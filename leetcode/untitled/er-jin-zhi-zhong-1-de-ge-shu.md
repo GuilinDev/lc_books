@@ -99,6 +99,8 @@ Output: false
 
 另外n当然不能是0或负数。
 
+Time O\(1\) ：Space：O\(1\)；
+
 ### 代码
 
 ```java
