@@ -93,3 +93,80 @@ class Solution {
 }
 ```
 
+## 187 - Repeated DNA Sequence
+
+### 原题概述
+
+All DNA is composed of a series of nucleotides abbreviated as A, C, G, and T, for example: "ACGAATTCCG". When studying DNA, it is sometimes useful to identify repeated sequences within the DNA.
+
+Write a function to find all the 10-letter-long sequences \(substrings\) that occur more than once in a DNA molecule.
+
+**Example:**
+
+```text
+Input: s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"
+
+Output: ["AAAAACCCCC", "CCCCCAAAAA"]
+```
+
+### 题意和分析
+
+给一个DNA字符串，找到它的所有长度为10的子串，并且这些子串在原本的DNA字符串中出现了两次或多次；这道题比较大众的解法是用位操作，
+
+ 0xfffff的解释：前两位0x表示十六进制，也就是每个数用二进制表示都是4位，比如0x0 = 0000，0x6 = 0110，十六进制的的数字从0 - 15，其中F代表15，写成二进制位1111，所以0xFFFFF = 1111 1111 1111 1111 1111，如果说这样一句话“程序是从内存中的页面x0xA532到0xFEE2读取的，那意思就是下面的页面被加载了 - 1010 0101 0011 0010 到 1111 1110 1110 0010。
+
+### 代码
+
+```java
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        List<String> result = new ArrayList<>();
+        if (s == null || s.length() < 10) {
+            return result;
+        }
+
+        Set<Integer> words = new HashSet<>();
+        Set<Integer> doubleWords = new HashSet<>();
+        char[] map = new char[26];
+
+        //map['A' - 'A'] = 0;Java中整型数组的default值本身就是0
+        map['C' - 'A'] = 1;
+        map['G' - 'A'] = 2;
+        map['T' - 'A'] = 3;
+
+        for (int i = 0; i < s.length() - 9; i++) {
+            int v = 0;
+            for (int j = i; j < i + 10; j++) {
+                v <<= 2; //v左移两位，例如01就变成0100了
+                v |= map[s.charAt(j) - 'A']; //append两位， 例如0100 || 11 => 0111
+            }
+
+            if (!words.add(v) && doubleWords.add(v)) {
+                result.add(s.substring(i , i + 10));
+            }
+        }
+        return result;
+    }
+}
+```
+
+这道题也可以用滑动窗口的办法也可以解决，Set来判断是否重复子串（用HashMap判断是否重复则比较麻烦，需要把子串当作key，出现的次数作为value，来判断是否出现2次或以上），Time：O\(n\), Space O\(n\)
+
+```java
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        Set seen = new HashSet();
+        Set repeated = new HashSet();
+        for (int i = 0; i + 9 < s.length(); i++) {//到倒数第十个循环后就不用
+            String ten = s.substring(i, i + 10);
+            if (!seen.add(ten)) {//判断条件是说，子串在Set中存在，不能往里面加了
+                repeated.add(ten);
+            }
+        }
+        return new ArrayList(repeated);
+    }
+}
+```
+
+
+
