@@ -28,6 +28,7 @@
       * [判断单链表是否有环](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/pan-duan-dan-lian-biao-shi-fou-you-huan.md)
       * [两个链表是否相交](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/liang-ge-lian-biao-shi-fou-xiang-jiao.md)
       * [合并两个有序链表](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/he-bing-liang-ge-you-xu-lie-biao.md)
+      * [链表元素去重复](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/lian-biao-yuan-su-qu-zhong-fu.md)
       * [别的链表问题](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/bie-de-lian-biao-wen-ti.md)
     * [Tree](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/README.md)
       * [寻找Tree中的nodes](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/xun-zhao-tree-zhong-de-nodes.md)
