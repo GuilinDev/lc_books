@@ -4,6 +4,21 @@ description: 面试中应该知道的基础知识
 
 # 基础知识
 
+## 操作系统
+
+### 进程Process与线程Thread
+
+![&#x6CE8;&#x610F;&#x5185;&#x5B58;&#x662F;&#x903B;&#x8F91;&#x5185;&#x5B58;&#xFF1B; &#x5728;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x4E2D;&#xFF0C;&#x6240;&#x6709;&#x7EBF;&#x7A0B;&#x662F;&#x5171;&#x4EAB;&#x540C;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#x7A7A;&#x95F4;&#x7684;&#x3002;](.gitbook/assets/image.png)
+
+
+
+![PC - Programming Counter&#xFF0C;&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;&#xFF0C;&#x7528;&#x4E8E;&#x6307;&#x793A;&#x7A0B;&#x5E8F;&#x5E8F;&#x5217;&#x4F4D;&#x7F6E;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#xFF1B;TLS - Thread Local Storage&#x7EBF;&#x7A0B;&#x672C;&#x5730;&#x5B58;&#x50A8;&#xFF0C;&#x4E3A;&#x8FDB;&#x7A0B;&#x4E2D;&#x7684;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x5B58;&#x50A8;&#x5168;&#x5C40;&#x6216;&#x9759;&#x6001;&#x53D8;&#x91CF;&#x7684;&#x5185;&#x5B58;&#x3002;](.gitbook/assets/image%20%281%29.png)
+
+  
+
+
+
+
 只刷题不上课肯定是不行的，根据大神[李小白](https://zhuanlan.zhihu.com/p/24774857)的推荐，更新了一下链接，选择打牢基础的五门课程
 
 ## Udacity: Introduction to Computer Science（计算机科学导论）
