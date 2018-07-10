@@ -240,27 +240,27 @@ Output: 10
 
 1. 刚开始的时候栈为空，压入第一个元素2对应的index = 0；然后第二个元素的下标为1，它的高度值是1，比前一个值小，所以这时候index = 1不入栈，并且index = 0出栈，栈变为空，计算此时面积area = 2；
 
-![](../../../.gitbook/assets/image%20%284%29.png)
+![](../../../.gitbook/assets/image%20%288%29.png)
 
     2. 高度1，5，6依次递增，所以依次压入栈中，然后当index = 4的时候，高度值为2，小于之前index = 3时候的高度值6，所以此时index = 4不入栈，但此时把index = 4对应的高度值2记下来；index = 3出栈，计算此时面积area = 6；
 
-![](../../../.gitbook/assets/image%20%2813%29.png)
+![](../../../.gitbook/assets/image%20%2819%29.png)
 
     3. 此时栈顶元素为index = 2，index = 2对应的值5 &gt; index = 4对应的值2；所以index = 2出栈，计算此时的面积area = 2 x 5 = 10；
 
-![](../../../.gitbook/assets/image%20%2817%29.png)
+![](../../../.gitbook/assets/image%20%2823%29.png)
 
     4. 此时栈顶元素为index = 1，它对应的高度1 &lt; index = 4对应的高度2，所以可以压入index = 4，同样之后index = 5也是上升可以压入，到最后结束的时候index = 6的时候人工压入一个0，此时栈的有效下标元素为{1,4,5}；栈顶元素为index = 6对应高度为0，此时只要高度比0大都需要出栈，所以index = 5先出栈，计算此时的面积area = 3，上面area最大值为10，所以不取；
 
-![](../../../.gitbook/assets/image%20%288%29.png)
+![](../../../.gitbook/assets/image%20%2812%29.png)
 
     5. 此时栈顶元素index = 4，高度值2 &gt; index = 6对应的高度值0，继续出栈，计算面积area = 2 x 2 = 4，不取；
 
-![](../../../.gitbook/assets/image%20%2810%29.png)
+![](../../../.gitbook/assets/image%20%2814%29.png)
 
     6. 此时栈顶元素为index = 1，对应的值1 &gt; index = 6对应的高度值0，继续出栈，此时index = 1出栈后栈变为空，并且当前元素已经到末尾了，index = 6，所以index = 1对应的高度值是最小的，这时候把所有的栈的数目与index = 1的高度相乘，得到area = 6；
 
-![](../../../.gitbook/assets/image%20%286%29.png)
+![](../../../.gitbook/assets/image%20%2810%29.png)
 
 
 
@@ -270,7 +270,7 @@ Time：O\(n\)；Space：新建一个Stack，O\(n\)；
 
 为什么这个方法是正确的呢？[参考这里](http://www.cnblogs.com/lichen782/p/leetcode_Largest_Rectangle_in_Histogram.html)。
 
-![](../../../.gitbook/assets/image%20%287%29.png)
+![](../../../.gitbook/assets/image%20%2811%29.png)
 
 > 例如我们遇到最后遇到一个递减的bar（红色）。高度位于红线上方的（也就是算法中栈里面大于最右bar的）元素，他们是不可能和最右边的较小高度bar围成一个比大于在弹栈过程中的矩形面积了（黄色面积），因为红色的bar对他们来说是一个短板，和红色bar能围成的最大面积也就是红色的高度乘以这些“上流社会”所跨越的索引范围。但是“上流社会”的高度个个都比红色bar大，他们完全只计算彼此之间围成的面积就远远大于和红色bar围成的任意面积了。所以红色bar是不可能参与“上流社会”的bar的围城的（好悲哀）。
 >
@@ -290,7 +290,7 @@ Time：O\(n\)；Space：新建一个Stack，O\(n\)；
 >
 > >
 
-![](../../../.gitbook/assets/image%20%283%29.png)
+![](../../../.gitbook/assets/image%20%286%29.png)
 
 ### 代码
 
