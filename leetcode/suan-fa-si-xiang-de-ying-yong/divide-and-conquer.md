@@ -1,2 +1,2 @@
-# Divide and Conquer
+# Dynamic Programming
 
