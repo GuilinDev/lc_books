@@ -50,7 +50,7 @@ description: 面试中应该知道的基础知识
 
 ![](.gitbook/assets/image%20%287%29.png)
 
-有篇很喜欢的文章来讲网络协议，包括HTTPS：[https://www.oschina.net/translate/https-explained-with-carrier-pigeons](https://www.oschina.net/translate/https-explained-with-carrier-pigeons)
+有篇很喜欢的文章来讲网络协议，包括HTTPS，中文[https://www.oschina.net/translate/https-explained-with-carrier-pigeons](https://www.oschina.net/translate/https-explained-with-carrier-pigeons) 英文原文 [https://medium.freecodecamp.org/https-explained-with-carrier-pigeons-7029d2193351](https://medium.freecodecamp.org/https-explained-with-carrier-pigeons-7029d2193351)
 
 ## 公开课
 
