@@ -1,4 +1,4 @@
-# Sort
+# 排序
 
 ## 9 - Palindrome Number
 
