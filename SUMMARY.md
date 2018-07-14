@@ -62,6 +62,7 @@
     * [Geometry](leetcode/suan-fa-si-xiang-de-ying-yong/geometry.md)
     * [Design](leetcode/suan-fa-si-xiang-de-ying-yong/design.md)
   * [5. Math](leetcode/math/README.md)
+    * [位数移动](leetcode/math/wei-shu-yi-dong.md)
     * [矩阵](leetcode/math/ju-zhen.md)
     * [数位分离/进制转换](leetcode/math/untitled.md)
     * [高精度运算](leetcode/math/gao-jing-du-yun-suan.md)
