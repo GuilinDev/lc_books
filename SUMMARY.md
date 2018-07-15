@@ -21,7 +21,7 @@
       * [Array别的题目](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/array-bie-de-ti-mu.md)
     * [String](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/string/README.md)
       * [String和数转换](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/string/string-he-shu-zhuan-huan.md)
-      * [各类计算器](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/string/ge-lei-ji-suan-qi.md)
+      * [计算器](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/string/ge-lei-ji-suan-qi.md)
     * [LinkedList](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/README.md)
       * [O\(1\)时间删除链表结点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/o1-shi-jian-shan-chu-lian-biao-jie-dian.md)
       * [单链表的翻转](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/dan-lian-biao-de-fan-zhuan.md)

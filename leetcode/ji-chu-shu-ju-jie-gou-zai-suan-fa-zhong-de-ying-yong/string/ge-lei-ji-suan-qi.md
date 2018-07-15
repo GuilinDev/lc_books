@@ -1,4 +1,4 @@
-# 各类计算器
+# 计算器
 
 ## 227 - Basic Calculator II
 
