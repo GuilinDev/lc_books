@@ -26,7 +26,7 @@ Output: "10101"
 
 将两个string形式的二进制数相加，并且保存在string中，要注意的是如何将string和int之间互相转换，并且每位相加时，会有进位的可能，会影响之后相加的结果。而且两个输入string的长度也可能会不同。创建一个StringBuilder来存相加的结果，从两个string的末尾开始取出字符，然后转为数字，相加，如果大于等于2，则标记进位标志carry，最后将StringBuilder转换成String，因为是从后面开始加，翻转一下。
 
-Time：O\(m + n\)； Space：O\(m\)，m是较长的那个string的长度。
+Time：O\(m\)； Space：O\(m\)，m是较长的那个string的长度。
 
 ### 代码
 
