@@ -25,6 +25,7 @@
     * [LinkedList](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/README.md)
       * [O\(1\)时间删除链表结点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/o1-shi-jian-shan-chu-lian-biao-jie-dian.md)
       * [单链表的翻转](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/dan-lian-biao-de-fan-zhuan.md)
+      * [链表排序](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/lian-biao-pai-xu.md)
       * [链表倒数第k个结点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/lian-biao-dao-shu-dikge-jie-dian.md)
       * [求链表的中间结点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/qiu-lian-biao-de-zhong-jian-jie-dian.md)
       * [判断单链表是否有环](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/pan-duan-dan-lian-biao-shi-fou-you-huan.md)
