@@ -31,7 +31,7 @@
       * [两个链表是否相交](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/liang-ge-lian-biao-shi-fou-xiang-jiao.md)
       * [合并有序链表](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/he-bing-liang-ge-you-xu-lie-biao.md)
       * [链表元素去重复](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/lian-biao-yuan-su-qu-zhong-fu.md)
-      * [别的链表问题](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/bie-de-lian-biao-wen-ti.md)
+      * [链表元素交换](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/lian-biao-yuan-su-jiao-huan.md)
     * [Stack](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/stack.md)
     * [Queue](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/queue.md)
     * [Heap](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/heap.md)
