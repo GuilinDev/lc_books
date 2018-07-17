@@ -1,4 +1,4 @@
-# 链表元素交换
+# 链表交换/重组/复制
 
 ## 24 - Swap Nodes in Pairs
 
@@ -82,4 +82,41 @@ class Solution {
     }
 }
 ```
+
+## 143 - Reorder List
+
+### 原题概述
+
+Given a singly linked list _L_: _L_0→_L_1→…→_Ln_-1→_L_n,  
+reorder it to: _L_0→_Ln_→_L_1→_Ln_-1→_L_2→_Ln_-2→…
+
+You may **not** modify the values in the list's nodes, only nodes itself may be changed.
+
+**Example 1:**
+
+```text
+Given 1->2->3->4, reorder it to 1->4->2->3.
+```
+
+**Example 2:**
+
+```text
+Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
+```
+
+### 题意和分析
+
+### 代码
+
+## 138 - Copy List with Random Pointer
+
+### 原题概述
+
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+
+Return a deep copy of the list.
+
+### 题意和分析
+
+### 代码
 
