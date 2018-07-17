@@ -185,7 +185,51 @@ rotate 4 steps to the right: 2->0->1->NULL
 
 ### 题意和分析
 
+一个链表把右边k位的结点挪到左边来，可以分三步来做：1）计算链表长度；2）定位到len - k % len的位置因为k可能比len大，所有是k % len；3）在定位好的位置处开始rotate。
+
+时间O\(n\)，空间O\(1\)。
+
 ### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode fast = dummy;
+        ListNode slow = dummy;
+
+        //找到链表的长度
+        int len;
+        for (len = 0; fast.next != null; len++) {
+            fast = fast.next;
+        }
+        //定位到len - k%len的位置
+        for (int i = 0; i < len - k%len; i++) {
+            slow = slow.next;
+        }
+
+        //开始做rotation
+        fast.next = dummy.next;
+        dummy.next = slow.next;//把i-k%i的节点放到dummy之后（return后的第一位）
+        slow.next = null;
+
+        return dummy.next;
+    }
+}
+```
 
 ## 86 - Partition List
 
