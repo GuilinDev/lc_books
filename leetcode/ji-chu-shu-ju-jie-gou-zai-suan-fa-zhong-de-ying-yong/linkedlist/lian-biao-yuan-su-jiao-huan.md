@@ -106,7 +106,109 @@ Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
 
 ### 题意和分析
 
+这道题做法是分为三部：1）找到链表的中间结点；2）将后半部分的链表倒转；3）将倒转后的后半部分链表插入到前半部分。时间复杂度O\(n\)，空间O\(n\)。
+
+也可以用stack的办法来做，先把所有结点存入到一个stack并计算长度，然后重新遍历链表，同时把所有结点弹出，超过长度一半的时候弹出的那些结点挨个插入，复杂度一样。
+
 ### 代码
+
+后半截reverse的做法
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null) {
+            return;
+        }
+
+        // Find the middle node
+        ListNode slow = head, fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        //前半部分包含了中间结点slow，将后半部分倒转
+        ListNode head2 = reverse(slow.next);
+        slow.next = null;
+
+        // Link the two halves together
+        while (head != null && head2 != null) {
+            ListNode tmp1 = head.next;
+            ListNode tmp2 = head2.next;
+            head2.next = head.next;
+            head.next = head2;
+            head = tmp1;
+            head2 = tmp2;
+        }
+    }
+
+    private ListNode reverse(ListNode n) {
+        ListNode prev = null;
+        ListNode cur = n;
+        while (cur != null) {
+            ListNode tmp = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = tmp;
+        }
+        return prev;
+    }
+}
+```
+
+用Stack的做法
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        if(head != null && head.next != null){
+            int len = 0;
+            Stack<ListNode> stack = new Stack<>();
+            ListNode curNode = head;
+
+            while(curNode != null) {//将全部结点存入到stack中，并计算链表长度
+                stack.push(curNode);
+                curNode = curNode.next;
+                len++;
+            }
+
+            curNode = head;//重新指向头部
+            while(len >= len / 2){//遍历过一半的时候开始将stack中剩下的一半结点插入
+                ListNode tmp = curNode.next;
+                curNode.next = stack.pop();
+                curNode.next.next = tmp;
+
+                curNode = curNode.next.next;
+                len -= 2;
+            }
+
+            if(len > 1) {
+                curNode.next = stack.pop();
+                curNode = curNode.next;
+            }
+
+            curNode.next = null;//删除原来链表中的已被插入的结点
+        }
+    }
+}
+```
 
 ## 138 - Copy List with Random Pointer
 
@@ -118,5 +220,11 @@ Return a deep copy of the list.
 
 ### 题意和分析
 
+
+
 ### 代码
+
+```java
+
+```
 
