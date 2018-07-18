@@ -18,7 +18,48 @@ Explanation: 342 + 465 = 807.
 
 ### 题意和分析
 
+给两个链表，个位十位百位从左到右存储，两个链表相加返回一个新链表。这道题也是链表的基本操作，创建一个dummy，原先的两个链表挨个结点相加，然后注意下进位就行了。时间O\(m+n\)，空间创建了一个新的链表O\(m\)，m是长度较长的那个链表。
+
 ### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            return l1 == null ? l2 : l1;
+        }
+        ListNode dummy = new ListNode(-1);
+        ListNode current = dummy;
+        int carry = 0;
+        while (l1 != null || l2 != null) {
+            int sum = carry;
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+            current.next = new ListNode(sum % 10);
+            current = current.next;
+            carry = sum / 10;
+        }
+        if (carry != 0) {//循环结束后最后判断下是否还有进位
+            current.next = new ListNode(carry);
+        }
+        return dummy.next;
+    }
+}
+```
 
 ## 445 - Add Two Numbers II
 
