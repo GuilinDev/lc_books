@@ -248,5 +248,45 @@ Output: 1->2->2->4->3->5
 
 ### 题意和分析
 
+要求把小于x的元素按顺序放到链表前面。使用链表最常用的双指针，一个指向当前小于x的最后一个元素，一个进行往前扫描。如果元素大于x，那么继续前进，否则，要把元素移到前面，并更新第一个指针。这里有一个小细节，就是如果不需要移动（也就是已经是接在小于x的最后元素的后面了），那么只需要继续前进即可。算法时间复杂度是O\(n\)，空间只需要几个辅助变量，是O\(1\)。
+
 ### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode partition(ListNode head, int x) {
+        if (head == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode slow = dummy, fast = dummy;
+
+        while (fast.next != null) {//相当于从dummy.next开始
+            if (fast.next.val < x) {
+                if (slow != fast) {//开始把结点插入到前面
+                    ListNode next = fast.next.next;//先记住fast.next的下一位
+                    fast.next.next = slow.next;
+                    slow.next = fast.next;
+                    fast.next = next;//最后把新的fast的next指向开始记住的下一位
+                } else {//如果slow和fast相同就只需让fast前移
+                    fast = fast.next;
+                }
+                slow = slow.next;
+            } else {//结点的值大于等于x
+                fast = fast.next;
+            }
+        }
+        return dummy.next;
+    }
+}
+```
 
