@@ -72,15 +72,20 @@ Time：都是O\(n\)；Space：递归是O\(n\)，迭代是O\(1\)。
  */
 class Solution {
     public ListNode reverseList(ListNode head) {
-        //in-place的做法
-        ListNode newHead = null;
-        while (head != null) {
-            ListNode nextNode = head.next;//先维持住head.next以防丢失
-            head.next = newHead;//当前结点的next应该指向上一个结点，初始为null
-            newHead = head;//当前结点还是直接赋值过来
-            head = nextNode;//继续往后遍历
+        if (head == null || head.next == null) {
+            return head;
         }
-        return newHead;//最后newHead是头结点
+        ListNode prev = null;
+        ListNode current = head;
+        ListNode next = null;
+        while (current != null) {
+            next = current.next;//记录当前结点的下一位
+            current.next = prev;
+            prev = current; //挪动前一个结点到现在的结点
+            current = next; //指向刚才记录的下一位
+        }
+        head = prev;//prev会停在最后一个结点处，current会停在最后一个结点后面的null处
+        return head;
     }
 }
 ```
