@@ -252,7 +252,7 @@ Return a deep copy of the list.
 
 ### 代码
 
-HashMap的做法
+HashMap的做法，需要一个哈希表的原因是当我们访问一个结点时可能它的随机指针指向的结点还没有访问过，结点还没有创建，所以需要线性的额外空间
 
 ```java
 /**
@@ -286,5 +286,61 @@ public class Solution {
 }
 ```
 
+in-place的做法，想避免使用额外空间，我们只能通过利用链表原来的数据结构来存储结点。基本思路是这样的，对链表进行三次扫描，第一次扫描对每个结点进行复制，然后把复制出来的新节点接在原结点的next，也就是让链表变成一个重复链表，就是新旧更替；第二次扫描中我们把旧结点的随机指针赋给新节点的随机指针，因为新结点都跟在旧结点的下一个，所以赋值比较简单，就是node.next.random = node.random.next，其中node.next就是新结点，因为第一次扫描就是把新结点接在旧结点后面。现在把结点的随机指针都接好了，最后一次扫描把链表拆成两个，第一个还原原链表，而第二个就是我们要求的复制链表。因为现在链表是旧新更替，只要把每隔两个结点分别相连，对链表进行分割即可。这个方法总共进行三次线性扫描，所以时间复杂度是O\(n\)。而这里并不需要额外空间，所以空间复杂度是O\(1\)。比起上面的方法，这里多做一次线性扫描，但是不需要额外空间，还是比较值的。
 
+```java
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        RandomListNode node = head, next = null;
+
+        // 第一个循环，复制每个node并各自链接到原先的node后面
+        while (node != null) {
+            next = node.next;//记录链表当前结点的下一位防止丢失
+
+            RandomListNode copy = new RandomListNode(node.label);
+            node.next = copy;
+            copy.next = next;
+
+            node = next;
+        }
+
+        //第二个循环，assign随机指针到复制的copy上
+        node = head;
+        while (node != null) {
+            if (node.random != null) {//旧的拷贝
+                node.next.random = node.random.next;
+            }
+            node = node.next.next;
+        }
+
+        //第三个循环,分拆链表并还原旧链表和建立新链表
+        node = head;
+        RandomListNode dummy = new RandomListNode(-1);
+        RandomListNode copy, newNode = dummy;
+        while (node != null) {
+            next = node.next.next;//记录下一个原先链表中的结点
+
+            //提取复制的结点为新的链表
+            copy = node.next;
+            newNode.next = copy;
+            newNode = copy;
+
+            //还原原来的链表
+            node.next = next;
+
+            node = next;
+        }
+
+        return dummy.next;
+    }
+}
+```
 
