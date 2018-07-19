@@ -224,9 +224,11 @@ Return a deep copy of the list.
 
 假设原始链表如下，细线表示next指针，粗线表示random指针，没有画出的指针均指向NULL：
 
-![](https://images0.cnblogs.com/blog/517264/201310/24223337-cf2f97805d17474bb9c0568d36db9af9.jpg)
+![](../../../.gitbook/assets/image%20%2813%29.png)
 
 **算法1**：先按照复制一个正常链表的方式复制，复制的时候把复制的结点做一个HashMap，以旧结点为key，新节点为value。这么做的目的是为了第二遍扫描的时候按照这个哈希表把结点的随机指针接上。下图蓝色为原始链表节点，红色为新链表节点：
+
+![](../../../.gitbook/assets/image%20%2826%29.png)
 
 ![](https://images0.cnblogs.com/blog/517264/201310/24224126-c879cdb9952f447587c976713b5dce38.jpg)
 
