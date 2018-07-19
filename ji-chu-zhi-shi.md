@@ -16,7 +16,7 @@ description: 面试中应该知道的基础知识
 
 ![&#x6CE8;&#x610F;&#x5BC4;&#x5B58;&#x5668;&#x65AD;&#x7535;&#x5C31;&#x4F1A;&#x4E22;&#x5931;&#x5B58;&#x50A8;](.gitbook/assets/image%20%284%29.png)
 
-![&#x6240;&#x4EE5;32&#x4F4D;&#x673A;&#x6BCF;&#x4E2A;&#x8FDB;&#x7A0B;&#x6700;&#x591A;&#x7528;&#x5230;4G&#x7684;&#x903B;&#x8F91;&#x5185;&#x5B58;](.gitbook/assets/image%20%2830%29.png)
+![&#x6240;&#x4EE5;32&#x4F4D;&#x673A;&#x6BCF;&#x4E2A;&#x8FDB;&#x7A0B;&#x6700;&#x591A;&#x7528;&#x5230;4G&#x7684;&#x903B;&#x8F91;&#x5185;&#x5B58;](.gitbook/assets/image%20%2831%29.png)
 
 ![&#x5206;&#x9875; - &#x5728;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4E2D;&#x627E;&#x5230;&#x7A7A;&#x95F2;&#x7684;&#x5757;&#x4EA4;&#x6362;&#x5230;&#x865A;&#x62DF;&#x5185;&#x5B58;&#x7684;&#x8FC7;&#x7A0B;](.gitbook/assets/image%20%282%29.png)
 

@@ -59,7 +59,7 @@ Can you solve it without using extra space?
 
 这道题是上一道的延伸，如果有环，判断环的入口，如果没有环就返回null，不要改变原先的链表。下面三种情况，链表无环，链表头尾相接，链表一部分有环。
 
-![](../../../.gitbook/assets/image%20%2826%29.png)
+![](../../../.gitbook/assets/image%20%2827%29.png)
 
 ![](../../../.gitbook/assets/image%20%286%29.png)
 
