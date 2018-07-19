@@ -220,11 +220,71 @@ Return a deep copy of the list.
 
 ### 题意和分析
 
+这道题还是链表的操作，给一个链表，这个链表在正常链表的基础上还带有一个random pointer，这个random pointer可以指向别的结点，也可以指向null，然后问题是如何deep copy这个链表。
 
+假设原始链表如下，细线表示next指针，粗线表示random指针，没有画出的指针均指向NULL：
+
+![](https://images0.cnblogs.com/blog/517264/201310/24223337-cf2f97805d17474bb9c0568d36db9af9.jpg)
+
+**算法1**：先按照复制一个正常链表的方式复制，复制的时候把复制的结点做一个HashMap，以旧结点为key，新节点为value。这么做的目的是为了第二遍扫描的时候按照这个哈希表把结点的随机指针接上。下图蓝色为原始链表节点，红色为新链表节点：
+
+![](https://images0.cnblogs.com/blog/517264/201310/24224126-c879cdb9952f447587c976713b5dce38.jpg)
+
+然后在上图的基础上进行如下两步
+
+1、构建新链表的random指针：比如new1.random = new1.random.random.next, new2.random = NULL, new3.random = NULL, new4.random = new4.random.random.next
+
+2、恢复原始链表：根据最开始保存的原始链表next指针映射关系恢复原始链表
+
+该算法总共要进行两次扫描，所以时间复杂度是O\(2\*n\)=O\(n\)，空间复杂度为需要哈希表来做映射，所以也是O\(N\)。
+
+**算法2**：该算法更为巧妙，不用保存原始链表的映射关系，构建新节点时，指针做如下变化，即把新节点插入到相应的旧节点后面：
+
+![](https://images0.cnblogs.com/blog/517264/201310/24225610-b49aa4b472734a1785fad23a2156cc14.jpg)
+
+同理分两步
+
+1、构建新节点random指针：new1-&gt;random = old1-&gt;random-&gt;next, new2-random = NULL, new3-random = NULL, new4-&gt;random = old4-&gt;random-&gt;next
+
+2、恢复原始链表以及构建新链表：例如old1-&gt;next = old1-&gt;next-&gt;next,  new1-&gt;next = new1-&gt;next-&gt;next
+
+该算法时间复杂度O\(N\)，空间复杂度O\(1\)。
 
 ### 代码
 
-```java
+HashMap的做法
 
+```java
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        Map<RandomListNode, RandomListNode> map = new HashMap<>();
+
+        //第一个循环，将所有nodes copy到hashmap中，旧结点为key，新结点为value
+        RandomListNode node = head;
+        while (node != null) {
+            map.put(node, new RandomListNode(node.label));
+            node = node.next;
+        }
+
+        node = head;//重新将node指向第一个结点
+        //第二个循环，assign随机指针和next
+        while (node != null) {
+            map.get(node).next = map.get(node.next);//随机找
+            map.get(node).random = map.get(node.random);
+            node = node.next;
+        }
+        return map.get(head);//返回第一结点
+    }
+}
 ```
+
+
 
