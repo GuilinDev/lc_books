@@ -150,7 +150,7 @@ XOR
 class Solution {
     public char findTheDifference(String s, String t) {
         int len = t.length();
-        char ch = t.charAt(len - 1);//初始化，注意长字符串t最后多出来的那位为初始值，为什么？
+        char ch = t.charAt(len - 1);//初始化，注意长字符串t最后多出来的那位为初始值，想想为什么？
         for (int i = 0; i < len - 1; i++) {//i < len -1，短的字符串不越界
             ch ^= s.charAt(i);
             ch ^= t.charAt(i);
@@ -175,13 +175,13 @@ class Solution {
 }
 ```
 
-int和char互换的做法
+int和char转换的做法
 
 ```java
 class Solution {
     public char findTheDifference(String s, String t) {
         int len = s.length();
-        int charCode = t.charAt(len);//初始化为长的字符串最后一位，为什么？
+        int charCode = t.charAt(len);//初始化为长的字符串最后一位，想想为什么？
         for (int i = 0; i < len; i++) {
             charCode -= s.charAt(i);
             charCode += t.charAt(i);
