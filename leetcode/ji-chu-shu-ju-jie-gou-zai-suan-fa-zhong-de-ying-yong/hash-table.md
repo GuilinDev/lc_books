@@ -150,7 +150,7 @@ XOR
 class Solution {
     public char findTheDifference(String s, String t) {
         int len = t.length();
-        char ch = t.charAt(len - 1);//初始化
+        char ch = t.charAt(len - 1);//初始化，注意长字符串t最后多出来的那位为初始值，为什么？
         for (int i = 0; i < len - 1; i++) {//i < len -1，短的字符串不越界
             ch ^= s.charAt(i);
             ch ^= t.charAt(i);
@@ -160,13 +160,13 @@ class Solution {
 }
 ```
 
-XOR更好理解的做法，两个串合在一起然后XOR，最后剩余的就是多出来的字符
+XOR更好理解的做法，需要一点额外空间，两个串合在一起然后XOR，最后剩余的就是多出来的字符
 
 ```java
 class Solution {
     public char findTheDifference(String s, String t) {
         String merge = s + t;
-        char ch = 0;//初始化 
+        char ch = 0;//初始化
         for (int i = 0; i < merge.length(); i++) {
             ch ^= merge.charAt(i);
         }
@@ -181,7 +181,7 @@ int和char互换的做法
 class Solution {
     public char findTheDifference(String s, String t) {
         int len = s.length();
-        int charCode = t.charAt(len);//初始化为长的字符串最后一位
+        int charCode = t.charAt(len);//初始化为长的字符串最后一位，为什么？
         for (int i = 0; i < len; i++) {
             charCode -= s.charAt(i);
             charCode += t.charAt(i);
