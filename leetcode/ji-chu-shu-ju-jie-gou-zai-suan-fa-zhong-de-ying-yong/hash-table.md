@@ -86,5 +86,29 @@ Explanation: The perimeter is the 16 yellow stripes in the image below:
 
 ### 题意和分析
 
+给一个矩形，里面的小格子是正方形，1代表陆地，0代表水，整个矩形边不超过100，没有湖，需要求出陆地周长。对整个二维数组遍历，每当遍历到一个陆地1时，同时判断下这块陆地的右边和下边看是否也是陆地，如果是就说明有neighbors，最后周长计算为land \* 4 - neighbors \* 2。时间O\(m \* n\)，空间O\(1\)。
+
 ### 代码
+
+```java
+class Solution {
+    public int islandPerimeter(int[][] grid) {
+        int lands = 0, neighbors = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    lands++;
+                    if (i < grid.length - 1 && grid[i+1][j] == 1) {//下方是陆地
+                        neighbors++;
+                    }
+                    if (j < grid[0].length - 1 && grid[i][j+1] == 1) {//右边是陆地
+                        neighbors++;
+                    }
+                }
+            }
+        }
+        return lands * 4 - neighbors * 2;
+    }
+}
+```
 
