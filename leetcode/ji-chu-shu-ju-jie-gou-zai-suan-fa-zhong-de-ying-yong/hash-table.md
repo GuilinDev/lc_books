@@ -142,6 +142,12 @@ Explanation:
 
 首先位操作的XOR可以去掉重复，因为自己和自己异或等于0；另外也可以计算两个字符串char codes的差距，然后转换成char即可，时间O\(n\)，空间O\(1\)。
 
+> char b = 'a'+18; //因为char本身在码表中可以用数字表示的，然后运算玩之后还是char，应该输出s 
+>
+> char a = 'a'; //这个定义就是错误的。 
+>
+> char b = a + 18; // 这样也是错的，因为JVM运算完后不知道结果是多少，所以会提示损失精度的错误，关于一个类型变量值的问题。
+
 ### 代码
 
 XOR
@@ -166,9 +172,9 @@ XOR更好理解的做法，需要一点额外空间，两个串合在一起然�
 class Solution {
     public char findTheDifference(String s, String t) {
         String merge = s + t;
-        char ch = 0;//初始化
+        char ch = 0;//初始化，这里表示ch的初始值为空格' '，P.S.，用ch != '\0'判断字符是否为空格
         for (int i = 0; i < merge.length(); i++) {
-            ch ^= merge.charAt(i);
+            ch ^= merge.charAt(i);//等于 ch = (char) (ch ^ merge.charAt(i));
         }
         return ch;
     }
