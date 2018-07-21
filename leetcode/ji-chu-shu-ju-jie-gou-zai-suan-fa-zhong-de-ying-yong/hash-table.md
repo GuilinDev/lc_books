@@ -430,5 +430,133 @@ class Solution {
 }
 ```
 
+## 242 - Valid Anagram
+
+### 原题概述
+
+Given two strings _s_ and _t_ , write a function to determine if _t_ is an anagram of _s_.
+
+**Example 1:**
+
+```text
+Input: s = "anagram", t = "nagaram"
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input: s = "rat", t = "car"
+Output: false
+```
+
+**Note:**  
+You may assume the string contains only lowercase alphabets.
+
+**Follow up:**  
+What if the inputs contain unicode characters? How would you adapt your solution to such case?
+
+### 题意和分析
+
+给两个字符串，判断二者是否打乱顺序组成的Anagram。这道题如果先排序再比较是否一样，复杂度为O\(nlogn\)；如果用XOR来消除的话，又不能排除aa和bb这样也能等于0的情况。因为字符可以用数字来表示，所以一个loop分别加减二者的所有字符的值，看是否有的字符为不为0即可，时间O\(n\)，空间创建了两个数组，O\(n\)。
+
+### 代码
+
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s == null && t == null) {
+            return true;
+        } else if (s == null || t == null) {
+            return false;
+        } else if (s.length() != t.length()) {
+            return false;
+        }
+
+        char[] char1 = s.toCharArray();
+        char[] char2 = t.toCharArray();
+
+        int[] alphabet = new int[26];//因为题目说了都是小写字母，所以最多26个
+        for (int i = 0; i < char1.length; i++) {
+            //在数组的特定的位置进行加减
+            alphabet[char1[i] - 'a']++;
+            alphabet[char2[i] - 'a']--;
+        }
+
+        for (int num : alphabet) {
+            if (num != 0) {//只要找到一个部位0的表示至少有一个不相同的字符
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+题目有追问，如果字符串中有unicode应该怎么调整，在Java中，Unicode 可以用一个字符来表示\(BMP, Basic Multilingual Plane\)，也可以用两个字符来表示\(high surrogate\)。我们可以用`String.codePointAt(int index)`这个方法来得到Unicode的整数表示法，其中index是哈希表中的key，另外可以用`Character.charCount(int code)`来得到在该位置有多少个characters被用到，从而正确地对index进行递增
+
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s == null && t == null) {
+            return true;
+        } else if (s == null || t == null) {
+            return false;
+        } else if (s.length() != t.length()) {
+            return false;
+        }
+
+        Map<Integer, Integer> dict = new HashMap<>();//创建一个map来检查两个字符串的字符
+        int index = 0;
+        while (index < s.length()) {
+            int charCode = s.codePointAt(index);//得到Unicode的整数的表达形式
+            dict.put(charCode, dict.getOrDefault(charCode, 0) + 1);
+            index += Character.charCount(charCode);//Unicode可以有一个或者两个字符的表达形式
+        }
+        index = 0;
+        while (index < t.length()) {
+            int charCode = t.codePointAt(index);
+            int count = dict.getOrDefault(charCode, 0);//看看是否有同样的字符
+
+            if (count == 0) {
+                return false;
+            } else {
+                dict.put(charCode, count - 1);
+            }
+
+            index += Character.charCount(charCode);
+        }
+        return true;
+    }
+}
+```
+
+Java8开始有新的特性，可以用`Charsequence.copdpoints()`来简化代码
+
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s == null && t == null) {
+            return true;
+        } else if (s == null || t == null) {
+            return false;
+        } else if (s.length() != t.length()) {
+            return false;
+        }
+
+        Map<Integer, Integer> dict = new HashMap<>();//创建一个map来检查两个字符串的字符
+        s.codePoints().forEach(code -> dict.put(code, dict.getOrDefault(code, 0) + 1));
+        t.codePoints().forEach(code -> dict.put(code, dict.getOrDefault(code, 0) - 1));
+
+        for (int count : dict.values()) {
+            if (count < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
 
 
