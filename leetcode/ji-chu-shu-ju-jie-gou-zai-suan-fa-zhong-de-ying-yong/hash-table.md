@@ -214,7 +214,96 @@ Given `[1,1,1,2,2,3]` and k = 2, return `[1,2]`.
 
 ### 题意和分析
 
-给一个非空的整数数组和一个总是有效的的整数k，返回前k个最多出现的元素。
+高频题，给一个非空的整数数组和一个总是有效的的整数k，返回前k个最多出现的元素。可以用HashMap来做桶排序，TreeMap和最大堆来做。
 
 ### 代码
+
+用最大堆，把数字和其频率放到HashMap中，然后把map的entry放到maxHeap中，从最顶上拿走k个数字的entry然后相对应的keys就是最高频率的k个数字。
+
+```java
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);//原数组的元素为key，出现次数为value
+        }
+
+        //利用最大堆
+        PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>((a,b)->(b.getValue() - a.getValue()));
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            maxHeap.add(entry);
+        }
+
+        List<Integer> result = new ArrayList<>();
+        while (result.size() < k) {
+            Map.Entry<Integer, Integer> entry = maxHeap.poll();//取出顶部元素并删除
+            result.add(entry.getKey());
+        }
+        return result;
+    }
+}
+```
+
+HashMap桶排序的做法，在建立好数字和其出现次数的映射后利用桶排序取k个最频繁的数字
+
+```java
+class Solution {    
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);//原数组的元素为key，出现次数为value
+        }
+
+        //创建一个放buckets的list
+        List<Integer>[] bucket = new List[nums.length + 1];//如果只有一个元素，那么也需要一个index为1的bucket
+        for (int num : map.keySet()) {
+            int freq = map.get(num);
+            if (bucket[freq] == null) {//没有这个桶，就加一个
+                bucket[freq] = new LinkedList<>();
+            }
+            bucket[freq].add(num);//在每个桶加上各自的元素
+        }
+
+        List<Integer> result = new LinkedList<>();
+        for (int i = bucket.length - 1; i > 0 && k > 0; i--) {//从做到右取n个
+            if (bucket[i] != null) {//只要出现过
+                List<Integer> list = bucket[i];
+                result.addAll(list);
+                k -= list.size();
+            }
+        }
+        return result;
+    }
+}
+```
+
+利用TreeMap自动排序
+
+```java
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);//原数组的元素为key，出现次数为value
+        }
+
+        //利用treeMap自动排序
+        TreeMap<Integer, List<Integer>> freqMap = new TreeMap<>();
+        for (int num : map.keySet()) {
+            int freq = map.get(num);
+            if (!freqMap.containsKey(freq)) {
+                freqMap.put(freq, new LinkedList<>());
+            }
+            freqMap.get(freq).add(num);
+        }
+
+        List<Integer> result = new ArrayList<>();
+        while (result.size() < k) {//取前k位
+            Map.Entry<Integer, List<Integer>> entry = freqMap.pollLastEntry();
+            result.addAll(entry.getValue());
+        }
+        return result;
+    }
+}
+```
 
