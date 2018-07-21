@@ -307,3 +307,128 @@ class Solution {
 }
 ```
 
+## 349 - Intersection of Two Arrays
+
+### 原题概述
+
+Given two arrays, write a function to compute their intersection.
+
+**Example:**  
+Given nums1 = `[1, 2, 2, 1]`, nums2 = `[2, 2]`, return `[2]`.
+
+**Note:**  
+
+
+* Each element in the result must be unique.
+* The result can be in any order.
+
+### 题意和分析
+
+有两个数组，找到他们交叉的部分（元素的个数），结果中的元素都是unique的，无关顺序。用两个set，第一个set存第一个数组的元素，然后第二个数组来检查是否有相同的元素，有的话就把这些元素存入到第二个set中，然后遍历第二个set将其中的元素作为整数数组返回，时间O\(n\)，空间O\(n\)。
+
+### 代码
+
+两个set
+
+```java
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> set1 = new HashSet<>();
+        Set<Integer> intersect = new HashSet<>();
+        for (int i = 0; i < nums1.length; i++) {//把nums1的元素存储到第一个set中
+            set1.add(nums1[i]);
+        }
+        for (int i = 0; i < nums2.length; i++) {//检查nums2的元素是否在第一个set中存在，存在就加入到第二个set中
+            if (set1.contains(nums2[i])) {//有交叉
+                intersect.add(nums2[i]);
+            }
+        }
+        int[] result = new int[intersect.size()];//遍历把第二个set中的元素存到结果的array中
+        int i = 0;
+        for (int num : intersect) {
+            result[i] = num;
+            i++;
+        }
+        return result;
+    }
+}
+```
+
+双指针做法，只用一个set，将两个数组排序后用个指针分别判断大小，因为要排序，时间O\(nlogn\)，空间O\(n\)。
+
+```java
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> set = new HashSet<>();
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        int i = 0, j = 0;//双指针
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] < nums2[j]) {
+                i++;
+            } else if (nums1[i] > nums2[j]) {
+                j++;
+            } else {//相等
+                set.add(nums1[i]);
+                i++;
+                j++;
+            }
+        }
+
+        //将set中的元素存入到整数数组中
+        int k = 0;
+        int[] result = new int[set.size()];
+        for (int num : set) {
+            result[k] = num;
+            k++;
+        }
+        return result;
+    }
+}
+```
+
+类似的方法，也可以用二分查找，将一个数组排序，然后用二分查找来遍历另外一个数组，看是否在第一个数组中存在，时间O\(nlogn\)，空间\(n\)。
+
+```java
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0) {
+            return new int[0];
+        }
+        Set<Integer> set = new HashSet<>();
+        Arrays.sort(nums1);
+
+        for (int i = 0; i < nums2.length; i++) {
+            if (binarySearch(nums1, nums2[i])) {
+                set.add(nums2[i]);
+            }
+        }
+        int[] result = new int[set.size()];
+        int k = 0;
+        for (int num : set) {
+            result[k] = num;
+            k++;
+        }
+        return result;
+    }
+
+    private boolean binarySearch(int[] nums, int n) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {//注意是地板除法，所以等于也是包含的，比如一个数的时候
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < n) {//小于就不用再检查mid了，所以是mid+1
+                left = mid + 1;
+            } else if (nums[mid] > n) {//大于就不用再检查mid了，所以是mid-1
+                right = mid - 1;
+            } else {//等于
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+
+
