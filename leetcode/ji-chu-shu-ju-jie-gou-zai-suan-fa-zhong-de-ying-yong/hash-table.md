@@ -156,7 +156,7 @@ XOR
 class Solution {
     public char findTheDifference(String s, String t) {
         int len = t.length();
-        char ch = t.charAt(len - 1);//初始化，注意长字符串t最后多出来的那位为初始值，想想为什么？
+        char ch = t.charAt(len - 1);//初始化，注意长字符串t最后多出来的那位为初始值，因为下面的循环要保证每个元素都遍历到
         for (int i = 0; i < len - 1; i++) {//i < len -1，短的字符串不越界
             ch ^= s.charAt(i);
             ch ^= t.charAt(i);
@@ -187,7 +187,7 @@ int和char转换的做法
 class Solution {
     public char findTheDifference(String s, String t) {
         int len = s.length();
-        int charCode = t.charAt(len);//初始化为长的字符串最后一位，想想为什么？
+        int charCode = t.charAt(len);//初始化为长的字符串最后一位，因为下面的循环要保证每个元素都遍历到
         for (int i = 0; i < len; i++) {
             charCode -= s.charAt(i);
             charCode += t.charAt(i);
@@ -196,4 +196,25 @@ class Solution {
     }
 }
 ```
+
+## 347 - Top K Frequent Elements
+
+### 原题概述
+
+Given a non-empty array of integers, return the **k** most frequent elements.
+
+For example,  
+Given `[1,1,1,2,2,3]` and k = 2, return `[1,2]`.
+
+**Note:**   
+
+
+* You may assume k is always valid, 1 ≤ k ≤ number of unique elements.
+* Your algorithm's time complexity **must be** better than O\(n log n\), where n is the array's size.
+
+### 题意和分析
+
+给一个非空的整数数组和一个总是有效的的整数k，返回前k个最多出现的元素。
+
+### 代码
 
