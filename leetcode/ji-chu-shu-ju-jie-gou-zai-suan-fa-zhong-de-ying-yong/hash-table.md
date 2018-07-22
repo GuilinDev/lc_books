@@ -460,6 +460,8 @@ What if the inputs contain unicode characters? How would you adapt your solution
 
 给两个字符串，判断二者是否打乱顺序组成的Anagram。这道题如果先排序再比较是否一样，复杂度为O\(nlogn\)；如果用XOR来消除的话，又不能排除aa和bb这样也能等于0的情况。因为字符可以用数字来表示，所以一个loop分别加减二者的所有字符的值，看是否有的字符为不为0即可，时间O\(n\)，空间创建了两个数组，O\(n\)。
 
+> ASCII, Unicode与UTF-8
+
 ### 代码
 
 ```java
@@ -582,5 +584,158 @@ The two boomerangs are [[1,0],[0,0],[2,0]] and [[1,0],[2,0],[0,0]]
 
 ### 题意和分析
 
+定义了一种类似回旋镖形状的三元组结构，要求第一个点和第二个点之间的距离跟第一个点和第三个点之间的距离相等。现在给了n个点，找出回旋镖的个数。那么如果有一个点a，还有两个点b和c，如果ab和ac之间的距离相等，那么就有两种排列方法abc和acb；如果有三个点b，c，d都分别和a之间的距离相等，那么有六种排列方法，abc, acb, acd, adc, abd,adb，那么是怎么算出来的呢，很简单，如果有n个点和a距离相等，那么排列方式为n\(n-1\)，这属于最简单的排列组合问题了。如此就可以遍历所有点，让每个点都做一次点a，然后遍历其他所有点，统计和a距离相等的点有多少个，然后分别带入n\(n-1\)计算结果并累加到result中，只有当n大于等于2时，result值才会真正增加。
+
+时间复杂度O\(n^2\)，空间复杂度O\(n\)。
+
+> 如果定义一个这样的二维数组int a\[3\]\[4\]={{1,3,5,7},{9,11,13,15},{17,19,21,23}};则其在内存中的表示下面这样的。
+>
+> ![](https://images0.cnblogs.com/blog2015/652582/201503/081344491173409.jpg)
+>
+> 在内存中二维数组是按照**行主序**进行存储的，从内存的角度上看，二维数组本质就是一个一维数组。如果把二维数组的每一行看成一个整体，即看成一个数组中的一个元素，那么整个二维数组就是一个一维数组。而**二维数组的名字代表二维数组第0行的首地址\(注意它是代表一行元素的首地址，而不是第0行第0列元素的首地址，虽然是相等的，但不能这么理解，所以在没有强制转换的情况下，二维数据要么通过行指针进行参数传递，要么通过二维指针进行参数传递\)**。
+
 ### 代码
+
+```java
+class Solution {
+    public int numberOfBoomerangs(int[][] points) {
+        if (points == null || points.length == 0) {
+            return 0;
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+        int result = 0;
+        for (int i = 0; i < points.length; i++) {
+            for (int j = 0; j < points.length; j++) {
+                if (i == j) {//自己和自己不用比较
+                    continue;
+                }
+                int distance = getDistance(points[i], points[j]);
+                map.put(distance, map.getOrDefault(distance, 0) + 1);//key是distance,value是距这个点相同distance的点的个数
+            }
+
+            for (int n : map.values()) {
+                result += n * (n - 1);//排列方式为n(n-1)
+            }
+            map.clear();//清空map，下一轮检查一个新的点
+        }
+        return result;
+    }
+
+    private int getDistance(int[] a, int[] b) {
+        int dx = a[0] - b[0];
+        int dy = a[1] - b[1];
+
+        return dx*dx + dy*dy;
+    }
+}
+```
+
+## 409 - Longest Palindrome
+
+### 原题概述
+
+Given a string which consists of lowercase or uppercase letters, find the length of the longest palindromes that can be built with those letters.
+
+This is case sensitive, for example `"Aa"` is not considered a palindrome here.
+
+**Note:**  
+Assume the length of given string will not exceed 1,010.
+
+**Example:**
+
+```text
+Input:
+"abccccdd"
+
+Output:
+7
+
+Explanation:
+One longest palindrome that can be built is "dccaccd", whose length is 7.
+```
+
+### 题意和分析
+
+给一个字符串，里面有大小写，字符可以打乱，问这些字符可以组成的最长的回文结构长度是多少。所以问题就转化为了求偶数个字符的个数，我们了解回文串的都知道，回文串主要有两种形式，一个是左右完全对称的，比如noon，还有一种是以中间字符为中心，左右对称，比如bob，level等，那么我们统计出来所有偶数个字符的出现总和，然后如果有总数是奇数个字符的话，我们算出偶数的个数，然后最后结果加1即可。
+
+### 代码
+
+```java
+class Solution {
+    public int longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int count = 0;
+        Set<Character> set = new HashSet<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (set.contains(s.charAt(i))) {
+                set.remove(s.charAt(i));//找到成对的字符就删掉
+                count++;
+            } else {
+                set.add(s.charAt(i));
+            }
+        }
+        if (!set.isEmpty()) {//奇数个字符
+            return count*2 + 1;
+        }
+        return count*2;//偶数个字符
+    }
+}
+```
+
+另外`hashset.remove(ch)`这个方法，如果hashset中有ch这个元素的话可以remove并且返回true，所以可以这样写
+
+```java
+class Solution {
+    public int longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        Set<Character> set = new HashSet<>();
+        int count = 0;
+        for (char ch : s.toCharArray()) {
+            if (set.remove(ch)) {//如果hashset中有这个字符，可以remove并返回true
+                count++;
+            } else {
+                set.add(ch);
+            }
+        }
+        return set.size() > 0 ? count*2 + 1 : count*2;
+    }
+}
+```
+
+另外，也可以利用int\[26\]来检查有多少个相同的字符
+
+```java
+class Solution {
+    public int longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        int[] lowercase = new int[26];
+        int[] uppercase = new int[26];
+        int result = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int ch = s.charAt(i);
+            if (ch >= 97) {//判断大小写
+                lowercase[ch - 'a']++;
+            } else {
+                uppercase[ch - 'A']++;
+            }
+        }
+        for (int i = 0; i < 26; i++) {//遍历大小写两个数组，看相同的字符有多少
+            //每两个字符组成一个回文
+            result += (lowercase[i] / 2) * 2;
+            result += (uppercase[i] / 2) * 2;
+        }
+        return result == s.length() ? result : result + 1;
+    }
+}
+```
+
+
 
