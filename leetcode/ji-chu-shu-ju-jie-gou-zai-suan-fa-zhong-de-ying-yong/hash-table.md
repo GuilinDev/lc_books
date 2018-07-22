@@ -560,7 +560,7 @@ class Solution {
 }
 ```
 
-## 447 - Number of Boomerangs
+## \*447 - Number of Boomerangs
 
 ### 原题概述
 
