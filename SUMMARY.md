@@ -1,11 +1,10 @@
 # Table of contents
 
 * [前言](README.md)
-* [Introduction](introduction.md)
 * [公司列表](gong-si-lie-biao.md)
 * [基础知识](ji-chu-zhi-shi.md)
 * [LeetCode刷题](leetcode/README.md)
-  * [0. Leetcode题目索引](leetcode/0.-leetcode-ti-mu-suo-yin.md)
+  * [0. 刷题策略](leetcode/introduction.md)
   * [1. 基础算法和算法思想](leetcode/ji-chu-suan-fa.md)
   * [2. 基础数据结构底层实现](leetcode/1.-shu-ju-jie-gou-de-di-ceng-shi-xian.md)
   * [3. 数据结构在算法中应用](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/README.md)
