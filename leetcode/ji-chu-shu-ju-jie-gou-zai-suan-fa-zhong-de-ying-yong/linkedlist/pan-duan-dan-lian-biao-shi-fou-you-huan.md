@@ -59,11 +59,11 @@ Can you solve it without using extra space?
 
 这道题是上一道的延伸，如果有环，判断环的入口，如果没有环就返回null，不要改变原先的链表。下面三种情况，链表无环，链表头尾相接，链表一部分有环。
 
-![](../../../.gitbook/assets/image%20%2830%29.png)
+![](../../../.gitbook/assets/image%20%2831%29.png)
 
 ![](../../../.gitbook/assets/image%20%287%29.png)
 
-![](../../../.gitbook/assets/image%20%2826%29.png)
+![](../../../.gitbook/assets/image%20%2827%29.png)
 
 这道题也是先用快慢指针判断该链表是否有环，如果没有环，直接返回null，如果有环\(这时候slow和fast是在一个node上\)，将fast重新指向head（将slow重新指向head也可以），然后继续走，不过这时候fast每次只走一步，若干步和slow和fast相遇的node就是环的入口；
 

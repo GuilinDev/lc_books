@@ -782,5 +782,117 @@ Given n = 3, there are a total of 5 unique BST's:
 
 ### 题意和分析
 
+这个解释来自[http://fisherlei.blogspot.com/2013/03/leetcode-unique-binary-search-trees.html](http://fisherlei.blogspot.com/2013/03/leetcode-unique-binary-search-trees.html)，略作修改
+
+ 如果把上例的顺序改一下，就可以看出规律了。  
+ 1                1                      2                       3             3  
+    \                 \                 /      \                  /              /   
+      3               2              1       3               2             1  
+    /                   \                                       /                  \  
+ 2                       3                                   1                    2  
+  
+比如，以1为根的树有几个，完全取决于有二个元素的子树有几种。同理，2为根的子树取决于一个元素的子树有几个。以3为根的情况，则与1相同。  
+  
+定义Count\[i\] 为以\[0,i\]能产生的Unique Binary Tree的数目，  
+  
+如果数组为空，毫无疑问，只有一种BST，即空树，  
+Count\[0\] =1  
+  
+如果数组仅有一个元素{1}，只有一种BST，单个节点  
+Count\[1\] = 1  
+  
+如果数组有两个元素{1,2}， 那么有如下两种可能  
+1                       2  
+  \                    /  
+    2                1  
+Count\[2\] = Count\[0\] \* Count\[1\]   \(1为根的情况\)  
+                  + Count\[1\] \* Count\[0\]  \(2为根的情况。  
+  
+再看一遍三个元素的数组，可以发现BST的取值方式如下：  
+Count\[3\] = Count\[0\]\*Count\[2\]  \(1为根的情况\)  
+               + Count\[1\]\*Count\[1\]  \(2为根的情况\)  
+               + Count\[2\]\*Count\[0\]  \(3为根的情况\)  
+  
+所以，由此观察，可以得出Count的递推公式为
+
+![](../../../.gitbook/assets/image%20%2811%29.png)
+
+这正是[卡塔兰数](http://zh.wikipedia.org/wiki/%E5%8D%A1%E5%A1%94%E5%85%B0%E6%95%B0)的一种定义方式，是一个典型的动态规划的定义方式（根据其实条件和递推式求解结果）。所以思路也很明确了，维护量res\[i\]表示含有i个结点的二叉查找树的数量。根据上述递推式依次求出1到n的的结果即可。
+
+对于BST是否Unique，很难判断，但引入了一个条件以后，立即就清晰了，**即当数组为 1，2，3，4，.. i，.. n时，基于以下原则的BST建树具有唯一性： 以i为根结点的树，其左子树由\[0, i-1\]构成， 其右子树由\[i+1, n\]构成。**
+
+时间上每次求解i个结点的二叉查找树数量的需要一个i步的循环，总体要求n次，所以总时间复杂度是O\(1+2+...+n\)=O\(n^2\)。空间上需要一个数组来维护，并且需要前i个的所有信息，所以是O\(n\)。
+
+### 代码
+
+```java
+class Solution {
+    public int numTrees(int n) {
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+        int[] trees = new int[n + 1];
+        trees[0] = 1;
+
+        // DP递推式：tree[t+1] = trees[i] * trees[t - i]，其中0 <= i <= t
+        // 令num = t + 1, 则t = num -1;
+        //递推式转化为:
+        //trees[num] += trees[i] * trees[num-1]，其中0 <= i <= num - 1, 1 <= num <= n;
+        //trees[0] = 1
+
+        for (int num = 1; num <= n; num++) {
+            for (int i = 0; i <= num - 1; i++) {
+                trees[num] += trees[i] * trees[(num - 1) - i];
+            }
+        }
+        return trees[n];
+    }
+}
+```
+
+## 110 - Balanced Binary Tree
+
+### 原题概述
+
+Given a binary tree, determine if it is height-balanced.
+
+For this problem, a height-balanced binary tree is defined as:
+
+> a binary tree in which the depth of the two subtrees of _every_ node never differ by more than 1.
+
+**Example 1:**
+
+Given the following tree `[3,9,20,null,null,15,7]`:
+
+```text
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+Return true.  
+  
+**Example 2:**
+
+Given the following tree `[1,2,2,3,3,null,null,4,4]`:
+
+```text
+       1
+      / \
+     2   2
+    / \
+   3   3
+  / \
+ 4   4
+```
+
+Return false.
+
+### 题意和分析
+
+用动态规划的两个套路，**自底向上**和**自顶向下来解**。
+
 ### 代码
 
