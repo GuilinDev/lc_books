@@ -280,3 +280,144 @@ class Solution {
 }
 ```
 
+## 226 - Invert Binary Tree
+
+### 原题概述
+
+Invert a binary tree.
+
+**Example:**
+
+Input:
+
+```text
+     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+```
+
+Output:
+
+```text
+     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+```
+
+**Trivia:**  
+This problem was inspired by [this original tweet](https://twitter.com/mxcl/status/608682016205344768) by [Max Howell](https://twitter.com/mxcl):
+
+> Google: 90% of our engineers use the software you wrote \(Homebrew\), but you can’t invert a binary tree on a whiteboard so f\*\*\* off.
+
+### 题意和分析
+
+同样可以用递归，DFS和BFS来做。
+
+### 代码
+
+递归的写法很简单，只是复杂度没有什么好优化的。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {//递归的终止条件
+            return root;
+        }
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        root.left = invertTree(right);
+        root.right = invertTree(left);
+
+        return root;
+    }
+}
+```
+
+DFS，可以用stack或者deque
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            TreeNode left = node.left;
+            node.left = node.right;
+            node.right = left;
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+        return root;
+    }
+}
+```
+
+BFS，其实就是层序遍历level order traversal，数据结构不一样
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);//vs add()
+
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();//vs peek()
+            TreeNode left = node.left;
+            node.left = node.right;
+            node.right = left;
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+        return root;
+    }
+}
+```
+
