@@ -148,3 +148,135 @@ A Full Binary Tree (FBT) is a tree in which every node other than the leaves has
 
 来源并加以修改：[https://www.cnblogs.com/idorax/p/6441043.html](https://www.cnblogs.com/idorax/p/6441043.html)
 
+## 104 - Maximum Depth of Binary Tree
+
+### 原题概述
+
+Given a binary tree, find its maximum depth.
+
+The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+**Note:** A leaf is a node with no children.
+
+**Example:**
+
+Given binary tree `[3,9,20,null,null,15,7]`,
+
+```text
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+return its depth = 3.
+
+### 题意和分析
+
+给一颗二叉树，找到其最大的深度并返回。可以用递归，DFS和BFS来做。
+
+### 代码
+
+递归做法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));//只要root不为null，深度至少为1
+    }
+}
+```
+
+DFS，用两个stack，一个用来记录Tree的结点，另一个用来记录最大深度。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Stack<TreeNode> stack = new Stack<>();//存储树节点
+        Stack<Integer> depth = new Stack<>();//存储树的深度
+        stack.push(root);//初始化
+        depth.push(1);//root不为null，则深度至少为1
+        int maxDepth = 0;
+        while (!stack.isEmpty()) {//只要stack中的元素还没有弹完
+            int temp = depth.pop();//每轮先弹出上一轮的“最大深度“进行比较
+            maxDepth = Math.max(temp, maxDepth);
+
+            TreeNode node = stack.pop();
+            if (node.left != null) {
+                stack.push(node.left);
+                depth.push(temp + 1);//在上一轮最大值的基础上，DFS多了一层
+            }
+            if (node.right != null) {
+                stack.push(node.right);
+                depth.push(temp + 1);
+            }
+        }
+        return maxDepth;
+    }
+}
+```
+
+BFS，用队列来实现
+
+```java
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);//add()
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                TreeNode node = queue.poll();
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+            count++;
+        }
+        return count;
+    }
+}
+```
+
