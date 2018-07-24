@@ -892,7 +892,83 @@ Return false.
 
 ### 题意和分析
 
-用动态规划的两个套路，**自底向上**和**自顶向下来解**。
+平衡二叉树的定义：两个子树的高度相差不会超过1，而且左右子树都是平衡的。用动态规划的两个套路，**自底向上**和**自顶向下来解**。
 
 ### 代码
+
+自顶向下 - 这个办法利用递归，算出左右子树的深度，然后严格按照平衡二叉树的定义看左右子树的深度是否相差大于1。其中findDepth\(\)的复杂度需要遍历每个结点为O\(n\)，而对所有结点都会执行以下findDepth\(\)，所以总体时间复杂度为O\(n^2\)，空间为O\(n\)。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        //左右子树的深度
+        int left = findDepth(root.left);
+        int right = findDepth(root.right);
+
+        return Math.abs(left - right) <= 1 //随时检查
+                && isBalanced(root.left) && isBalanced(root.right);
+    }
+
+    //递归找到子树的深度
+    private int findDepth(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return Math.max(findDepth(node.left), findDepth(node.right)) + 1;//node不为0深度至少为1
+    }
+}
+```
+
+自底向上 - 利用DFS，在DFS的递归中返回当前结点的height，如果当前结点的子结点是平衡的，dfsHeight\(\)会返回一个非负整数，如果不平衡就返回-1，然后根据leftHeight和rightHeight的结果来决定一层层上升传递的数值。
+
+```text
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        return dfsHeight(root) != -1;//检查返回的数字决定是否平衡
+    }
+    private int dfsHeight(TreeNode root) {
+        if (root == null) {//递归的终止条件，查到最后还是平衡的就返回-1
+            return 0;
+        }
+
+        //回溯时层层传递
+        int leftHeight = dfsHeight(root.left);
+        if (leftHeight == -1) {
+            return -1;
+        }
+        int rightHeight = dfsHeight(root.right);
+        if (rightHeight == -1) {
+            return -1;
+        }
+
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+            return -1;
+        }
+
+        return Math.max(leftHeight, rightHeight) + 1;//返回当前结点的height
+    }
+}
+```
 
