@@ -850,6 +850,99 @@ class Solution {
 }
 ```
 
+## 95 - Unique Binary Search Trees II
+
+### 原题概述
+
+Given an integer _n_, generate all structurally unique **BST's** \(binary search trees\) that store values 1 ... _n_.
+
+**Example:**
+
+```text
+Input: 3
+Output:
+[
+  [1,null,3,2],
+  [3,2,null,1],
+  [3,1,null,null,2],
+  [2,1,3],
+  [1,null,2,null,3]
+]
+Explanation:
+The above output corresponds to the 5 unique BST's shown below:
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+```
+
+### 题意和分析
+
+跟上一题相比，这道题要求不是总数，而是打印出所有符合条件的BST。
+
+大致思路如下：
+
+1. 每一次都在一个范围内随机选取一个结点作为根。 
+2. 每选取一个结点作为根，就把树切分成左右两个子树，直至该结点左右子树为空。
+
+可以看出这也是一个可以划分成子问题求解的题目，所以考点是动态规划。 但具体对于本题来说，采取的是自底向上的求解过程。
+
+ 1. 选出根结点后应该先分别求解该根的左右子树集合，也就是根的左子树有若干种，它们组成左子树集合，根的右子树有若干种，它们组成右子树集合。 
+
+2. 然后将左右子树相互配对，每一个左子树都与所有右子树匹配，每一个右子树都与所有的左子树匹配。然后将两个子树插在根结点上。 
+
+3. 最后，把根结点放入链表中。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<TreeNode> generateTrees(int n) {
+        if (n < 1) {
+            return new ArrayList<TreeNode>();
+        }
+        return helper(1, n);
+    }
+
+    private List<TreeNode> helper(int start, int end) {
+        List<TreeNode> result = new ArrayList<>();
+        if (start > end) {
+            result.add(null);
+            return result;
+        }
+
+        for (int i = start; i <= end; i++) {//在1...n中依次选取结点作为根
+            //接下来根据选取的根，把树切分成左右子树，递归直到为空
+            List<TreeNode> leftChild = helper(start, i - 1);
+            List<TreeNode> rightChild = helper(i + 1, end);
+            for (TreeNode left : leftChild) {
+                for (TreeNode right : rightChild) {
+                    TreeNode root = new TreeNode(i);//当前树的根
+
+                    //根结合上左右子树
+                    root.left = left;
+                    root.right = right;
+
+                    result.add(root);
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
 ## 110 - Balanced Binary Tree
 
 ### 原题概述
