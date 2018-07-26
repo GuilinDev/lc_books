@@ -241,7 +241,7 @@ class Solution {
 }
 ```
 
-BFS，用队列来实现
+BFS，用Queue来实现
 
 ```java
 
@@ -835,7 +835,7 @@ class Solution {
         trees[0] = 1;
 
         // DP递推式：tree[t+1] = trees[i] * trees[t - i]，其中0 <= i <= t
-        // 令num = t + 1, 则t = num -1;
+        // 令num = t + 1, 则t = num - 1;
         //递推式转化为:
         //trees[num] += trees[i] * trees[num-1]，其中0 <= i <= num - 1, 1 <= num <= n;
         //trees[0] = 1
@@ -1027,7 +1027,7 @@ class Solution {
 
 自底向上 - 利用DFS，在DFS的递归中返回当前结点的height，如果当前结点的子结点是平衡的，dfsHeight\(\)会返回一个非负整数，如果不平衡就返回-1，然后根据leftHeight和rightHeight的结果来决定一层层上升传递的数值。
 
-```text
+```java
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
