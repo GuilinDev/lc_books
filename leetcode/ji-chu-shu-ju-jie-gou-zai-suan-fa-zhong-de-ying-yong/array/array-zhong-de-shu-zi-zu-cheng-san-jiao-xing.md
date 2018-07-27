@@ -244,11 +244,11 @@ Output: 10
 
     2. 高度1，5，6依次递增，所以依次压入栈中，然后当index = 4的时候，高度值为2，小于之前index = 3时候的高度值6，所以此时index = 4不入栈，但此时把index = 4对应的高度值2记下来；index = 3出栈，计算此时面积area = 6；
 
-![](../../../.gitbook/assets/image%20%2825%29.png)
+![](../../../.gitbook/assets/image%20%2826%29.png)
 
     3. 此时栈顶元素为index = 2，index = 2对应的值5 &gt; index = 4对应的值2；所以index = 2出栈，计算此时的面积area = 2 x 5 = 10；
 
-![](../../../.gitbook/assets/image%20%2832%29.png)
+![](../../../.gitbook/assets/image%20%2833%29.png)
 
     4. 此时栈顶元素为index = 1，它对应的高度1 &lt; index = 4对应的高度2，所以可以压入index = 4，同样之后index = 5也是上升可以压入，到最后结束的时候index = 6的时候人工压入一个0，此时栈的有效下标元素为{1,4,5}；栈顶元素为index = 6对应高度为0，此时只要高度比0大都需要出栈，所以index = 5先出栈，计算此时的面积area = 3，上面area最大值为10，所以不取；
 

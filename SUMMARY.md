@@ -42,7 +42,7 @@
     * [Heap](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/heap.md)
     * [Hash Table](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/hash-table.md)
     * [Tree](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/README.md)
-      * [Tree的知识点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/tree-de-zhi-shi-dian.md)
+      * [Tree的基础知识](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/tree-de-zhi-shi-dian.md)
       * [寻找Tree中的nodes](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/xun-zhao-tree-zhong-de-nodes.md)
   * [4. 算法思想的应用](leetcode/suan-fa-si-xiang-de-ying-yong/README.md)
     * [Two Pointers](leetcode/suan-fa-si-xiang-de-ying-yong/untitled-2.md)

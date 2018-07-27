@@ -1,4 +1,4 @@
-# Tree的知识点
+# Tree的基础知识
 
 树在数据结构中占有非常重要的地位。
 
@@ -8,6 +8,8 @@
 3、level order traverse （bfs）  
   
 70%的题目都是第二类。
+
+## Perfect/Complete/Full
 
 这里先介绍树的基本概念，给出完美\(Perfect\)二叉树，完全\(Complete\)二叉树和完满\(Full\)二叉树的区别。 **如果学习过二叉树，但是对这三种二叉树并没有深入的理解，或者完全被中文数据结构教科书所误导\(只听说过满二叉树和完全二叉树\)的朋友不妨花点时间耐着性子将本文仔细阅读N\(&gt;=1\)遍。**
 
@@ -28,7 +30,7 @@ many levels of additional nodes that form a hierarchy.
 
 例如：
 
-![](https://images2015.cnblogs.com/blog/1094457/201702/1094457-20170225102115945-363779980.png)
+![](../../../.gitbook/assets/image%20%2825%29.png)
 
 ```text
 A simple unordered tree; in this diagram, the node labeled 7 has two children, 
