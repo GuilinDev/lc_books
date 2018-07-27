@@ -1,8 +1,8 @@
 # Tree
 
-## 104 - Maximum Depth of Binary Tree
+### 104 - Maximum Depth of Binary Tree
 
-### 原题概述
+#### 原题概述
 
 Given a binary tree, find its maximum depth.
 
@@ -24,11 +24,11 @@ Given binary tree `[3,9,20,null,null,15,7]`,
 
 return its depth = 3.
 
-### 题意和分析
+#### 题意和分析
 
 给一颗二叉树，找到其最大的深度并返回。可以用递归，DFS和BFS来做。
 
-### 代码
+#### 代码
 
 递归做法
 
@@ -132,9 +132,9 @@ class Solution {
 }
 ```
 
-## 226 - Invert Binary Tree
+### 226 - Invert Binary Tree
 
-### 原题概述
+#### 原题概述
 
 Invert a binary tree.
 
@@ -165,11 +165,11 @@ This problem was inspired by [this original tweet](https://twitter.com/mxcl/stat
 
 > Google: 90% of our engineers use the software you wrote \(Homebrew\), but you can’t invert a binary tree on a whiteboard so f\*\*\* off.
 
-### 题意和分析
+#### 题意和分析
 
 同样可以用递归，DFS和BFS来做。
 
-### 代码
+#### 代码
 
 递归的写法很简单，只是复杂度没有什么好优化的。
 
@@ -273,9 +273,9 @@ class Solution {
 }
 ```
 
-## 617 - Merge Two  Binary Tree
+### 617 - Merge Two  Binary Tree
 
-### 原题概述
+#### 原题概述
 
 Given two binary trees and imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not.
 
@@ -303,11 +303,11 @@ Merged tree:
 
 **Note:** The merging process must start from the root nodes of both trees.
 
-### 题意和分析
+#### 题意和分析
 
 同样可以用递归来做，将一棵树merge到另一颗树中。
 
-### 代码
+#### 代码
 
 递归
 
@@ -338,9 +338,9 @@ class Solution {
 }
 ```
 
-## 100 - Same Tree
+### 100 - Same Tree
 
-### 原题概述
+#### 原题概述
 
 Given two binary trees, write a function to check if they are the same or not.
 
@@ -382,11 +382,11 @@ Input:     1         1
 Output: false
 ```
 
-### 题意和分析
+#### 题意和分析
 
 用递归和非递归分别实现。
 
-### 代码
+#### 代码
 
 递归
 
@@ -459,9 +459,9 @@ class Solution {
 }
 ```
 
-## 173 - Binary Search Tree Iterator
+### 173 - Binary Search Tree Iterator
 
-### 原题概述
+#### 原题概述
 
 Implement an iterator over a binary search tree \(BST\). Your iterator will be initialized with the root node of a BST.
 
@@ -469,7 +469,7 @@ Calling `next()` will return the next smallest number in the BST.
 
 **Note:** `next()` and `hasNext()` should run in average O\(1\) time and uses O\(h\) memory, where h is the height of the tree.
 
-### 题意和分析
+#### 题意和分析
 
 这道题是对二叉搜索树的遍历，要求next\(\)返回下一个最小的val，next\(\)和hasNext\(\)的时间复杂度为O\(1\)，空间为O\(h\)，其中h为高度。BST的建树规则是left-root-right，这个跟中序遍历一样。
 
@@ -560,7 +560,7 @@ Calling `next()` will return the next smallest number in the BST.
 
 然后，我们的这个数据结构是否满足题目要求。我们可以看到每一个结点一定要进入栈中，且该操作是在构造过程和next\(\)中执行的，其中构造过程只执行一次，而next\(\)执行多次。但是进栈的操作存在差异性，有时候调用next\(\)不会往栈中添加任何元素，有时候会添加多个，但是至多不超过h个，其中h是树的高度，因为添加时只顺着树的左分支往下添加。我们一共要调用n次next\(\)，在这n次调用中，每个结点都进栈/出栈，共n次入栈操作，n次出栈操作，平均起来，**每次next\(\)只有`一次入栈操作+一次出栈操作`**，因此**满足平均时间复杂度O\(1\)**的要求。再看空间复杂度，刚才我们已经说过，在往栈中添加元素时**只顺着树的左分支往下添加**，因此**至多添加h个结点**，其中h就是树的高度，因此**满足空间复杂度O\(h\)**的要求。
 
-### 代码
+#### 代码
 
 ```java
 /**
@@ -611,9 +611,9 @@ public class BSTIterator {
  */
 ```
 
-## 96 - Unique Binary Search Trees
+### 96 - Unique Binary Search Trees
 
-### 原题概述
+#### 原题概述
 
 Given _n_, how many structurally unique **BST's** \(binary search trees\) that store values 1 ... _n_?
 
@@ -632,7 +632,7 @@ Given n = 3, there are a total of 5 unique BST's:
    2     1         2                 3
 ```
 
-### 题意和分析
+#### 题意和分析
 
 这个解释来自[http://fisherlei.blogspot.com/2013/03/leetcode-unique-binary-search-trees.html](http://fisherlei.blogspot.com/2013/03/leetcode-unique-binary-search-trees.html)，略作修改
 
@@ -675,7 +675,7 @@ Count\[3\] = Count\[0\]\*Count\[2\]  \(1为根的情况\)
 
 时间上每次求解i个结点的二叉查找树数量的需要一个i步的循环，总体要求n次，所以总时间复杂度是O\(1+2+...+n\)=O\(n^2\)。空间上需要一个数组来维护，并且需要前i个的所有信息，所以是O\(n\)。
 
-### 代码
+#### 代码
 
 ```java
 class Solution {
@@ -702,9 +702,9 @@ class Solution {
 }
 ```
 
-## 95 - Unique Binary Search Trees II
+### 95 - Unique Binary Search Trees II
 
-### 原题概述
+#### 原题概述
 
 Given an integer _n_, generate all structurally unique **BST's** \(binary search trees\) that store values 1 ... _n_.
 
@@ -730,7 +730,7 @@ The above output corresponds to the 5 unique BST's shown below:
    2     1         2                 3
 ```
 
-### 题意和分析
+#### 题意和分析
 
 跟上一题相比，这道题要求不是总数，而是打印出所有符合条件的BST。
 
@@ -747,7 +747,7 @@ The above output corresponds to the 5 unique BST's shown below:
 
 3. 最后，把根结点放入链表中。
 
-### 代码
+#### 代码
 
 ```java
 /**
@@ -795,9 +795,9 @@ class Solution {
 }
 ```
 
-## 110 - Balanced Binary Tree
+### 110 - Balanced Binary Tree
 
-### 原题概述
+#### 原题概述
 
 Given a binary tree, determine if it is height-balanced.
 
@@ -835,11 +835,11 @@ Given the following tree `[1,2,2,3,3,null,null,4,4]`:
 
 Return false.
 
-### 题意和分析
+#### 题意和分析
 
 平衡二叉树的定义：两个子树的高度相差不会超过1，而且左右子树都是平衡的。用动态规划的两个套路，**自底向上**和**自顶向下来解**。
 
-### 代码
+#### 代码
 
 自顶向下 - 这个办法利用递归，算出左右子树的深度，然后严格按照平衡二叉树的定义看左右子树的深度是否相差大于1。其中findDepth\(\)的复杂度需要遍历每个结点为O\(n\)，而对所有结点都会执行以下findDepth\(\)，所以总体时间复杂度为O\(n^2\)，空间为O\(n\)。
 
