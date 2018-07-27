@@ -1018,7 +1018,7 @@ Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of 
 
 #### 题意和分析
 
-求二叉搜索树的最小共同祖先，正常的思路是用递归来求解，由于二叉搜索树的特点是左&lt;根&lt;右，所以根节点的值一直都是中间值，大于左子树的所有节点值，小于右子树的所有节点值，所以如果根节点的值大于给定的两个值p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归寻找共同父节点；如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么就进入根节点的右子节点继续递归，如果都不是（大于p和q中较小值而小于较大值），则说明当前根节点就是最小共同父节点，直接返回； 
+求二叉搜索树的最小共同祖先，正常的思路是用递归来求解，由于二叉搜索树的特点是左&lt;=根&lt;=右，所以根节点的值一直都是中间值，大于左子树的所有节点值，小于右子树的所有节点值，所以如果根节点的值大于给定的两个值p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归寻找共同父节点；如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么就进入根节点的右子节点继续递归，如果都不是（大于p和q中较小值而小于较大值），则说明当前根节点就是最小共同父节点，直接返回； 
 
 如果是非递归的写法，就是把递归的过程用while来代替，但是每次循环需要更新一下当前的根节点。
 
@@ -1078,6 +1078,131 @@ class Solution {
                 break;
             }
         }
+        return root;
+    }
+}
+```
+
+### 669 - Trim a Binary Search Tree
+
+#### 原题概述
+
+Given a binary search tree and the lowest and highest boundaries as `L` and `R`, trim the tree so that all its elements lies in `[L, R]` \(R &gt;= L\). You might need to change the root of the tree, so the result should return the new root of the trimmed binary search tree.
+
+**Example 1:**  
+
+
+```text
+Input: 
+    1
+   / \
+  0   2
+
+  L = 1
+  R = 2
+
+Output: 
+    1
+      \
+       2
+```
+
+**Example 2:**  
+
+
+```text
+Input: 
+    3
+   / \
+  0   4
+   \
+    2
+   /
+  1
+
+  L = 1
+  R = 3
+
+Output: 
+      3
+     / 
+   2   
+  /
+ 1
+```
+
+#### 题意和分析
+
+给一个边界返回\[L, R\]，修剪给定的BST，所有不在范围内的结点都应该被剪掉，但是剩下的应该还是BST，左&lt;=根&lt;=右，如果是先遍历一遍BST，把符合要求的结点放入到一个Array里面，然后再重建一个新的BST，这样的想法可能会改变原来BST的总体结构；
+
+所以用另外一种思路，在遍历的过程就对二叉树进行修剪，在递归的过程中判定根结点是否在范围中，如果根结点的值小于L，就返回根结点的右子结点调用递归的值；如果根结点大于R，就返回根结点的左子结点调用递归函数的值；如果根结点在范围内，就将起左右子结点同时更新为对其左右子结点调用递归函数的值，最后返回root。
+
+#### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if (root == null) {
+            return null;
+        }
+        if (root.val < L) {//左边的结点都不用看了
+            return trimBST(root.right, L, R);
+        }
+        if (root.val > R) {//右边的结点都不用看了
+            return trimBST(root.left, L, R);
+        }
+        root.left = trimBST(root.left, L, R);
+        root.right = trimBST(root.right, L, R);
+
+        return root;
+    }
+}
+```
+
+同样，也可以用非递归while的办法来代替递归过程
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if (root == null) {
+            return null;
+        }
+        while (root.val < L || root.val > R) {
+            root = (root.val < L) ? root.right : root.left;
+        }
+        TreeNode current = root;
+        while (current != null) {
+            while (current.left != null && current.left.val < L) {
+                current.left = current.left.right;//太小，移向右边
+            }
+            current = current.left;
+        }
+        current = root;
+        while (current != null) {
+            while (current.right != null && current.right.val > R) {
+                current.right = current.right.left;//太大，移向左边
+            }
+            current = current.right;
+        }
+
         return root;
     }
 }
