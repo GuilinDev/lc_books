@@ -1,8 +1,8 @@
 # Array中做加减法
 
-## 66 - Plus One
+### 66 - Plus One
 
-### 原题概述
+#### 原题概述
 
 > Given a **non-empty** array of digits representing a non-negative integer, plus one to the integer.
 >
@@ -26,13 +26,13 @@
 > Explanation: The array represents the integer 4321.
 > ```
 
-### 题意和分析
+#### 题意和分析
 
 作为开胃菜，这道题目很简单，就是需要考虑数组中最后一位加1的时候进位的问题。
 
 Time: O\(n\)
 
-### 代码
+#### 代码
 
 ```java
 class Solution {
