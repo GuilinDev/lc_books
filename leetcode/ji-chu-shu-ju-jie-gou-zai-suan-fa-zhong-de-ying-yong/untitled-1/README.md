@@ -1208,3 +1208,119 @@ class Solution {
 }
 ```
 
+### 101 - Symmetric Tree
+
+#### 原题概述
+
+Given a binary tree, check whether it is a mirror of itself \(ie, symmetric around its center\).
+
+For example, this binary tree `[1,2,2,3,4,4,3]` is symmetric:
+
+```text
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+```
+
+But the following `[1,2,2,null,3,null,3]` is not:  
+
+
+```text
+    1
+   / \
+  2   2
+   \   \
+   3    3
+```
+
+**Note:**  
+Bonus points if you could solve it both recursively and iteratively.
+
+#### 题意和分析
+
+判断一个Binary Tree是否是平衡树，两个结点n1和n2，需要判断n1的左子结点和n2的右子结点是否相同，以及n1的右子结点和n2的左子结点是否相同。加分项是用递归和迭代的办法分别做出来。
+
+#### 代码
+
+递归
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isSymmetric(root.left, root.right);
+    }
+    private boolean isSymmetric(TreeNode left, TreeNode right) {
+        //递归的两个终止条件
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null || left.val != right.val) {
+            return false;
+        }
+        return isSymmetric(left.left, right.right) && isSymmetric(left.right, right.left);
+    }
+}
+```
+
+非递归，同样的思路做迭代，用Queue来做，把左边的结点和右边分别进行比较即可。
+
+> Queue使用时要尽量避免Collection的add\(\)和remove\(\)方法，而是要使用offer\(\)来加入元素，使用poll\(\)来获取并移出元素。它们的优点是通过返回值可以判断成功与否，add\(\)和remove\(\)方法在失败的时候会抛出异常。 如果要使用前端而不移出该元素，使用element\(\)或者peek\(\)方法。
+>
+> 另外LinkedList类实现了Queue接口，因此我们可以把LinkedList当成Queue来用。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        //这里用一个Queue也是可以的，每次while循环依次取出和加入就可以了，为了方便阅读用了两个Queue
+        Queue<TreeNode> q1 = new LinkedList<>();
+        Queue<TreeNode> q2 = new LinkedList<>();
+        q1.offer(root.left);
+        q2.offer(root.right);
+
+        while (!q1.isEmpty() && !q2.isEmpty()) {
+            TreeNode left = q1.poll();
+            TreeNode right = q2.poll();
+
+            if (left == null && right == null) {
+                continue;
+            }
+            if (left == null || right == null || left.val != right.val) {
+                return false;
+            }
+
+            q1.offer(left.left);
+            q1.offer(left.right);
+            q2.offer(right.right);
+            q2.offer(right.left);
+        }
+        return true;
+    }
+}
+```
+
