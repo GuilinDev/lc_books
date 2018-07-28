@@ -1324,3 +1324,91 @@ class Solution {
 }
 ```
 
+### 124 - Binary Tree Maximum Path Sum
+
+#### 原题概述
+
+Given a **non-empty** binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain **at least one node** and does not need to go through the root.
+
+**Example 1:**
+
+```text
+Input: [1,2,3]
+
+       1
+      / \
+     2   3
+
+Output: 6
+```
+
+**Example 2:**
+
+```text
+Input: [-10,9,20,null,null,15,7]
+
+   -10
+   / \
+  9  20
+    /  \
+   15   7
+
+Output: 42
+```
+
+#### 题意和分析
+
+求二叉树的最大路径，这道题很容易想到DFS，但因为起始位置和结束位置可以是任意位置，所以有点难度。我们知道Tree相关的题目一般都用递归来做，树的递归解法一般是二话不说先递归到leaf，然后回溯到root，同时在回溯的过程中处理结点。以给定的例子稍微改变一下来看
+
+```text
+      -10
+      / \
+     9  20
+    /  \
+   15   7
+```
+
+最长路径为15-&gt;9-&gt;-10-&gt;20，现在递归到了15，接下来回溯到9，这时候以9为root的子树的和为15+9+7=31；然后继续回溯到-10，这个时候得选一条路径，左路径或右路径，因为叶子结点15 &gt; 7，所以选左路径15-&gt;9-&gt;-10而不是7-&gt;9-&gt;-10，所以对回溯到的每个结点，就用递归函数返回值来定义为：当前结点为root，到leaf的最大路径之和，然后保留全局最大值在参数中，然后返回。
+
+在递归函数中，如果当前结点不存在，那么直接返回0。否则就分别对其左右子节点调用递归函数，由于路径和（是 路径的和，不是某个结点的值）有可能为负数，而我们当然不希望加上负的路径和，所以我们和0相比，取较大的那个，就是要么不加，加就要加正数。然后我们来更新全局最大值结果result，就是以左子结点为终点的最大path之和加上以右子结点为终点的最大path之和，还要加上当前结点值，这样就组成了一个条完整的路径。
+
+#### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int result;
+    public int maxPathSum(TreeNode root) {
+        result = Integer.MIN_VALUE;
+        helper(root);
+        return result;
+    }
+
+    private int helper(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        //分别获得左子树和右子树的最大路径的和
+        int left = helper(node.left);
+        int right = helper(node.right);
+
+        result = Math.max(result, left + right + node.val);//当前回溯到的结点的子树的和vs之前的子树的和
+
+        return Math.max(0, (Math.max(left, right) + node.val));//当前结点为root的子树跟0相比较，不需要负数的和
+    }
+}
+```
+
+这道题的Follow up是打印这个最大路径，这时候递归函数得返回该路径上所有的结点组成的数组，对左右子节点调用递归函数后得到的是数组，需要统计出数组之和，跟0比较，如果小于0，这个和就清零，同时数组清空，然后更新最大路径之和跟数组，最后拼出来返回值的数组。
+
