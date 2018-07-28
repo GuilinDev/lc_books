@@ -1491,5 +1491,136 @@ class Solution {
 }
 ```
 
-如果当前结点不为空，且既不是p也不是q，那么根据上面的分析，p和q的位置就有三种情况，p和q要么分别位于左右子树中，或者同时位于左子树，或者同时位于右子树。在i合理需要优化的情况就是当p和q同时为于左子树或右子树中，而且返回的结点并不是p或q，那么就是p和q的最小父结点了，已经求出来了，就不用再对右结点调用递归函数了，同样，对返回的right也做同样的优化处理
+如果当前结点不为空，且既不是p也不是q，那么根据上面的分析，p和q的位置就有三种情况，p和q要么分别位于左右子树中，或者同时位于左子树，或者同时位于右子树。这里需要优化的情况就是当p和q同时为于左子树或右子树中，而且返回的结点并不是p或q，那么就是p和q的最小父结点了，已经求出来了，就不用再对右结点调用递归函数了，同样，对返回的right也做同样的优化处理。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || p == root || q == root) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        if (left != null && left != p && left != q) {
+            return left;
+        }
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (right != null && right != p && right != q) {
+            return right;
+        }
+        if (left != null && right != null) {
+            return root;
+        }
+
+        return left != null ? left : right;
+    }
+}
+```
+
+###  654 - Maximum Binary Tree
+
+#### 原题概述
+
+Given an integer array with no duplicates. A maximum tree building on this array is defined as follow:
+
+1. The root is the maximum number in the array.
+2. The left subtree is the maximum tree constructed from left part subarray divided by the maximum number.
+3. The right subtree is the maximum tree constructed from right part subarray divided by the maximum number.
+
+Construct the maximum tree by the given array and output the root node of this tree.
+
+**Example 1:**  
+
+
+```text
+Input: [3,2,1,6,0,5]
+Output: return the tree root node representing the following tree:
+
+      6
+    /   \
+   3     5
+    \    / 
+     2  0   
+       \
+        1
+```
+
+**Note:**  
+
+
+1. The size of the given array will be in the range \[1,1000\].
+
+#### 题意和分析
+
+给一个整数数组，创建一个最大二叉树，最大二叉树的定义是最大值为root，然后它的左子树和右子树也是最大二叉树，分治法来递归；使用到了一个辅助数据结构v来让保持降序。遍历原数组，对于每个遍历到的数字，创建一个结点，然后进行循环，如果v不空，且末尾结点值小于当前数字，那么将末尾结点连到当前结点的左子结点，并且移除数组中的末尾结点，这样可以保证子结点都会小于父结点。循环结束后，如果此时v仍不为空，说明结点值很大，那么将当前结点连到数组末尾结点的右子结点上。之后将当前结点加入v中，最后返回数组v的首结点。
+
+#### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        LinkedList<TreeNode> lklist = new LinkedList<>();
+        for (int num: nums){
+            TreeNode cur = new TreeNode(num);
+            while (!lklist.isEmpty() && lklist.peekFirst().val < cur.val){
+                cur.left = lklist.pop();
+            }
+
+            if (!lklist.isEmpty()){
+                lklist.peekFirst().right = cur;
+            }
+            lklist.push(cur);
+        }
+
+        return lklist.peekLast();
+    }
+}
+```
+
+或者使用双端队列
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        Deque<TreeNode> stack = new LinkedList<>();
+        for (int i = 0; i < nums.length; i++) {
+            TreeNode current = new TreeNode(nums[i]);
+            while (!stack.isEmpty() && stack.peek().val < nums[i]) {
+                current.left = stack.pop();
+            }
+            if (!stack.isEmpty()) {
+                stack.peek().right = current;
+            }
+            stack.push(current);
+        }
+        return stack.isEmpty() ? null : stack.removeLast();
+    }
+}
+```
 
