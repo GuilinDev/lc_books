@@ -1,6 +1,6 @@
 # Tree
 
-### 104 - Maximum Depth of Binary Tree
+### t104 - Maximum Depth of Binary Tree
 
 #### 原题概述
 
@@ -1411,4 +1411,85 @@ class Solution {
 ```
 
 这道题的Follow up是打印这个最大路径，这时候递归函数得返回该路径上所有的结点组成的数组，对左右子节点调用递归函数后得到的是数组，需要统计出数组之和，跟0比较，如果小于0，这个和就清零，同时数组清空，然后更新最大路径之和跟数组，最后拼出来返回值的数组。
+
+### 236 - Lowest Common Ancestor of Binary Tree
+
+#### 原题概述
+
+Given a binary tree, find the lowest common ancestor \(LCA\) of two given nodes in the tree.
+
+According to the [definition of LCA on Wikipedia](https://en.wikipedia.org/wiki/Lowest_common_ancestor): “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants \(where we allow **a node to be a descendant of itself**\).”
+
+Given the following binary tree:  root = \[3,5,1,6,2,0,8,null,null,7,4\]
+
+```text
+        _______3______
+       /              \
+    ___5__          ___1__
+   /      \        /      \
+   6      _2       0       8
+         /  \
+         7   4
+```
+
+**Example 1:**
+
+```text
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+Output: 3
+Explanation: The LCA of of nodes 5 and 1 is 3.
+```
+
+**Example 2:**
+
+```text
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+Output: 5
+Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself
+             according to the LCA definition.
+```
+
+**Note:**
+
+* All of the nodes' values will be unique.
+* p and q are different and both values will exist in the binary tree.
+
+#### 题意和分析
+
+这道题跟[235-Lowest Common Ancestor of a Binary Search Tree](https://guilindev.gitbook.io/interview/~/edit/drafts/-LITBKR8sHSxeQQ_2a5r/leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1#235-lowest-common-ancestor-of-a-binary-search-tree)相比，这道题是普通的二叉树，结点的值不会重复，不能用二叉搜索树的特征，同样用递归，先看当前结点是否为null，若为null直接返回null，如果为p或q中的任意一个，直接返回当前结点；如果都不是就对齐左右子结点，然后分别调用递归函数，因为p和q一定存在，所以如果当前结点不等于p或q的时候，有可能：
+
+1）p和q分别在左右子树，对左右子结点调用递归函数，会分别返回p和q的位置，那当前结点恰好就是p和q的最小父结点，直接返回；
+
+2）p和q都在左子树，这样又有两种情况，一种情况是left会返回p和q中较高的那个位置，而right会返回空，所以我们最终返回非空的left即可，这就是题目中的例子2的情况。还有一种情况是会返回p和q的最小父结点，就是说当前结点的左子树中的某个结点才是p和q的最小父结点，会被返回；
+
+3）若p和q同时位于右子树，同样这里有两种情况，一种情况是right会返回p和q中较高的那个位置，而left会返回空，所以我们最终返回非空的right即可，还有一种情况是会返回p和q的最小父结点，就是说当前结点的右子树中的某个结点才是p和q的最小父结点，返回。
+
+#### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || p == root || q == root) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (left != null && right != null) {
+            return root;
+        }
+        return left != null ? left : right;//上面2）3）的分析
+    }
+}
+```
+
+如果当前结点不为空，且既不是p也不是q，那么根据上面的分析，p和q的位置就有三种情况，p和q要么分别位于左右子树中，或者同时位于左子树，或者同时位于右子树。在i合理需要优化的情况就是当p和q同时为于左子树或右子树中，而且返回的结点并不是p或q，那么就是p和q的最小父结点了，已经求出来了，就不用再对右结点调用递归函数了，同样，对返回的right也做同样的优化处理
 
