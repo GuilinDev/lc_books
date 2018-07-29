@@ -1,6 +1,6 @@
 # Tree
 
-### t104 - Maximum Depth of Binary Tree
+### 104 - Maximum Depth of Binary Tree
 
 #### 原题概述
 
@@ -941,7 +941,7 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
 
 #### 题意和分析
 
-这道题是要将有序数组转为二叉搜索树，二叉搜索树始终满足左&lt;根&lt;右的特性，如果将二叉搜索树按中序遍历的话，得到的就是一个有序数组。那么反过来，根节点应该是有序数组的中间点，从中间点分开为左右两个有序数组，在分别找出其中间点作为原中间点的左右两个子节点，这不就是是二分查找法的核心思想么。所以这道题考的就是二分查找法。
+这道题是要将有序数组转为二叉搜索树，二叉搜索树始终满足左&lt;=根&lt;=右的特性，如果将二叉搜索树按中序遍历的话，得到的就是一个有序数组。那么反过来，根节点应该是有序数组的中间点，从中间点分开为左右两个有序数组，在分别找出其中间点作为原中间点的左右两个子节点，这不就是是二分查找法的核心思想么。所以这道题考的就是二分查找法。
 
 #### 代码
 
@@ -1160,6 +1160,8 @@ class Solution {
         if (root.val > R) {//右边的结点都不用看了
             return trimBST(root.left, L, R);
         }
+        
+        //root的值在L和R中间的时候
         root.left = trimBST(root.left, L, R);
         root.right = trimBST(root.right, L, R);
 
@@ -1483,6 +1485,8 @@ class Solution {
         }
         TreeNode left = lowestCommonAncestor(root.left, p, q);
         TreeNode right = lowestCommonAncestor(root.right, p, q);
+        
+        //p，q分别在当前root的左右子树
         if (left != null && right != null) {
             return root;
         }
@@ -1516,6 +1520,8 @@ class Solution {
         if (right != null && right != p && right != q) {
             return right;
         }
+        
+        //这是p和q分别在左右子树的情况，这个解法没有优化这种情况
         if (left != null && right != null) {
             return root;
         }
@@ -1560,7 +1566,7 @@ Output: return the tree root node representing the following tree:
 
 #### 题意和分析
 
-给一个整数数组，创建一个最大二叉树，最大二叉树的定义是最大值为root，然后它的左子树和右子树也是最大二叉树，分治法来递归；使用到了一个辅助数据结构v来让保持降序。遍历原数组，对于每个遍历到的数字，创建一个结点，然后进行循环，如果v不空，且末尾结点值小于当前数字，那么将末尾结点连到当前结点的左子结点，并且移除数组中的末尾结点，这样可以保证子结点都会小于父结点。循环结束后，如果此时v仍不为空，说明结点值很大，那么将当前结点连到数组末尾结点的右子结点上。之后将当前结点加入v中，最后返回数组v的首结点。
+给一个整数数组，创建一个最大二叉树，最大二叉树的定义是最大值为root，然后它的左子树和右子树也是最大二叉树，分治法来递归；使用到了一个辅助数据结构v来让保持降序。遍历原数组，对于每个遍历到的元素，创建一个结点，然后进行循环，如果v不空，且末尾结点值小于当前数字，那么将末尾结点连到当前结点的左子结点，并且移除数组中的末尾结点，这样可以保证子结点都会小于父结点。循环结束后，如果此时v仍不为空，说明结点值很大，那么将当前结点连到数组末尾结点的右子结点上。之后将当前结点加入v中，最后返回v的首结点。
 
 #### 代码
 
@@ -1576,20 +1582,20 @@ Output: return the tree root node representing the following tree:
  */
 class Solution {
     public TreeNode constructMaximumBinaryTree(int[] nums) {
-        LinkedList<TreeNode> lklist = new LinkedList<>();
+        LinkedList<TreeNode> v = new LinkedList<>();
         for (int num: nums){
             TreeNode cur = new TreeNode(num);
-            while (!lklist.isEmpty() && lklist.peekFirst().val < cur.val){
-                cur.left = lklist.pop();
+            while (!v.isEmpty() && v.peekFirst().val < cur.val){
+                cur.left = v.pop();
             }
 
-            if (!lklist.isEmpty()){
-                lklist.peekFirst().right = cur;
+            if (!v.isEmpty()){
+                v.peekFirst().right = cur;
             }
-            lklist.push(cur);
+            v.push(cur);
         }
 
-        return lklist.peekLast();
+        return v.peekLast();
     }
 }
 ```

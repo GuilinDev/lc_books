@@ -8,6 +8,16 @@
 
 
 
+TCP协议的三次握手和四次挥手：
+
+建立连接 - 三次握手
+
+断开连接 - 四次挥手
+
+
+
+
+
 有篇很喜欢的文章来讲网络协议，包括HTTPS，
 
 这里是中文翻译[https://www.oschina.net/translate/https-explained-with-carrier-pigeons](https://www.oschina.net/translate/https-explained-with-carrier-pigeons) 
