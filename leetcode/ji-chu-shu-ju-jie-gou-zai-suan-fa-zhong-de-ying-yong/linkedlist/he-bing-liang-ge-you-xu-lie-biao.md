@@ -1,8 +1,8 @@
 # 合并有序链表
 
-## 21  Merge Two Sorted Lists
+### 21  Merge Two Sorted Lists
 
-### 原题概述
+#### 原题概述
 
 Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
 
@@ -13,13 +13,13 @@ Input: 1->2->4, 1->3->4
 Output: 1->1->2->3->4->4
 ```
 
-### 题意和分析
+#### 题意和分析
 
 这道题很可能跟[Merge Sorted Array](https://guilindev.gitbook.io/interview/leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/he-bing-you-xu-de-arrays)一起问。可以用递归方法，判断哪个链表的节点值小就把该节点的下一个节点递归，最后返回最小的那个head；迭代，比较直接，两个链表都不为空的时候按顺序比较就是。
 
 两个方法相同，Time：O\(m+n\)；Space，因为每次递归辅助空间是线性的而不是二分减少，所以应该O\(m + n\)。
 
-### 代码
+#### 代码
 
 递归
 
@@ -86,9 +86,9 @@ class Solution {
 }
 ```
 
-## 23  Merge k Sorted Lists
+### 23  Merge k Sorted Lists
 
-### 原题概述
+#### 原题概述
 
 Merge _k_ sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
 
@@ -104,7 +104,7 @@ Input:
 Output: 1->1->2->3->4->4->5->6
 ```
 
-### 题意和分析
+#### 题意和分析
 
 这道题是多个有序链表合并成一个，在分布式系统中比较常见，比如来自不同客户端的sorted lists数据要在central server上面merge起来。
 
@@ -148,7 +148,7 @@ _归并操作的过程如下：_
 
 
 
-### 代码
+#### 代码
 
 分治法
 
