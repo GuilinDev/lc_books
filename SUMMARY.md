@@ -26,7 +26,6 @@
       * [String和数转换](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/string/string-he-shu-zhuan-huan.md)
       * [计算器](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/string/ge-lei-ji-suan-qi.md)
     * [LinkedList](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/README.md)
-      * [O\(1\)时间删除链表结点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/o1-shi-jian-shan-chu-lian-biao-jie-dian.md)
       * [单链表的翻转](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/dan-lian-biao-de-fan-zhuan.md)
       * [判断单链表是否有环](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/pan-duan-dan-lian-biao-shi-fou-you-huan.md)
       * [合并有序链表](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/he-bing-liang-ge-you-xu-lie-biao.md)
