@@ -769,3 +769,641 @@ class Solution {
 }
 ```
 
+## 链表的各种操作
+
+### 148 - Sort List
+
+#### 原题概述
+
+Sort a linked list in _O_\(_n_ log _n_\) time using constant space complexity.
+
+**Example 1:**
+
+```text
+Input: 4->2->1->3
+Output: 1->2->3->4
+```
+
+**Example 2:**
+
+```text
+Input: -1->5->3->4->0
+Output: -1->0->3->4->5
+```
+
+#### 题意和分析
+
+用 _O_\(_n_ log _n_\) 的复杂度对链表中的元素进行排序。既然是_O_\(_n_ log _n_\)复杂度的排序，那自然就是想到快排（复杂度平均）或者归并排序，这里用归并排序比较合适。根据Merge Sort的基本思想，就是找到中间结点，然后对左右两半部分分别进行归并排序，最后对排好序的两部分链表进行merge。通常Merge Sort是针对数组来看的，这里是链表，找到中间结点的办法是快慢指针；然后是合并两个有序链表，迭代或递归。最后返回。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {//递归的出口，只有/只剩一个结点的时候就不再递归
+            return head;
+        }
+        ListNode middle = getMiddleOfList(head);
+        ListNode next = middle.next;
+        middle.next = null;//把链表断开分为左边（包括middle结点）和右边
+        return mergeTwoList(sortList(head), sortList(next));
+    }
+
+    //快慢指针找到中间结点
+    private ListNode getMiddleOfList(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    //合并两个有序链表
+    private ListNode mergeTwoList(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(-1), current = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                current.next = l1;
+                l1 = l1.next;
+            } else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+            current = current.next;
+        }
+        current.next = l1 == null ? l2 : l1;
+
+        return dummy.next;
+    }
+}
+```
+
+### \* 147 - Insertion Sort List
+
+### 原题概述
+
+Sort a linked list using insertion sort.
+
+![](https://upload.wikimedia.org/wikipedia/commons/0/0f/Insertion-sort-example-300px.gif)  
+A graphical example of insertion sort. The partial sorted list \(black\) initially contains only the first element in the list.  
+With each iteration one element \(red\) is removed from the input data and inserted in-place into the sorted list
+
+
+
+**Algorithm of Insertion Sort:**
+
+1. Insertion sort iterates, consuming one input element each repetition, and growing a sorted output list.
+2. At each iteration, insertion sort removes one element from the input data, finds the location it belongs within the sorted list, and inserts it there.
+3. It repeats until no input elements remain.
+
+  
+**Example 1:**
+
+```text
+Input: 4->2->1->3
+Output: 1->2->3->4
+```
+
+**Example 2:**
+
+```text
+Input: -1->5->3->4->0
+Output: -1->0->3->4->5
+```
+
+#### 题意和分析
+
+首先，For God's sake, don't try sorting a linked list during the interview.所以我们这道题练习链表的基本操作。
+
+要求对链表实现插入排序，这是一种O\(n^2\)复杂度的算法，就是每次循环找到一个元素在当前排好的结果中相对应的位置，然后插进去，经过n次迭代之后就得到排好序的结果了。了解了思路之后就是链表的基本操作了，搜索并进行相应的插入。时间复杂度是排序算法的O\(n^2\)，空间复杂度是O\(1\)。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummy = new ListNode(-1);
+        ListNode current = head;//准备插入的的结点
+        ListNode pre = dummy;//current结点会插入到pre和pre.next之间
+        ListNode next = null; //下一个准备插入的结点
+
+        //插入排序两层循环
+        while (current != null) {
+            next = current.next;//先把当前结点的尾部维持好
+            //找到合适的位置插入
+            while (pre.next != null && pre.next.val < current.val) {
+                pre = pre.next;
+            }
+            //找到合适位置后进行插入操作
+            current.next = pre.next;
+            pre.next = current;
+            pre = dummy;
+            current = next;
+        }
+        return dummy.next;
+    }
+}
+```
+
+### 61 - Rotate List
+
+#### 原题概述
+
+Given a linked list, rotate the list to the right by _k_ places, where _k_ is non-negative.
+
+**Example 1:**
+
+```text
+Input: 1->2->3->4->5->NULL, k = 2
+Output: 4->5->1->2->3->NULL
+Explanation:
+rotate 1 steps to the right: 5->1->2->3->4->NULL
+rotate 2 steps to the right: 4->5->1->2->3->NULL
+```
+
+**Example 2:**
+
+```text
+Input: 0->1->2->NULL, k = 4
+Output: 2->0->1->NULL
+Explanation:
+rotate 1 steps to the right: 2->0->1->NULL
+rotate 2 steps to the right: 1->2->0->NULL
+rotate 3 steps to the right: 0->1->2->NULL
+rotate 4 steps to the right: 2->0->1->NULL
+```
+
+#### 题意和分析
+
+一个链表把右边k位的结点挪到左边来，可以分三步来做：1）计算链表长度；2）定位到len - k % len的位置因为k可能比len大，所有是k % len；3）在定位好的位置处开始rotate。
+
+时间O\(n\)，空间O\(1\)。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode fast = dummy;
+        ListNode slow = dummy;
+
+        //找到链表的长度
+        int len;
+        for (len = 0; fast.next != null; len++) {
+            fast = fast.next;
+        }
+        //定位到len - k%len的位置
+        for (int i = 0; i < len - k%len; i++) {
+            slow = slow.next;
+        }
+
+        //开始做rotation
+        fast.next = dummy.next;
+        dummy.next = slow.next;//把i-k%i的节点放到dummy之后（return后的第一位）
+        slow.next = null;
+
+        return dummy.next;
+    }
+}
+```
+
+### 86 - Partition List
+
+#### 原题概述
+
+Given a linked list and a value _x_, partition it such that all nodes less than _x_ come before nodes greater than or equal to _x_.
+
+You should preserve the original relative order of the nodes in each of the two partitions.
+
+**Example:**
+
+```text
+Input: head = 1->4->3->2->5->2, x = 3
+Output: 1->2->2->4->3->5
+```
+
+#### 题意和分析
+
+要求把小于x的元素按顺序放到链表前面。使用链表最常用的双指针，一个指向当前小于x的最后一个元素，一个进行往前扫描。如果元素大于x，那么继续前进，否则，要把元素移到前面，并更新第一个指针。这里有一个小细节，就是如果不需要移动（也就是已经是接在小于x的最后元素的后面了），那么只需要继续前进即可。算法时间复杂度是O\(n\)，空间只需要几个辅助变量，是O\(1\)。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode partition(ListNode head, int x) {
+        if (head == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode slow = dummy, fast = dummy;
+
+        while (fast.next != null) {//相当于从dummy.next开始
+            if (fast.next.val < x) {
+                if (slow != fast) {//开始把结点插入到前面
+                    ListNode next = fast.next.next;//先记住fast.next的下一位
+                    fast.next.next = slow.next;
+                    slow.next = fast.next;
+                    fast.next = next;//最后把新的fast的next指向开始记住的下一位
+                } else {//如果slow和fast相同就只需让fast前移
+                    fast = fast.next;
+                }
+                slow = slow.next;
+            } else {//结点的值大于等于x
+                fast = fast.next;
+            }
+        }
+        return dummy.next;
+    }
+}
+```
+
+### 24 - Swap Nodes in Pairs
+
+#### 原题概述
+
+Given a linked list, swap every two adjacent nodes and return its head.
+
+**Example:**
+
+```text
+Given 1->2->3->4, you should return the list as 2->1->4->3.
+```
+
+**Note:**
+
+* Your algorithm should use only constant extra space.
+* You may **not** modify the values in the list's nodes, only nodes itself may be changed.
+
+#### 题意和分析
+
+给一个链表，两两交换位置，每次跳两位，比如第一结点和第二结点交换位置，但第二结点和第三结点就不必交换位置，如果是单数个结点，就剩一个；要求空间为常数，所以如果用递归，先递归到最后一个结点，然后和倒数第二个交换的这种办法，因为空间是O\(n\)所以不行。另外也不能通过改变value的值来“交换”，只能交换结点。
+
+时间复杂度O\(n\)。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode current = dummy;
+
+        while (current.next != null && current.next.next != null) {//current的后两位进行交换
+            ListNode first = current.next;
+            ListNode second = current.next.next;
+            first.next = second.next;//将第一个结点next指向第二个结点的next
+            current.next = second;//将前面dummy或者已经交换过的结点（head）指向正在交换的的第二个结点
+            current.next.next = first;//将“head”指向原本的第一个结点
+
+            current = current.next.next;//让“head”跳两位
+        }
+        return dummy.next;
+    }
+}
+```
+
+
+
+递归的办法是先遍历到链表末尾，先交换最后两个，依次向前；空间复杂度不符合题目要求，但是依然可以过test cases。
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        if (head.next == null) {
+            return head;
+        }
+        ListNode n = head.next;
+        head.next = swapPairs(head.next.next);//每次跳两位递归
+        n.next = head;
+        return n;
+    }
+}
+```
+
+### 143 - Reorder List
+
+#### 原题概述
+
+Given a singly linked list _L_: _L_0→_L_1→…→_Ln_-1→_L_n,  
+reorder it to: _L_0→_Ln_→_L_1→_Ln_-1→_L_2→_Ln_-2→…
+
+You may **not** modify the values in the list's nodes, only nodes itself may be changed.
+
+**Example 1:**
+
+```text
+Given 1->2->3->4, reorder it to 1->4->2->3.
+```
+
+**Example 2:**
+
+```text
+Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
+```
+
+#### 题意和分析
+
+这道题做法是分为三步：1）找到链表的中间结点；2）将后半部分的链表倒转；3）将倒转后的后半部分链表插入到前半部分。时间复杂度O\(n\)，空间O\(n\)。
+
+也可以用stack的办法来做，先把所有结点存入到一个stack并计算长度，然后重新遍历链表，同时把所有结点弹出，超过长度一半的时候弹出的那些结点挨个插入，复杂度一样。
+
+#### 代码
+
+后半截reverse的做法
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null) {
+            return;
+        }
+
+        // Find the middle node
+        ListNode slow = head, fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        //前半部分包含了中间结点slow，将后半部分倒转
+        ListNode head2 = reverse(slow.next);
+        slow.next = null;
+
+        // Link the two halves together
+        while (head != null && head2 != null) {
+            ListNode tmp1 = head.next;
+            ListNode tmp2 = head2.next;
+            head2.next = head.next;
+            head.next = head2;
+            head = tmp1;
+            head2 = tmp2;
+        }
+    }
+
+    private ListNode reverse(ListNode n) {
+        ListNode prev = null;
+        ListNode cur = n;
+        while (cur != null) {
+            ListNode tmp = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = tmp;
+        }
+        return prev;
+    }
+}
+```
+
+用Stack的做法
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        if(head != null && head.next != null){
+            int len = 0;
+            Stack<ListNode> stack = new Stack<>();
+            ListNode curNode = head;
+
+            while(curNode != null) {//将全部结点存入到stack中，并计算链表长度
+                stack.push(curNode);
+                curNode = curNode.next;
+                len++;
+            }
+
+            curNode = head;//重新指向头部
+            while(len >= len / 2){//遍历过一半的时候开始将stack中剩下的一半结点插入
+                ListNode tmp = curNode.next;
+                curNode.next = stack.pop();
+                curNode.next.next = tmp;
+
+                curNode = curNode.next.next;
+                len -= 2;
+            }
+
+            if(len > 1) {
+                curNode.next = stack.pop();
+                curNode = curNode.next;
+            }
+
+            curNode.next = null;//删除原来链表中的已被插入的结点
+        }
+    }
+}
+```
+
+### 138 - Copy List with Random Pointer
+
+#### 原题概述
+
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
+
+Return a deep copy of the list.
+
+#### 题意和分析
+
+这道题还是链表的操作，给一个链表，这个链表在正常链表的基础上还带有一个random pointer，这个random pointer可以指向别的结点，也可以指向null，然后问题是如何deep copy这个链表。
+
+假设原始链表如下，细线表示next指针，粗线表示random指针，没有画出的指针均指向NULL：
+
+![](../../../.gitbook/assets/image%20%2815%29.png)
+
+**算法1**：先按照复制一个正常链表的方式复制，复制的时候把复制的结点做一个HashMap，以旧结点为key，新节点为value。这么做的目的是为了第二遍扫描的时候按照这个哈希表把结点的随机指针接上。下图蓝色为原始链表节点，红色为新链表节点：
+
+![](../../../.gitbook/assets/image%20%2829%29.png)
+
+![](https://images0.cnblogs.com/blog/517264/201310/24224126-c879cdb9952f447587c976713b5dce38.jpg)
+
+然后在上图的基础上进行如下两步
+
+1、构建新链表的random指针：比如new1.random = new1.random.random.next, new2.random = NULL, new3.random = NULL, new4.random = new4.random.random.next
+
+2、恢复原始链表：根据最开始保存的原始链表next指针映射关系恢复原始链表
+
+该算法总共要进行两次扫描，所以时间复杂度是O\(2\*n\)=O\(n\)，空间复杂度为需要哈希表来做映射，所以也是O\(N\)。
+
+**算法2**：该算法更为巧妙，不用保存原始链表的映射关系，构建新节点时，指针做如下变化，即把新节点插入到相应的旧节点后面：
+
+![](https://images0.cnblogs.com/blog/517264/201310/24225610-b49aa4b472734a1785fad23a2156cc14.jpg)
+
+同理分两步
+
+1、构建新节点random指针：new1-&gt;random = old1-&gt;random-&gt;next, new2-random = NULL, new3-random = NULL, new4-&gt;random = old4-&gt;random-&gt;next
+
+2、恢复原始链表以及构建新链表：例如old1-&gt;next = old1-&gt;next-&gt;next,  new1-&gt;next = new1-&gt;next-&gt;next
+
+该算法时间复杂度O\(N\)，空间复杂度O\(1\)。
+
+#### 代码
+
+HashMap的做法，需要一个哈希表的原因是当我们访问一个结点时可能它的随机指针指向的结点还没有访问过，结点还没有创建，所以需要线性的额外空间
+
+```java
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        Map<RandomListNode, RandomListNode> map = new HashMap<>();
+
+        //第一个循环，将所有nodes copy到hashmap中，旧结点为key，新结点为value
+        RandomListNode node = head;
+        while (node != null) {
+            map.put(node, new RandomListNode(node.label));
+            node = node.next;
+        }
+
+        node = head;//重新将node指向第一个结点
+        //第二个循环，assign随机指针和next
+        while (node != null) {
+            map.get(node).next = map.get(node.next);//随机找
+            map.get(node).random = map.get(node.random);
+            node = node.next;
+        }
+        return map.get(head);//返回第一结点
+    }
+}
+```
+
+in-place的做法，想避免使用额外空间，我们只能通过利用链表原来的数据结构来存储结点。基本思路是这样的，对链表进行三次扫描，第一次扫描对每个结点进行复制，然后把复制出来的新节点接在原结点的next，也就是让链表变成一个重复链表，就是新旧更替；第二次扫描中我们把旧结点的随机指针赋给新节点的随机指针，因为新结点都跟在旧结点的下一个，所以赋值比较简单，就是node.next.random = node.random.next，其中node.next就是新结点，因为第一次扫描就是把新结点接在旧结点后面。现在把结点的随机指针都接好了，最后一次扫描把链表拆成两个，第一个还原原链表，而第二个就是我们要求的复制链表。因为现在链表是旧新更替，只要把每隔两个结点分别相连，对链表进行分割即可。这个方法总共进行三次线性扫描，所以时间复杂度是O\(n\)。而这里并不需要额外空间，所以空间复杂度是O\(1\)。比起上面的方法，这里多做一次线性扫描，但是不需要额外空间，还是比较值的。
+
+```java
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        RandomListNode node = head, next = null;
+
+        // 第一个循环，复制每个node并各自链接到原先的node后面
+        while (node != null) {
+            next = node.next;//记录链表当前结点的下一位防止丢失
+
+            RandomListNode copy = new RandomListNode(node.label);
+            node.next = copy;
+            copy.next = next;
+
+            node = next;
+        }
+
+        //第二个循环，assign随机指针到复制的copy上
+        node = head;
+        while (node != null) {
+            if (node.random != null) {//旧的拷贝
+                node.next.random = node.random.next;
+            }
+            node = node.next.next;
+        }
+
+        //第三个循环,分拆链表并还原旧链表和建立新链表
+        node = head;
+        RandomListNode dummy = new RandomListNode(-1);
+        RandomListNode copy, newNode = dummy;
+        while (node != null) {
+            next = node.next.next;//记录下一个原先链表中的结点
+
+            //提取复制的结点为新的链表
+            copy = node.next;
+            newNode.next = copy;
+            newNode = copy;
+
+            //还原原来的链表
+            node.next = next;
+
+            node = next;
+        }
+
+        return dummy.next;
+    }
+}
+```
+
