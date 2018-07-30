@@ -28,7 +28,6 @@
     * [LinkedList](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/README.md)
       * [链表倒数第k个结点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/lian-biao-dao-shu-dikge-jie-dian.md)
       * [求链表的中间结点](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/qiu-lian-biao-de-zhong-jian-jie-dian.md)
-      * [链表元素相加](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/lian-biao-yuan-su-xiang-jia.md)
     * [Stack](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/stack.md)
     * [Queue](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/queue.md)
     * [Heap](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/heap.md)

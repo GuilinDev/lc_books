@@ -1,6 +1,145 @@
 # LinkedList
 
-链表和数组都是线性结构，但是链表和数组的不同在于数组可以随机的对于数据进行访问。给出索引。可以以O\(1\)的时间复杂度迅速访问到该元素。链表只能从头指针开始。
+链表和数组都是线性结构，但是链表和数组的不同在于数组可以随机的对于数据进行访问。给出索引（或指针）。数组可以以O\(1\)的时间复杂度迅速访问到该元素。链表只能从头指针开始。
+
+链表是最简单的动态数据结构，同时具有天生的递归性质。理解好链表会帮助我们更好地理解高级动态数据结构，深入理解指针，更好地理解递归，以及如何学习由链表组成的更高级的数据结构（包括栈和队列等基础结构）。
+
+## 链表元素相加
+
+### 2 - Add Two Numbers
+
+#### 原题概述
+
+You are given two **non-empty** linked lists representing two non-negative integers. The digits are stored in **reverse order** and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+**Example**
+
+```text
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+Explanation: 342 + 465 = 807.
+```
+
+#### 题意和分析
+
+给两个链表，个位十位百位从左到右存储，两个链表相加返回一个新链表。这道题也是链表的基本操作，创建一个dummy，原先的两个链表挨个结点相加，然后注意下进位就行了。时间O\(m+n\)，空间创建了一个新的链表O\(m\)，m是长度较长的那个链表。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            return l1 == null ? l2 : l1;
+        }
+        ListNode dummy = new ListNode(-1);
+        ListNode current = dummy;
+        int carry = 0;
+        while (l1 != null || l2 != null) {
+            int sum = carry;
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+            current.next = new ListNode(sum % 10);
+            current = current.next;
+            carry = sum / 10;
+        }
+        if (carry != 0) {//循环结束后最后判断下是否还有进位
+            current.next = new ListNode(carry);
+        }
+        return dummy.next;
+    }
+}
+```
+
+### 445 - Add Two Numbers II
+
+#### 原题概述
+
+You are given two **non-empty** linked lists representing two non-negative integers. The most significant digit comes first and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+**Follow up:**  
+What if you cannot modify the input lists? In other words, reversing the lists is not allowed.
+
+**Example:**
+
+```text
+Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 8 -> 0 -> 7
+```
+
+#### 题意和分析
+
+这道题跟前面一道题比，significant digit在前面了，所以个位就在最后。用stack的办法来让最后的位数先相加即可。时间O\(2m + 2n\) = O\(m + n\)；空间创建了两个新的stack，O\(m+n\)。
+
+#### 代码
+
+```java
+ * Definition for singly-linked list.
+         * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null) {
+            return l1 == null ? l2 : l1;
+        }
+        Stack<Integer> stack1 = new Stack<>();
+        Stack<Integer> stack2 = new Stack<>();
+
+        while (l1 != null) {
+            stack1.push(l1.val);
+            l1 = l1.next;
+        }
+        while (l2 != null) {
+            stack2.push(l2.val);
+            l2 = l2.next;
+        }
+
+        ListNode list = new ListNode(-1);
+        int carry = 0;
+        while (!stack1.isEmpty() || !stack2.isEmpty()) {
+            int sum = carry;
+            if (!stack1.isEmpty()) {
+                sum += stack1.pop();
+            }
+            if (!stack2.isEmpty()) {
+                sum += stack2.pop();
+            }
+            list.val = sum % 10;//当前结点的val
+            carry = sum / 10;
+            ListNode head = new ListNode(carry);//new一个head结点，注意这里的val值需要是carry，两个stack都加完循环跳出后，有进位的话需要返回有正确的val的第一个结点
+            head.next = list;//将上一步new出来的head结点插入到当前结点的前面
+            list = head;//将当前结点的更新为前面一个结点
+
+        }
+        if (carry != 0) {//两个stack中的数都加完了，如果还有进位的话就返回当前结点
+            return list;
+        }
+        return list.next;//没有进位的话，当前结点list的val为上一轮的carry==0，这时候返回list.next
+    }
+}
+```
 
 ## 合并有序链表
 
@@ -328,6 +467,127 @@ class Solution {
     }
 }
 ```
+
+## 判断链表是否是回文
+
+### 234 - Palindrome Linked List
+
+#### 原题概述
+
+Given a singly linked list, determine if it is a palindrome.
+
+**Example 1:**
+
+```text
+Input: 1->2
+Output: false
+```
+
+**Example 2:**
+
+```text
+Input: 1->2->2->1
+Output: true
+```
+
+**Follow up:**  
+Could you do it in O\(n\) time and O\(1\) space?
+
+#### 题意和分析
+
+这道题要求判断链表是否是回文的，跟Array相比链表没办法通过索引来读取后面的元素。首先可以用快慢指针来找到中点，在寻找重点过程中慢指针每走一步就把链表元素存入到一个stack中，当慢指针到达中点的时候就将存入到栈内的前半截元素和后半截进行比较；时间和空间都是O\(n\)，另外用递归的办法也是同样的复杂度。
+
+其次如果想用O\(n\)的时间和O\(1\)的空间，那就在快慢指针找到中点的时候，将后半截链表元素进行翻转后再进行比较。
+
+#### 代码
+
+用Stack
+
+
+
+用递归，这样就不用翻转链表后半截从而改变结构
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode root;
+    public boolean isPalindrome(ListNode head) {
+        root = head;
+        return (head == null) ? true : _isPalindrome(head);
+    }
+
+    public boolean _isPalindrome(ListNode head) {
+        boolean flag = true;
+        if (head.next != null) {
+            flag = _isPalindrome(head.next);
+        }
+        if (flag && root.val == head.val) {
+            root = root.next;
+            return true;
+        }
+        return false;
+    }
+}
+```
+
+翻转后半截链表进行比较
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+
+        //先找到中点
+        ListNode slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        //倒转后半部分链表
+        ListNode last = slow.next;//如果是奇数个元素，slow会停在正中间那个元素处；如果是偶数个元素，slow会停在对半分前半截的最后一个位置；所以检查后半截链表的时候，从slow.next开始进行倒转    
+        while (last.next != null) {
+            ListNode temp = last.next;
+            last.next = temp.next;
+            temp.next = slow.next;
+            slow.next = temp;
+        }
+
+        ListNode pre = head;//将一个指针重新指向前半截链表头部
+
+        //挨个比较
+        while (slow.next != null) {
+            slow = slow.next;
+            if (pre.val != slow.val) {
+                return false;
+            }
+            pre = pre.next;
+        }
+        return true;
+    }
+}
+```
+
+## 求链表中的结点
+
+
 
 ## 判断单链表是否有环
 
@@ -1045,7 +1305,7 @@ class Solution {
 }
 ```
 
-## 链表的各种操作 - 排序/重组/扭转/分割/交换
+## 链表的各种操作 
 
 ### 148 - Sort List
 
@@ -1126,7 +1386,7 @@ class Solution {
 
 ### \* 147 - Insertion Sort List
 
-### 原题概述
+#### 原题概述
 
 Sort a linked list using insertion sort.
 
