@@ -2,7 +2,7 @@
 
 链表和数组都是线性结构，但是链表和数组的不同在于数组可以随机的对于数据进行访问。给出索引（或指针）。数组可以以O\(1\)的时间复杂度迅速访问到该元素。链表只能从头指针开始。
 
-链表是最简单的动态数据结构，同时具有天生的递归性质。理解好链表会帮助我们更好地理解高级动态数据结构，深入理解指针，更好地理解递归，以及如何学习由链表组成的更高级的数据结构（包括栈和队列等基础结构）。
+链表是最简单的动态数据结构，不需要处理固定容量的问题，同时具有天生的递归性质。理解好链表会帮助我们更好地理解高级动态数据结构，深入理解指针，更好地理解递归，以及如何学习由链表组成的更高级的数据结构（包括栈和队列等基础结构）。
 
 ## 链表元素相加
 
@@ -585,9 +585,100 @@ class Solution {
 }
 ```
 
-## 求链表中的结点
+## 链表中的结点
 
+### 328 - Odd Even Linked List
 
+#### 原题概述
+
+Given a singly linked list, group all odd nodes together followed by the even nodes. Please note here we are talking about the node number and not the value in the nodes.
+
+You should try to do it in place. The program should run in O\(1\) space complexity and O\(nodes\) time complexity.
+
+**Example 1:**
+
+```text
+Input: 1->2->3->4->5->NULL
+Output: 1->3->5->2->4->NULL
+```
+
+**Example 2:**
+
+```text
+Input: 2->1->3->5->6->4->7->NULL
+Output: 2->3->6->7->1->5->4->NULL
+```
+
+**Note:**
+
+* The relative order inside both the even and odd groups should remain as it was in the input.
+* The first node is considered odd, the second node even and so on ...
+
+#### 题意和分析
+
+这道题给一个链表，对奇偶结点进行分组，所有的奇结点在前面，所有偶结点在后面。利用双指针，第一个是奇结点，第二个是偶结点，首先pre指向奇结点，cur指向偶结点，然后把cur后面的奇结点插入到pre的后面，再然后pre和cur同时前进一步，这个时候pre又指向了奇结点，cur又指向了偶结点；如此类推，就把所有的奇结点提到前面来了。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null || head.next == null || head.next.next == null) {
+            return head;
+        }
+
+        ListNode pre = head, cur = head.next;
+        while (cur != null && cur.next != null) {
+            ListNode temp = pre.next;//1->2->3->4->5->NULL，首先pre在1处，cur在2处
+            pre.next = cur.next;//X掉1后面的箭头，将1指向3，1->3->4->5->NULL/2->3->4->5->NULL
+            cur.next = cur.next.next;//1->3->4->5->NULL/2->4->5->NULL
+            pre.next.next = temp;//1->3->2->4->5->NULL
+
+            //两个指针各自前进一位
+            pre = pre.next;
+            cur = cur.next;
+        }
+        return head;
+    }
+}
+```
+
+另外一种解法是，奇偶在指针分别指向奇偶结点的其实位置，另外创建一个其实结点even来保存偶结点的起始位置，然后把奇结点指向偶结点的下一个奇结点，然后奇结点后移一步，再把偶结点指向下一个奇结点的下一个（是偶结点），然后再把这个偶结点移一步，以此类推到末尾。
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null || head.next == null || head.next.next == null) {
+            return head;
+        }
+
+        ListNode odd = head, even = head.next, even_head = even;
+        while (even != null && even.next != null) {
+            odd = odd.next = even.next;//Java是自右向左逐一赋值
+            even = even.next = odd.next;
+        }
+        odd.next = even_head;
+
+        return head;
+    }
+}
+```
 
 ## 判断单链表是否有环
 
