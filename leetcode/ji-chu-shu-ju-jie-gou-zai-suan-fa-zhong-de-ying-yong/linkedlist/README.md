@@ -468,6 +468,69 @@ class Solution {
 }
 ```
 
+### 19 - Remove Nth Node From End of List
+
+#### 原题概述
+
+Given a linked list, remove the _n_-th node from the end of list and return its head.
+
+**Example:**
+
+```text
+Given linked list: 1->2->3->4->5, and n = 2.
+
+After removing the second node from the end, the linked list becomes 1->2->3->5.
+```
+
+**Note:**
+
+Given _n_ will always be valid.
+
+**Follow up:**
+
+Could you do this in one pass?
+
+#### 题意和分析
+
+要求移除链表倒数的第N个节点，n不会大于链表的元素总数，如果两次遍历就简单了，先找到链表长度，然后移除len-N+1的的元素，但是要求一次遍历解决问题，所以就要求遍历到这个结点就应该删除了。应用双指针，pre和cur；首先cur指针向前走N步，如果cur此时指向空，这个为corner case，那就需要移除为首元素，此时返回head.next即可；如果cur不指向空，那就让cur和cur同时走，直到cur走到最后一个元素，此时pre指向的就是要移除元素的前一个元素，此时将下一个元素移除即可。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head.next == null) {//n肯定有效，如果只有一个结点则没法移除
+            return null;
+        }
+        ListNode pre = head, cur = head;
+        for (int i = 0; i < n; i++) {//cur先走n步
+            cur = cur.next;
+        }
+        if (cur == null) {//到末尾了，移除第一结点
+            return head.next;
+        }
+
+        while (cur.next != null) {
+            cur = cur.next;
+            pre = pre.next;
+        }
+
+        //此时pre在待移除结点的前一位
+        pre.next = pre.next.next;
+
+        return head;
+    }
+}
+```
+
 ## 判断链表是否是回文
 
 ### 234 - Palindrome Linked List
