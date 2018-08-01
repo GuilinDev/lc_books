@@ -1658,7 +1658,50 @@ Return the following binary tree:
 
 #### 题意和分析
 
+这道题用先序和中序来建立二叉树，先序的顺序第一个肯定是root，所以二叉树的根结点可以确定，由于题目中说了没有相同的元素，所以利用先序的根我们可以找到这个根在中序的位置，并且在中序的数组中根结点为中心拆分成左右两部分，然后又用我们熟悉的递归调用就可以重建二叉树了
 
+#### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return buildTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode buildTree(int[] preorder, int pLeft, int pRight, int[] inorder, int iLeft, int iRight) {
+        if (pLeft > pRight || iLeft > iRight) {
+            return null;
+        }
+        int i = 0;
+        for (i = iLeft; i <= iRight; i++) {
+            if (preorder[pLeft] == inorder[i]) {
+                break;
+            }
+        }
+
+        TreeNode cur = new TreeNode(preorder[pLeft]);
+        cur.left = buildTree(preorder, pLeft + 1, pLeft + i - iLeft, inorder, iLeft, i - 1);
+        cur.right = buildTree(preorder, pLeft + i - iLeft +1, pRight, inorder, i + 1, iRight);
+
+        return cur;
+    }
+}
+```
+
+### 106 Construct Binary Tree from Inorder and Postorder Traversal
+
+#### 原题概述
+
+#### 题意和分析
 
 #### 代码
 
