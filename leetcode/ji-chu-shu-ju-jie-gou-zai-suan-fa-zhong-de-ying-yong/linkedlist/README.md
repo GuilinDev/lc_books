@@ -404,7 +404,7 @@ class Solution {
 }
 ```
 
-## O\(1\)时间删除链表结点
+## 删除链表结点
 
 ### 237 - Delete Note in a Linked List
 
@@ -527,6 +527,75 @@ class Solution {
         pre.next = pre.next.next;
 
         return head;
+    }
+}
+```
+
+### 203 - Remove Linked List Elements
+
+#### 原题概述
+
+Remove all elements from a linked list of integers that have value **val**.
+
+**Example:**
+
+```text
+Input:  1->2->6->3->4->5->6, val = 6
+Output: 1->2->3->4->5
+```
+
+#### 题意和分析
+
+考察链表的基本操作，因为第一结点有可能也会被删除，所以使用dummy加油，然后返回dummy.next。
+
+#### 代码
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode dummy = new ListNode(-1);
+        ListNode pre = dummy;
+        dummy.next = head;
+        while (pre.next != null) {
+            if (pre.next.val == val) {
+                ListNode node = pre.next;
+                pre.next = node.next;
+                node.next = null;
+            } else {
+                pre = pre.next;
+            }
+        }
+        return dummy.next;
+    }
+}
+```
+
+当然，Linked List是天然的递归结构，可以用递归来做
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null) {
+            return null;
+        }
+        head.next = removeElements(head.next, val);
+        return head.val == val ? head.next : head;//等于val就跳过现在结点（删除）
     }
 }
 ```
