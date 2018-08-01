@@ -159,3 +159,63 @@ A Full Binary Tree (FBT) is a tree in which every node other than the leaves has
 
 来源并加以修改：[https://www.cnblogs.com/idorax/p/6441043.html](https://www.cnblogs.com/idorax/p/6441043.html)
 
+## 前序、中序和后序
+
+来看一个例子, 某一二叉树的中序和后序遍历分别为：
+
+Preorder:　  　5　　4　　11　　8　　13　　9
+
+Inorder:　　 　11　　4　　5　　13　　8　　9
+
+**5**　　4　　11　　8　　13　　9　　　　　　=&gt;　　　　　　　　　 5
+
+11　　4　　**5**　　13　　8　　9　　　　　　　　　　　　　　　　/　　\
+
+**4**　　11　　 　　**8**　　 13　　9　　　　　　=&gt;　　　　　　　　　5
+
+11　　**4**　　　　 13　　**8**　　9　　 　　　　　　　　　　　　　  /　　\
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　4　　　8
+
+**11　　　　 　　13　　　　9**　　　　　　　　=&gt;　　　　　　　　　5
+
+**11　　　　　　 13　　　　9**　　　　 　　　　　　　　　　　　   /　　\
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　4　　　8
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　/　　　 /     \
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　11　　  13　　  9
+
+怎么没有由先序和后序遍历建立二叉树呢，这是因为先序和后序遍历不能唯一的确定一个二叉树，比如下面五棵树：
+
+    1　　　　　　preorder:　　  1　　2　　3  
+   / \　　　　　  inorder:　　     **2　　1　　3**  
+ 2    3　　  　　 postorder:　　 2　　3　　1
+
+       1   　　　　preorder:　　   1　　2　　3  
+      / 　　　　　 inorder:　　     **3　　2　　1**  
+    2 　　　　     postorder: 　　3　　2　　1  
+   /  
+ 3
+
+       1　　　　    preorder:　　  1　　2　　3  
+      / 　　　　　  inorder:　　    **2　　3　　1**  
+    2 　　　　　　postorder:　　3　　2　　1  
+      \  
+       3
+
+       1　　　　     preorder:　　  1　　2　　3  
+         \ 　　　　   inorder:　　    **1　　3　　2**  
+          2 　　　　 postorder:　　3　　2　　1  
+         /  
+       3
+
+       1　　　　     preorder:　　  1　　2　　3  
+         \ 　　　　　inorder:　　    **1　　2　　3**  
+          2 　　　　 postorder:　　3　　2　　1  
+            \  
+　　　　3
+
+ 从上面我们可以看出，对于先序遍历都为1 2 3的五棵二叉树，它们的中序遍历都不相同，而它们的后序遍历却有相同的，所以只有和中序遍历一起才能唯一的确定一棵二叉树。
+
