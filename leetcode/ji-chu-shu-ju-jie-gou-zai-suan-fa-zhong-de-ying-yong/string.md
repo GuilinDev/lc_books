@@ -1,8 +1,72 @@
-# 计算器
+# String
 
-## 227 - Basic Calculator II
+## String和数的转换
 
-### 原题概述
+### 67 - Add Binary
+
+#### 原题概述
+
+Given two binary strings, return their sum \(also a binary string\).
+
+The input strings are both **non-empty** and contains only characters `1` or `0`.
+
+**Example 1:**
+
+```text
+Input: a = "11", b = "1"
+Output: "100"
+```
+
+**Example 2:**
+
+```text
+Input: a = "1010", b = "1011"
+Output: "10101"
+```
+
+#### 题意和分析
+
+将两个string形式的二进制数相加，并且保存在string中，要注意的是如何将string和int之间互相转换，并且每位相加时，会有进位的可能，会影响之后相加的结果。而且两个输入string的长度也可能会不同。创建一个StringBuilder来存相加的结果，从两个string的末尾开始取出字符，然后转为数字，相加，如果大于等于2，则标记进位标志carry，最后将StringBuilder转换成String，因为是从后面开始加，翻转一下。
+
+Time：O\(m\)； Space：O\(m\)，m是较长的那个string的长度。
+
+#### 代码
+
+```java
+class Solution {
+    public String addBinary(String a, String b) {
+        if (a == null || b == null) {
+            return a == null ? b : a;
+        }
+        int aIndex = a.length() - 1, bIndex = b.length() - 1, carry = 0;
+        StringBuilder sb = new StringBuilder();
+        while (aIndex >= 0 || bIndex >= 0) {
+            int sum = carry;//每轮两个数相加的和
+            if (aIndex >= 0) {
+                sum += a.charAt(aIndex) - '0';//转换成二进制数
+                aIndex--;
+            }
+            if (bIndex >= 0) {
+                sum += b.charAt(bIndex) - '0';//转换成二进制数
+                bIndex--;
+            }
+            sb.append(sum % 2);
+            carry = sum / 2;
+        }
+        if (carry != 0) {
+            sb.append(carry);
+        }
+
+        return sb.reverse().toString();
+    }
+}
+```
+
+## 计算器
+
+### 227 - Basic Calculator II
+
+#### 原题概述
 
 Implement a basic calculator to evaluate a simple expression string.
 
@@ -34,7 +98,7 @@ Output: 5
 * You may assume that the given expression is always valid.
 * **Do not** use the `eval` built-in library function.
 
-### 题意和分析
+#### 题意和分析
 
 设计一个计算器，输入一个有效的字符串表达式，加减乘除后输出一个整数，除法是地板除法，表达式里的数字都是正整数。eval\(\)是脚本语言中的方法，Java并没有。
 
@@ -44,7 +108,7 @@ Output: 5
 
 当然这道题不用stack也可以，可以把string先转换成char array，然后从左到右运算，维持一个result负责最终结果和一个pre负责遇到乘法除法的时候重算一下先做乘除。复杂度一样。
 
-### 代码
+#### 代码
 
 Stack
 
