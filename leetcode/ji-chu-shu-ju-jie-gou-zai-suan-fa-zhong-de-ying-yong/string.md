@@ -206,3 +206,54 @@ class Solution {
 }
 ```
 
+
+
+### 316 - Remove Duplicate Letters
+
+#### 原题概述
+
+Given a string which contains only lowercase letters, remove duplicate letters so that every letter appear once and only once. You must make sure your result is the smallest in lexicographical order among all possible results.
+
+**Example 1:**
+
+```text
+Input: "bcabc"
+Output: "abc"
+```
+
+**Example 2:**
+
+```text
+Input: "cbacdcbc"
+Output: "acdb"
+```
+
+#### 题意和分析
+
+移除重复字母，使每个字母只出现一次，结果按照字母顺序排，而且不能打乱原来的相对位置。
+
+递归的办法，先用哈希表记录每个字母出现的次数，再遍历给定字符串s，找出最小的字母，每比较一个字母，在哈希表中的值减1，如果此时为0了，则不继续遍历了，此时我们记录了一个位置，把字符串s中该位置左边的字符都删掉，右边的所有再出现的该字母也删掉，递归调用此函数即可。时间： O\(26 \* n\) = O\(n\)。
+
+#### 代码
+
+```java
+class Solution {
+    public String removeDuplicateLetters(String s) {
+        int[] count = new int[26];
+        int pos = 0;//最小的s[i]的位置
+        for (int i = 0; i < s.length(); i++) {
+            count[s.charAt(i) - 'a']++;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) < s.charAt(pos)) {
+                pos = i;
+            }
+            if (--count[s.charAt(i) - 'a'] == 0) {
+                break;
+            }
+        }
+        return s.length() == 0 ? "" : s.charAt(pos) + removeDuplicateLetters(s.substring(pos + 1).replaceAll("" + s.charAt(pos), ""));
+    }
+}
+```
+
