@@ -219,21 +219,242 @@ Output: 6
 
 #### 题意和分析
 
-#### 代码
-
-### 173 - Binary Search Tree Iterator
-
-#### 原题概述
-
-#### 题意和分析
+跟84 - Largest Rectangle in Histogram类似，收集雨水，可以用DP或者stack来做。
 
 #### 代码
+
+DP方法一，维护一个一位dp数组，遍历两遍数组，第一遍遍历dp\[i\]中存入i位置左边的最大值；然后第二遍遍历，找到dp\[i\]右边的最大值；然后两个最大值取较小值，跟当前值A\[i\]比较，如果大于A\[i\]，将差值存入结果。
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        int result = 0, max = 0, n = height.length;
+        int[] dp = new int[n];
+        //i位置左边的最大值
+        for (int i = 0; i < n; i++) {
+            dp[i] = max;
+            max = Math.max(max, height[i]);
+        }
+        max = 0;
+        //找到右边的最大值并和左边的最大值比较
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i] = Math.min(dp[i], max);//dp[i]取较小值，水才不会溢出
+            max = Math.max(max, height[i]);
+            if (dp[i] - height[i] > 0) {
+                result += dp[i] - height[i];
+            }
+        }
+        return result;
+    }
+}
+```
+
+DP方法二，上面的方法一看是两次遍历，直觉就可以优化，可以用两个指针left和right分别指向给定数组的首尾，然后两头往中间扫描，在当前两个指针已经扫描过的范围内，先比较两头找出较小值，如果较小值是left指向的值，从左往右扫，相反就从右往左扫；在扫描过程中如果遇到的值比当前的较小值小，将差值存入结果，如果遇到的值比较小值大，重新确定窗口范围，直到left和right指针相遇并且重合。
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        int result = 0, left = 0, right = height.length - 1;
+        while (left < right) {
+            int min = Math.min(height[left], height[right]);
+            if (height[left] == min) {
+                left++;
+                while (left < right && height[left] < min) {
+                    result += min - height[left];
+                    left++;
+                }
+            } else {
+                right--;
+                while (left < right && height[right] < min) {
+                    result += min - height[right];
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
+上面解法可以更简洁
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        int result = 0, left = 0, right = height.length - 1;
+        int level = 0;
+        while (left < right) {
+            int min = height[(height[left] < height[right]) ? left++ : right--];
+            level = Math.max(level, min);
+            result += level - min;
+        }
+        return result;
+    }
+}
+```
+
+Stack的做法，遍历高度，如果此时栈为空，或者当前高度小于等于栈顶高度，则把当前高度的坐标压入栈，注意我们不直接把高度压入栈，而是把坐标压入栈，这样方便我们在后来算水平距离。当遇到比栈顶高度大的时候，就说明有可能会有坑存在，可以装雨水。此时栈里至少有一个高度，如果只有一个的话，那么不能形成坑，我们直接跳过，如果多余一个的话，那么此时把栈顶元素取出来当作坑，新的栈顶元素就是左边界，当前高度是右边界，只要取二者较小的，减去坑的高度，长度就是右边界坐标减去左边界坐标再减1，二者相乘就是盛水量。
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        Stack<Integer> stack = new Stack<Integer>();
+        int i = 0, n = height.length, result = 0;
+        while (i < n) {
+            if (stack.isEmpty() || height[i] <= height[stack.peek()]) {
+                stack.push(i);
+                i++;
+            } else {
+                int t = stack.pop();
+                if (stack.isEmpty()) {
+                    continue;
+                }
+                result += (Math.min(height[i], height[stack.peek()]) - height[t]) * (i - stack.peek() - 1);
+            }
+        }
+        return result;
+    }
+}
+```
 
 ### 150 - Evaluate Reverse Polish Notation
 
 #### 原题概述
 
+Evaluate the value of an arithmetic expression in [Reverse Polish Notation](http://en.wikipedia.org/wiki/Reverse_Polish_notation).
+
+Valid operators are `+`, `-`, `*`, `/`. Each operand may be an integer or another expression.
+
+**Note:**
+
+* Division between two integers should truncate toward zero.
+* The given RPN expression is always valid. That means the expression would always evaluate to a result and there won't be any divide by zero operation.
+
+**Example 1:**
+
+```text
+Input: ["2", "1", "+", "3", "*"]
+Output: 9
+Explanation: ((2 + 1) * 3) = 9
+```
+
+**Example 2:**
+
+```text
+Input: ["4", "13", "5", "/", "+"]
+Output: 6
+Explanation: (4 + (13 / 5)) = 6
+```
+
+**Example 3:**
+
+```text
+Input: ["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]
+Output: 22
+Explanation: 
+  ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+= ((10 * (6 / (12 * -11))) + 17) + 5
+= ((10 * (6 / -132)) + 17) + 5
+= ((10 * 0) + 17) + 5
+= (0 + 17) + 5
+= 17 + 5
+= 22
+```
+
 #### 题意和分析
 
+将操作数放前面，操作符后置的写法是逆波兰表达式。从前往后遍历数组，遇到数字则压入栈中，遇到符号，则把栈顶的两个数字拿出来运算，把结果再压入栈中，直到遍历完整个数组，栈顶数字即为最终答案。
+
 #### 代码
+
+```java
+class Solution {
+    public int evalRPN(String[] tokens) {
+        int a,b;
+        Stack<Integer> stack = new Stack<>();
+        for (String s : tokens) {
+            if (s.equals("+")) {
+                stack.add(stack.pop() + stack.pop());
+            } else if (s.equals("/")) {
+                b = stack.pop();
+                a = stack.pop();
+                stack.add(a / b);
+            } else if (s.equals("*")) {
+                stack.add(stack.pop() * stack.pop());
+            } else if (s.equals("-")) {
+                b = stack.pop();
+                a = stack.pop();
+                stack.add (a - b);
+            } else {//遇到数字
+                stack.add(Integer.parseInt(s));
+            }
+        }
+        return stack.pop();
+    }
+}
+```
+
+也可以用递归
+
+```java
+class Solution {
+    public int evalRPN(String[] tokens) {
+        int len = tokens.length - 1;
+        return helper(tokens, len);
+    }
+    private int helper(String[] tokens, int len) {
+        String s = tokens[len];
+        if (s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/")) {
+            int b = helper (tokens, --len);
+            int a = helper (tokens, --len);
+            if (s.equals("+")) {
+                return a + b;
+            } else if (s.equals("-")) {
+                return a - b;
+            } else if (s.equals("*")) {
+                return a * b;
+            } else {
+                return a / b;
+            }
+        } else {//数字
+            return Integer.parseInt(s);
+        }
+    }
+}
+```
+
+"茴"字的第三种写法，每次遇到操作符就运算之前的两个数字（一定有的）
+
+```java
+class Solution {
+    public int evalRPN(String[] tokens) {
+        int[] ls = new int[tokens.length/2+1];
+        int index = 0;
+        for (String token : tokens) {
+            switch (token) {
+                case "+":
+                    ls[index - 2] = ls[index - 2] + ls[index - 1];
+                    index--;
+                    break;
+                case "-":
+                    ls[index - 2] = ls[index - 2] - ls[index - 1];
+                    index--;
+                    break;
+                case "*":
+                    ls[index - 2] = ls[index - 2] * ls[index - 1];
+                    index--;
+                    break;
+                case "/":
+                    ls[index - 2] = ls[index - 2] / ls[index - 1];
+                    index--;
+                    break;
+                default:
+                    ls[index++] = Integer.parseInt(token);
+                    break;
+            }
+        }
+        return ls[0];
+    }
+}
+```
 
