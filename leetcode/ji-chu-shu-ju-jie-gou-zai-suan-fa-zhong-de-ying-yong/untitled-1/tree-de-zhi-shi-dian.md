@@ -42,7 +42,7 @@ has no parent. 上图是一棵无序的树示例。在上图中，标号为7的�
 **1.2 树的基本术语**
 
 | **Root** | The top node in a tree. | **根** | 树的顶端结点 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| :--- | :--- | :--- | :--- |
 | **Child** | A node directly connected to another node when moving away from the Root. | **孩子** | 当远离根\(Root\)的时候，直接连接到另外一个结点的结点被称之为孩子\(Child\);  |
 | **Parent** | The converse notion of a child. | **双亲** | 相应地，另外一个结点称为孩子\(child\)的双亲\(parent\)。 |
 | **Siblings** | A group of nodes with the same parent. | **兄弟** | 具有同一个双亲\(Parent\)的孩子\(Child\)之间互称为兄弟\(Sibling\)。 |
@@ -148,7 +148,7 @@ A Full Binary Tree (FBT) is a tree in which every node other than the leaves has
 **3. 总结** \(下表参考[来源](http://stackoverflow.com/questions/12359660/difference-between-complete-binary-tree-strict-binary-tree-full-binary-tre)\)
 
 | **完美二叉树** | Perfect Binary Tree | Every node except the leaf nodes have two children and every level \(last level too\) is completely filled. **除了叶子结点之外的每一个结点都有两个孩子，每一层\(当然包含最后一层\)都被完全填充。** |
-| --- | --- | --- |
+| :--- | :--- | :--- |
 | **完全二叉树** | Complete Binary Tree | Every level except the last level is completely filled and all the nodes are left justified. **除了最后一层之外的其他每一层都被完全填充，并且所有结点都保持向左对齐。** |
 | **完满二叉树** | Full/Strictly Binary Tree | Every node except the leaf nodes have two children. **除了叶子结点之外的每一个结点都有两个孩子结点。** |
 

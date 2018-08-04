@@ -266,7 +266,7 @@ _归并操作的过程如下：_
 5. _将另一序列剩下的所有元素直接复制到合并序列尾_
 
 | _最差時間复杂度_ | ![\Theta\(n\log n\)](http://upload.wikimedia.org/math/f/2/9/f296a521bff060cd02c3ef6ee7931dd7.png) |
-| --- | --- | --- | --- |
+| :--- | :--- |
 | _最优時間复杂度_ | ![\Theta\(n\)](http://upload.wikimedia.org/math/5/c/1/5c151486ce3904339687c2bac3cccd8d.png) |
 | _平均时间复杂度_ | ![\Theta\(n\log n\)](http://upload.wikimedia.org/math/f/2/9/f296a521bff060cd02c3ef6ee7931dd7.png) |
 | _最差空间复杂度_ | ![\Theta\(n\)](http://upload.wikimedia.org/math/5/c/1/5c151486ce3904339687c2bac3cccd8d.png) |
