@@ -464,9 +464,152 @@ class Solution {
 
 #### 原题概述
 
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string may contain open `(` and closing parentheses `)`, the plus `+` or minus sign `-`, **non-negative** integers and empty spaces .
+
+**Example 1:**
+
+```text
+Input: "1 + 1"
+Output: 2
+```
+
+**Example 2:**
+
+```text
+Input: " 2-1 + 2 "
+Output: 3
+```
+
+**Example 3:**
+
+```text
+Input: "(1+(4+5+2)-3)+(6+8)"
+Output: 23
+```
+
+**Note:**
+
+* You may assume that the given expression is always valid.
+* **Do not** use the `eval` built-in library function.
+
 #### 题意和分析
 
+实现一个简单的计算器，表达式中只有加减号，数字，括号和空格，没有乘除，所以没有计算的优先级之分，因此这道题就变的没有那么复杂。用一个栈来辅助计算，用个变量sign来表示当前的符号，遍历给定的字符串s，如果遇到了数字，由于可能是个多位数，所以我们要用while循环把之后的数字都读进来，然后用sign\*num来更新结果res；如果遇到了加号，则sign赋为1，如果遇到了符号，则赋为-1；如果遇到了左括号，则把当前结果res和符号sign压入栈，res重置为0，sign重置为1；如果遇到了右括号，结果res乘以栈顶的符号，栈顶元素出栈，结果res加上栈顶的数字，栈顶元素出栈。
+
 #### 代码
+
+```java
+class Solution {
+    public int calculate(String s) {
+        int res = 0, sign = 1, n = s.length();
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c >= '0') {
+                int num = 0;
+                while (i < n && s.charAt(i) >= '0') {
+                    num = 10 * num + s.charAt(i++) - '0';
+                }
+                res += sign * num;
+                i--;
+            } else if (c == '+') {
+                sign = 1;
+            } else if (c == '-') {
+                sign = -1;
+            } else if (c == '(') {
+                stack.push(res);
+                stack.push(sign);
+                res = 0;
+                sign = 1;
+            } else if (c == ')') {
+                res *= stack.pop();
+                res += stack.pop();
+            }
+        }
+        return res;
+    }
+}
+```
+
+类似的做法，使用一个变量来保存读取的num，遇到其他字符，就用sign\*num来更新结果res
+
+```java
+class Solution {
+    public int calculate(String s) {
+        int res = 0, num = 0, sign = 1, n = s.length();
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c >= '0') {
+                num = 10 * num + (c - '0');
+            } else if (c == '+' || c == '-') {
+                res += sign * num;
+                num = 0;
+                sign = (c == '+') ? 1 : -1;
+            } else if (c == '(') {
+                stack.push(res);
+                stack.push(sign);
+                res = 0;
+                sign = 1;
+            } else if (c == ')') {
+                res += sign * num;
+                num = 0;
+                res *= stack.pop();
+                res += stack.pop();
+            }
+        }
+        res += sign * num;
+        return res;
+    }
+}
+```
+
+递归处理括号的方法在这道题也同样适用，用一个变量count，遇到左括号自增1，遇到右括号自减1，当count为0的时候，说明括号正好完全匹配，这个trick在验证括号是否valid的时候经常使用到。然后我们就是根据左右括号的位置提取出中间的子字符串调用递归函数，返回值赋给num，这种思路类似Basic Calculator III。
+
+```java
+class Solution {
+    public int calculate(String s) {
+        if (s.length() == 0) return 0;
+        s = "(" + s + ")";
+        int[] p = {0};
+        return eval(s, p);
+    }
+    //计算括号里面的值
+    private int eval(String s, int[] p){
+        int val = 0;
+        int i = p[0];
+        int sign = 1; //1:+ -1:-
+        int num = 0;
+        while(i < s.length()){
+            char c = s.charAt(i);
+            switch(c){
+                case '+': val = val + sign * num; // end of number and set operator
+                    num = 0;
+                    sign = 1;
+                    i++;
+                    break;
+                case '-': val = val + sign * num; // end of number and set operator
+                    num = 0;
+                    sign = -1;
+                    i++;
+                    break;
+                case '(': p[0] = i + 1; // start a new eval
+                    val = val + sign * eval(s, p);
+                    i = p[0];
+                    break;
+                case ')': p[0] = i + 1; // end current eval and return. Note that we need to deal with the last num
+                    return val + sign * num;
+                case ' ': i++;
+                    continue;
+                default : num = num * 10 + c - '0'; i++;
+            }
+        }
+        return val;
+    }
+}
+```
 
 ### 341 - Flatten Nested List Iterator
 
