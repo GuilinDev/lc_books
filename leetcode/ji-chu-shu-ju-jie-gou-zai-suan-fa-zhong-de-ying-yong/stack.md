@@ -490,3 +490,19 @@ Output: "acdb"
 
 #### 代码
 
+### 341 - Flatten Nested List Iterator
+
+#### 原题概述
+
+#### 题意和分析
+
+#### 代码
+
+### 232 - Implement Queue using Stacks
+
+#### 原题概述
+
+#### 题意和分析
+
+#### 代码
+
