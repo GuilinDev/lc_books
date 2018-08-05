@@ -725,5 +725,101 @@ queue.empty(); // returns false
 
 #### 代码
 
+```java
+class MyQueue {
 
+    Stack<Integer> queue = new Stack<>();
+
+    /** Initialize your data structure here. */
+    public MyQueue() {
+
+    }
+
+    /** Push element x to the back of queue. */
+    public void push(int x) {
+        Stack<Integer> temp = new Stack<Integer>();
+        while(!queue.empty()){
+            temp.push(queue.pop());
+        }
+        queue.push(x);
+        while(!temp.empty()){
+            queue.push(temp.pop());
+        }
+    }
+
+    /** Removes the element from in front of queue and returns that element. */
+    public int pop() {
+        return queue.pop();
+    }
+
+    /** Get the front element. */
+    public int peek() {
+        return queue.peek();
+    }
+
+    /** Returns whether the queue is empty. */
+    public boolean empty() {
+        return queue.empty();
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+```
+
+上面那个解法简单容易理解，但是效率不高，因为每次在push的时候，都要翻转两边栈，下面这个方法使用了两个栈s1和s2，其中新进栈的都先缓存在s1中，当要pop和peek的时候，才将s1中所有元素移到s2中操作，这样可以得到优化。
+
+```java
+class MyQueue {
+
+    Stack<Integer> s1 = new Stack<>();
+    Stack<Integer> s2 = new Stack<>();
+
+    /** Initialize your data structure here. */
+    public MyQueue() {
+
+    }
+
+    /** Push element x to the back of queue. */
+    public void push(int x) {
+        s1.push(x);
+    }
+
+    /** Removes the element from in front of queue and returns that element. */
+    public int pop() {
+        peek();
+        return s2.pop();
+    }
+
+    /** Get the front element. */
+    public int peek() {
+        if (s2.isEmpty()) {
+            while (!s1.isEmpty()) {
+                s2.push(s1.pop());
+            }
+        }
+        return s2.peek();
+    }
+
+    /** Returns whether the queue is empty. */
+    public boolean empty() {
+        return s1.isEmpty() && s2.isEmpty();
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+```
 
