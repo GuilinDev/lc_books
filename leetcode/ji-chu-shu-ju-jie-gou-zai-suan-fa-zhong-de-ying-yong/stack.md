@@ -635,15 +635,95 @@ By calling next repeatedly until hasNext returns false, the order of elements re
 
 #### 代码
 
+```java
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * public interface NestedInteger {
+ *
+ *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     public boolean isInteger();
+ *
+ *     // @return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // Return null if this NestedInteger holds a nested list
+ *     public Integer getInteger();
+ *
+ *     // @return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // Return null if this NestedInteger holds a single integer
+ *     public List<NestedInteger> getList();
+ * }
+ */
+public class NestedIterator implements Iterator<Integer> {
 
+    Stack<NestedInteger> stack = new Stack<>();
 
+    public NestedIterator(List<NestedInteger> nestedList) {
+        for (int i = nestedList.size() - 1; i >= 0; i--) {
+            stack.push(nestedList.get(i));
+        }
+    }
 
+    @Override
+    public Integer next() {
+        NestedInteger t = stack.pop();
+        return t.getInteger();
+    }
+
+    @Override
+    public boolean hasNext() {
+        while (!stack.isEmpty()) {
+            NestedInteger t = stack.peek();
+            if (t.isInteger()) return true;
+            stack.pop();
+            for (int i = t.getList().size() - 1; i >= 0; i--) {
+                stack.push(t.getList().get(i));
+            }
+        }
+        return false;
+    }
+}
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i = new NestedIterator(nestedList);
+ * while (i.hasNext()) v[f()] = i.next();
+ */
+```
 
 ### 232 - Implement Queue using Stacks
 
 #### 原题概述
 
+Implement the following operations of a queue using stacks.
+
+* push\(x\) -- Push element x to the back of queue.
+* pop\(\) -- Removes the element from in front of queue.
+* peek\(\) -- Get the front element.
+* empty\(\) -- Return whether the queue is empty.
+
+**Example:**
+
+```text
+MyQueue queue = new MyQueue();
+
+queue.push(1);
+queue.push(2);  
+queue.peek();  // returns 1
+queue.pop();   // returns 1
+queue.empty(); // returns false
+```
+
+**Notes:**
+
+* You must use only standard operations of a stack -- which means only `push to top`, `peek/pop from top`, `size`, and `is empty`operations are valid.
+* Depending on your language, stack may not be supported natively. You may simulate a stack by using a list or deque \(double-ended queue\), as long as you use only standard operations of a stack.
+* You may assume that all operations are valid \(for example, no pop or peek operations will be called on an empty queue\).
+
 #### 题意和分析
 
+用栈来实现队列，刚好和225-Implement Stack using Queues相反。栈和队列的核心不同点就是栈是先进后出，而队列是先进先出，所以要用栈的先进后出的特性来模拟出队列的先进先出。那么怎么做呢，其实很简单，只要我们在插入元素的时候每次都从前面插入即可，比如如果一个队列是1,2,3,4，那么在栈中保存为4,3,2,1，那么返回栈顶元素1，也就是队列的首元素，则问题迎刃而解。所以此题的难度是push函数，我们需要一个辅助栈temp，把s的元素也逆着顺序存入temp中，此时加入新元素x，再把temp中的元素存回来，这样就是我们要的顺序了，其他三个操作也就直接调用栈的操作即可。
+
 #### 代码
+
+
 
