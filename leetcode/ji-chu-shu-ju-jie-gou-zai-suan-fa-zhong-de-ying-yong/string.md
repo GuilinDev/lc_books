@@ -176,9 +176,52 @@ class Solution {
 
 #### 原题概述
 
+Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string `""`.
+
+**Example 1:**
+
+```text
+Input: ["flower","flow","flight"]
+Output: "fl"
+```
+
+**Example 2:**
+
+```text
+Input: ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+```
+
+**Note:**
+
+All given inputs are in lowercase letters `a-z`.
+
 #### 题意和分析
 
+求一个字符串数组的最长的共同前缀，字符串都是小写字母，这个只能把所有单词排成纵列挨个查了，如果查找的过程中某一个字符串没有了，或者某个字符串的字符不同，那就直接上一轮保存的最长公共前缀。
+
 #### 代码
+
+```java
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+        for (int i = 0; i < strs[0].length(); i++) {//以第一个字符串的长度来遍历，排成纵列
+            for (int j = 0; j < strs.length - 1; j++) {//比较到倒数第二个字符串
+                if (i >= strs[j].length() || i >= strs[j+1].length() || strs[j].charAt(i) != strs[j+1].charAt(i)) {
+                    return strs[j].substring(0, i);//不包括i位置的字符
+                }
+            }
+        }
+        return strs[0];//如果都遍历结束了还没有return，那第一个字符串就是最短的字符串（之一），本省就是最长前缀
+    }
+}
+```
 
 ### 67 - Add Binary
 
