@@ -333,11 +333,59 @@ P     I
 
 #### 题意和分析
 
+Z型打印，从左到右横着读变成"从上到下-斜上-从上到下"这样来读，涉及坐标变化和分块处理。
 
+比如有一个字符串 “0123456789ABCDEF”，转为zigzag
+
+当 n = 2 时：
+
+0 2 4 6 8 A C E
+
+1 3 5 7 9 B D F
+
+当 n = 3 时：
+
+0   4    8     C
+
+1 **3** 5 **7** 9 **B** D **F**
+
+2    6   A     E
+
+当 n = 4 时：
+
+0      6        C
+
+1   **5** 7   **B**  D
+
+2 **4**   8 **A**    E
+
+3      9       F
+
+除了第一行和最后一行没有中间形成之字型的数字外，其他行都有，而首位两行中相邻两个元素的index之差跟行数是相关的，为 2\*numRows- 2 （注意空格也算一个位置），根据这个特点，我们可以按顺序找到所有的正常元素在原字符串的位置，将他们按顺序加到新字符串里面。对于在正常字元素出现的位置也是有规律的，每个黑体字元素的位置为 j + 2\*numRows-2 - 2\*i，（其中，j为前一个正常字体元素的列数，i为当前行数）。 比如当n = 4中的黑体字5，它的位置为 1 + 2\*4-2 - 2\*1 = 5，为原字符串的正确位置。当我们知道所有正常字体元素和黑体字元素位置的正确算法，那就可以一次性的把它们按顺序都加到新的字符串里面。
 
 #### 代码
 
-
+```java
+class Solution {
+    public String convert(String s, int numRows) {
+        if (numRows <= 1) {
+            return s;
+        }
+        String result = "";
+        int size = 2 * numRows - 2;
+        for (int i = 0; i < numRows; i++) {//一行一行打印
+            for (int j = i; j < s.length(); j += size) {
+                result += s.charAt(j);//打印正常字体的字符
+                int temp = j + size - 2 * i;
+                if ( i != 0 && i != numRows - 1 && temp < s.length()) { //打印斜上的黑体字的字符
+                    result += s.charAt(temp);
+                }
+            }
+        }
+        return result;
+    }
+}
+```
 
 ### 3 - Longest Substring Without Repeating Characters
 
