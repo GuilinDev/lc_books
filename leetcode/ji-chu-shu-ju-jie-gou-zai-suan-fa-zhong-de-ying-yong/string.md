@@ -137,7 +137,48 @@ class Solution {
 }
 ```
 
-## String和数的转换
+### 344 - Reverse String
+
+#### 原题概述
+
+Write a function that takes a string as input and returns the string reversed.
+
+**Example:**  
+Given s = "hello", return "olleh".
+
+#### 题意和分析
+
+转换成字符数组，两个索引往中间走，如果相等或者left大于right就停止。
+
+#### 代码
+
+```java
+class Solution {
+    public String reverseString(String s) {
+        if (s == null || s.length() == 0 || s.length() == 1) {
+            return s;
+        }
+        char[] result = s.toCharArray();
+        int left = 0, right = result.length - 1;
+        while (left < right) {
+            char temp = result[left];
+            result[left] = result[right];
+            result[right] = temp;
+            left++;
+            right--;
+        }
+        return new String(result);
+    }
+}
+```
+
+### 14 - Longest Common Prefix
+
+#### 原题概述
+
+#### 题意和分析
+
+#### 代码
 
 ### 67 - Add Binary
 
