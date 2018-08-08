@@ -403,7 +403,53 @@ Given `"pwwkew"`, the answer is `"wke"`, with the length of 3. Note that the ans
 
 #### 题意和分析
 
+给一个字符串，找到其最长的子串（不是子序列），返回这个子串的长度。维护一个滑动窗口，窗口里面的字符都是不重复的。1）首先可以用一个HashMap来记录窗口内的字符和这些字符最后出现的位置，如果窗口右侧移动后发现有重复的字符，那就将left索引指向HashMap里面保存的该字符的位置的下一位，窗口右侧继续移动，同时保持len的最长的值；2）使用HashSet，出现过的字符都放入set中，遇到set中没有的字符就加入set并更新结果result，如果有重复的，从左边开始删除字符，知道删到重复的字符为止。
+
 #### 代码
+
+HashMap
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0) {
+            return 0;
+        }
+        HashMap<Character, Integer> map = new HashMap<>();
+        int result = 0;
+        for (int i = 0, j = 0; i < s.length(); i++) {//右边索引遍历字符串,左边记录窗口左边
+            if (map.containsKey(s.charAt(i))) {//如果滑动窗口出现重复的字符
+                j = Math.max(j, map.get(s.charAt(i)) + 1);
+            }
+            map.put(s.charAt(i), i);//不管是否移动左边的索引，都将当前的字符存入hashmap
+            result = Math.max(result, i - j + 1);
+        }
+        return result;
+    }
+}
+```
+
+HashSet
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int result = 0, left = 0, right = 0;
+        HashSet<Character> ch = new HashSet<>();
+        while (right < s.length()) {
+            if (!ch.contains(s.charAt(right))) {
+                ch.add(s.charAt(right));
+                right++;
+                result = Math.max(result, ch.size());
+            } else {
+                ch.remove(s.charAt(left));
+                left++;
+            }
+        }
+        return result;
+    }
+}
+```
 
 ### 67 - Add Binary
 
