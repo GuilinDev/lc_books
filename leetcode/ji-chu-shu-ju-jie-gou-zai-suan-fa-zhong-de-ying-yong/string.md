@@ -528,6 +528,125 @@ class Solution {
 }
 ```
 
+### 5 - Longest Palindromic Substring
+
+#### 原题概述
+
+Given a string **s**, find the longest palindromic substring in **s**. You may assume that the maximum length of **s** is 1000.
+
+**Example 1:**
+
+```text
+Input: "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+```
+
+**Example 2:**
+
+```text
+Input: "cbbd"
+Output: "bb"
+```
+
+#### 题意和分析
+
+找最长回文子串，给定的字符串最长为1000，1\)
+
+1）首先可以O\(n^2\)，以每个字符为中心然后向两边延伸来检查，保留一个最长的子串即可，这个需要注意一下奇偶（以自己为中心以及以自己旁边的两个字符为中心）；2\)
+
+2）优化的办法是用dp，维护一个二维dp，其中dp\[i\]\[j\]表示字符串区间\[i,j\]是否为回文串，当i==j时，只有一个字符，肯定是回文串；如果i = j + 1，那二者是相邻字符，此时判断s\[i\]是否等于s\[j\]，如果i和j不相邻，i-j&gt;=2的时候，除了判断s\[i\]和s\[j\]相等，还得保证dp\[j+1\]\[i-1\]也得为真，才是回文串，所以递推式为
+
+dp\[i, j\] = 1                                               if i == j为回文串
+
+           = s\[i\] == s\[j\]                                if j = i + 1
+
+           = s\[i\] == s\[j\] && dp\[i + 1\]\[j - 1\]    if j &gt; i + 1     
+
+3）O\(n\)的马拉车算法Manacher's Algorithm，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍
+
+#### 代码
+
+O\(n^2\)
+
+```java
+class Solution {
+    private int lo, maxLen;
+
+    public String longestPalindrome(String s) {
+        int len = s.length();
+        if (len < 2)
+            return s;
+
+        for (int i = 0; i < len-1; i++) {
+            extendPalindrome(s, i, i);  //assume odd length, try to extend Palindrome as possible
+            extendPalindrome(s, i, i+1); //assume even length.
+        }
+        return s.substring(lo, lo + maxLen);
+    }
+
+    private void extendPalindrome(String s, int j, int k) {
+        while (j >= 0 && k < s.length() && s.charAt(j) == s.charAt(k)) {
+            j--;
+            k++;
+        }
+        if (maxLen < k - j - 1) {
+            lo = j + 1;
+            maxLen = k - j - 1;
+        }
+    }
+}
+```
+
+DP
+
+```java
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        
+        int n = s.length();
+        String res = null;
+
+        boolean[][] dp = new boolean[n][n];
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i; j < n; j++) {
+                dp[i][j] = s.charAt(i) == s.charAt(j) && (j - i < 3 || dp[i + 1][j - 1]);
+
+                if (dp[i][j] && (res == null || j - i + 1 > res.length())) {
+                    res = s.substring(i, j + 1);
+                }
+            }
+        }
+
+        return res;
+    }
+}
+```
+
+ Manacher's Algorithm \(to be continued\)
+
+
+
+### 38 - Count and Say
+
+#### 原题概述
+
+#### 题意和分析
+
+#### 代码
+
+### 151 - Reverse Words in a String
+
+#### 原题概述
+
+#### 题意和分析
+
+#### 代码
+
 ### 67 - Add Binary
 
 #### 原题概述
