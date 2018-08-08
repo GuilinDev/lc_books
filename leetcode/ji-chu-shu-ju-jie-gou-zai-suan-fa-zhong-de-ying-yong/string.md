@@ -203,7 +203,84 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 
 #### 题意和分析
 
+上一道题反过来，数字转换为罗马数字，输入的限制为1～3999，
+
+| 基本字符 | I | V | X | L | C | D | M |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 相应的数字 | 1 | 5 | 10 | 50 | 100 | 500 | 1000  |
+
+因为有输入的限制，所以投机取巧可以建立一个数表，每次查表找出最大的当前最大的数，然后减去再继续查表
+
 #### 代码
+
+```java
+class Solution {
+    public String intToRoman(int num) {
+        String result = "";
+        int[] val = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] str = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        for (int i = 0; i < val.length; i++) {
+            while (num >= val[i]) {
+                num -= val[i];
+                result += str[i];
+            }
+        }
+        return result;
+    }
+}
+```
+
+正常的做法，例如整数 1437 的罗马数字为 MCDXXXVII，千位，百位，十位和个位上的数分别用罗马数字表示了。 1000 - M, 400 - CD, 30 - XXX, 7 - VII。所以我们要做的就是用取商法分别提取各个位上的数字，然后分别表示出来：
+
+100 - C
+
+200 - CC
+
+300 - CCC
+
+400 - CD
+
+500 - D
+
+600 - DC
+
+700 - DCC
+
+800 - DCCC
+
+900 - CM
+
+可以分为四类，100到300一类，400一类，500到800一类，900最后一类。每一位上的情况都是类似的。
+
+```java
+class Solution {
+    public String intToRoman(int num) {
+        String result = "";
+        char[] roman = {'M', 'D', 'C', 'L', 'X', 'V', 'I'};
+        int[] value = {1000, 500, 100, 50, 10, 5, 1};
+
+        for (int n = 0; n < 7; n += 2) {
+            int x = num / value[n];
+            if (x < 4) {
+                for (int i = 1; i <= x; i++) {
+                    result += roman[n];
+                }
+            } else if (x == 4) {
+                result = result + roman[n] + roman[n-1];
+            } else if (x > 4 && x < 9) {
+                result += roman[n-1];
+                for (int i = 6; i <= x; i++) {
+                    result += roman[n];
+                }
+            } else if (x == 9) {
+                result = result + roman[n] + roman[n-2];
+            }
+            num %= value[n];
+        }
+        return result;
+    }
+}
+```
 
 ### 344 - Reverse String
 
