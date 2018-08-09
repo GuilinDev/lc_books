@@ -635,17 +635,199 @@ class Solution {
 
 #### 原题概述
 
+The count-and-say sequence is the sequence of integers with the first five terms as following:
+
+```text
+1.     1
+2.     11
+3.     21
+4.     1211
+5.     111221
+```
+
+`1` is read off as `"one 1"` or `11`.  
+`11` is read off as `"two 1s"` or `21`.  
+`21` is read off as `"one 2`, then `one 1"` or `1211`.  
+
+
+Given an integer n, generate the nth term of the count-and-say sequence.
+
+Note: Each term of the sequence of integers will be represented as a string.
+
+**Example 1:**
+
+```text
+Input: 1
+Output: "1"
+```
+
+**Example 2:**
+
+```text
+Input: 4
+Output: "1211"
+```
+
 #### 题意和分析
 
+对于前一个数，找出相同元素的个数，把这个“个数”和该元素存到新的string里面， [**字符串中永远只会出现1,2,3这三个字符**，假设第k个字符串中出现了4，那么第k-1个字符串必定有四个相同的字符连续出现，假设这个字符为1，则第k-1个字符串为x1111y。第k-1个字符串是第k-2个字符串的读法，即第k-2个字符串可以读为“x个1,1个1,1个y” 或者“\*个x,1个1,1个1,y个\*”，这两种读法分别可以合并成“x+1个1,1个y” 和 “\*个x，2个1，y个\*”，代表的字符串分别是“\(x+1\)11y” 和 "x21y"，即k-1个字符串为“\(x+1\)11y” 或 "x21y"，不可能为“x1111y”。](http://www.cnblogs.com/TenosDoIt/p/3776356.html)
+
 #### 代码
+
+```java
+class Solution {
+    public String countAndSay(int n) {
+        if (n <= 0) {
+            return "";
+        }
+        String result = "1";//如果不为空，至少是1
+        while (--n > 0) {
+            String cur = "";
+            for (int i = 0; i < result.length(); i++) {//遍历result每个字符
+                int count = 1;
+                while (i + 1 < result.length() && result.charAt(i) == result.charAt(i + 1)) {//数一下总共有几个相同的字符，可以一起说
+                    count++;
+                    i++;
+                }
+                cur = cur + count + result.charAt(i);
+            }
+            result = cur;
+        }
+        return result;
+    }
+}
+```
 
 ### 151 - Reverse Words in a String
 
 #### 原题概述
 
+Given an input string, reverse the string word by word.
+
+**Example:**  
+
+```text
+Input: "the sky is blue",
+Output: "blue is sky the".
+```
+
+**Note:**
+
+* A word is defined as a sequence of non-space characters.
+* Input string may contain leading or trailing spaces. However, your reversed string should not contain leading or trailing spaces.
+* You need to reduce multiple spaces between two words to a single space in the reversed string.
+
+**Follow up:** For C programmers, try to solve it _in-place_ in _O_\(1\) space.
+
 #### 题意和分析
 
+只是翻转单词间的顺序，单词自身的字符是不翻转的，可以先翻转整个字符串，然后再翻转每一个单词（当然也可以先分别翻转每一个单词，然后再整个字符串翻转一遍），遇到空格就知道是否一个单词结束了。
+
 #### 代码
+
+```java
+public class Solution {
+    public String reverseWords(String s) {
+        int storeIndex = 0, n = s.length();
+        StringBuilder sb = new StringBuilder(s).reverse();//先翻转整个字符串一次
+        for (int i = 0; i < n; i++) {
+            if (sb.charAt(i) != ' ') {
+                if (storeIndex != 0) sb.setCharAt(storeIndex++, ' ');
+                int j = i;
+                while (j < n && sb.charAt(j) != ' ') sb.setCharAt(storeIndex++, sb.charAt(j++));
+                String t = new StringBuilder(sb.substring(storeIndex - (j - i), storeIndex)).reverse().toString();
+                sb.replace(storeIndex - (j - i), storeIndex, t);
+                i = j;
+            }
+        }
+        sb.setLength(storeIndex);
+        return sb.toString();
+    }
+}
+```
+
+不用StringBuilder
+
+```java
+public class Solution {
+
+    public String reverseWords(String s) {
+        if (s == null) return null;
+
+        char[] a = s.toCharArray();
+        int n = a.length;
+
+        // 第一步，倒转整个字符串
+        reverse(a, 0, n - 1);
+        // 第二步，倒转每个单词
+        reverseWords(a, n);
+        // 第三步，清除多余的空格
+        return cleanSpaces(a, n);
+    }
+
+    void reverseWords(char[] a, int n) {
+        int i = 0, j = 0;
+
+        while (i < n) {
+            while (i < j || i < n && a[i] == ' ') i++; // skip spaces
+            while (j < i || j < n && a[j] != ' ') j++; // skip non spaces
+            reverse(a, i, j - 1);                      // reverse the word
+        }
+    }
+
+    // trim leading, trailing and multiple spaces
+    String cleanSpaces(char[] a, int n) {
+        int i = 0, j = 0;
+
+        while (j < n) {
+            while (j < n && a[j] == ' ') j++;             // skip spaces
+            while (j < n && a[j] != ' ') a[i++] = a[j++]; // keep non spaces
+            while (j < n && a[j] == ' ') j++;             // skip spaces
+            if (j < n) a[i++] = ' ';                      // keep only one space
+        }
+
+        return new String(a).substring(0, i);
+    }
+
+    // reverse a[] from a[i] to a[j]
+    private void reverse(char[] a, int i, int j) {
+        while (i < j) {
+            char t = a[i];
+            a[i++] = a[j];
+            a[j--] = t;
+        }
+    }
+
+}
+```
+
+用split来做
+
+```java
+public class Solution {
+
+    public String reverseWords(String s) {
+        String result = "";
+        String[] words = s.trim().split("\\s+");
+        for (int i = words.length - 1; i > 0; i--) {
+            result += words[i] + " ";
+        }
+        return result + words[0];//最后加上words[0]，因为上面的循环没有加否则多了个空格
+    }
+}
+```
+
+用Java8的join方法直接拼接字符串
+
+```java
+public class Solution {
+    public String reverseWords(String s) {
+        String[] words = s.trim().split(" +");//用空格符来分隔每一个单词，而不是用正则
+        Collections.reverse(Arrays.asList(words));
+        return String.join(" ", words);
+    }
+}
+```
 
 ### 67 - Add Binary
 
