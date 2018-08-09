@@ -831,6 +831,151 @@ public class Solution {
 }
 ```
 
+### 10 - Regular Expression Matching
+
+#### 原题概述
+
+Given an input string \(`s`\) and a pattern \(`p`\), implement regular expression matching with support for `'.'` and `'*'`.
+
+```text
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+```
+
+The matching should cover the **entire** input string \(not partial\).
+
+**Note:**
+
+* `s` could be empty and contains only lowercase letters `a-z`.
+* `p` could be empty and contains only lowercase letters `a-z`, and characters like `.` or `*`.
+
+**Example 1:**
+
+```text
+Input:
+s = "aa"
+p = "a"
+Output: false
+Explanation: "a" does not match the entire string "aa".
+```
+
+**Example 2:**
+
+```text
+Input:
+s = "aa"
+p = "a*"
+Output: true
+Explanation: '*' means zero or more of the precedeng element, 'a'. Therefore, by repeating 'a' once, it becomes "aa".
+```
+
+**Example 3:**
+
+```text
+Input:
+s = "ab"
+p = ".*"
+Output: true
+Explanation: ".*" means "zero or more (*) of any character (.)".
+```
+
+**Example 4:**
+
+```text
+Input:
+s = "aab"
+p = "c*a*b"
+Output: true
+Explanation: c can be repeated 0 times, a can be repeated 1 time. Therefore it matches "aab".
+```
+
+**Example 5:**
+
+```text
+Input:
+s = "mississippi"
+p = "mis*is*p*."
+Output: false
+```
+
+#### 题意和分析
+
+求两个字符串是否能完全cover。跟44-Wildcard Matching类似，\*的意思略有不同，这道题\*表示0个，1个或者多个，因此a\*b可以表示b，aaab，即任意个a。
+
+递归的办法
+
+如果p为空，s也为空，返回true，否则返回false；p的第二个字符为\*，因为\*之前的字符可以任意，也可以为0，先用递归调用为0的情况，也就是直接把这两个字符去掉再比较；或者当s不为空的时候，并且第一个字符和p的第一个字符相同，把s去掉首字符再与p调用递归（p不能去掉首字符，因为\*前的字符可以无限个）；如果p的第二个字符不为\*，那就比较第一个字符，然后对后面的字符串调用递归。
+
+#### 代码
+
+```java
+class Solution {
+    public boolean isMatch(String s, String p) {
+        if (p.length() == 0) {
+            return s.length() == 0;
+        }
+        if (p.length() > 1 && p.charAt(1) == '*') {
+            return isMatch(s, p.substring(2)) || (s.length() != 0 && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.') && isMatch(s.substring(1), p));
+        } else {
+            return s.length() != 0 && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.') && isMatch(s.substring(1), p.substring(1));
+        }
+    }
+}
+```
+
+DP的方法，
+
+1, If p.charAt\(j\) == s.charAt\(i\) : dp\[i\]\[j\] = dp\[i-1\]\[j-1\]; 
+
+2, If p.charAt\(j\) == '.' : dp\[i\]\[j\] = dp\[i-1\]\[j-1\]; 
+
+3, If p.charAt\(j\) == '_':_ 
+
+_here are two sub conditions:_ 
+
+_1 if p.charAt\(j-1\) != s.charAt\(i\) : dp\[i\]\[j\] = dp\[i\]\[j-2\] //in this case, a_ only counts as empty 
+
+2 if p.charAt\(i-1\) == s.charAt\(i\) or p.charAt\(i-1\) == '.': dp\[i\]\[j\] = dp\[i-1\]\[j\] //in this case, a _counts as multiple a or dp\[i\]\[j\] = dp\[i\]\[j-1\] // in this case, a_ counts as single a or dp\[i\]\[j\] = dp\[i\]\[j-2\] // in this case, a\* counts as empty
+
+```java
+class Solution {
+    public boolean isMatch(String s, String p) {
+        if (s == null || p == null) {
+            return false;
+        }
+        boolean[][] dp = new boolean[s.length()+1][p.length()+1];
+        dp[0][0] = true;
+        for (int i = 0; i < p.length(); i++) {
+            if (p.charAt(i) == '*' && dp[0][i-1]) {
+                dp[0][i+1] = true;
+            }
+        }
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j < p.length(); j++) {
+                if (p.charAt(j) == '.') {
+                    dp[i+1][j+1] = dp[i][j];
+                }
+                if (p.charAt(j) == s.charAt(i)) {
+                    dp[i+1][j+1] = dp[i][j];
+                }
+                if (p.charAt(j) == '*') {
+                    if (p.charAt(j-1) != s.charAt(i) && p.charAt(j-1) != '.') {
+                        dp[i+1][j+1] = dp[i+1][j-1];
+                    } else {
+                        dp[i+1][j+1] = (dp[i+1][j] || dp[i][j+1] || dp[i+1][j-1]);
+                    }
+                }
+            }
+        }
+        return dp[s.length()][p.length()];
+    }
+}
+```
+
+### 17 - Letter Combinations of a Phone Number
+
+### 22 - Generate Parentheses
+
 ### 67 - Add Binary
 
 #### 原题概述
