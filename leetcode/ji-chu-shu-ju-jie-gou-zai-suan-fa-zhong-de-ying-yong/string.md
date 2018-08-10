@@ -1082,6 +1082,83 @@ class Solution {
 
 ## 22 - Generate Parentheses
 
+### 原题概述
+
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+For example, given n = 3, a solution set is:
+
+```text
+[
+  "((()))",
+  "(()())",
+  "(())()",
+  "()(())",
+  "()()()"
+]
+```
+
+### 题意和分析
+
+给一个数字n，让生成n个括号的所有正确形式，列出所有组合的形式一般可以用递归（而不是动态规划）， 比如n为3，由于字符串只有左括号和右括号两种字符，而且最终结果必定是左括号3个，右括号3个，所以定义两个变量left和right分别表示剩余左右括号的个数，如果在某次递归时，左括号的个数大于右括号的个数，说明此时生成的字符串中右括号的个数大于左括号的个数，即会出现'\)\('这样的非法串，所以这种情况直接返回，不继续处理。如果left和right都为0，则说明此时生成的字符串已有3个左括号和3个右括号，且字符串合法，则存入结果中后返回；如果以上两种情况都不满足，若此时left大于0，则调用递归函数，注意参数的更新，若right大于0，则调用递归函数，同样要更新参数。
+
+### 代码
+
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        helper(n, n, "", result);//先传入初始状态，再递归
+        return result;
+    }
+    private void helper(int left, int right, String out, List<String> result) {
+        if (left < 0 || right < 0 || left > right) {//已经取完甚至超过了，所以直接返回，left>right表示')('成对
+            return;
+        }
+        if (left == 0 && right == 0) {//左右括号都取完了
+            result.add(out);
+            return;
+        }
+
+        //仍在继续下一层
+        helper(left-1, right, out + '(', result);//这一层拿出左括号，下一层少一个左括号递归
+        helper(left, right-1, out + ')', result);//这一层拿出右括号，下一层少一个右括号递归
+    }
+}
+```
+
+CareerCup书上给的方法，这种方法的思想是找左括号，每找到一个左括号，就在其后面加一个完整的括号，最后再在开头加一个\(\)，就形成了所有的情况，需要注意的是，有时候会出现重复的情况，所以用set数据结构，这样如果遇到重复项，不会加入到结果中，最后我们再把set转为List即可，
+
+n＝1:    \(\)
+
+n=2:    \(\(\)\)    \(\)\(\)
+
+n=3:    \(\(\)\(\)\)    \(\(\(\)\)\)    \(\)\(\(\)\)    \(\(\)\)\(\)    \(\)\(\)\(\)   
+
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        Set<String> result = new HashSet<>();
+        if (n == 0) {
+            result.add("");
+        } else {
+            List<String> pre = generateParenthesis(n - 1);//在递归前一层的基础上加上()
+            for (String str : pre) {
+                for (int i = 0; i < str.length(); i++) {
+                    if (str.charAt(i) == '(') {
+                        str = str.substring(0, i + 1) + "()" + str.substring(i+1, str.length());
+                        result.add(str);
+                        str = str.substring(0, i+1) + str.substring(i + 3, str.length());
+                    }
+                }
+                result .add("()" + str);
+            }
+        }
+        return new ArrayList(result);
+    }
+}
+```
+
 ## 67 - Add Binary
 
 #### 原题概述
