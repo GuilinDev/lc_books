@@ -997,11 +997,57 @@ Although the above answer is in lexicographical order, your answer could be in a
 
 求电话号码的字母组合，即数字2到9中每个数字可以代表按键上的数个字母，输入是一串数字，求出所有可能的组合，最后返回的结果的顺序不重要。类似题目有90 -  Subsets II, 113 - Path Sum II, 46 - Permutations, 47 - Permutionas II, 77 - Combinations, 39 - Combination Sum, 40 Combination Sum II等。
 
-先创建
+这道题是经典的 backtracking回溯算法，
+
+> 当一个题目，存在各种满足条件的组合，并且需要把它们全部列出来，就可以考虑backtracking了，不过注意，backtracking一定程度上属于穷举，当数据特别大的时候吧不合适，这时通常应该考虑DP。
+
+先创建一个mapping，对应所有的键，比如输入"23"，2对应"abc"，3对应"def"，在递归的时候先确定2对应的字母之一，比如a，然后
 
 ### 代码
 
 
+
+迭代的办法则可以用BFS或者DFS来做，下面是BFS是使用队列
+
+```java
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        LinkedList<String> result = new LinkedList<>();
+        if (digits.length() == 0) {
+            return result;
+        }
+        //把电话键盘上数字对应的字母列出来，比如输入为2，对应"abc"
+        String[] mapping = new String[]{"0","1","abc","def","ghi","mno","pqrs","tuv","wxyz"};
+        result.add("");
+        while(result.peek().length() != digits.length()) {
+            String remove = result.remove();
+            String map = mapping[digits.charAt(remove.length()) - '0'];
+            for (char c : map.toCharArray()) {
+                result.addLast(remove + c);
+            }
+        }
+        return result;
+    }
+}class Solution {
+    public List<String> letterCombinations(String digits) {
+        LinkedList<String> result = new LinkedList<>();
+        if (digits.length() == 0) {
+            return result;
+        }
+        //把电话键盘上数字对应的字母列出来，比如输入为2，对应"abc"
+        String[] mapping = new String[]{"0","1","abc","def","ghi","mno","pqrs","tuv","wxyz"};
+        result.add("");
+        while(result.peek().length() != digits.length()) {
+            String remove = result.remove();
+            String map = mapping[digits.charAt(remove.length()) - '0'];
+            for (char c : map.toCharArray()) {
+                result.addLast(remove + c);
+            }
+        }
+        return result;
+    }
+}
+```
 
 ## 22 - Generate Parentheses
 
