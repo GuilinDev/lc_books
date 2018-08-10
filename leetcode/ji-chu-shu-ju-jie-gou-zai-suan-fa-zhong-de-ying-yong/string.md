@@ -1,8 +1,8 @@
 # String
 
-### 13 - Roman to Integer
+## 13 - Roman to Integer
 
-#### 原题概述
+### 原题概述
 
 Roman numerals are represented by seven different symbols: `I`, `V`, `X`, `L`, `C`, `D` and `M`.
 
@@ -64,7 +64,7 @@ Output: 1994
 Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 ```
 
-#### 题意和分析
+### 题意和分析
 
 罗马数字转换为数字，参考[Grandyang的解释](http://www.cnblogs.com/grandyang/p/4120857.html)
 
@@ -92,7 +92,7 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 
  每次跟后面的数字比较，如果小于等于后面的数字，我们先减去之前加上的数字，如果大于的后面的数字，直接加上当前的数，最后一个数后面没有数了，不会被循环到，直接加上。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -137,9 +137,9 @@ class Solution {
 }
 ```
 
-### 12 - Integer to Roman
+## 12 - Integer to Roman
 
-#### 原题概述
+### 原题概述
 
 Roman numerals are represented by seven different symbols: `I`, `V`, `X`, `L`, `C`, `D` and `M`.
 
@@ -201,7 +201,7 @@ Output: "MCMXCIV"
 Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 ```
 
-#### 题意和分析
+### 题意和分析
 
 上一道题反过来，数字转换为罗马数字，输入的限制为1～3999，
 
@@ -211,7 +211,7 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 
 因为有输入的限制，所以投机取巧可以建立一个数表，每次查表找出最大的当前最大的数，然后减去再继续查表
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -282,20 +282,20 @@ class Solution {
 }
 ```
 
-### 344 - Reverse String
+## 344 - Reverse String
 
-#### 原题概述
+### 原题概述
 
 Write a function that takes a string as input and returns the string reversed.
 
 **Example:**  
 Given s = "hello", return "olleh".
 
-#### 题意和分析
+### 题意和分析
 
 转换成字符数组，两个索引往中间走，如果相等或者left大于right就停止。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -317,9 +317,9 @@ class Solution {
 }
 ```
 
-### 14 - Longest Common Prefix
+## 14 - Longest Common Prefix
 
-#### 原题概述
+### 原题概述
 
 Write a function to find the longest common prefix string amongst an array of strings.
 
@@ -344,11 +344,11 @@ Explanation: There is no common prefix among the input strings.
 
 All given inputs are in lowercase letters `a-z`.
 
-#### 题意和分析
+### 题意和分析
 
 求一个字符串数组的最长的共同前缀，字符串都是小写字母，这个只能把所有单词排成纵列挨个查了，如果查找的过程中某一个字符串没有了，或者某个字符串的字符不同，那就直接上一轮保存的最长公共前缀。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -368,9 +368,9 @@ class Solution {
 }
 ```
 
-### 6 - ZigZag Conversion
+## 6 - ZigZag Conversion
 
-#### 原题概述
+### 原题概述
 
 The string `"PAYPALISHIRING"` is written in a zigzag pattern on a given number of rows like this: \(you may want to display this pattern in a fixed font for better legibility\)
 
@@ -408,7 +408,7 @@ Y A   H R
 P     I
 ```
 
-#### 题意和分析
+### 题意和分析
 
 Z型打印，从左到右横着读变成"从上到下-斜上-从上到下"这样来读，涉及坐标变化和分块处理。
 
@@ -440,7 +440,7 @@ Z型打印，从左到右横着读变成"从上到下-斜上-从上到下"这样
 
 除了第一行和最后一行没有中间形成之字型的数字外，其他行都有，而首尾两行中相邻两个元素的index之差跟行数是相关的，为 2\*numRows- 2 （注意空格也算一个位置），根据这个特点，我们可以按顺序找到所有的正常元素在原字符串的位置，将他们按顺序加到新字符串里面。对于在正常字元素出现的位置也是有规律的，每个黑体字元素的位置为 j + 2\*numRows-2 - 2\*i，（其中，j为前一个正常字体元素的列数，i为当前行数）。 比如当n = 4中的黑体字5，它的位置为 1 + 2\*4-2 - 2\*1 = 5，为原字符串的正确位置。当我们知道所有正常字体元素和黑体字元素位置的正确算法，那就可以一次性的把它们按顺序都加到新的字符串里面。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -464,9 +464,9 @@ class Solution {
 }
 ```
 
-### 3 - Longest Substring Without Repeating Characters
+## 3 - Longest Substring Without Repeating Characters
 
-#### 原题概述
+### 原题概述
 
 Given a string, find the length of the **longest substring** without repeating characters.
 
@@ -478,11 +478,11 @@ Given `"bbbbb"`, the answer is `"b"`, with the length of 1.
 
 Given `"pwwkew"`, the answer is `"wke"`, with the length of 3. Note that the answer must be a **substring**, `"pwke"` is a subsequence and not a substring.
 
-#### 题意和分析
+### 题意和分析
 
 给一个字符串，找到其最长的子串（不是子序列），返回这个子串的长度。维护一个滑动窗口，窗口里面的字符都是不重复的。1）首先可以用一个HashMap来记录窗口内的字符和这些字符最后出现的位置，如果窗口右侧移动后发现有重复的字符，那就将left索引指向HashMap里面保存的该字符的位置的下一位，窗口右侧继续移动，同时保持len的最长的值；2）使用HashSet，出现过的字符都放入set中，遇到set中没有的字符就加入set并更新结果result，如果有重复的，从左边开始删除字符，知道删到重复的字符为止。
 
-#### 代码
+### 代码
 
 HashMap
 
@@ -528,9 +528,9 @@ class Solution {
 }
 ```
 
-### 5 - Longest Palindromic Substring
+## 5 - Longest Palindromic Substring
 
-#### 原题概述
+### 原题概述
 
 Given a string **s**, find the longest palindromic substring in **s**. You may assume that the maximum length of **s** is 1000.
 
@@ -549,7 +549,7 @@ Input: "cbbd"
 Output: "bb"
 ```
 
-#### 题意和分析
+### 题意和分析
 
 找最长回文子串，给定的字符串最长为1000，1\)
 
@@ -565,7 +565,7 @@ dp\[i, j\] = 1                                               if i == j为回文�
 
 3）O\(n\)的马拉车算法Manacher's Algorithm，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍
 
-#### 代码
+### 代码
 
 O\(n^2\)
 
@@ -631,9 +631,9 @@ class Solution {
 
 
 
-### 38 - Count and Say
+## 38 - Count and Say
 
-#### 原题概述
+### 原题概述
 
 The count-and-say sequence is the sequence of integers with the first five terms as following:
 
@@ -668,11 +668,11 @@ Input: 4
 Output: "1211"
 ```
 
-#### 题意和分析
+### 题意和分析
 
 对于前一个数，找出相同元素的个数，把这个“个数”和该元素存到新的string里面， [**字符串中永远只会出现1,2,3这三个字符**，假设第k个字符串中出现了4，那么第k-1个字符串必定有四个相同的字符连续出现，假设这个字符为1，则第k-1个字符串为x1111y。第k-1个字符串是第k-2个字符串的读法，即第k-2个字符串可以读为“x个1,1个1,1个y” 或者“\*个x,1个1,1个1,y个\*”，这两种读法分别可以合并成“x+1个1,1个y” 和 “\*个x，2个1，y个\*”，代表的字符串分别是“\(x+1\)11y” 和 "x21y"，即k-1个字符串为“\(x+1\)11y” 或 "x21y"，不可能为“x1111y”。](http://www.cnblogs.com/TenosDoIt/p/3776356.html)
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -698,9 +698,9 @@ class Solution {
 }
 ```
 
-### 151 - Reverse Words in a String
+## 151 - Reverse Words in a String
 
-#### 原题概述
+### 原题概述
 
 Given an input string, reverse the string word by word.
 
@@ -719,13 +719,13 @@ Output: "blue is sky the".
 
 **Follow up:** For C programmers, try to solve it _in-place_ in _O_\(1\) space.
 
-#### 题意和分析
+### 题意和分析
 
 只是翻转单词间的顺序，单词自身的字符是不翻转的，可以先翻转整个字符串，然后再翻转每一个单词（当然也可以先分别翻转每一个单词，然后再整个字符串翻转一遍），遇到空格就知道是否一个单词结束了。
 
 如果用stack呢？用空格区分单词，最后一个单词应该怎么处理。。
 
-#### 代码
+### 代码
 
 ```java
 public class Solution {
@@ -831,9 +831,9 @@ public class Solution {
 }
 ```
 
-### 10 - Regular Expression Matching
+## 10 - Regular Expression Matching
 
-#### 原题概述
+### 原题概述
 
 Given an input string \(`s`\) and a pattern \(`p`\), implement regular expression matching with support for `'.'` and `'*'`.
 
@@ -898,7 +898,7 @@ p = "mis*is*p*."
 Output: false
 ```
 
-#### 题意和分析
+### 题意和分析
 
 求两个字符串是否能完全cover。跟44-Wildcard Matching类似，\*的意思略有不同，这道题\*表示0个，1个或者多个，因此a\*b可以表示b，aaab，即任意个a。
 
@@ -906,7 +906,7 @@ Output: false
 
 如果p为空，s也为空，返回true，否则返回false；p的第二个字符为\*，因为\*之前的字符可以任意，也可以为0，先用递归调用为0的情况，也就是直接把这两个字符去掉再比较；或者当s不为空的时候，并且第一个字符和p的第一个字符相同，把s去掉首字符再与p调用递归（p不能去掉首字符，因为\*前的字符可以无限个）；如果p的第二个字符不为\*，那就比较第一个字符，然后对后面的字符串调用递归。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -972,11 +972,40 @@ class Solution {
 }
 ```
 
-### 17 - Letter Combinations of a Phone Number
+## 17 - Letter Combinations of a Phone Number
 
-### 22 - Generate Parentheses
+### 原题概述
 
-### 67 - Add Binary
+Given a string containing digits from `2-9` inclusive, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters \(just like on the telephone buttons\) is given below. Note that 1 does not map to any letters.
+
+![](http://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Telephone-keypad2.svg/200px-Telephone-keypad2.svg.png)
+
+**Example:**
+
+```text
+Input: "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+```
+
+**Note:**
+
+Although the above answer is in lexicographical order, your answer could be in any order you want.
+
+### 题意和分析
+
+求电话号码的字母组合，即数字2到9中每个数字可以代表按键上的数个字母，输入是一串数字，求出所有可能的组合，最后返回的结果的顺序不重要。类似题目有90 -  Subsets II, 113 - Path Sum II, 46 - Permutations, 47 - Permutionas II, 77 - Combinations, 39 - Combination Sum, 40 Combination Sum II等。
+
+先创建
+
+### 代码
+
+
+
+## 22 - Generate Parentheses
+
+## 67 - Add Binary
 
 #### 原题概述
 
@@ -1036,11 +1065,29 @@ class Solution {
 }
 ```
 
-## 计算器
+## 49 - Group Anagrams
 
-### 227 - Basic Calculator II
+## 657 Judge Route Cycle
 
-#### 原题概述
+## 8 - String to Integer\(atoi\)
+
+## 28 - Implement substr
+
+## 557 - Reverse Words in a String III
+
+## 383 - Ransom Note
+
+## 804 - Unique Morse Code Words
+
+## 43 - Multiply Strings
+
+## 387 - First Unique Character in a String
+
+## 345 - Reverse Vowels of a String
+
+## 227 - Basic Calculator II
+
+### 原题概述
 
 Implement a basic calculator to evaluate a simple expression string.
 
@@ -1072,7 +1119,7 @@ Output: 5
 * You may assume that the given expression is always valid.
 * **Do not** use the `eval` built-in library function.
 
-#### 题意和分析
+### 题意和分析
 
 设计一个计算器，输入一个有效的字符串表达式，加减乘除后输出一个整数，除法是地板除法，表达式里的数字都是正整数。eval\(\)是脚本语言中的方法，Java并没有。
 
@@ -1082,7 +1129,7 @@ Output: 5
 
 当然这道题不用stack也可以，可以把string先转换成char array，然后从左到右运算，维持一个result负责最终结果和一个pre负责遇到乘法除法的时候重算一下先做乘除。复杂度一样。
 
-#### 代码
+### 代码
 
 Stack
 
@@ -1182,9 +1229,9 @@ class Solution {
 
 
 
-### 316 - Remove Duplicate Letters
+## 316 - Remove Duplicate Letters
 
-#### 原题概述
+### 原题概述
 
 Given a string which contains only lowercase letters, remove duplicate letters so that every letter appear once and only once. You must make sure your result is the smallest in lexicographical order among all possible results.
 
@@ -1202,13 +1249,13 @@ Input: "cbacdcbc"
 Output: "acdb"
 ```
 
-#### 题意和分析
+### 题意和分析
 
 移除重复字母，使每个字母只出现一次，结果按照字母顺序排，而且不能打乱原来的相对位置。
 
 递归的办法，先用哈希表记录每个字母出现的次数，再遍历给定字符串s，找出最小的字母，每比较一个字母，在哈希表中的值减1，如果此时为0了，则不继续遍历了，此时我们记录了一个位置，把字符串s中该位置左边的字符都删掉，右边的所有再出现的该字母也删掉，递归调用此函数即可。时间： O\(26 \* n\) = O\(n\)。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
