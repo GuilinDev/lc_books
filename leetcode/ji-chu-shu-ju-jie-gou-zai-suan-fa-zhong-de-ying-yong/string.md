@@ -1005,7 +1005,38 @@ Although the above answer is in lexicographical order, your answer could be in a
 
 ### 代码
 
+```java
+class Solution {
+    public List<String> letterCombinations(String digits) {
 
+        //把电话键盘上数字对应的字母列出来，比如输入为2，对应"abc"
+        String[] mapping = new String[] {"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        List<String> list = new ArrayList<String>();
+
+        letterCombinations(list,digits,"",0,mapping);//index从0开始
+
+        return list;
+    }
+
+    private void letterCombinations (List<String> list, String digits,
+                                     String curr, int index,String[] mapping) {
+        //最后一层退出条件
+        if (index == digits.length()) {
+            if(curr.length() != 0) list.add(curr);
+            return;
+        }
+
+        //找到数字对应的字符串
+        String temp = mapping[digits.charAt(index) - '0'];
+        for (int i = 0; i < temp.length(); i++) {
+            //每次循环把不同字符串加到当前curr之后
+            String next = curr + temp.charAt(i);
+            //进入下一层
+            letterCombinations(list,digits,next,index+1,mapping);
+        }
+    }
+}
+```
 
 迭代的办法则可以用BFS或者DFS来做，下面是BFS是使用队列
 
