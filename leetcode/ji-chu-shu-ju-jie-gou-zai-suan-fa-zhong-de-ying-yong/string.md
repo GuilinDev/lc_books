@@ -1305,7 +1305,116 @@ class Solution {
 
 ## 657 Judge Route Cycle
 
+### 原题概述
+
+Initially, there is a Robot at position \(0, 0\). Given a sequence of its moves, judge if this robot makes a circle, which means it moves back to **the original place**.
+
+The move sequence is represented by a string. And each move is represent by a character. The valid robot moves are `R` \(Right\), `L`\(Left\), `U` \(Up\) and `D` \(down\). The output should be true or false representing whether the robot makes a circle.
+
+**Example 1:**  
+
+
+```text
+Input: "UD"
+Output: true
+```
+
+**Example 2:**  
+
+
+```text
+Input: "LL"
+Output: false
+```
+
+### 题意和分析
+
+找是否绕圈，有多少个U就得有多少个D，有多少个L就得有多少个R，跟20 - Valid Parentheses类似，那道题用stack来解，这个题更简单，两个计数器来看最后是否为0就行了。
+
+### 代码
+
+```java
+class Solution {
+    public boolean judgeCircle(String moves) {
+        if (moves == null || moves.length() == 0) {
+            return true;
+        }
+        int countH = 0, countV = 0;
+        for (int i = 0; i < moves.length(); i++) {
+            if (moves.charAt(i) == 'L') countH++;
+            if (moves.charAt(i) == 'R') countH--;
+            if (moves.charAt(i) == 'U') countV++;
+            if (moves.charAt(i) == 'D') countV--;
+        }
+        return countH == 0 && countV == 0;
+    }
+}
+```
+
 ## 8 - String to Integer\(atoi\)
+
+### 原题概述
+
+Implement `atoi` which converts a string to an integer.
+
+The function first discards as many whitespace characters as necessary until the first non-whitespace character is found. Then, starting from this character, takes an optional initial plus or minus sign followed by as many numerical digits as possible, and interprets them as a numerical value.
+
+The string can contain additional characters after those that form the integral number, which are ignored and have no effect on the behavior of this function.
+
+If the first sequence of non-whitespace characters in str is not a valid integral number, or if no such sequence exists because either str is empty or it contains only whitespace characters, no conversion is performed.
+
+If no valid conversion could be performed, a zero value is returned.
+
+**Note:**
+
+* Only the space character `' '` is considered as whitespace character.
+* Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: \[−231,  231 − 1\]. If the numerical value is out of the range of representable values, INT\_MAX \(231 − 1\) or INT\_MIN \(−231\) is returned.
+
+**Example 1:**
+
+```text
+Input: "42"
+Output: 42
+```
+
+**Example 2:**
+
+```text
+Input: "   -42"
+Output: -42
+Explanation: The first non-whitespace character is '-', which is the minus sign.
+             Then take as many numerical digits as possible, which gets 42.
+```
+
+**Example 3:**
+
+```text
+Input: "4193 with words"
+Output: 4193
+Explanation: Conversion stops at digit '3' as the next character is not a numerical digit.
+```
+
+**Example 4:**
+
+```text
+Input: "words and 987"
+Output: 0
+Explanation: The first non-whitespace character is 'w', which is not a numerical 
+             digit or a +/- sign. Therefore no valid conversion could be performed.
+```
+
+**Example 5:**
+
+```text
+Input: "-91283472332"
+Output: -2147483648
+Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
+             Thefore INT_MIN (−231) is returned.
+```
+
+### 题意和分析
+
+### 代码
 
 ## 28 - Implement substr
 
