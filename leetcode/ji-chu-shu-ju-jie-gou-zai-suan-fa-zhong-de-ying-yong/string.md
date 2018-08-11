@@ -1590,7 +1590,53 @@ class Solution {
 
 ## 557 - Reverse Words in a String III
 
+### 原题概述
+
+Given a string, you need to reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order.
+
+**Example 1:**  
+
+
+```text
+Input: "Let's take LeetCode contest"
+Output: "s'teL ekat edoCteeL tsetnoc"
+```
+
+**Note:** In the string, each word is separated by single space and there will not be any extra space in the string.
+
+### 题意和分析
+
+只翻转字符串中每个单词的顺序，每个单词都只由一个空格隔开。用split分成一个字符串数组，然后用StringBuilder分别翻转每个单词；
+
+如果不用StringBuilder的内置reverse方法也可以用setCharAt手动实现reverse，或者toCharArray来用数组翻转。
+
+### 代码
+
+```java
+class Solution {
+    public String reverseWords(String s) {
+        String[] words = s.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            words[i] = new StringBuilder(words[i]).reverse().toString();//用内置方法进行翻转
+        }
+        StringBuilder result = new StringBuilder();
+        for (String word : words) {
+            result.append(word + " ");
+        }
+        return result.toString().trim();//去掉最后一个单词后面的空格
+    }
+}
+```
+
 ## 383 - Ransom Note
+
+### 原题概述
+
+
+
+### 题意和分析
+
+### 代码
 
 ## 804 - Unique Morse Code Words
 
