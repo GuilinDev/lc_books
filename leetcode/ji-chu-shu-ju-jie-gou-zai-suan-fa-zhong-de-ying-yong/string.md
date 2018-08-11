@@ -1414,7 +1414,115 @@ Explanation: The number "-91283472332" is out of the range of a 32-bit signed in
 
 ### 题意和分析
 
+实现一个atoi函数（AscII to Interger），主要考虑各种边界条件，包括正负号，越界，空格，精度等。
+
 ### 代码
+
+```java
+class Solution {
+    public int myAtoi(String str) {
+        if (str == null) {
+            return 0;
+        }
+        //处理空格
+        str = str.trim();
+
+        //输入有可能全是空格，经过trim处理后变成了空
+        if (str.length() == 0) {
+            return 0;
+        }
+
+        //处理正负号（可能有可能也没有）
+        char flag = '+';
+        int i = 0;//记录字符串的索引
+        if (str.charAt(0) == '-') {
+            flag = '-';
+            i++;//挪到正/负号的下一位
+        } else if (str.charAt(0) == '+') {
+            i++;
+        }
+
+        //使用double来保存结果
+        double result = 0;
+        //检查条件，i索引不越界，且值在0到9之间
+        while (str.length() > i && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+            result = result * 10 + (str.charAt(i) - '0');//从左到右每次取一位字符来计算
+            i++;//向右移动索引
+        }
+
+        //如果flag是'-'，是负数，在前面加上负号
+        if (flag == '-') {
+            result = -result;
+        }
+
+        //处理越界问题
+        if (result > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        if (result < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }
+
+        return (int)result;
+    }
+}
+```
+
+可以把判断是否确界的条件写得精妙一点，基于两条：
+
+1. Integer.MAX\_VALUE/10 &lt; result; //当前转换结果比Integer中最大值除以10还大（因为这个判断放在while循环最开始，之后还要对result进行\*10+当前遍历元素的操作，所以如果还乘10的result已经比Integer.MAX\_VALUE/10还大，可想而知，乘了10更大）；
+2. Integer.MAX\_VALUE/10 == result && Integer.MAX\_VALUE%10 &lt; \(str.charAt\(i\) - '0'\) //另外的一个情况就是，当前result恰好跟 Integer.MAX\_VALUE/10相等，那么就判断当前遍历的元素值跟最大值的最后一位的大小关系即可。
+
+```java
+class Solution {
+    public int myAtoi(String str) {
+        if (str == null) {
+            return 0;
+        }
+        //处理空格
+        str = str.trim();
+
+        //输入有可能全是空格，经过trim处理后变成了空
+        if (str.length() == 0) {
+            return 0;
+        }
+
+        //处理正负号（可能有可能也没有）
+        char flag = '+';
+        int i = 0;//记录字符串的索引
+        if (str.charAt(0) == '-') {
+            flag = '-';
+            i++;//挪到正/负号的下一位
+        } else if (str.charAt(0) == '+') {
+            i++;
+        }
+
+        //使用double来保存结果
+        double result = 0;
+        while (str.length() > i && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+            result = result * 10 + (str.charAt(i) - '0');//从左到右每次取一位字符来计算
+            i++;//向右移动索引到末尾
+        }
+
+        //处理越界问题，这里把正负号处理挪到后面，就暂时只用和最大值比较，下一步再加上可能的负号
+        while (str.length() > i && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+            if (Integer.MAX_VALUE/10 < result || //与最大值除以10比较
+                    (Integer.MAX_VALUE/10 == result && Integer.MAX_VALUE%10 < (str.charAt(i) - '0'))) {//与最大值的最后一位比较看是否相同
+                return flag == '-' ? Integer.MIN_VALUE : Integer.MAX_VALUE;//越界，返回最大/最小值
+            }
+            result = result * 10 + (str.charAt(i) - '0');//不越界，正常计算
+            i++;
+        }
+
+        //如果flag是'-'，是负数，在前面加上负号
+        if (flag == '-') {
+            result = -result;
+        }
+
+        return (int)result;
+    }
+}
+```
 
 ## 28 - Implement substr
 
