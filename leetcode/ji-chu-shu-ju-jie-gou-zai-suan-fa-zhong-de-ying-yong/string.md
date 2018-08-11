@@ -1632,13 +1632,56 @@ class Solution {
 
 ### 原题概述
 
+Given an arbitrary ransom note string and another string containing letters from all the magazines, write a function that will return true if the ransom note can be constructed from the magazines ; otherwise, it will return false.
 
+Each letter in the magazine string can only be used once in your ransom note.
+
+**Note:**  
+You may assume that both strings contain only lowercase letters.
+
+```text
+canConstruct("a", "b") -> false
+canConstruct("aa", "ab") -> false
+canConstruct("aa", "aab") -> true
+```
+
+### 题意和分析
+
+赎金条，看一个magazines来的字符串是否可以组成赎金的note的字符串，每个字符只能用一次。用HashMap来统计次数，然后把赎金条的信息遍历看是否够用即可。
+
+### 代码
+
+```java
+class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (char ch : magazine.toCharArray()) {
+            int newCount = map.getOrDefault(ch, 0) + 1;
+            map.put(ch, newCount);
+        }
+
+        for (char ch : ransomNote.toCharArray()) {
+            if (!map.containsKey(ch)) {//不包含的字符直接为false
+                return false;
+            }
+            int newCount = map.get(ch) - 1;
+            if (newCount < 0) {//ransomNote字符过多返回false
+                return false;
+            }
+            map.put(ch, newCount);
+        }
+        return true;
+    }
+}
+```
+
+## 804 - Unique Morse Code Words
+
+### 原题概述
 
 ### 题意和分析
 
 ### 代码
-
-## 804 - Unique Morse Code Words
 
 ## 43 - Multiply Strings
 
