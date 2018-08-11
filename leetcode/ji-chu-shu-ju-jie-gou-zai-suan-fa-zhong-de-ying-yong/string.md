@@ -1161,7 +1161,7 @@ class Solution {
 
 ## 67 - Add Binary
 
-#### 原题概述
+### 原题概述
 
 Given two binary strings, return their sum \(also a binary string\).
 
@@ -1181,13 +1181,13 @@ Input: a = "1010", b = "1011"
 Output: "10101"
 ```
 
-#### 题意和分析
+### 题意和分析
 
 将两个string形式的二进制数相加，并且保存在string中，要注意的是如何将string和int之间互相转换，并且每位相加时，会有进位的可能，会影响之后相加的结果。而且两个输入string的长度也可能会不同。创建一个StringBuilder来存相加的结果，从两个string的末尾开始取出字符，然后转为数字，相加，如果大于等于2，则标记进位标志carry，最后将StringBuilder转换成String，因为是从后面开始加，翻转一下。
 
 Time：O\(m\)； Space：O\(m\)，m是较长的那个string的长度。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -1244,7 +1244,64 @@ Output:
 
 ### 题意和分析
 
+给一个字符串数组，把所有的anagrams异构体归在一起，最后返回每个anagram的组，首先可以遍历整个个字符串数组，每遇到一个字符串就对其排序，如果同为anagrams排序后会是同样的字符串，依次字符串为key，以一个anagram下的 字符串列表为value，然后从hashmap中打印出所有的值即可；
+
+改进的办法不用排序， 每个字母对应一个质数，将一个字符串中的字母对应的质数做乘法，异构体所得的乘积一定相同。
+
 ### 代码
+
+排序的办法
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return new ArrayList<List<String>>();
+        }
+
+        HashMap<String, List<String>> map = new HashMap<>();
+        for (String s : strs) {
+            char[] cha = s.toCharArray();
+            Arrays.sort(cha);//对字符串转换的字符数组进行排序
+            String keyStr = String.valueOf(cha);//字符数组转换成字符串的key
+            if (!map.containsKey(keyStr)) {//第一次出现就新增一个key
+                map.put(keyStr, new ArrayList<String>());
+            }
+            map.get(keyStr).add(s);
+        }
+        return new ArrayList<List<String>>(map.values());//map.values()获得HashMap的所有的值
+    }
+}
+```
+
+利用质数做乘积找key
+
+```java
+class Solution {
+    public static List<List<String>> groupAnagrams(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return new ArrayList<List<String>>();
+        }
+
+        // 用质数作为每个字母的唯一标识key，然后做乘法，异构体所的一定相同，最多10609个
+        int[] prime = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103};
+
+        HashMap<Integer, List<String>> map = new HashMap<>();
+        for (String s : strs) {
+            int key = 1;
+            for (char c : s.toCharArray()) {//获得质数乘积做成的key，异构体的key一样
+                key *= prime[c - 'a'];//找到prime中对应的质数
+            }
+
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<String>());
+            }
+            map.get(key).add(s);
+        }
+        return new ArrayList<List<String>>(map.values());
+    }
+}
+```
 
 ## 657 Judge Route Cycle
 
