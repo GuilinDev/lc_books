@@ -1526,6 +1526,68 @@ class Solution {
 
 ## 28 - Implement substr
 
+### 原题概述
+
+Implement [strStr\(\)](http://www.cplusplus.com/reference/cstring/strstr/).
+
+Return the index of the first occurrence of needle in haystack, or **-1** if needle is not part of haystack.
+
+**Example 1:**
+
+```text
+Input: haystack = "hello", needle = "ll"
+Output: 2
+```
+
+**Example 2:**
+
+```text
+Input: haystack = "aaaaa", needle = "bba"
+Output: -1
+```
+
+**Clarification:**
+
+What should we return when `needle` is an empty string? This is a great question to ask during an interview.
+
+For the purpose of this problem, we will return 0 when `needle` is an empty string. This is consistent to C's [strstr\(\)](http://www.cplusplus.com/reference/cstring/strstr/) and Java's [indexOf\(\)](https://docs.oracle.com/javase/7/docs/api/java/lang/String.html#indexOf%28java.lang.String%29).
+
+### 题意和分析
+
+在一个字符串中找另一个字符串第一次出现的位置，有以下两种边界情况：如果子字符串为空，则返回0；如果子字符串长度大于母字符串长度，则返回-1。 
+
+开始遍历母字符串，我们并不需要遍历整个母字符串，而是遍历到剩下的长度和子字符串相等的位置即可，这样可以提高运算效率。对于遍历到的每一个字符，都遍历一遍子字符串，一个一个字符的对应比较，如果对应位置有不等的，则跳出循环，如果一直都没有跳出循环，则说明子字符串出现了，则返回起始位置即可。
+
+至于KMP算法这里就不说了。
+
+### 代码
+
+```java
+class Solution {
+    public int strStr(String haystack, String needle) {
+        if (needle == null || needle.length() == 0) {
+            return 0;
+        }
+        int m = haystack.length(), n = needle.length();
+        if (n > m) {
+            return -1;
+        }
+        for (int i = 0; i <= m - n; i++) {//注意这里是<=，想想比如n==1，那就可能检查到m的最后一位
+            int j = 0;
+            for (j = 0; j < n; j++) {
+                if (haystack.charAt(i+j) != needle.charAt(j)) {
+                    break;//break里面的for循环
+                }
+            }
+            if (j == n) {//没有break
+                return i;
+            }
+        }
+        return -1;//没找到
+    }
+}
+```
+
 ## 557 - Reverse Words in a String III
 
 ## 383 - Ransom Note
