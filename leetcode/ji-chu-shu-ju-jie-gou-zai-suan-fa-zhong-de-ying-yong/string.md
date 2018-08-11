@@ -1740,15 +1740,80 @@ class Solution {
 
 ### 原题概述
 
+Given two non-negative integers `num1` and `num2` represented as strings, return the product of `num1` and `num2`, also represented as a string.
 
+**Example 1:**
+
+```text
+Input: num1 = "2", num2 = "3"
+Output: "6"
+```
+
+**Example 2:**
+
+```text
+Input: num1 = "123", num2 = "456"
+Output: "56088"
+```
+
+**Note:**
+
+1. The length of both `num1` and `num2` is &lt; 110.
+2. Both `num1` and `num2` contain only digits `0-9`.
+3. Both `num1` and `num2` do not contain any leading zero, except the number 0 itself.
+4. You **must not use any built-in BigInteger library** or **convert the inputs to integer** directly.
+
+### 题意和分析
+
+两个字符串表示的数字，相乘后返回字符串表示的乘积（这样可以计算超大数相乘，不受int和long数值范围的约束），就用多位数的乘法过程，每位相乘然后错位相加，把错位相加的结果保存在一个一维数组中，然后每位上算进位，最后每位就变成一位，去掉首位的0，然后把每位数字按顺序保存到结果中。
+
+![](../../.gitbook/assets/image%20%2833%29.png)
+
+### 代码
+
+```java
+class Solution {
+    public String multiply(String num1, String num2) {
+        int m = num1.length(), n = num2.length();
+        int[] pos = new int[m+n];//二者的乘积最大长度为m+n-1加上首位上的0
+
+        for (int i = m - 1; i >= 0; i--) {//从右边的数开始乘积
+            for (int j = n - 1; j >= 0; j--) {
+                int mul = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                int p1 = i + j, p2 = i + j + 1;//上一步的乘积可能是两位数，所以在一维数组pos中先找到两个位置的索引存放十位和个位
+                int sum = mul + pos[p2];//加上第二个数上一轮可能存在此位置的数值
+
+                pos[p1] += sum / 10;//重新计算的sum，第一个位置存十位
+                pos[p2] = sum % 10;//重新计算的sum，第二个位置存个位
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        //遍历整个一维数组
+        for (int p : pos) {
+            if (!(sb.length() == 0 && p == 0)) {//非乘以0的情况
+                sb.append(p);
+            }
+        }
+        return sb.length() == 0 ? "0" : sb.toString();
+    }
+}
+```
+
+## 387 - First Unique Character in a String
+
+### 原题概述
 
 ### 题意和分析
 
 ### 代码
 
-## 387 - First Unique Character in a String
-
 ## 345 - Reverse Vowels of a String
+
+### 原题概述
+
+### 题意和分析
+
+### 代码
 
 ## 227 - Basic Calculator II
 
