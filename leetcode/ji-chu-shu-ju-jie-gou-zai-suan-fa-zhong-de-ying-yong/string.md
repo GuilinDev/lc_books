@@ -1803,15 +1803,71 @@ class Solution {
 
 ### 原题概述
 
+Given a string, find the first non-repeating character in it and return it's index. If it doesn't exist, return -1.
+
+**Examples:**
+
+```text
+s = "leetcode"
+return 0.
+
+s = "loveleetcode",
+return 2.
+```
+
+**Note:** You may assume the string contain only lowercase letters.
+
 ### 题意和分析
 
+找到全小写字符串中第一个出现的非重复字符，那么就先找到每个字符出现的次数，然后找到出现次数为1的字符，返回其位置即可。由于Java中的HashMap的顺序是按照有利于随机查找的hash的顺序，并非是按照输入的顺序，所以用一个26长度的数组来记录频率。
+
 ### 代码
+
+```java
+class Solution {
+    public int firstUniqChar(String s) {
+        if (s == null || s.length() == 0) {
+            return -1;
+        }
+
+        int[] freq = new int[26];
+        for (char ch : s.toCharArray()) {
+            freq[ch - 'a']++;
+        }
+        for (int i = 0; i < s.length(); i++) {//注意依然按照s中字符的顺序来遍历
+            if (freq[s.charAt(i) - 'a'] == 1) return i;
+        }
+        return -1;
+    }
+}
+```
 
 ## 345 - Reverse Vowels of a String
 
 ### 原题概述
 
+Write a function that takes a string as input and reverse only the vowels of a string.
+
+**Example 1:**
+
+```text
+Input: "hello"
+Output: "holle"
+```
+
+**Example 2:**
+
+```text
+Input: "leetcode"
+Output: "leotcede"
+```
+
+**Note:**  
+The vowels does not include the letter "y".
+
 ### 题意和分析
+
+
 
 ### 代码
 
