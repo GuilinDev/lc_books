@@ -1679,11 +1679,72 @@ class Solution {
 
 ### 原题概述
 
+International Morse Code defines a standard encoding where each letter is mapped to a series of dots and dashes, as follows: `"a"`maps to `".-"`, `"b"` maps to `"-..."`, `"c"` maps to `"-.-."`, and so on.
+
+For convenience, the full table for the 26 letters of the English alphabet is given below:
+
+```text
+[".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+```
+
+Now, given a list of words, each word can be written as a concatenation of the Morse code of each letter. For example, "cab" can be written as "-.-.-....-", \(which is the concatenation "-.-." + "-..." + ".-"\). We'll call such a concatenation, the transformation of a word.
+
+Return the number of different transformations among all words we have.
+
+```text
+Example:
+Input: words = ["gin", "zen", "gig", "msg"]
+Output: 2
+Explanation: 
+The transformation of each word is:
+"gin" -> "--...-."
+"zen" -> "--...-."
+"gig" -> "--...--."
+"msg" -> "--...--."
+
+There are 2 different transformations, "--...-." and "--...--.".
+```
+
+**Note:**
+
+* The length of `words` will be at most `100`.
+* Each `words[i]` will have length in range `[1, 12]`.
+* `words[i]` will only consist of lowercase letters.
+
 ### 题意和分析
+
+介绍了摩斯码的写法，给一个字符串数组，问表示这些单词的摩斯码共有多少种，因为有些单词的摩斯码是相同的，比如gin和zin；遍历给的字符串数组，求出每个字符串摩斯码，然后在HashSet中检查是否出现过，最后返回HashSet的长度。
+
+Follow up问题可能问给一个摩斯码，问可以组成几个单词？ 
 
 ### 代码
 
+```java
+class Solution {
+    public int uniqueMorseRepresentations(String[] words) {
+        String[] morse = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
+        HashSet<String> hashSet = new HashSet<>();
+        for (String word : words) {
+            StringBuilder sb = new StringBuilder();
+            for (char ch : word.toCharArray()) {
+                sb.append(morse[ch - 'a']);
+            }
+            hashSet.add(sb.toString());//HashSet直接加入，不用查重
+        }
+        return hashSet.size();
+    }
+}
+```
+
 ## 43 - Multiply Strings
+
+### 原题概述
+
+
+
+### 题意和分析
+
+### 代码
 
 ## 387 - First Unique Character in a String
 
