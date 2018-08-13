@@ -1570,6 +1570,29 @@ class Solution {
 }
 ```
 
+用substring
+
+```java
+class Solution {
+    public int strStr(String haystack, String needle) {
+        if (needle == null || needle.length() == 0) {
+            return 0;
+        }
+        int len = needle.length();
+        char ch = needle.charAt(0);
+        for (int i = 0; i <= haystack.length()-len; i++) {
+            if (haystack.charAt(i) == ch) {
+                String temp = haystack.substring(i, i + len);
+                if (temp.equals(needle)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+}
+```
+
 ## 557 - Reverse Words in a String III
 
 ### 原题概述
@@ -1650,7 +1673,7 @@ class Solution {
             if (newCount < 0) {//ransomNote字符过多返回false
                 return false;
             }
-            map.put(ch, newCount);
+            map.put(ch, newCount);//map.get(ch) = newCount;
         }
         return true;
     }
@@ -1852,8 +1875,6 @@ The vowels does not include the letter "y".
 只翻转一个字符串中的元音字符，题目中没说只是小写，所以大写的字符也算，可以直接双指针left和right，如果都指向元音字符，交换；如果left不是，右移一位left；如果right不是，左移一位right；当left大于等于right的时候停止。
 
 ### 代码
-
-
 
 ```java
 class Solution {
