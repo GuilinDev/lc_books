@@ -1059,24 +1059,6 @@ class Solution {
         }
         return result;
     }
-}class Solution {
-    public List<String> letterCombinations(String digits) {
-        LinkedList<String> result = new LinkedList<>();
-        if (digits.length() == 0) {
-            return result;
-        }
-        //把电话键盘上数字对应的字母列出来，比如输入为2，对应"abc"
-        String[] mapping = new String[]{"0","1","abc","def","ghi","mno","pqrs","tuv","wxyz"};
-        result.add("");
-        while(result.peek().length() != digits.length()) {
-            String remove = result.remove();
-            String map = mapping[digits.charAt(remove.length()) - '0'];
-            for (char c : map.toCharArray()) {
-                result.addLast(remove + c);
-            }
-        }
-        return result;
-    }
 }
 ```
 
@@ -1867,9 +1849,73 @@ The vowels does not include the letter "y".
 
 ### 题意和分析
 
-
+只翻转一个字符串中的元音字符，题目中没说只是小写，所以大写的字符也算，可以直接双指针left和right，如果都指向元音字符，交换；如果left不是，右移一位left；如果right不是，左移一位right；当left大于等于right的时候停止。
 
 ### 代码
+
+
+
+```java
+class Solution {
+    public String reverseVowels(String s) {
+        if (s == null || s.length() == 0 || s.length() == 1) {
+            return s;
+        }
+        char[] word = s.toCharArray();
+        int left = 0, right = s.length() - 1;
+        while(left <= right){
+            if(isVowels(word[left]) && isVowels(word[right])){
+                swap(word, left, right);
+                left++;
+                right--;
+            }else if (!isVowels(word[left])){
+                left++;
+            }else {
+                right--;
+            }
+        }
+        return new String(word);
+    }
+    public boolean isVowels(char c){
+        return c=='a'||c=='e'||c=='i'||c=='o'||c=='u'||c=='A'||c=='E'||c=='I'||c=='O'||c=='U';
+    }
+    public void swap(char[] ch,int left,int right){
+        char temp = ch[left];
+        ch[left] = ch[right];
+        ch[right] = temp;
+    }
+}
+```
+
+```java
+class Solution {
+    public String reverseVowels(String s) {
+        if(s == null || s.length()==0 || s.length() == 1) return s;
+        String vowels = "aeiouAEIOU";
+        char[] chars = s.toCharArray();
+        int left = 0;
+        int right = s.length()-1;
+        while(left < right){
+
+            while(left < right && !vowels.contains(chars[left]+"")) {//转换成字符串检查是否存在
+                left++;
+            }
+
+            while(left < right && !vowels.contains(chars[right]+"")) {
+                right--;
+            }
+
+            char temp = chars[left];
+            chars[left] = chars[right];
+            chars[right] = temp;
+
+            left++;
+            right--;
+        }
+        return new String(chars);
+    }
+}
+```
 
 ## 227 - Basic Calculator II
 

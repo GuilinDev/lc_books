@@ -4,3 +4,7 @@
 
 `public static int getNumericValue(char ch)`和`Character.getNumericValue()` : 返回指定Unicode表示的int值；
 
+getOrDefault
+
+addLast
+
