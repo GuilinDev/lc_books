@@ -50,6 +50,7 @@
         * [Graph DFS](leetcode/suan-fa-si-xiang-de-ying-yong/dfs/ji-yu-zu-he-combination-de-dfs/graph-dfs.md)
         * [Non Recursive DFS](leetcode/suan-fa-si-xiang-de-ying-yong/dfs/ji-yu-zu-he-combination-de-dfs/untitled-1.md)
     * [Backtracking](leetcode/suan-fa-si-xiang-de-ying-yong/backtracking.md)
+    * [递归Recursion](leetcode/suan-fa-si-xiang-de-ying-yong/di-gui-recursion.md)
     * [Dynamic Programming](leetcode/suan-fa-si-xiang-de-ying-yong/divide-and-conquer.md)
     * [滑动窗口](leetcode/suan-fa-si-xiang-de-ying-yong/hua-dong-chuang-kou.md)
     * [Greedy](leetcode/suan-fa-si-xiang-de-ying-yong/greedy.md)
