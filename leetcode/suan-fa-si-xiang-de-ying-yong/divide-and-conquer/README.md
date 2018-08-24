@@ -6,8 +6,6 @@ description: >-
 
 # Dynamic Programming
 
-## \*\*\*\*
-
 ![](../../../.gitbook/assets/image%20%2832%29.png)
 
 ## 121 - Best Time to Buy and Sell Stock
@@ -57,5 +55,97 @@ class Solution {
 }
 ```
 
+## 70 - Climb Stairs
 
+### 原题概述
+
+You are climbing a stair case. It takes _n_ steps to reach to the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+**Note:** Given _n_ will be a positive integer.
+
+**Example 1:**
+
+```text
+Input: 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+```
+
+**Example 2:**
+
+```text
+Input: 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+```
+
+### 题意和分析
+
+爬梯子，每次爬一步或者两步，总共有多少种爬法。虽然是简单题，但是一道极佳的说明动态规划的题目，想法类似于斐波那契数列。
+
+### 代码
+
+以时间换空间，空间复杂度为O\(n\)
+
+```java
+class Solution {
+    public int climbStairs(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        if (n == 1) {
+            return 1;
+        }
+        int[] stair = new int[n];
+
+        //two base cases
+        stair[0] = 1;
+        stair[1] = 2;
+
+        //以空间换时间，到每个阶梯i的时候都记忆一下有多少种爬法
+        for (int i = 2; i < n; i++) {
+            stair[i] = stair[i-1] + stair[i-2];
+        }
+        return stair[n-1];//注意这里是返回stair[n-1]，这是最后一步台阶
+    }
+}
+```
+
+优化一下空间
+
+```java
+class Solution {
+    public int climbStairs(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+
+        //前两步的基础值
+        if (n == 1) {
+            return 1;
+        }
+        if (n == 2) {
+            return 2;
+        }
+
+        //O(1)的空间
+        int a = 1, b = 2, result = 0;
+
+        //只需记住n-1和n-2最后两步的和
+        for (int i = 2; i < n; i++) {
+            result = a + b;//i-1和i-2所有路径和总和
+            a = b;//i-2的总和
+            b = result;//i-1的总和
+        }
+        return result;
+    }
+}
+```
 
