@@ -149,3 +149,108 @@ class Solution {
 }
 ```
 
+## 192 - House Robber
+
+### 原题概述
+
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and **it will automatically contact the police if two adjacent houses were broken into on the same night**.
+
+Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight **without alerting the police**.
+
+**Example 1:**
+
+```text
+Input: [1,2,3,1]
+Output: 4
+Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
+             Total amount you can rob = 1 + 3 = 4.
+```
+
+**Example 2:**
+
+```text
+Input: [2,7,9,3,1]
+Output: 12
+Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
+             Total amount you can rob = 2 + 9 + 1 = 12.
+```
+
+### 题意和分析
+
+相当于数组中不相邻的数相加如何使其和最大，依然是DP来求极值，维护一个一维数组dp，其中dp\[i\]表示到数组的i位置时之前的不相邻数的最大和，递推公式为dp\[i\] = max\(nums\[i\] + dp\[i-2\], dp\[i-1\]\)，初始化dp\[0\]为nums\[0\]，dp\[1\]为之前的nums\[0\]和nums\[1\]中的较大值。
+
+### 代码
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+
+        int len = nums.length;
+        if (len == 1) return nums[0];
+
+        int[] dp = new int[len];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+
+        for (int i = 2; i < len; i++) {
+            dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2]);//当前数+不相邻子问题的和，与相邻子问题的和，相比较看哪个大
+        }
+        return dp[len-1];
+    }
+}
+```
+
+另外的思路是维护两个变量a和b，按奇偶来更新这两个值，保证a和b这两个最大值的备选值均为不相邻数组成，最后判断a和b哪个大就是最后的最大值。
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+
+        int len = nums.length;
+        if (len == 1) return nums[0];
+
+        int a = 0, b = 0;
+        for (int i = 0; i < len; i++) {
+            if (i % 2 != 0) {//奇数
+                a = Math.max(a + nums[i], b);//注意是不相邻数的和，相比较
+            } else {//偶数
+                b = Math.max(b + nums[i], a);
+            }
+        }
+        return Math.max(a, b);
+    }
+}
+```
+
+## 338 - Counting Bits
+
+### 原题概述
+
+Given a non negative integer number **num**. For every numbers **i** in the range **0 ≤ i ≤ num** calculate the number of 1's in their binary representation and return them as an array.
+
+**Example 1:**
+
+```text
+Input: 2
+Output: [0,1,1]
+```
+
+**Example 2:**
+
+```text
+Input: 5
+Output: [0,1,1,2,1,2]
+```
+
+**Follow up:**
+
+* It is very easy to come up with a solution with run time **O\(n\*sizeof\(integer\)\)**. But can you do it in linear time **O\(n\)** /possibly in a single pass?
+* Space complexity should be **O\(n\)**.
+* Can you do it like a boss? Do it without using any builtin function like **\_\_builtin\_popcount** in c++ or in any other language.
+
+### 题意和分析
+
+### 代码
+
