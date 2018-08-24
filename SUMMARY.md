@@ -21,7 +21,6 @@
       * [在Array中搜索元素](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/zai-array-zhong-cha-xun-yuan-su.md)
       * [子数组Subarray](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/zi-shu-zu-subarray.md)
       * [众数](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/zhong-shu.md)
-      * [Array别的题目](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/array-bie-de-ti-mu.md)
     * [String](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/string.md)
     * [LinkedList](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/README.md)
       * [Linked List的面试知识](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/linkedlist/qiu-lian-biao-de-zhong-jian-jie-dian.md)
