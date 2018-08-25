@@ -252,5 +252,112 @@ Output: [0,1,1,2,1,2]
 
 ### 题意和分析
 
+给一个整数n，找出0到n间数字二进制表达式中1的个数，给了很多限制条件，就是不让一位一位去算，而是找规律。看了discussion才知道dp是怎样来的：
+
+首先给一个例子：
+
+Index： 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+
+相应的1的个数：0 1 1 2 1 2 2 3 1 2 2 3 2 3 3 4
+
+四个一组看，很容易看出来重叠子问题了
+
+dp\[0\] = 0;
+
+dp\[1\] = dp\[0\] + 1;
+
+dp\[2\] = dp\[0\] + 1;
+
+dp\[3\] = dp\[1\] +1;
+
+dp\[4\] = dp\[0\] + 1;
+
+dp\[5\] = dp\[1\] + 1;
+
+dp\[6\] = dp\[2\] + 1;//为了找寻规律，这里就不是dp\[6\] = dp\[1\] + 1了
+
+dp\[7\] = dp\[3\] + 1;
+
+dp\[8\] = dp\[0\] + 1;  
+...
+
+从上述表达式可以得出递归式：
+
+dp\[1\] = dp\[1-1\] + 1;
+
+dp\[2\] = dp\[2-2\] + 1;
+
+dp\[3\] = dp\[3-2\] +1;
+
+dp\[4\] = dp\[4-4\] + 1;
+
+dp\[5\] = dp\[5-4\] + 1;
+
+dp\[6\] = dp\[6-4\] + 1;
+
+dp\[7\] = dp\[7-4\] + 1;
+
+dp\[8\] = dp\[8-8\] + 1;  
+...
+
+dp\[index\] = dp\[index - offset\] + 1， 从index = 1开始，其中，如果当前索引是offset的两倍，那offset自增加倍。
+
+### 代码
+
+```java
+class Solution {
+    public int[] countBits(int num) {
+        int[] result = new int[num+1];
+        int offset = 1;
+        for (int index = 1; index <= num; index++) {//规律从1开始
+            if (offset*2 == index) {
+                offset *= 2;
+            }
+            result[index] = result[index - offset] + 1;//重叠子问题
+        }
+        return result;
+    }
+}
+```
+
+## 139 - Word Break
+
+### 原题概述
+
+Given a **non-empty** string _s_ and a dictionary _wordDict_ containing a list of **non-empty** words, determine if _s_ can be segmented into a space-separated sequence of one or more dictionary words.
+
+**Note:**
+
+* The same word in the dictionary may be reused multiple times in the segmentation.
+* You may assume the dictionary does not contain duplicate words.
+
+**Example 1:**
+
+```text
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+```
+
+**Example 2:**
+
+```text
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
+```
+
+**Example 3:**
+
+```text
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
+```
+
+### 题意和分析
+
+
+
 ### 代码
 
