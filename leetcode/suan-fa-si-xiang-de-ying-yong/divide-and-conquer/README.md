@@ -357,7 +357,32 @@ Output: false
 
 ### 题意和分析
 
+{% embed data="{\"url\":\"https://blog.csdn.net/linhuanmars/article/details/22358863\",\"type\":\"link\",\"title\":\"Word Break -- LeetCode - CSDN博客\",\"description\":\"原题链接: http://oj.leetcode.com/problems/word-break/  这道题仍然是动态规划的题目，我们总结一下动态规划题目的基本思路。首先我们要决定要存储什么历史信息以及用什么数据结构来存储信息。然后是最重要的递推式，就是如从存储的历史信息中得到当前步的结果。最后我们需要考虑的就是起始条件的值。 接下来我们套用上面的思路来解这道题。首先我们要存储的历史信息res\",\"icon\":{\"type\":\"icon\",\"url\":\"https://csdnimg.cn/public/favicon.ico\",\"aspectRatio\":0}}" %}
 
+> 动态规划题目的基本思路：首先我们要决定要存储什么历史信息以及用什么数据结构来存储信息，然后是最重要的递推式，就是如何从存储的历史信息中得到当前步的结果，最后我们需要考虑的就是起始条件的值。
 
 ### 代码
+
+```java
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+        boolean[] res = new boolean[s.length() + 1];
+        res[0] = true;//初始条件
+        for (int i = 0; i < s.length(); i++) {
+            StringBuilder sb = new StringBuilder(s.substring(0, i + 1));//取0到i的子字符串
+            for (int j = 0; j <= i; j++) {
+                if (res[j] && wordDict.contains(sb.toString())) {
+                    res[i+1] = true;
+                    break;
+                }
+                sb.deleteCharAt(0);
+            }
+        }
+        return res[s.length()];
+    }
+}
+```
 
