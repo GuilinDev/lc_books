@@ -92,7 +92,7 @@ Explanation: There are three ways to climb to the top.
 
 ### 代码
 
-以时间换空间，空间复杂度为O\(n\)
+以空间换时间，空间复杂度为O\(n\)
 
 ```java
 class Solution {
@@ -118,7 +118,7 @@ class Solution {
 }
 ```
 
-优化一下空间
+优化一下空间，只需存最后两步即可
 
 ```java
 class Solution {
@@ -300,7 +300,7 @@ dp\[7\] = dp\[7-4\] + 1;
 dp\[8\] = dp\[8-8\] + 1;  
 ...
 
-dp\[index\] = dp\[index - offset\] + 1， 从index = 1开始，其中，如果当前索引是offset的两倍，那offset自增加倍。
+dp\[index\] = dp\[index - offset\] + 1， 从index = 1开始，其中，如果当前索引i是offset的两倍，那offset自增加倍。
 
 ### 代码
 
@@ -378,7 +378,7 @@ class Solution {
                     res[i+1] = true;
                     break;
                 }
-                sb.deleteCharAt(0);
+                sb.deleteCharAt(0);//？
             }
         }
         return res[s.length()];

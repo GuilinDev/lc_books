@@ -567,7 +567,7 @@ dp\[i, j\] = 1                                               if i == j为回文�
 
            = s\[i\] == s\[j\] && dp\[i + 1\]\[j - 1\]    if j &gt; i + 1     
 
-3）O\(n\)的马拉车算法Manacher's Algorithm，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍
+3）O\(n\)的马拉车算法Manacher's Algorithm，线型时间，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍
 
 ### 代码
 
@@ -589,14 +589,15 @@ class Solution {
         return s.substring(lo, lo + maxLen);
     }
 
-    private void extendPalindrome(String s, int j, int k) {
-        while (j >= 0 && k < s.length() && s.charAt(j) == s.charAt(k)) {
-            j--;
-            k++;
+    private void extendPalindrome(String s, int left, int right) {//字符串和两个指针
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
         }
-        if (maxLen < k - j - 1) {
-            lo = j + 1;
-            maxLen = k - j - 1;
+        //注意上面while循环是在左右不等才停止的，当前的maxLen是成员变量，需要维持奇偶中大的一个（较小的不进循环）
+        if (maxLen < right - left - 1) {
+            lo = left + 1;//回文子字符串的下标
+            maxLen = right - left - 1;//回文子字符串的上标
         }
     }
 }
@@ -630,10 +631,6 @@ class Solution {
     }
 }
 ```
-
- Manacher's Algorithm \(to be continued\)
-
-
 
 ## 38 - Count and Say
 
