@@ -470,42 +470,83 @@ class Solution {
 }
 ```
 
-## 96 - Unique Binary Search Trees
-
-### 原题概述
-
-Given _n_, how many structurally unique **BST's** \(binary search trees\) that store values 1 ... _n_?
-
-**Example:**
-
-```text
-Input: 3
-Output: 5
-Explanation:
-Given n = 3, there are a total of 5 unique BST's:
-
-   1         3     3      2      1
-    \       /     /      / \      \
-     3     2     1      1   3      2
-    /     /       \                 \
-   2     1         2                 3
-```
-
-### 题意和分析
-
-
-
-### 代码
-
 ## 279 - Perfect Squares
 
 ### 原题概述
 
+Given a positive integer n, find the least number of perfect square numbers \(for example, `1, 4, 9, 16, ...`\) which sum to n.
+
+**Example 1:**
+
+```text
+Input: n = 12
+Output: 3 
+Explanation: 12 = 4 + 4 + 4.
+```
+
+**Example 2:**
+
+```text
+Input: n = 13
+Output: 2
+Explanation: 13 = 4 + 9.
+```
+
 ### 题意和分析
+
+给一个正整数，求最少由几个完全平方数组成，考察[四平方和定理](https://zh.wikipedia.org/wiki/%E5%9B%9B%E5%B9%B3%E6%96%B9%E5%92%8C%E5%AE%9A%E7%90%86)（没听说过），如果是DP的办法，其中一个办法是建立一个一维动态数组， 初始化第一个值为0，在循环里计算，每次增加一个dp数组的长度，里面那个for循环一次循环结束就算好下一个数由几个完全平方数组成，直到增加到第n+1个，返回即可；
+
+DP的效率不是很高， 一个更加高效的办法是，根据四平方和定理，任意一个正整数均可表示为4个整数的平方和（4个，3个，2个或者1个），首先将数字化简一下，由于一个数如果含有因子4，那么我们可以把4都去掉，并不影响结果，比如2和8,3和12等等，返回的结果是相同的。还有一个可以化简的地方就是，如果一个数除以8余7的话，那么这个数肯定是由4个完全平方数组成。经过两次化简，一个很大的数有可能就会变得很小了，大大减少了运算时间，接下来将化简后的数拆为两个平方数之和，如果拆成功了那么就会返回1或2，因为其中一个平方数可能为0. \(由于输入的n是正整数，所以不存在两个平方数均为0的情况\)。注意!!a + !!b这个表达式，感叹号!表示逻辑取反，那么一个正整数逻辑取反为0，再取反为1，所以用两个感叹号!!的作用就是看a和b是否为正整数，都为正整数的话返回2，只有一个是正整数的话就返回1。
 
 ### 代码
 
-## 312 Burst Balloons
+DP
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        ArrayList<Integer> dp = new ArrayList<>();
+        dp.add(0);
+
+        while (dp.size() <= n) {
+            int m = dp.size(), val = Integer.MAX_VALUE;
+            for (int i = 1; i * i <= m; i++) {
+                val = Math.min(val, dp.get(m - i*i) + 1);
+            }
+            dp.add(val);
+        }
+        return dp.get(dp.size() - 1);
+    }
+}
+```
+
+四平方和的方法
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        //两步化简
+        while (n % 4 == 0) n /= 4;
+        if (n % 8 == 7) return 4;
+
+        int a = -1, b = (int)Math.sqrt(n);
+        n -= b * b;
+        b += b + 1;
+        while (a <= b) {
+            if (n < 0) {
+                n += b -= 2;
+            } else if (n > 0) {
+                n -= a += 2;
+            } else {
+                return a < 0 ? 1 : 2;
+            }
+        }
+        return 3;
+    }
+}
+```
+
+## 312 - Burst Balloons
 
 ### 原题概述
 
@@ -513,7 +554,7 @@ Given n = 3, there are a total of 5 unique BST's:
 
 ### 代码
 
-## 120 Triangle 
+## 120 - Triangle 
 
 ### 原题概述
 
@@ -521,7 +562,7 @@ Given n = 3, there are a total of 5 unique BST's:
 
 ### 代码
 
-## 62 Unique Paths
+## 62 - Unique Paths
 
 ### 原题概述
 
@@ -529,5 +570,11 @@ Given n = 3, there are a total of 5 unique BST's:
 
 ### 代码
 
+## 64 - Minimum Path Sum
 
+### 原题概述
+
+### 题意和分析
+
+### 代码
 
