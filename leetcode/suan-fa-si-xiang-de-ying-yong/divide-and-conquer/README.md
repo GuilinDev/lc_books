@@ -386,3 +386,89 @@ class Solution {
 }
 ```
 
+## 72 - Edit Distance
+
+### 原题概述
+
+Given two words _word1_ and _word2_, find the minimum number of operations required to convert _word1_ to _word2_.
+
+You have the following 3 operations permitted on a word:
+
+1. Insert a character
+2. Delete a character
+3. Replace a character
+
+**Example 1:**
+
+```text
+Input: word1 = "horse", word2 = "ros"
+Output: 3
+Explanation: 
+horse -> rorse (replace 'h' with 'r')
+rorse -> rose (remove 'r')
+rose -> ros (remove 'e')
+```
+
+**Example 2:**
+
+```text
+Input: word1 = "intention", word2 = "execution"
+Output: 5
+Explanation: 
+intention -> inention (remove 't')
+inention -> enention (replace 'i' with 'e')
+enention -> exention (replace 'n' with 'x')
+exention -> exection (replace 'n' with 'c')
+exection -> execution (insert 'u')
+```
+
+### 题意和分析
+
+从一个work变成另外一个word最少需要多少次操作，操作可以是添加一个字符，删除一个字符和替换一个字符。 维护一个二维的数组dp，其中dp\[i\]\[j\]表示从word1的前i个字符转换到word2的前j个字符所需要的步骤（dp\[len1\]\[len2\]自然就是最后需要得到的结果），初始化的话需要给第一行和第一列赋值， 因为第一行和第一列对应的总有一个字符串是空串，于是转换步骤完全是另一个字符串的长度。所以难点还是在于找出递推式，先举个例子来看，比如word1是“bbc"，word2是”abcd“，得到的dp数组如下
+
+```text
+  Ø a b c d
+Ø 0 1 2 3 4
+b 1 1 1 2 3
+b 2 2 1 2 3
+c 3 3 2 1 2
+```
+
+可以发现，当word1\[i\] == word2\[j\]时，dp\[i\]\[j\] = dp\[i-1\]\[j-1\]，当word1\[i\] != word2\[j\]时，dp\[i\]\[j\]是其左，左上，正上方三个值当中的最小值+1，因此，递推式就是
+
+dp\[i\]\[j\] =      /    dp\[i - 1\]\[j - 1\]                                      if word1\[i - 1\] == word2\[j - 1\]
+
+                  \    min\(dp\[i - 1\]\[j - 1\], min\(dp\[i - 1\]\[j\], dp\[i\]\[j - 1\]\)\) + 1            else
+
+### 代码
+
+```java
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int len1 = word1.length(), len2 = word2.length();
+
+        int[][] dp = new int[len1+1][len2+1];//最开始对应了一个空字符串
+
+        char[] wordArr1 = word1.toCharArray(), wordArr2 = word2.toCharArray();
+
+        //为第一行和第一列赋值
+        for (int i = 0; i <= len1; i++) dp[i][0] = i;
+        for (int i = 0; i <= len2; i++) dp[0][i] = i;
+
+        //第一行和第一列已经有值，所以从1开始
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                if (wordArr1[i-1] == wordArr2[j-1]) {
+                    dp[i][j] = dp[i-1][j-1];
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i-1][j-1], dp[i-1][j]), dp[i][j-1]) + 1;
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+}
+```
+
+
+
