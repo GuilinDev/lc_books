@@ -615,9 +615,48 @@ class Solution {
 
 ### 原题概述
 
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+
+For example, given the following triangle
+
+```text
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+```
+
+The minimum path sum from top to bottom is `11` \(i.e., **2** + **3** + **5** + **1** = 11\).
+
+**Note:**
+
+Bonus point if you are able to do this using only _O_\(_n_\) extra space, where _n_ is the total number of rows in the triangle.
+
 ### 题意和分析
 
+从三角形的第二行开始，triangle\[i\]\[j\] = min\(triangle\[i - 1\]\[j - 1\], triangle\[i - 1\]\[j\]\)，然后两边的数字直接赋值上一行中找到的最小值，bonus说最好空间复杂度为_O_\(_n_\)，因此在原来的triangle数组上改动；
+
+一种更好的办法是自底向上，逐个遍历triagnle的最后一行，对于每个数字，将它与它之后的元素比较，选择较小的+triangle数组上面一行相邻位置的元素作为新的元素，一层一层往上扫描，最小的数字冒泡到了前面，返回最前面的元素。
+
 ### 代码
+
+```java
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int size = triangle.size();
+        for (int i = size - 2; i >= 0; i--) {//size-1是最后一行
+            for (int j = 0; j <= i; j++) {//对当前层的数字逐个遍历
+                int self = triangle.get(i).get(j);
+                int result = Math.min(triangle.get(i+1).get(j) + self, triangle.get(i+1).get(j+1)+self);
+                triangle.get(i).set(j, result);
+            }
+        }
+        return triangle.get(0).get(0);//最小的path sum在最前面
+    }
+}
+```
 
 ## 62 - Unique Paths
 
