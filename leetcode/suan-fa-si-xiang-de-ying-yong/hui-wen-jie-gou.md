@@ -75,9 +75,88 @@ class Solution {
 
 ### **原题概述**
 
+Given two strings _s_ and _t_ , write a function to determine if _t_ is an anagram of _s_.
+
+**Example 1:**
+
+```text
+Input: s = "anagram", t = "nagaram"
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input: s = "rat", t = "car"
+Output: false
+```
+
+**Note:**  
+You may assume the string contains only lowercase alphabets.
+
+**Follow up:**  
+What if the inputs contain unicode characters? How would you adapt your solution to such case?
+
 ### **题意和分析**
 
+1）toCharArray\(\)排序后比较两个字符串是否相同；
+
+2）利用HashMap来记录第一个字符串的数目，然后第一个字符串根据出现次数来减；
+
+3）创建一个26位的小写字母字符数组，第一次循环相应地加减两个字符串的字符数目，第二次循环看是否有不为0的字符位置，有则返回false，没有则返回true。
+
 ### **代码**
+
+只适用于26个字母，如果想考虑所有Unicode的情况可以把数组长度设为127
+
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        int[] alphabet = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            alphabet[s.charAt(i) - 'a']++;
+            alphabet[t.charAt(i) - 'a']--;
+        }
+        //检查数组的各字符是否相等
+        for (int ab : alphabet) if (ab != 0) return false;
+        return true;
+    }
+}
+```
+
+HashMap的做法
+
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+
+            //getOrDefault()
+            int count1 = map.getOrDefault(s.charAt(i), 0) + 1;
+            map.put(s.charAt(i), count1);
+
+            int count2 = map.getOrDefault(t.charAt(i), 0) - 1;
+            map.put(t.charAt(i), count2);
+
+        }
+
+        //检查hashmap的值
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
 
 ## **179 Largest Number**
 
