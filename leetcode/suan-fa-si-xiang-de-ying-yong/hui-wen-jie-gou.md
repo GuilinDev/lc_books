@@ -182,9 +182,95 @@ Output: "9534330"
 
 ### **题意和分析**
 
-\*\*\*\*
+给一堆正整数，要求拼出最大的数字，返回最大数字的字符串；做法是对整个数组的元素转换成字符串进行排序，但这个排序不是简单地比较大小，而是首位最大的数字在前面，比如71和59，71应该排在前面；如果首位相同，那就再比较第二位看谁大，如果第二位大，那就把该数放在前面，以此类推，比如753和751；注意3和30（比较3和0），52和5239（比较5和3），2570和25（比较7和2）， 909和90这样的情况（比较9和9），前n位数都相同，最后某个数a的n+1位没有了，另一个数b则还有位数这样的情况，都是前面的数应该更大，应该比较这个多出来的n+1位和首位数字，如果a的首位数大于b的n+1位数，a在前面；如果a的首位数小于等于b的n+1位数，b在前面。
+
+coding的时候只需把两个数字的两种链接方式都试试，来比较一下就知道谁大谁小，不用具体考虑上述的情况。
 
 ### **代码**
+
+手动实现comparator
+
+```java
+class Solution {
+    public String largestNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return "";
+        }
+
+        //将整型数组转换为字符串数组
+        String[] s_num = new String[nums.length];
+        for (int i = 0; i < s_num.length; i++) {
+            s_num[i] = String.valueOf(nums[i]);
+        }
+
+        //手动实现一个comparator
+        Comparator<String> comp = new Comparator<String>() {
+            @Override
+            public int compare(String str1, String str2) {
+                String s1 = str1 + str2;
+                String s2 = str2 + str1;
+                return s2.compareTo(s1);//这里把大的放在前面
+            }
+        };
+
+
+        Arrays.sort(s_num, comp);
+
+        //极端情况，如果头部给了0
+        if (s_num[0].charAt(0) == '0') return "0";
+
+        StringBuilder sb = new StringBuilder();
+        for (String s : s_num) {
+            sb.append(s);
+        }
+
+        return sb.toString();
+    }
+}
+```
+
+Java8的做法
+
+```java
+class Solution {
+    public String largestNumber(int[] nums) {
+
+        String result = Arrays.stream(nums)
+                .mapToObj(String::valueOf)
+                .sorted((a, b) -> (b+a).compareTo(a+b))
+                .collect(Collectors.joining(""));
+
+        return result.startsWith("0") ? "0" : result;
+    }
+}
+```
+
+堆排序HeapSort
+
+```java
+class Solution {
+    public String largestNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return "";
+        }
+
+        Queue<String> queue = new PriorityQueue<>(nums.length,
+                (left, right) -> Long.valueOf(right + left).compareTo(Long.valueOf(left + right))
+        );
+        for (int num : nums) {
+            queue.offer(String.valueOf(num));
+        }
+
+        StringBuilder sb = new StringBuilder(nums.length);
+        while (!queue.isEmpty()) {
+            sb.append(queue.poll());//顺序从堆顶取出元素
+        }
+
+        String result = sb.toString();
+        return result.startsWith("0") ? "0" : result;
+    }
+}
+```
 
 ## **164 Maximum Gap**
 
