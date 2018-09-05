@@ -364,14 +364,6 @@ class Solution {
 
 ### **代码**
 
-## **350 Intersection of Two Arrays II**
-
-### **原题概述**
-
-### **题意和分析**
-
-### **代码**
-
 ## **75 Sort Colors**
 
 ### **原题概述**

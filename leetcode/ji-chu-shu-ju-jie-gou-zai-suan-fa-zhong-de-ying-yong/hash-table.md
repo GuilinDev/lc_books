@@ -430,6 +430,102 @@ class Solution {
 }
 ```
 
+## **350 Intersection of Two Arrays II**
+
+### **原题概述**
+
+\*\*\*\*
+
+Given two arrays, write a function to compute their intersection.
+
+**Example 1:**
+
+```text
+Input: nums1 = [1,2,2,1], nums2 = [2,2]
+Output: [2,2]
+```
+
+**Example 2:**
+
+```text
+Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+Output: [4,9]
+```
+
+**Note:**
+
+* Each element in the result should appear as many times as it shows in both arrays.
+* The result can be in any order.
+
+**Follow up:**
+
+* What if the given array is already sorted? How would you optimize your algorithm?
+* What if nums1's size is small compared to nums2's size? Which algorithm is better?
+* What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
+
+### **题意和分析**
+
+跟上一道349题比起来，可以返回重复的数字，并且尽可能多地返回。可以用HashMap来建立nums1中元素和出现个数的映射，然后遍历nums2，如果nums2中当前字符在哈希表中的个数大于0，将此字符加入到result中，相应的出现次数减去1，以防止重复计算。
+
+另外一种做法是先将两个数组排序，然后用两个指针分别指向两个数组的起始位置，如果两个指针指向的数字相等，将该数字存入结果，两个指针均右移一位；如果第一个指针指向的数字大，第二个指针右移一位，反之亦然。
+
+### **代码**
+
+HashMap
+
+```java
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<Integer> result = new ArrayList<>();
+
+        //将第一个数组建立映射
+        for (int i : nums1) {
+            int count1 = map.getOrDefault(i, 0) + 1;
+            map.put(i, count1);
+        }
+        //遍历第二个数组
+        for (int i : nums2) {
+            int count2 = map.getOrDefault(i, 0);
+            if (count2 > 0) {
+                result.add(i);
+                count2--;
+            }
+            map.put(i, count2);
+        }
+        //Java8 ArrayList转换为Array
+        return result.stream().mapToInt(Integer::intValue).toArray();
+    }
+}
+```
+
+两个指针
+
+```java
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        List<Integer> result = new ArrayList<>();
+
+        int idx1 = 0, idx2 = 0;
+        while (idx1 < nums1.length && idx2 < nums2.length) {
+            if (nums1[idx1] == nums2[idx2]) {
+                result.add(nums1[idx1]);
+                idx1++;
+                idx2++;
+            } else if (nums1[idx1] < nums2[idx2]) {
+                idx1++;
+            } else {
+                idx2++;
+            }
+        }
+        return result.stream().mapToInt(Integer::intValue).toArray();
+    }
+}
+```
+
 ## 242 - Valid Anagram
 
 ### 原题概述
