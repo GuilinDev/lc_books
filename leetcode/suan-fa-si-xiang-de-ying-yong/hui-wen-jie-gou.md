@@ -304,9 +304,57 @@ Explanation: The array contains less than 2 elements, therefore return 0.
 
 ### **题意和分析**
 
-\*\*\*\*
+这道题找出排序前的数组中在排序后两个相邻数字最大的差值，如果先对数组排序再挨个找那就是_nO\(logn\)_了，不满足题目的线性时间复杂度要求；但是空间复杂度没有要求，于是用空间换时间，利用桶排序bucket sort，首先找出数组的最大值max和最小值min，之后确定每个桶的容量，为\(max - min\)/数组元素个数 + 1，然后确定桶的个数，\(max - min\)/桶的容量 + 1；然后再每个桶里找出这个桶的最大值和最小值，数组中最大间距的两个数不会在一个桶里，而应该在一个桶里的最小值和另一个桶的最大值之间的间距。
 
 ### **代码**
+
+```java
+class Solution {
+    public int maximumGap(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return 0;
+        }
+
+        //找到数组中的最大值和最小值
+        int min = nums[0];
+        int max = nums[0];
+        for (int i : nums) {
+            min = Math.min(min, i);
+            max = Math.max(max, i);
+        }
+
+        //gap的最小的可能的值，除法向上取值
+        int gap = (int) Math.ceil((double)(max - min)/(nums.length - 1));
+        int[] bucketsMIN = new int[nums.length - 1];//存储每个桶里局部的最小值
+        int[] bucketsMAX = new int[nums.length - 1];//存储每个桶里局部的最大值
+        //初始化局部最大值和最小值的两个数组
+        Arrays.fill(bucketsMIN, Integer.MAX_VALUE);
+        Arrays.fill(bucketsMAX, Integer.MIN_VALUE);
+
+        //把数字放入到桶里
+        for (int i : nums) {
+            if (i == min || i == max) continue;
+            int idx = (i - min) / gap;//每个桶右边位置的索引
+            bucketsMIN[idx] = Math.min(i, bucketsMIN[idx]);
+            bucketsMAX[idx] = Math.max(i, bucketsMAX[idx]);
+        }
+
+        //扫描整个桶找到最大的gap
+        int maxGap = Integer.MIN_VALUE;
+        int previous = min;
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (bucketsMIN[i] == Integer.MAX_VALUE && bucketsMAX[i] == Integer.MIN_VALUE) continue; //空桶
+
+            //最小值减去前面的value为当前的gap
+            maxGap = Math.max(maxGap, bucketsMIN[i] - previous);
+            //更新previous的值
+            previous = bucketsMAX[i];
+        }
+        maxGap = Math.max(maxGap, max - previous);//最后得到最大的gap值
+        return maxGap;
+    }
+}
+```
 
 ## **280 Wiggle Sort**
 
