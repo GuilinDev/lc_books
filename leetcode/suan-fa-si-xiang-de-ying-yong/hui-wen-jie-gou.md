@@ -390,6 +390,8 @@ Output: [0,0,1,1,2,2]
 
 题目中说了如果两次扫描的做法，先计数，然后打印出来，利用HashMap或者count来统计，然后再把打印即可。如果想一次扫描就排好序，利用双指针的办法，因为0，1，2分别代表red，white，blue，最后需要排成012这样的顺序，那就把第一个索引指向头部，第二个索引指向尾部，然后遍历数组，如果遇到当前元素为0，则当前元素与第一个索引交换值，同时第一个索引往后移动一步；如果遇到2，则当前元素与第二个索引交换值，同时第二个索引往前移动一步；如果遇到1，继续遍历不作改变。
 
+当然，三个指针也是可以的，都从0开始，遍历nums，如果等于2，只有第三个指针移动；如果等于1，第二个和第三个指针一起移动；如果等于0，三个指针都移动。
+
 ### **代码**
 
 ```java
@@ -418,5 +420,38 @@ class Solution {
 }
 ```
 
-###  
+三个指针
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+        if (nums == null || nums.length == 0 || nums.length == 1) {
+            return;
+        }
+        int red = 0, white = 0, blue = 0;
+        for (int n : nums) {
+            if (n == 2) {
+                nums[blue] = 2;
+                blue++;
+            } else if (n == 1) {
+                nums[blue] = 2;
+                blue++;
+                nums[white] = 1;
+                white++;
+            } else {
+                nums[blue] = 2;
+                blue++;
+                nums[white] = 1;
+                white++;
+                nums[red] = 0;
+                red++;
+            }
+        }
+
+    }
+}
+```
+
+  
+
 
