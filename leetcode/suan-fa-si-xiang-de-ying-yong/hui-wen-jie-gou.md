@@ -388,7 +388,35 @@ Output: [0,0,1,1,2,2]
 
 ### **题意和分析**
 
-\*\*\*\*
+题目中说了如果两次扫描的做法，先计数，然后打印出来，利用HashMap或者count来统计，然后再把打印即可。如果想一次扫描就排好序，利用双指针的办法，因为0，1，2分别代表red，white，blue，最后需要排成012这样的顺序，那就把第一个索引指向头部，第二个索引指向尾部，然后遍历数组，如果遇到当前元素为0，则当前元素与第一个索引交换值，同时第一个索引往后移动一步；如果遇到2，则当前元素与第二个索引交换值，同时第二个索引往前移动一步；如果遇到1，继续遍历不作改变。
 
-### **代码** 
+### **代码**
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+        if (nums == null || nums.length == 0 || nums.length == 1) {
+            return;
+        }
+        int red = 0, blue = nums.length - 1;
+        for (int i = 0; i <= blue; i++) {//循环到第二个索引处就可以停止了
+            if (nums[i] == 0) {
+                int temp0 = nums[i];
+                nums[i] = nums[red];
+                nums[red] = temp0;
+                red++;
+            }
+            if (nums[i] == 2) {
+                int temp2 = nums[i];
+                nums[i] = nums[blue];
+                nums[blue] = temp2;
+                blue--;
+                i--;//i的值需要自减1是因为从blue的索引处交换一个元素到前面，需要停在当前步再检查一下
+            }
+        }
+    }
+}
+```
+
+###  
 
