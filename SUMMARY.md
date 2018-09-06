@@ -8,7 +8,7 @@
   * [Java语言相关的面试问题](ji-chu-zhi-shi/java-yu-yan-xiang-guan-de-mian-shi-wen-ti.md)
   * [公开课](ji-chu-zhi-shi/gong-kai-ke.md)
 * [LeetCode刷题](leetcode/README.md)
-  * [0. 刷题策略](leetcode/introduction.md)
+  * [0. LeetCode Strategy](leetcode/introduction.md)
   * [1. 基础算法和算法思想](leetcode/ji-chu-suan-fa.md)
   * [2. 基础数据结构底层实现](leetcode/1.-shu-ju-jie-gou-de-di-ceng-shi-xian.md)
   * [3. 数据结构在算法中应用](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/README.md)
