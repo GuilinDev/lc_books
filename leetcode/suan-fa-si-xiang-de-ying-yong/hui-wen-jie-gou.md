@@ -360,9 +360,57 @@ class Solution {
 
 ### **原题概述**
 
+Given an unsorted array `nums`, reorder it **in-place** such that `nums[0] <= nums[1] >= nums[2] <= nums[3]...`.
+
+**Example:**
+
+```text
+Input: nums = [3,5,2,1,6,4]
+Output: One possible answer is [3,5,1,6,2,4]
+```
+
 ### **题意和分析**
 
+这道题要求钟摆排序，首先我们可以先对数组排序，排完序以后第0个数不用管，然后交换第1个数和第2个数，交换第3个数和第4个数，依次类推即可；
+
+优化的办法，那就是每次当前元素nums\[i\]和前一个元素nums\[i-1\]相比，奇数位的元素nums\[i\]肯定比前面的元素nums\[i-1\]大于或等于，如果小于，交换二者的值；偶数位的元素nums\[i\]肯定比前面的元素nums\[i-1\]小于或等于，如果的大于，同样交换二者的值。
+
 ### **代码**
+
+排序的办法
+
+```java
+class Solution {
+    public void wiggleSort(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length - 1; i+=2) {
+            int temp = nums[i];
+            nums[i] = nums[i+1];
+            nums[i+1] = temp;
+        }
+    }
+}
+```
+
+线型复杂度
+
+```java
+class Solution {
+    public void wiggleSort(int[] nums) {
+        if (nums == null || nums.length == 0) return;
+
+        for (int i = 1; i < nums.length; i++) {
+            if ((i % 2 != 0 && nums[i] < nums[i-1]) || i % 2 == 0 && nums[i] > nums[i-1]) {
+                int temp = nums[i];
+                nums[i] = nums[i-1];
+                nums[i-1] = temp;
+            }
+        }
+    }
+}
+```
 
 ## **75 Sort Colors**
 
