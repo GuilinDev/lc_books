@@ -203,53 +203,6 @@ class Solution {
 }
 ```
 
-## **121 Best Time to Buy and Sell Stock**
-
-### 原题概述
-
-Say you have an array for which the _i_th element is the price of a given stock on day _i_.
-
-If you were only permitted to complete at most one transaction \(i.e., buy one and sell one share of the stock\), design an algorithm to find the maximum profit.
-
-Note that you cannot sell a stock before you buy one.
-
-**Example 1:**
-
-```text
-Input: [7,1,5,3,6,4]
-Output: 5
-Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
-             Not 7-1 = 6, as selling price needs to be larger than buying price.
-```
-
-**Example 2:**
-
-```text
-Input: [7,6,4,3,1]
-Output: 0
-Explanation: In this case, no transaction is done, i.e. max profit = 0.
-```
-
-### 题意和分析
-
-数组代表股票的价格，只能买一次，求最大利润。这是比较简单的动态规划的思想，只需遍历数组，找到其中局部最小值，然后让其后面的元素和前面的局部最小值比较就可以知道最大利润。
-
-### 代码
-
-```java
-class Solution {
-    public int maxProfit(int[] prices) {
-        int minBuy = Integer.MAX_VALUE, maxProfit = 0;
-        for (int price : prices) {
-            minBuy = Math.min(minBuy, price);//找到子问题中最小的buy的价格
-            maxProfit = Math.max(maxProfit, price - minBuy);//找到最小buy价格下最大的利润
-        }
-
-        return maxProfit;
-    }
-}
-```
-
 ## **122 Best Time to Buy and Sell Stock II** 
 
 ### 原题概述
@@ -311,9 +264,75 @@ class Solution {
 
 ### 原题概述
 
+Given an array of size n, find the majority element. The majority element is the element that appears **more than** `⌊ n/2 ⌋` times.
+
+You may assume that the array is non-empty and the majority element always exist in the array.
+
+**Example 1:**
+
+```text
+Input: [3,2,3]
+Output: 3
+```
+
+**Example 2:**
+
+```text
+Input: [2,2,1,1,1,2,2]
+Output: 2
+```
+
 ### 题意和分析
 
+这道题要求众数，首先因为出现的次数是多于n/2的次数的，所以可以排序然后最中间的数就是需要找的数；另外有个更高效的办法，所以只需要每次只需出现一个数就+1，然后出现不同的数就-1，最后剩下的数一定是需要找的数，因为众数一定存在，出现次数是大于n/2的，所以它的出现次数比别的数加起来的出现次数都多。
+
+另外也可以用bit manipulation来做， 将数组中的元素按位来建立，表示的长度是32位，每次统计下数组中该元素位上0和1的个数，如果1多，那么我们将结果result中该位变为1，最后累加出来的res就是中位数了
+
 ### 代码
+
+投票算法
+
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int count = 0, result = 0;
+        for (int num : nums) {
+            if (count == 0) {
+                result = num;
+                count++;
+            } else if (result == num) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+        return result;
+    }
+}
+```
+
+位操作
+
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int result = 0, n = nums.length;
+        for (int i = 0; i < 32; i++) {
+            int ones = 0, zeros = 0;
+            for (int num : nums) {
+                if (ones > n / 2 || zeros > n / 2) break;
+                if ((num & (1 << i)) != 0) {
+                    ones++;
+                } else {
+                    zeros++;
+                }
+            }
+            if (ones > zeros) result |= (1 << i);
+        }
+        return result;
+    }
+}
+```
 
 ## **283 Move Zeroes** 
 
