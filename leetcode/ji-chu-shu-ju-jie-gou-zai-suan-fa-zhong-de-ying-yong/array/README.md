@@ -338,13 +338,46 @@ class Solution {
 
 ### 原题概述
 
+Given an array `nums`, write a function to move all `0`'s to the end of it while maintaining the relative order of the non-zero elements.
+
+**Example:**
+
+```text
+Input: [0,1,0,3,12]
+Output: [1,3,12,0,0]
+```
+
+**Note**:
+
+1. You must do this **in-place** without making a copy of the array.
+2. Minimize the total number of operations.
+
 ### 题意和分析
 
+给一个数组，把其中的0挪到最后面去，非0元素的相对顺序不能变，不能另外开一个数组；使用两个指针，从0位置开始查，找到不为0的元素后，与另外一个指针交换值，直到末尾。
+
 ### 代码
+
+```java
+class Solution {
+    public void moveZeroes(int[] nums) {
+        for (int left = 0, right = 0; right < nums.length; right++) {
+            if (nums[right] != 0) {//把非0的元素全部换到前面来
+                int temp = nums[right];
+                nums[right] = nums[left];
+                nums[left] = temp;
+                left++;//挪动指针从非0元素到下一位
+            }
+        }
+    }
+}
+```
 
 ## **238 Product of Array Except Self** 
 
 ### 原题概述
+
+
 
 ### 题意和分析
 
