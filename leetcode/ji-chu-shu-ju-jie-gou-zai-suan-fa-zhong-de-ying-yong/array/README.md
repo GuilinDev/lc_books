@@ -203,6 +203,53 @@ class Solution {
 }
 ```
 
+## **121 Best Time to Buy and Sell Stock**
+
+### 原题概述
+
+Say you have an array for which the _i_th element is the price of a given stock on day _i_.
+
+If you were only permitted to complete at most one transaction \(i.e., buy one and sell one share of the stock\), design an algorithm to find the maximum profit.
+
+Note that you cannot sell a stock before you buy one.
+
+**Example 1:**
+
+```text
+Input: [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+             Not 7-1 = 6, as selling price needs to be larger than buying price.
+```
+
+**Example 2:**
+
+```text
+Input: [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e. max profit = 0.
+```
+
+### 题意和分析
+
+数组代表股票的价格，只能买一次，求最大利润。这是比较简单的动态规划的思想，只需遍历数组，找到其中局部最小值，然后让其后面的元素和前面的局部最小值比较就可以知道最大利润。
+
+### 代码
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int minBuy = Integer.MAX_VALUE, maxProfit = 0;
+        for (int price : prices) {
+            minBuy = Math.min(minBuy, price);//找到子问题中最小的buy的价格
+            maxProfit = Math.max(maxProfit, price - minBuy);//找到最小buy价格下最大的利润
+        }
+
+        return maxProfit;
+    }
+}
+```
+
 ## **122 Best Time to Buy and Sell Stock II** 
 
 ### 原题概述
@@ -242,7 +289,23 @@ Explanation: In this case, no transaction is done, i.e. max profit = 0.
 
 ### 题意和分析
 
+这道题跟121 Best Time to Buy and Sell Stock相比，可以无限购买，那就从第二天开始算，如果当前的股票价格高于前一日的话，就把差额利润算入到结果当中，如果后面的值更高，那继续把利润加入；虽然例子中说了不能卖了再买，但是如上算法的利润是一样的，所以只需遍历数组，然后把每个数和它后面的数进行比较即可。
+
 ### 代码
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int result = 0;
+        for (int i = 0; i < prices.length - 1; i++) {//到倒数第二个数为止
+            if (prices[i] < prices[i+1]) {
+                result += prices[i+1] - prices[i];
+            }
+        }
+        return result;
+    }
+}
+```
 
 ## **169 Majority Element** 
 
