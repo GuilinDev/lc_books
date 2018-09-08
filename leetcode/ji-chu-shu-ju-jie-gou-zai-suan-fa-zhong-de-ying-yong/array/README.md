@@ -121,13 +121,68 @@ class Solution {
 
 ### 原题概述
 
+Given n non-negative integers a1, a2, ..., an , where each represents a point at coordinate \(i, ai\). n vertical lines are drawn such that the two endpoints of line i is at \(i, ai\) and \(i, 0\). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+**Note:** You may not slant the container and n is at least 2.
+
+![](https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/17/question_11.jpg)
+
+The above vertical lines are represented by array \[1,8,6,2,5,4,8,3,7\]. In this case, the max area of water \(blue section\) the container can contain is 49.
+
+**Example:**
+
+```text
+Input: [1,8,6,2,5,4,8,3,7]
+Output: 49
+```
+
 ### 题意和分析
 
+跟42 Trapping Rain Water类似，略简单一点，只需要用双指针指向头尾，然后往中间走计算装雨水的面积即可，移动的办法是挪动较矮的线的index以防错过最大值，计算面积的方法是找到两条线中较矮的那条，乘以两条线的距离。
+
 ### 代码
+
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int result = 0, left = 0, right = height.length - 1;
+
+        while (left < right) {
+            result = Math.max(result, Math.min(height[left], height[right]) * (right - left));
+
+            //移动较矮的那条线的index
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return result;
+    }
+}
+```
 
 ## **561 Array Partition I** 
 
 ### 原题概述
+
+Given an array of **2n** integers, your task is to group these integers into **n** pairs of integer, say \(a1, b1\), \(a2, b2\), ..., \(an, bn\) which makes sum of min\(ai, bi\) for all i from 1 to n as large as possible.
+
+**Example 1:**  
+
+
+```text
+Input: [1,4,3,2]
+
+Output: 4
+Explanation: n is 2, and the maximum sum of pairs is 4 = min(1, 2) + min(3, 4).
+```
+
+**Note:**  
+
+
+1. **n** is a positive integer, which is in the range of \[1, 10000\].
+2. All the integers in the array will be in the range of \[-10000, 10000\].
 
 ### 题意和分析
 
