@@ -377,11 +377,80 @@ class Solution {
 
 ### 原题概述
 
+Given an array `nums` of _n_ integers where _n_ &gt; 1,  return an array `output` such that `output[i]` is equal to the product of all the elements of `nums` except `nums[i]`.
 
+**Example:**
+
+```text
+Input:  [1,2,3,4]
+Output: [24,12,8,6]
+```
+
+**Note:** Please solve it **without division** and in O\(_n_\).
+
+**Follow up:**  
+Could you solve it with constant space complexity? \(The output array **does not** count as extra space for the purpose of space complexity analysis.\)
 
 ### 题意和分析
 
+给一个数组，让返回一个新数组，对于每一个位置上的数是其他位置上数的乘积，并且限定了时间复杂度O\(n\)，不让用除法。对于数组中的某个元素，如果知道该数前面所有数的乘积，也知道该数后面所有数的乘积，二者相乘就是对该数的结果；根据这一点，可以先遍历数组两遍，第一次遍历算出针对第i个元素前面所有元素的乘积，第二次遍历算出针对第i个元素后面所有元素的乘积；然后第三次遍历分别相乘即可；
+
+可以对空间进行优化，无需单独的数组来保存乘积，而是直接累积到result中，第一次遍历，将所有i元素前面的乘积的累积存入result数组中，然后从后面开始遍历，用一个临时变量back来存储后面的乘积，初始化为1，然后每次不断累积，将back的值乘入到相对应的result数组的位置上。
+
 ### 代码
+
+用数组来保存乘积
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int len = nums.length;
+        int[] front = new int[len], back = new int[len], result = new int[len];
+        //初始化乘积为1
+        front[0] = 1;
+        back[len - 1] = 1;
+        //计算i元素前面所有元素的乘积
+        for (int i = 1; i < len; i++) {
+            front[i] = front[i - 1] * nums[i - 1];
+        }
+        //计算i元素后面所有元素的乘积
+        for (int i = len - 2; i >= 0; i--) {
+            back[i] = back[i + 1] * nums[i + 1];
+        }
+
+        //二者相乘
+        for (int i = 0; i < len; i++) {
+            result[i] = front[i] * back[i];
+        }
+        return result;
+    }
+}
+```
+
+优化空间
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int len = nums.length, back = 1;
+        int[] result = new int[len];
+
+        //第一次遍历计算所有i元素前面的乘积
+        result[0] = 1;//初始化为1，因为第二次遍历会乘过来
+        for (int i = 1; i < len; i++) {
+            result[i] = result[i - 1] * nums[i - 1];
+        }
+
+        //第二次遍历从后面开始计算，逐渐累积
+        for (int i = len - 1; i >= 0; i--) {
+            result[i] *= back;
+            back *= nums[i];
+        }
+
+        return result;
+    }
+}
+```
 
 ## **217 Contains Duplicate** 
 
