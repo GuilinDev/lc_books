@@ -456,6 +456,57 @@ class Solution {
 
 ### 原题概述
 
+Given an array of integers, find if the array contains any duplicates.
+
+Your function should return true if any value appears at least twice in the array, and it should return false if every element is distinct.
+
+**Example 1:**
+
+```text
+Input: [1,2,3,1]
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input: [1,2,3,4]
+Output: false
+```
+
+**Example 3:**
+
+```text
+Input: [1,1,1,3,3,4,3,2,4,2]
+Output: true
+```
+
+### 题意和分析
+
+判断数组是否包含有任意元素的重复元素，如果包含返回true；可以先排序然后比较相邻元素，也可以使用HashMap来检查，如果元素不存在，放入HashMap中，如果存在，返回false。要时间还是要空间。
+
+### 代码
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            if (map.containsKey(num)) {
+                return true;
+            } else {
+                map.put(num, 1);
+            }
+        }
+        return false;
+    }
+}
+```
+
+## **219 Contains Duplicate II**
+
+## 原题概述
+
 ### 题意和分析
 
 ### 代码
@@ -468,11 +519,5 @@ class Solution {
 
 ### 代码
 
-## **219 Contains Duplicate II**
-
-## 原题概述
-
-### 题意和分析
-
-### 代码 
+##  
 
