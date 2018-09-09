@@ -656,7 +656,7 @@ class Solution {
 
 ## **219 Contains Duplicate II**
 
-## 原题概述
+### 原题概述
 
 Given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that **nums\[i\] = nums\[j\]** and the **absolute** difference between i and j is at most k.
 
@@ -683,7 +683,170 @@ Output: false
 
 ### 题意和分析
 
+第217 Contains Duplicate的延伸，加了个条件检查重复元素的索引是否超过k，没超过就返回true，同样用HashMap来存，k-v分别是元素的值和索引，检查重复的时候加一个检查条件即可。
 
+### 代码
 
-### 代码 
+```java
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i]) && i - map.get(nums[i]) <= k) {
+                return true;
+            }
+            map.put(nums[i], i);
+        }
+        return false;
+    }
+}
+```
+
+也可以用HashSet添加值会有一个boolean的返回值的特性来做
+
+```java
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (i > k)set.remove(nums[i - k - 1]);//最多k个元素，超过k个元素就从头开始删除
+            if (!set.add(nums[i])) return true;//加不进去了，说明距离比k小
+        }
+        return false;
+    }
+}
+```
+
+## **41 First Missing Positive**
+
+### **原题概述**
+
+Given an unsorted integer array, find the smallest missing positive integer.
+
+**Example 1:**
+
+```text
+Input: [1,2,0]
+Output: 3
+```
+
+**Example 2:**
+
+```text
+Input: [3,4,-1,1]
+Output: 2
+```
+
+**Example 3:**
+
+```text
+Input: [7,8,9,11,12]
+Output: 1
+```
+
+**Note:**
+
+Your algorithm should run in _O_\(_n_\) time and uses constant extra space.
+
+### **题意和分析**
+
+### **代码**
+
+## **128 Longest Consecutive Sequence** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **54 Spiral Matrix** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **229 Majority Element II** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **228 Summary Ranges** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **31 Next Permutation** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **448 Find All Numbers Disappeared in an Array** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **287 Find the Duplicate Number** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **189 Rotate Array** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **79 Word Search** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **73 Set Matrix Zeroes**
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **289 Game of Life** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **695 Max Area of Island** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+###  
 
