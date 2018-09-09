@@ -503,21 +503,88 @@ class Solution {
 }
 ```
 
-## **219 Contains Duplicate II**
-
-## 原题概述
-
-### 题意和分析
-
-### 代码
-
 ## **48 Rotate Image** 
 
 ### 原题概述
 
+You are given an _n_ x _n_ 2D matrix representing an image.
+
+Rotate the image by 90 degrees \(clockwise\).
+
+**Note:**
+
+You have to rotate the image [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm), which means you have to modify the input 2D matrix directly. **DO NOT** allocate another 2D matrix and do the rotation.
+
+**Example 1:**
+
+```text
+Given input matrix = 
+[
+  [1,2,3],
+  [4,5,6],
+  [7,8,9]
+],
+
+rotate the input matrix in-place such that it becomes:
+[
+  [7,4,1],
+  [8,5,2],
+  [9,6,3]
+]
+```
+
+**Example 2:**
+
+```text
+Given input matrix =
+[
+  [ 5, 1, 9,11],
+  [ 2, 4, 8,10],
+  [13, 3, 6, 7],
+  [15,14,12,16]
+], 
+
+rotate the input matrix in-place such that it becomes:
+[
+  [15,13, 2, 5],
+  [14, 3, 4, 1],
+  [12, 6, 8, 9],
+  [16, 7,10,11]
+]
+```
+
 ### 题意和分析
 
 ### 代码
 
-##  
+## **219 Contains Duplicate II**
+
+## 原题概述
+
+Given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that **nums\[i\] = nums\[j\]** and the **absolute** difference between i and j is at most k.
+
+**Example 1:**
+
+```text
+Input: nums = [1,2,3,1], k = 3
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input: nums = [1,0,1,1], k = 1
+Output: true
+```
+
+**Example 3:**
+
+```text
+Input: nums = [1,2,3,1,2,3], k = 2
+Output: false
+```
+
+### 题意和分析
+
+### 代码 
 
