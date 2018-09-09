@@ -555,7 +555,104 @@ rotate the input matrix in-place such that it becomes:
 
 ### 题意和分析
 
+计算机里图片的本质是矩阵，旋转矩阵即是旋转图片，有很多方法可以旋转矩阵，我自己比较好理解的两种办法是：
+
+1）首先对原数组取其转置矩阵（行列互换），然后把每行的数字翻转可得到结果，如下所示\(其中蓝色数字表示翻转轴\)：
+
+1  2  3　　　 　　 1  4  7　　　　　  7  4  1
+
+4  5  6　　--&gt;　　 2  5  8　　 --&gt;  　  8  5  2　　
+
+7  8  9 　　　 　　3  6  9　　　　      9  6  3
+
+2）首先以从对角线为轴翻转，然后再以x轴中线上下翻转即可得到结果：
+
+1  2  3　　　 　　 9  6  3　　　　　  7  4  1
+
+4  5  6　　--&gt;　　 8  5  2　　 --&gt;   　 8  5  2　　
+
+7  8  9 　　　 　　7  4  1　　　　　  9  6  3
+
+3）每次循环换四个数字：
+
+1  2  3                 7  2  1                  7  4  1
+
+4  5  6      --&gt;      4  5  6　　 --&gt;  　 8  5  2　　
+
+7  8  9                 9  8  3　　　　　 9  6  3
+
 ### 代码
+
+转置矩阵的办法
+
+```java
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {//j = i不用重复转置
+                //转换为转置矩阵transport matrix
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        //逐行将元素翻转
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n/2; j++) {//注意这里是j < n/2，没有=
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[i][n - j - 1];
+                matrix[i][n - j - 1] = temp;
+            }
+        }
+    }
+}
+```
+
+对角线翻转的办法
+
+```java
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        //以对角线为轴翻转
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[n - 1 - j][n - 1 - i];
+                matrix[n - 1 - j][n - 1 - i] = temp;
+            }
+        }
+        //以x轴中线上下翻转
+        for (int i = 0; i < n / 2; i++) {
+            for (int j = 0; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[n - 1 - i][j];
+                matrix[n - 1 - i][j] = temp;
+            }
+        }
+    }
+}
+```
+
+直接旋转
+
+```java
+class Solution {
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n / 2; i++) {
+            for (int j = i; j < n - 1 - i; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[n - 1 - j][i];
+                matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j];
+                matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
+                matrix[j][n - 1 - i] = temp;
+            }
+        }
+    }
+}
+```
 
 ## **219 Contains Duplicate II**
 
@@ -585,6 +682,8 @@ Output: false
 ```
 
 ### 题意和分析
+
+
 
 ### 代码 
 
