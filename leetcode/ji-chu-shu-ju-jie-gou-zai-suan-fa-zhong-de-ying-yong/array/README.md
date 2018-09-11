@@ -750,7 +750,31 @@ Your algorithm should run in _O_\(_n_\) time and uses constant extra space.
 
 ### **题意和分析**
 
+给一个数组，返回第一个缺失的正数，要求线性时间复杂度O\(n\)和常量空间O\(1\)，因此一般的排序方法是不能用的，另外用空间也有要求所以利用额外空间例如HashMap和HashSet也不能用了；只能in-place来做，遍历数组，把1放到nums\[0\]处，把2放到nums\[1\]处，如果nums\[i\] &gt; 0（**负数和0不用管**），同时nums\[i\]为整数且不大于n（**因为缺失的第一个正数值最大就是数组的长度n，不可能超过**），同时nums\[i\]不等于nums\[nums\[i\] - 1\]的话（**桶排序的思想，对应的数字应该放在对应的位置上**），则交换nums\[i\]和nums\[nums\[i\] - 1\]的位置；然后再遍历一遍，遇到nums\[i\] != i + 1即为第一个缺失的正数。
+
 ### **代码**
+
+```java
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        if (nums == null || nums.length == 0) return 1;
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            while (nums[i] > 0 && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
+                int temp = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = temp;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != i + 1) return i + 1;
+        }
+
+        //从1开始连续出现
+        return n + 1;
+    }
+}
+```
 
 ## **128 Longest Consecutive Sequence** 
 
