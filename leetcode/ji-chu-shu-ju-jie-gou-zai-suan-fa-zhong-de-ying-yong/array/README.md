@@ -780,9 +780,82 @@ class Solution {
 
 ### **原题概述**
 
+Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+Your algorithm should run in O\(_n_\) complexity.
+
+**Example:**
+
+```text
+Input: [100, 4, 200, 1, 3, 2]
+Output: 4
+Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+```
+
 ### **题意和分析**
 
+没有排序的数组里面寻找最长的子序列，要求时间复杂度是O\(n\)，没有空间复杂度的要求，于是可以用一个HashSet，把数组里面所有的元素放入到set里面，然后遍历数组，对每个元素都进行移除操作，同时用两个指针prev和next求出当前元素的构成连续数列的前面和后面一个数，继续检查prev和next是否在set中存在，如果存在就继续移除，最后用next - prev - 1（因为两个指针指向的元素在set中不存在的时候才停止移除，所以有-1），对每个元素都进行这样的操作后求出连续序列最大的。
+
+ 也可以采用HashMap来做，刚开始map为空，然后遍历所有数组中的元素，如果该数字不在map中，那么分别检查前后两个数字是否在map中，如果在，则返回其哈希表中映射值，若不在，则返回0，将prev+next+1作为当前数字的映射，并更新result结果，然后更新num-left和num-right的映射值。
+
 ### **代码**
+
+HashSet
+
+```java
+class Solution {
+   public int longestConsecutive(int[] nums) {
+      if (nums == null || nums.length == 0) return 0;
+
+      HashSet<Integer> set = new HashSet<>();
+      int result = 0;
+
+      //将数组里的所有元素放到HashSet里面
+      for (int num : nums) set.add(num);
+
+      for (int num : nums) {
+         if (set.remove(num)) {//Java的remove方法是有返回值的，同样add也有
+            int prev = num - 1, next = num + 1;
+            while (set.remove(prev)) prev--;
+            while (set.remove(next)) next++;
+
+            result = Math.max(result, next - prev - 1);
+         }
+      }
+      return result;
+   }
+}
+```
+
+HashMap
+
+```java
+class Solution {
+   public int longestConsecutive(int[] nums) {
+      if (nums == null || nums.length == 0) return 0;
+
+      HashMap<Integer, Integer> map = new HashMap<>();
+      int result = 0;
+      for (int num : nums) {
+         if (!map.containsKey(num)) {
+            //注意这里的prev和next是元素在HashMap中的索引值
+            int prev = map.containsKey(num - 1) ? map.get(num - 1) : 0;
+            int next = map.containsKey(num + 1) ? map.get(num + 1) : 0;
+
+            int sum = prev + next + 1;
+            map.put(num, sum);
+
+            result = Math.max(result, sum);
+
+            map.put(num - prev, sum);
+            map.put(num + next, sum);
+         }
+      }
+
+      return result;
+   }
+}
+```
 
 ## **54 Spiral Matrix** 
 
