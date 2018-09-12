@@ -952,9 +952,67 @@ class Solution {
 
 ### **原题概述**
 
+Given an integer array of size n, find all elements that appear more than `⌊ n/3 ⌋` times.
+
+**Note:** The algorithm should run in linear time and in O\(1\) space.
+
+**Example 1:**
+
+```text
+Input: [3,2,3]
+Output: [3]
+```
+
+**Example 2:**
+
+```text
+Input: [1,1,1,3,3,2,2,2]
+Output: [1,2]
+```
+
 ### **题意和分析**
 
+跟169 Major Element相比，这道题是要求返回所出现次数超过1/3的元素，另外还规定了线性时间复杂度和常数时间，所以想利用数据结构来统计不可行；因为是出现次数大于1/3，所以众数最多是两个，最少是没有。做法是两次遍历，第一次遍历找出两个众数作为备选，第二次遍历利用投票方法确认这两个众数是否合格。
+
 ### **代码**
+
+```java
+class Solution {
+   public List<Integer> majorityElement(int[] nums) {
+      List<Integer> result = new ArrayList<>();
+      if (nums == null || nums.length == 0) return result;
+      int candidate1 = 0, candidate2 = 0, count1 = 0, count2 = 0;
+      for (int num : nums) {//利用投票法则，至少有两个数的出现次数是多于其它数的
+         if (num == candidate1) {
+            count1++;
+         } else if (num == candidate2) {
+            count2++;
+         } else if (count1 == 0) {
+            candidate1 = num;
+            count1 = 1;
+         } else if (count2 == 0) {
+            candidate2 = num;
+            count2 = 1;
+         } else {
+            count1--;
+            count2--;
+         }
+      }
+
+      //重新计算一下两个备选众数的实际出现次数，看是否超过1/3
+      count1 = 0;
+      count2 = 0;
+      for (int num : nums) {
+         if (num == candidate1) count1++;
+         else if (num == candidate2) count2++;
+      }
+      if (count1 > nums.length/3) result.add(candidate1);
+      if (count2 > nums.length/3) result.add(candidate2);
+
+      return result;
+   }
+}
+```
 
 ## **31 Next Permutation** 
 
