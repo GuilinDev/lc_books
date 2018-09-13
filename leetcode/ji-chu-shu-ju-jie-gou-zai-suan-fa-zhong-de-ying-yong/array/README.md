@@ -944,14 +944,6 @@ class Solution {
 
 ### **原题概述**
 
-### **题意和分析**
-
-### **代码**
-
-## **228 Summary Ranges** 
-
-### **原题概述**
-
 Given an integer array of size n, find all elements that appear more than `⌊ n/3 ⌋` times.
 
 **Note:** The algorithm should run in linear time and in O\(1\) space.
@@ -1013,6 +1005,14 @@ class Solution {
    }
 }
 ```
+
+## **228 Summary Ranges** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
 
 ## **31 Next Permutation** 
 
