@@ -35,7 +35,7 @@ Time: O\(n\),  Space: O\(n\);
 merge sort 
 1）最坏时间复杂度是 O(nlogn)；
 2）平均时间复杂度是 O(nlogn)；
-3）空间复杂度是 O(1)。
+3）空间复杂度如果用Array实现为O(n),如果用LinkedList来实现为O(logn)。
 quick sort 
 1）最坏时间复杂度是 O(n^2)；
 2）平均时间复杂度是 O(nlogn)；
