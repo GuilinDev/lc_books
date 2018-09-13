@@ -30,11 +30,23 @@ public class SelectionSort {
         arr[j] = temp;
     }
 
+    //测试
     public static void main(String[] args) {
-        int[] arr = {3, 2, 7, 5, 8, 6, 4, 1};
-        SelectionSort.sort(arr);
+        int [] nums = new int[10];
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = (int)(Math.random() * 11);
+        }
 
-        for (int num : arr) {
+        System.out.println("Before Selection Sorting:");
+        for (int num : nums) {
+            System.out.print(num + " ");
+        }
+
+        System.out.println();
+
+        SelectionSort.sort(nums);
+        System.out.println("After Selection Sorting:");
+        for (int num : nums) {
             System.out.print(num + " ");
         }
     }
