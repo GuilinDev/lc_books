@@ -1,8 +1,10 @@
 # 1. 基础算法和算法思想
 
-## 排序算法
+## 基础排序算法
 
 ### 选择排序
+
+针对整型的选择排序
 
 ```java
 public class SelectionSort {
@@ -53,7 +55,13 @@ public class SelectionSort {
 }
 ```
 
+
+
+
+
 ### 插入排序
+
+## 高级排序算法
 
 ## 堆
 
