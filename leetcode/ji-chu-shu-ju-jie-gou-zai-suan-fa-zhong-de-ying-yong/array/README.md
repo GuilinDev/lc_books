@@ -1010,9 +1010,50 @@ class Solution {
 
 ### **原题概述**
 
+Given a sorted integer array without duplicates, return the summary of its ranges.
+
+**Example 1:**
+
+```text
+Input:  [0,1,2,4,5,7]
+Output: ["0->2","4->5","7"]
+Explanation: 0,1,2 form a continuous range; 4,5 form a continuous range.
+```
+
+**Example 2:**
+
+```text
+Input:  [0,2,3,4,6,8,9]
+Output: ["0","2->4","6","8->9"]
+Explanation: 2,3,4 form a continuous range; 8,9 form a continuous range.
+```
+
 ### **题意和分析**
 
+这道题的思路比较简单，从左边找到右边即可，注意判断一下如果是连续的元素就用"-&gt;"，否则就是元素自己，注意下边界就行。
+
 ### **代码**
+
+```java
+class Solution {
+   public List<String> summaryRanges(int[] nums) {
+      List<String> result = new ArrayList<>();
+      int len = nums.length;
+      for (int i = 0; i < len; i++) {
+         int temp = nums[i];
+         while (i + 1 < len && nums[i + 1] - nums[i] == 1) {//是连续元素
+            i++;
+         }
+         if (nums[i] != temp) {//多于一个元素
+            result.add(temp + "->" + nums[i]);
+         } else {//只有当前元素自己
+            result.add(nums[i] + "");
+         }
+      }
+      return result;
+   }
+}
+```
 
 ## **31 Next Permutation** 
 
