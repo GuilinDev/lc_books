@@ -1264,11 +1264,56 @@ Output: 3
 
 n+1长度的数组，找出唯一的那个有重复的数字，可能重复多次，不能修改数组并要求常量空间和小于平方级线型时间复杂度（不能用额外空间来统计出现的次数，不能排序，也不能套两个循环来暴力破解）。
 
-1）二分法，利用数组的元素的值在区间\[1, n\]的特点进行搜索，首先求出中间的索引mid，然后遍历整个数组，统计所有小于等于索引mid的元素的个数，如果元素个数大于mid索引，则说明重复值在\[mid+1, n\]这些索引之间，因为“较小的数比较多”，反之，重复值应在\[1, mid-1\]之间（“较大的数比较多”），然后依次类推，直到搜索完成，此时的low就是我们要求的重复值；
+1）二分查找，利用数组的元素的值在区间\[1, n\]的特点进行搜索，首先求出中间的索引mid，然后遍历整个数组，统计所有小于等于索引mid的元素的个数，如果元素个数大于mid索引，则说明重复值在\[mid+1, n\]这些索引之间，因为“较小的数比较多”，反之，重复值应在\[1, mid-1\]之间（“较大的数比较多”），然后依次类推，直到搜索完成，此时的low就是我们要求的重复值；
 
-2）双指针，数组元素的范围是\[1, n\]
+2）双指针，数组元素的范围是\[1, n\]，利用数组元素和坐标的转换来形成一个闭环，利用快慢指针找到重复的值，参考[这里](http://bookshadow.com/weblog/2015/09/28/leetcode-find-duplicate-number/)[这里](https://leetcode.com/problems/find-the-duplicate-number/discuss/72845/Java-O%28n%29-time-and-O%281%29-space-solution.-Similar-to-find-loop-in-linkedlist.)。
 
 ### **代码**
+
+二分查找
+
+```java
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int low = 1, high = nums.length - 1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            int count = 0;
+            for (int num : nums) {
+                if (num <= mid) {
+                    count++;
+                }
+            }
+            if (count <= mid) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return low;
+    }
+}
+```
+
+双指针
+
+```java
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int len = nums.length, slow = len, fast = len;
+        do {
+            slow = nums[slow - 1];
+            fast = nums[nums[fast-1] - 1];
+        } while (slow != fast);
+        slow = len;
+        while (slow != fast) {
+            slow = nums[slow - 1];
+            fast = nums[fast - 1];
+        }
+        return slow;
+    }
+}
+```
 
 ## **189 Rotate Array** 
 
