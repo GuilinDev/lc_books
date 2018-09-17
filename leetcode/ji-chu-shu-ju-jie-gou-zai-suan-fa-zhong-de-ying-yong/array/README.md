@@ -1141,17 +1141,132 @@ Output:
 
 1） 第一遍循环，对于每个数字nums\[i\]，我们认为nums\[nums\[i\] - 1\]是其对应的数，如果这个对应的数是正数，将其赋值为负数，如果已经是负数，就不变；可以想象，如果某些数1 ≤ a\[i\] ≤ n 缺失了，那么它们对应的索引处的整数就不会被改变成负数，然后第二遍循环我们就找出剩余的正数，返回这些正数所对应的索引值，就是原本数组中缺少的数字；
 
-2）第一遍循环，将nums\[i\]交换到其对应的位置索引nums\[nums\[i\]-1\]上去，比如题目给的例子例子，如果没有缺失的数你那正确的顺序应该是\[1, 2, 3, 4, 5, 6, 7, 8\]，现在是\[4, 3 ,2 ,7 ,8 ,2 ,3 ,1\]，于是把数字移动到正确的位置上去，比如第一个4（nums\[0\]）就应该和7（nums\[4-1\] = nums\[3\]）逐个交换个位置，有点选择排序的思想，最后得到的顺序是\[1, 2, 3, 4, 3, 2, 7, 8\]，最后在对应位置检验，如果nums\[i\]和i+1不等，那么将i+1存入结果中即可;
+2）第一遍循环，将nums\[i\]交换到其对应的位置索引nums\[nums\[i\]-1\]上去，比如题目给的例子例子，如果没有缺失的数你那正确的顺序应该是\[1, 2, 3, 4, 5, 6, 7, 8\]，现在是\[4, 3 ,2 ,7 ,8 ,2 ,3 ,1\]，于是把数字移动到正确的位置上去，比如第一个4（nums\[0\]）就应该和7（nums\[4-1\] = nums\[3\]）逐个交换个位置，有点选择排序的思想，最后得到的顺序是\[1, 2, 3, 4, 3, 2, 7, 8\]，最后在对应位置检查，如果nums\[i\]和i+1不等，那么将i+1存入结果中即可;
 
-3）
+3）对于\[4, 3 ,2 ,7 ,8 ,2 ,3 ,1\]，在nums\[nums\[i\]-1\]位置累加数组长度len，\(nums\[i\]-1有可能越界，所以需要对len取余\)，最后要找出缺失的数只需要看nums\[i\]的值是否小于等于len即可，最后遍历完nums\[i\]数组为\[12, 19, 18, 15, 8, 2, 11, 9\]，我们发现有两个数字8和2小于等于len，那么就可以通过i+1来得到正确的结果5和6了;
 
 ### **代码**
+
+正负数来标记
+
+```java
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> result = new ArrayList();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        int len = nums.length;
+
+        //先把元素对应的索引处改为负数
+        for (int i = 0; i < len; i++) {
+            int index = Math.abs(nums[i]) - 1;
+            nums[index] = (nums[index] > 0) ? -nums[index] : nums[index];
+        }
+
+        //找到目前剩余的正数，返回索引值
+        for (int i = 0; i < len; i++) {
+            if (nums[i] > 0) {
+                result.add(i + 1);
+            }
+        }
+        return result;
+    }
+}
+```
+
+交换索引和数字
+
+```java
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> result = new ArrayList();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        int len = nums.length;
+
+        for (int i = 0; i < len; i++) {
+            if (nums[i] != nums[nums[i] - 1]) {//相等则说明刚才已经交换过了
+                swap (nums, i, nums[i] - 1);//将i位置的元素和nums[i] - 1处的元素进行交换，放在合适的位置
+                i--;//交换后需要在当前位置停留一下检查当前元素的交换位置
+            }
+        }
+
+        for (int i = 0; i < len; i++) {
+            if (nums[i] != i + 1) {
+                result.add(i + 1);
+            }
+        }
+        return result;
+    }
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
+累加数组长度
+
+```java
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> result = new ArrayList();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        int len = nums.length;
+
+        for (int i = 0; i < len; i++) {
+            nums[(nums[i] - 1) % len] += len;
+        }
+
+        for (int i = 0; i < len; i++) {
+            if (nums[i] <= len) {
+                result.add(i + 1);
+            }
+        }
+        return result;
+    }
+}
+```
 
 ## **287 Find the Duplicate Number** 
 
 ### **原题概述**
 
+Given an array nums containing n + 1 integers where each integer is between 1 and n \(inclusive\), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
+
+**Example 1:**
+
+```text
+Input: [1,3,4,2,2]
+Output: 2
+```
+
+**Example 2:**
+
+```text
+Input: [3,1,3,4,2]
+Output: 3
+```
+
+**Note:**
+
+1. You **must not** modify the array \(assume the array is read only\).
+2. You must use only constant, O\(1\) extra space.
+3. Your runtime complexity should be less than _O_\(_n_2\).
+4. There is only one duplicate number in the array, but it could be repeated more than once.
+
 ### **题意和分析**
+
+n+1长度的数组，找出唯一的那个有重复的数字，可能重复多次，不能修改数组并要求常量空间和小于平方级线型时间复杂度（不能用额外空间来统计出现的次数，不能排序，也不能套两个循环来暴力破解）。
+
+1）二分法，利用数组的元素的值在区间\[1, n\]的特点进行搜索，首先求出中间的索引mid，然后遍历整个数组，统计所有小于等于索引mid的元素的个数，如果元素个数大于mid索引，则说明重复值在\[mid+1, n\]这些索引之间，因为“较小的数比较多”，反之，重复值应在\[1, mid-1\]之间（“较大的数比较多”），然后依次类推，直到搜索完成，此时的low就是我们要求的重复值；
+
+2）双指针，数组元素的范围是\[1, n\]
 
 ### **代码**
 
