@@ -2,6 +2,8 @@
 
 ## 基础排序算法
 
+![](../.gitbook/assets/image%20%2823%29.png)
+
 ### 选择排序
 
 针对整型的选择排序
@@ -62,6 +64,10 @@ public class SelectionSort {
 ### 插入排序
 
 ## 高级排序算法
+
+![](../.gitbook/assets/image%20%2818%29.png)
+
+
 
 ## 堆
 

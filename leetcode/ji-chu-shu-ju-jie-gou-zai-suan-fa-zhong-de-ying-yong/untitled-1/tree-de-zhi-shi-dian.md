@@ -30,7 +30,7 @@ many levels of additional nodes that form a hierarchy.
 
 例如：
 
-![](../../../.gitbook/assets/image%20%2825%29.png)
+![](../../../.gitbook/assets/image%20%2827%29.png)
 
 ```text
 A simple unordered tree; in this diagram, the node labeled 7 has two children, 
