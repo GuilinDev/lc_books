@@ -1,8 +1,33 @@
 # LeetCode刷题
 
-题目索引
+## 算法思维导图
 
-| \# | Title | 难度 | Frequency | Time | Tags |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | Two Sum | Easy | 5 | O\(n\) | ArrayHashTable |
+![](../.gitbook/assets/suan-fa-si-wei-dao-tu.png)
 
+## 题目索引
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align:left">#</th>
+      <th style="text-align:left">Title</th>
+      <th style="text-align:left">难度</th>
+      <th style="text-align:left">Frequency</th>
+      <th style="text-align:left">Time</th>
+      <th style="text-align:left">Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align:left">1</td>
+      <td style="text-align:left">Two Sum</td>
+      <td style="text-align:left">Easy</td>
+      <td style="text-align:left">5</td>
+      <td style="text-align:left">O(n)</td>
+      <td style="text-align:left">
+        <p>Array</p>
+        <p>HashTable</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
