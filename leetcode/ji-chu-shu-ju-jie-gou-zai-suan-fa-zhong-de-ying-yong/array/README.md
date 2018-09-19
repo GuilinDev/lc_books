@@ -1319,9 +1319,63 @@ class Solution {
 
 ### **原题概述**
 
+Given an array, rotate the array to the right by _k_ steps, where _k_ is non-negative.
+
+**Example 1:**
+
+```text
+Input: [1,2,3,4,5,6,7] and k = 3
+Output: [5,6,7,1,2,3,4]
+Explanation:
+rotate 1 steps to the right: [7,1,2,3,4,5,6]
+rotate 2 steps to the right: [6,7,1,2,3,4,5]
+rotate 3 steps to the right: [5,6,7,1,2,3,4]
+```
+
+**Example 2:**
+
+```text
+Input: [-1,-100,3,99] and k = 2
+Output: [3,99,-1,-100]
+Explanation: 
+rotate 1 steps to the right: [99,-1,-100,3]
+rotate 2 steps to the right: [3,99,-1,-100]
+```
+
 ### **题意和分析**
 
+翻转数组右边部分k个元素，如果可以用辅助数组，就直接  \(i+k\)%n来映射就行了，但是要求空间为常量，并且至少有三种方法可以来做：1）用多个辅助变量来记录数组元素；2） 先翻转整个数组，再翻转前k个数字，最后翻转后len - k个数字；3）不停交换两个数字，达到翻转的目的。
+
 ### **代码**
+
+这里实现第二种解法
+
+```java
+class Solution {
+    public void rotate(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+
+        k %= nums.length;//k有可能比数组长度长
+
+        int len = nums.length;
+
+        reverse(nums, 0, len - 1);//全部数组翻转一遍
+        reverse(nums, 0, k - 1);//翻转前k个数组元素
+        reverse(nums, k, len - 1);//翻转后面len - k个元素
+    }
+    private void reverse(int[] nums, int left, int right) {
+        while (left < right) {
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            left++;
+            right--;
+        }
+    }
+}
+```
 
 ## **79 Word Search** 
 
