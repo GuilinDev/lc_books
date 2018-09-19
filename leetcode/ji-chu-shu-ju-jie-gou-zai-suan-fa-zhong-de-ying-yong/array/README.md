@@ -1496,9 +1496,120 @@ class Solution {
 
 ### **原题概述**
 
+Given a _m_ x _n_ matrix, if an element is 0, set its entire row and column to 0. Do it [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm).
+
+**Example 1:**
+
+```text
+Input: 
+[
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
+]
+Output: 
+[
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]
+```
+
+**Example 2:**
+
+```text
+Input: 
+[
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
+]
+Output: 
+[
+  [0,0,0,0],
+  [0,4,5,0],
+  [0,3,1,0]
+]
+```
+
+**Follow up:**
+
+* A straight forward solution using O\(_mn_\) space is probably a bad idea.
+* A simple improvement uses O\(_m_ + _n_\) space, but still not the best solution.
+* Could you devise a constant space solution?
+
 ### **题意和分析**
 
+给一个矩阵，如果某个元素为0，就将该元素所在的行和列上的元素都改为0，额外空间O\(_mn_\)的解法的当然是复制一下矩阵，然后暴力按行扫，只要有0就把该行全部变成0，然后再按照列来扫，如果该列有0则把列上所有元素变成0；空间复杂度为O\(_m_ + _n_\)的做法则是，创建两个一维数组，一个用来记录哪些行有0，另一个用来记录哪些列有0，然后分别修改行和列的元素；
+
+要求是用O\(1\)的空间，所以可以用原数组的第一行第一列来记录各行各列是否有0：
+
+1）先扫描第一行第一列，如果有0，则将各自的flag设置为true；  
+2）然后扫描除去第一行第一列的整个数组，如果有0，则将对应的第一行和第一列的数字赋0；  
+3）再次遍历除去第一行第一列的整个数组，如果对应的第一行和第一列的数字有一个为0，则将当前值赋0；  
+4） 最后根据第一行第一列的flag情况来更新第一行和第一列的元素；
+
 ### **代码**
+
+```java
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return;
+        }
+
+        //记录第一行和第一列是否有0的flag
+        boolean rowZero = false, colZero = false;
+
+        int m = matrix.length, n = matrix[0].length;
+
+        //首先扫描第一行和第一列
+        for (int i = 0; i < n; i++) {
+            if (matrix[0][i] == 0) {
+                rowZero = true;
+                break;
+            }
+        }
+        for (int j = 0; j < m; j++) {
+            if (matrix[j][0] == 0) {
+                colZero = true;
+                break;
+            }
+        }
+
+        //遍历除第一行和第一列的行列，把是否有0的结果分别记录在第一行和第一列
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+
+        //遍历除第一行和第一列的行列，如果第一行和第一列有0，则将该行列均改为0
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        //最后修改第一行和第一列的元素
+        if (rowZero) {
+            for (int i = 0; i < n; i++) {
+                matrix[0][i] = 0;
+            }
+        }
+        if (colZero) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
+```
 
 ## **289 Game of Life** 
 
