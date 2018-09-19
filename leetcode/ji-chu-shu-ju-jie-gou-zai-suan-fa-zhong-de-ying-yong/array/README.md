@@ -1615,11 +1615,93 @@ class Solution {
 
 ### **原题概述**
 
+According to the [Wikipedia's article](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life): "The **Game of Life**, also known simply as **Life**, is a cellular automaton devised by the British mathematician John Horton Conway in 1970."
+
+Given a board with m by n cells, each cell has an initial state live \(1\) or dead \(0\). Each cell interacts with its [eight neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood) \(horizontal, vertical, diagonal\) using the following four rules \(taken from the above Wikipedia article\):
+
+1. Any live cell with fewer than two live neighbors dies, as if caused by under-population.
+2. Any live cell with two or three live neighbors lives on to the next generation.
+3. Any live cell with more than three live neighbors dies, as if by over-population..
+4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+
+Write a function to compute the next state \(after one update\) of the board given its current state. The next state is created by applying the above rules simultaneously to every cell in the current state, where births and deaths occur simultaneously.
+
+**Example:**
+
+```text
+Input: 
+[
+  [0,1,0],
+  [0,0,1],
+  [1,1,1],
+  [0,0,0]
+]
+Output: 
+[
+  [0,0,0],
+  [1,0,1],
+  [0,1,1],
+  [0,1,0]
+]
+```
+
+**Follow up**:
+
+1. Could you solve it in-place? Remember that the board needs to be updated at the same time: You cannot update some cells first and then use their updated values to update other cells.
+2. In this question, we represent the board using a 2D array. In principle, the board is infinite, which would cause problems when the active area encroaches the border of the array. How would you address these problems?
+
 ### **题意和分析**
+
+\*\*\*\*
 
 ### **代码**
 
+\*\*\*\*
+
 ## **695 Max Area of Island** 
+
+### **原题概述**
+
+Given a non-empty 2D array `grid` of 0's and 1's, an **island** is a group of `1`'s \(representing land\) connected 4-directionally \(horizontal or vertical.\) You may assume all four edges of the grid are surrounded by water.
+
+Find the maximum area of an island in the given 2D array. \(If there is no island, the maximum area is 0.\)
+
+**Example 1:**  
+
+
+```text
+[[0,0,1,0,0,0,0,1,0,0,0,0,0],
+ [0,0,0,0,0,0,0,1,1,1,0,0,0],
+ [0,1,1,0,1,0,0,0,0,0,0,0,0],
+ [0,1,0,0,1,1,0,0,1,0,1,0,0],
+ [0,1,0,0,1,1,0,0,1,1,1,0,0],
+ [0,0,0,0,0,0,0,0,0,0,1,0,0],
+ [0,0,0,0,0,0,0,1,1,1,0,0,0],
+ [0,0,0,0,0,0,0,1,1,0,0,0,0]]
+```
+
+Given the above grid, return `6`. Note the answer is not 11, because the island must be connected 4-directionally.
+
+**Example 2:**  
+
+
+```text
+[[0,0,0,0,0,0,0,0]]
+```
+
+Given the above grid, return `0`.
+
+**Note:** The length of each dimension in the given `grid` does not exceed 50.
+
+### **题意和分析**
+
+\*\*\*\*
+
+### **代码**
+
+\*\*\*\*
+
+## **39 Combination Sum** 
 
 ### **原题概述**
 
@@ -1627,5 +1709,23 @@ class Solution {
 
 ### **代码**
 
-###  
+###  **62 Unique Paths** 
+
+**697 Degree of an Array** 
+
+**64 Minimum Path Sum** 
+
+**123 Best Time to Buy and Sell Stock III** 
+
+**442 Find All Duplicates in an Array** 
+
+**717 1-bit and 2-bit Characters 49.0% Easy78 Subsets** 
+
+**55 Jump Game** 
+
+**59 Spiral Matrix II** 
+
+**45 Jump Game II** 
+
+**628 Maximum Product of Three Numbers**
 
