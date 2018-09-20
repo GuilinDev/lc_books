@@ -1753,11 +1753,81 @@ Given the above grid, return `0`.
 
 ### **题意和分析**
 
-\*\*\*\*
+典型的DFS，对每个元素，如果是1的话就前后左右调用递归递归，然后比较每个元素的最大值；如果想避免修改原本的数组，可以另外新建一个同等大小的二维数组来记录是否访问过，由于要同时记录多个元素是否被访问过，因此不能像79 Word Search那样优化空间。
 
 ### **代码**
 
-\*\*\*\*
+```java
+class Solution {
+    public int maxAreaOfIsland(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        int m = grid.length, n = grid[0].length;
+        int maxArea = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {//是岛屿的时候才计算
+                    maxArea = Math.max(maxArea, dfs(grid, i, j));
+                }
+            }
+        }
+        return maxArea;
+    }
+
+    private int dfs(int[][] grid, int i, int j) {
+        int m = grid.length, n = grid[0].length;
+        if (i >= 0 && i < m && j >= 0 && j < n && grid[i][j] == 1) {
+            grid[i][j] = 0;//这一步很重要，设为0是为了防止递归过程中对当前元素的重复调用
+            //本身的面积+四个方向可能的面积
+            return 1 + dfs(grid, i + 1, j) + dfs(grid, i - 1, j) + dfs(grid, i, j + 1) + dfs(grid, i, j - 1);
+        }
+        return 0;
+    }
+}
+```
+
+不改变原本的二维数组
+
+```java
+class Solution {
+    public int maxAreaOfIsland(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+
+        int m = grid.length, n = grid[0].length;
+        int maxArea = 0;
+
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                visited[i][j] = false;
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {//是岛屿的时候才计算
+                    maxArea = Math.max(maxArea, dfs(grid, i, j, visited));
+                    visited[i][j] = false;//重设刚才的元素为下一轮检查做准备
+                }
+            }
+        }
+        return maxArea;
+    }
+
+    private int dfs(int[][] grid, int i, int j, boolean[][] visited) {
+        int m = grid.length, n = grid[0].length;
+        if (i >= 0 && i < m && j >= 0 && j < n && grid[i][j] == 1 && !visited[i][j]) {
+            visited[i][j] = true;
+            //本身的面积+四个方向可能的面积
+            return 1 + dfs(grid, i + 1, j, visited) + dfs(grid, i - 1, j, visited) + dfs(grid, i, j + 1, visited) + dfs(grid, i, j - 1, visited);
+        }
+        return 0;
+    }
+}
+```
 
 ## **39 Combination Sum** 
 
