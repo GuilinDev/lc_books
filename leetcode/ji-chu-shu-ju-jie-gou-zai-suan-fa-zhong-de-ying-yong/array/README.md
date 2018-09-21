@@ -1833,9 +1833,72 @@ class Solution {
 
 ### **原题概述**
 
+Given a **set** of candidate numbers \(`candidates`\) **\(without duplicates\)** and a target number \(`target`\), find all unique combinations in `candidates` where the candidate numbers sums to `target`.
+
+The **same** repeated number may be chosen from `candidates` unlimited number of times.
+
+**Note:**
+
+* All numbers \(including `target`\) will be positive integers.
+* The solution set must not contain duplicate combinations.
+
+**Example 1:**
+
+```text
+Input: candidates = [2,3,6,7], target = 7,
+A solution set is:
+[
+  [7],
+  [2,2,3]
+]
+```
+
+**Example 2:**
+
+```text
+Input: candidates = [2,3,5], target = 8,
+A solution set is:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+```
+
 ### **题意和分析**
 
+给一个没有重复元素的数组，找出里面的元素加起来等于target的所有组合，原数组的元素可以利用多次。这种求所有组合的情况通常都是另外写一个方法来做递归求得（[这里是这类型题的总结](https://leetcode.com/problems/combination-sum/discuss/16502/A-general-approach-to-backtracking-questions-in-Java-%28Subsets-Permutations-Combination-Sum-Palindrome-Partitioning%29)）。
+
 ### **代码**
+
+```java
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if (candidates == null || candidates.length == 0) {
+            return result;
+        }
+        List<Integer> oneRecord = new ArrayList<>();
+        Arrays.sort(candidates);
+        backtrack(candidates, target, 0, oneRecord, result);
+        return result;
+    }
+
+    private void backtrack(int[] candidates, int remian, int index, List<Integer> oneRecord, List<List<Integer>> result) {
+        if (remian < 0 ) {//组合不合适
+            return;
+        } else if (remian == 0) {//找到合适的组合
+            result.add(new ArrayList<>(oneRecord));
+        } else {
+            for (int i = index; i < candidates.length; i++) {
+                oneRecord.add(candidates[i]);
+                backtrack(candidates, remian - candidates[i], i, oneRecord, result);
+                oneRecord.remove(oneRecord.size() - 1);//按照索引移除所有元素
+            }
+        }
+    }
+}
+```
 
 ##  **62 Unique Paths** 
 
