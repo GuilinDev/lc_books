@@ -1837,23 +1837,91 @@ class Solution {
 
 ### **代码**
 
-###  **62 Unique Paths** 
+##  **62 Unique Paths** 
 
-**697 Degree of an Array** 
+### **原题概述**
 
-**64 Minimum Path Sum** 
+### **题意和分析**
 
-**123 Best Time to Buy and Sell Stock III** 
+### **代码**
 
-**442 Find All Duplicates in an Array** 
+## **697 Degree of an Array** 
 
-**717 1-bit and 2-bit Characters 49.0% Easy78 Subsets** 
+### **原题概述**
 
-**55 Jump Game** 
+### **题意和分析**
 
-**59 Spiral Matrix II** 
+### **代码**
 
-**45 Jump Game II** 
+## **64 Minimum Path Sum** 
 
-**628 Maximum Product of Three Numbers**
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **123 Best Time to Buy and Sell Stock III** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **442 Find All Duplicates in an Array** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **717 1-bit and 2-bit Characters**
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **78 Subsets** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **55 Jump Game** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **59 Spiral Matrix II** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **45 Jump Game II** 
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
+
+## **628 Maximum Product of Three Numbers**
+
+### **原题概述**
+
+### **题意和分析**
+
+### **代码**
 
