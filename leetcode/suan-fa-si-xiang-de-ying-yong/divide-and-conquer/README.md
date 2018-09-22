@@ -149,6 +149,93 @@ class Solution {
 }
 ```
 
+## 62 - Unique Paths
+
+### 原题概述
+
+A robot is located at the top-left corner of a _m_ x _n_ grid \(marked 'Start' in the diagram below\).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid \(marked 'Finish' in the diagram below\).
+
+How many possible unique paths are there?
+
+![](https://leetcode.com/static/images/problemset/robot_maze.png)  
+Above is a 7 x 3 grid. How many possible unique paths are there?
+
+**Note:** _m_ and _n_ will be at most 100.
+
+**Example 1:**
+
+```text
+Input: m = 3, n = 2
+Output: 3
+Explanation:
+From the top-left corner, there are a total of 3 ways to reach the bottom-right corner:
+1. Right -> Right -> Down
+2. Right -> Down -> Right
+3. Down -> Right -> Right
+```
+
+**Example 2:**
+
+```text
+Input: m = 7, n = 3
+Output: 28
+```
+
+### 题意和分析
+
+要想从start 点到 finish 点，那么，必然经过 h1 或 h2 点，如下图所示：
+
+![enter image description here](http://images.gitbook.cn/aeb1d490-6ddd-11e8-9ab5-a93e1135abc8)
+
+所以，问题转化为：求 start 点到 h1 点，或到 h2 点的路径中的较小者，这相当于将问题域变小了 1，递归下去，直到问题域变为 1 个点。
+
+使用额外的一个二维数组dp，其中dp\[i\]\[j\]表示到当前位置不同的走法的个数，然后可以得到递推式为: dp\[i\]\[j\] = dp\[i - 1\]\[j\] + dp\[i\]\[j - 1\]，另外对于空间复杂度， 每次只需要用到上一行当前列，以及前一列当前行的信息，只需要用一个一维数组存上一行的信息即可，然后扫过来依次更替掉上一行对应列的信息即可，一行一行的刷新，因此可以简化为使用一维数组dp。 时间复杂度是O\(m\*n\)，空间复杂度O\(n\)。
+
+### 代码
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if (m < 0 || n < 0) {
+            return 0;
+        }
+        int[] dp = new int[n];
+        dp[0] = 1;//只记录列
+        for (int i = 0; i < m; i++) {//行从第0行开始
+            for (int j = 1; j < n; j++) {//列从第1列开始
+                dp[j] += dp[j - 1];
+            }
+        }
+        return dp[n - 1];
+    }
+}
+```
+
+这道题也可以用纯粹的数学的方法来解，求出组合数， 从左上到右下相当于机器人总共走了m + n - 2步，其中m - 1步向下走，n - 1步向右走，那么总共不同的方法个数就相当于在步数里面m - 1和n - 1中较小的那个数的取法，时间复杂度O\(min\(m, n\)，空间复杂度O\(1\)。
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if (m < 0 || n < 0) {
+            return 0;
+        }
+        double dom = 1, dedom = 1;
+
+        //找出m和n中的较小值
+        int small = m < n ? m - 1 : n - 1;
+        int big = m < n ? n - 1 : m - 1;
+        //组合公式求出分子和分母
+        for (int i = 1; i <= small; i++) {
+            dedom *= i;
+            dom *= small + big + 1 - i;
+        }
+        return (int)(dom / dedom);
+    }
+}
+```
+
 ## 192 - House Robber
 
 ### 原题概述
