@@ -57,14 +57,6 @@ class Solution {
 }
 ```
 
-## 29 Divide Two Integers
-
-### 原题概述
-
-### 题意和分析
-
-### 代码
-
 ## 287 Find the Duplicate Number 
 
 ### 原题概述
