@@ -2,7 +2,7 @@
 
 ## 基础排序算法
 
-![](../.gitbook/assets/image%20%2823%29.png)
+![](../.gitbook/assets/image%20%2824%29.png)
 
 ### 选择排序
 
@@ -65,7 +65,7 @@ public class SelectionSort {
 
 ## 高级排序算法
 
-![](../.gitbook/assets/image%20%2818%29.png)
+![](../.gitbook/assets/image%20%2819%29.png)
 
 
 
