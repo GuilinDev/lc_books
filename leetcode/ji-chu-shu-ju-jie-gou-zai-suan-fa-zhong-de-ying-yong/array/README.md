@@ -1912,9 +1912,73 @@ class Solution {
 
 ### **原题概述**
 
+\*\*\*\*
+
+Given a non-empty array of non-negative integers `nums`, the **degree** of this array is defined as the maximum frequency of any one of its elements.
+
+Your task is to find the smallest possible length of a \(contiguous\) subarray of `nums`, that has the same degree as `nums`.
+
+**Example 1:**  
+
+
+```text
+Input: [1, 2, 2, 3, 1]
+Output: 2
+Explanation: 
+The input array has a degree of 2 because both elements 1 and 2 appear twice.
+Of the subarrays that have the same degree:
+[1, 2, 2, 3, 1], [1, 2, 2, 3], [2, 2, 3, 1], [1, 2, 2], [2, 2, 3], [2, 2]
+The shortest length is 2. So return 2.
+```
+
+**Example 2:**  
+
+
+```text
+Input: [1,2,2,3,1,4,2]
+Output: 6
+```
+
 ### **题意和分析**
 
+给一个整数数组，规定degree是这个数组的一个或者多个出现次数最多的元素，求出degree一样的最短子数组的长度。比较直观的做法是先用一个HashMap来统计哪些元素属于degree，同时用另外一个HashMap来统计每个元素的初始出现位置和最后出现位置（第一次出现就更新起始位置，接下来只更新结束位置），这样一次遍历后就知道了数组的degree有哪些元素和每个元素的的起始终止位置，把起始和终止位置相减然后+1，就是拥有同样degree的子数组的长度了；由于degree的元素可能有多个，因此根据degree的数值需要遍历所有的degree元素找到最小的子字符串长度。
+
+另外起始可以把两个HashMap合成一个，key是元素，value是数组分别包含三个元素 - 出现次数，起始位置和终止位置。
+
 ### **代码**
+
+```java
+class Solution {
+    public int findShortestSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int degree = 0, result = Integer.MAX_VALUE;
+        //存元素和出现的次数
+        HashMap<Integer, int[]> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (!map.containsKey(nums[i])) {//第一次出现，更新出现次数，和初始结束位置
+                map.put(nums[i], new int[]{1, i, i});
+            } else {//之前已经出现过，更新出现次数和结束位置
+                int[] temp = map.get(nums[i]);
+                temp[0]++;
+                temp[2] = i;
+            }
+        }
+
+        for (int[] value : map.values()) {
+            if (value[0] > degree) {//更新degree
+                degree = value[0];
+                result = value[2] - value[1] + 1;//计算当前元素的起始终止位置
+            } else if (value[0] == degree) {
+                result = Math.min(result, value[2] - value[1] + 1);//找到最小的长度
+            }
+        }
+        return result;
+    }
+}
+```
 
 ## **64 Minimum Path Sum** 
 
