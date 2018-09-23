@@ -1980,14 +1980,6 @@ class Solution {
 }
 ```
 
-## **123 Best Time to Buy and Sell Stock III** 
-
-### **原题概述**
-
-### **题意和分析**
-
-### **代码**
-
 ## **442 Find All Duplicates in an Array** 
 
 ### **原题概述**
