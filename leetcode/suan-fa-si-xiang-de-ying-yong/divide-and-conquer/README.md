@@ -753,11 +753,59 @@ class Solution {
 
 ### 代码
 
-## 64 - Minimum Path Sum
+## **64 Minimum Path Sum** 
 
-### 原题概述
+### **原题概述**
 
-### 题意和分析
+Given a _m_ x _n_ grid filled with non-negative numbers, find a path from top left to bottom right which _minimizes_ the sum of all numbers along its path.
 
-### 代码
+**Note:** You can only move either down or right at any point in time.
+
+**Example:**
+
+```text
+Input:
+[
+  [1,3,1],
+  [1,5,1],
+  [4,2,1]
+]
+Output: 7
+Explanation: Because the path 1→3→1→1→1 minimizes the sum.
+```
+
+### **题意和分析**
+
+给一个二维数组，从左上到右下找一条经过的元素加起来最小的path，返回所有元素加起来的和。全局最优，用DP， dp\[i\]\[j\] = grid\[i\]\[j\] + min\(dp\[i - 1\]\[j\]\)，所有路径经过的元素之和等于当前元素的值加上上一个可到达的元素的总和最小值。
+
+### **代码**
+
+```java
+class Solution {
+    public int minPathSum(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        int m = grid.length, n = grid[0].length;
+        int[][] dp = new int[m][n];
+
+        //初始化第一个值
+        dp[0][0] = grid[0][0];
+        //初始化第一行和第一列
+        for (int i = 1; i < m; i++) {
+            dp[i][0] = grid[i][0] + dp[i-1][0];//当前值+上一步的最小值
+        }
+        for (int j = 1; j < n; j++) {
+            dp[0][j] = grid[0][j] + dp[0][j-1];
+        }
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = grid[i][j] + Math.min(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+        return dp[m-1][n-1];
+    }
+}
+```
 
