@@ -1984,9 +1984,47 @@ class Solution {
 
 ### **原题概述**
 
+Given an array of integers, 1 ≤ a\[i\] ≤ n \(n = size of array\), some elements appear **twice** and others appear **once**.
+
+Find all the elements that appear **twice** in this array.
+
+Could you do it without extra space and in O\(n\) runtime?
+
+**Example:**  
+
+
+```text
+Input:
+[4,3,2,7,8,2,3,1]
+
+Output:
+[2,3]
+```
+
 ### **题意和分析**
 
+给一个数组，里面的元素1 ≤ a\[i\] ≤ n，里面有的元素出现一次有的出现两次，在常数空间和线性时间复杂度找出所有的出现两次的元素。这道题的三种解法跟 448 Find All Numbers Disappeared in an Array一模一样，这里就用正负值的办法， 对于每个nums\[i\]，我们将其对应的nums\[nums\[i\] - 1\]取相反数，如果其已经是负数了，说明之前存在过，那么说明该数出现了两次，我们将其加入结果result中即可。
+
 ### **代码**
+
+```java
+class Solution {
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            int index = Math.abs(nums[i]) - 1;//绝对值才是正确的索引值
+            if (nums[index] < 0) {
+                result.add(Math.abs(index+1));//将相应的索引加入到结果
+            }
+            nums[index] = -nums[index];
+        }
+        return result;
+    }
+}
+```
 
 ## **717 1-bit and 2-bit Characters**
 
