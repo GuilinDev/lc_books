@@ -2032,7 +2032,34 @@ class Solution {
 
 ### **题意和分析**
 
+说有两种特殊的字符，一种是两位字符，只能是二进制的11和10，另一种是单个位字符，只能是二进制的0。现在给了我们一个只包含0和1的数组，最后一个元素始终是0，问我们能否将其正确的分割，使得最后一个字符是单个位字符。
+
+按照 这个解法 （[https://leetcode.com/problems/1-bit-and-2-bit-characters/discuss/108967/JAVA-check-only-the-end-of-array](https://leetcode.com/problems/1-bit-and-2-bit-characters/discuss/108967/JAVA-check-only-the-end-of-array)），只检查最后一位或者两位：
+
+1）如果数组里面只有一位，那么返回true，因为最后一位必然是0；
+
+2）如果数组最后两位都是0，返回true；
+
+3）如果最后是10这样的情况，这取决于前面1的数量，如果是奇数个1，返回false，因为有个1不能配对；如果是偶数个1，返回true；
+
 ### **代码**
+
+```java
+class Solution {
+    public boolean isOneBitCharacter(int[] bits) {
+        int ones = 0;
+
+        for (int i = bits.length - 2; i >= 0 && bits[i] != 0; i--) {//最后一位不用检查
+            ones++;
+        }
+        if (ones % 2 != 0) {
+            return false;
+        }
+
+        return true;
+    }
+}
+```
 
 ## **78 Subsets** 
 
