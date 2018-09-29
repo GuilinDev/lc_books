@@ -35,7 +35,7 @@ Explanation: You will always arrive at index 3 no matter what. Its maximum
 
 这道题首先可以用DP， 维护一个一位数组dp，其中dp\[i\]表示达到i位置时剩余的步数，到达当前位置跟上一个位置（不是前一个位置）的剩余步数和数字（能达到的最远位置）有关，下一个位置的剩余步数（dp值）就等于当前的这个较大值减去1，因为需要花一个跳力到达下一个位置，所以状态转移方程：dp\[i\] = max\(dp\[i - 1\], nums\[i - 1\]\) - 1，如果当某一个时刻dp数组的值为负了，说明无法抵达当前位置，则直接返回false，最后判断**数**组最后一位是否为非负数即可知道是否能抵达该位置。
 
-Greedy的做法会更优
+Greedy的做法会更优，因为其实没有必要用维护一维数组的方式来对每一步的剩余步数进行关注，只知道是否能到达末尾就行了，只需维护一个变量reach，来记录当前步最远能到达的位置坐标，初始为0，遍历整个数组，如果当前的坐标大于reach或者reach已经到达最后一个位置或超出，就跳出循环；否则就更更新reach为当前reach的值和i + nums\[i\]中的较大值。
 
 ### **代码**
 
@@ -60,6 +60,22 @@ class Solution {
 ```
 
 Greedy
+
+```java
+class Solution {
+    public boolean canJump(int[] nums) {
+        int len = nums.length;
+        int reach = 0;
+        for (int i = 0; i < len; i++) {
+            if (i > reach || reach >= len - 1) {
+                break;
+            }
+            reach = Math.max(reach, i + nums[i]);
+        }
+        return reach >= len - 1;
+    }
+}
+```
 
   
 **45 Jump Game II**
