@@ -33,11 +33,36 @@ Explanation: You will always arrive at index 3 no matter what. Its maximum
 
 ### **题意和分析**
 
-这道题首先可以用DP， 维护一个一位数组dp，其中dp\[i\]表示达到i位置时剩余的步数，到达当前位置跟上一个位置（不是前一个位置）的剩余步数和数字（能达到的最远位置）有关
+这道题首先可以用DP， 维护一个一位数组dp，其中dp\[i\]表示达到i位置时剩余的步数，到达当前位置跟上一个位置（不是前一个位置）的剩余步数和数字（能达到的最远位置）有关，下一个位置的剩余步数（dp值）就等于当前的这个较大值减去1，因为需要花一个跳力到达下一个位置，所以状态转移方程：dp\[i\] = max\(dp\[i - 1\], nums\[i - 1\]\) - 1，如果当某一个时刻dp数组的值为负了，说明无法抵达当前位置，则直接返回false，最后判断**数**组最后一位是否为非负数即可知道是否能抵达该位置。
+
+Greedy的做法会更优
 
 ### **代码**
 
-##  **45 Jump Game II**
+DP
+
+```java
+class Solution {
+    public boolean canJump(int[] nums) {
+        int len = nums.length;
+        int [] dp = new int[len];
+        Arrays.fill(dp, 0);
+
+        for (int i = 1; i < len; i++) {
+            dp[i] = Math.max(dp[i - 1], nums[i - 1]) - 1;
+            if (dp[i] < 0) {
+                return false;
+            }
+        }
+        return dp[len - 1] >= 0;
+    }
+}
+```
+
+Greedy
+
+  
+**45 Jump Game II**
 
 ### **原题概述** {#yuan-ti-gai-shu-30}
 
