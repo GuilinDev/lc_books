@@ -77,12 +77,50 @@ class Solution {
 }
 ```
 
-  
-**45 Jump Game II**
+##  **45 Jump Game II**
 
 ### **原题概述** {#yuan-ti-gai-shu-30}
 
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Your goal is to reach the last index in the minimum number of jumps.
+
+**Example:**
+
+```text
+Input: [2,3,1,1,4]
+Output: 2
+Explanation: The minimum number of jumps to reach the last index is 2.
+    Jump 1 step from index 0 to 1, then 3 steps to the last index.
+```
+
+**Note:**
+
+You can assume that you can always reach the last index.
+
 ### **题意和分析** {#ti-yi-he-fen-xi-30}
 
+上一道题55 Jump Game是判断能否到达最后，这一道题是找出步数最少的走法，[参考这里](https://www.cnblogs.com/lichen782/p/leetcode_Jump_Game_II.html)；遍历数组，把上一道题的全局最优变化成第step步最优和第step-1步最优，step表示走了多少步，当走到超过第step-1步所能达到最远距离的时候，说明step-1不能到达当前步，这时候更新步数step-1。
+
 ### **代码** {#dai-ma-30}
+
+```java
+class Solution {
+    public int jump(int[] nums) {
+        int step = 0;
+        int last = 0;//上一步能到达的最远距离
+        int curr = 0;//当前结点最远能覆盖的距离
+        for (int i = 0; i < nums.length; i++) {
+            if (i > last) {//上一步不能到达，得再跳一次了
+                last = curr;
+                step++;
+            }
+            curr = Math.max(curr, i + nums[i]);
+        }
+        return step;
+    }
+}
+```
 
