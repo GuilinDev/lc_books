@@ -940,6 +940,80 @@ class Solution {
 }
 ```
 
+##  **59 Spiral Matrix II** {#59-spiral-matrix-ii}
+
+### **原题概述** {#yuan-ti-gai-shu-29}
+
+Given a positive integer _n_, generate a square matrix filled with elements from 1 to _n_2 in spiral order.
+
+**Example:**
+
+```text
+Input: 3
+Output:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+```
+
+### **题意和分析** {#ti-yi-he-fen-xi-29}
+
+这道题根据打印顺序来创建二维数组，和54 Spiral Matrix一样的思路。
+
+### **代码** {#dai-ma-29}
+
+```java
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] result = new int[n][n];
+        if (n <= 0) {
+            return result;
+        }
+        int rowBegin = 0;
+        int rowEnd = n - 1;
+        int colBegin = 0;
+        int colEnd = n - 1;
+        int index = 1;
+        while (rowBegin <= rowEnd && colBegin <= colEnd) {
+            //从左到右
+            for (int i = colBegin; i<= colEnd; i++) {
+                result[rowBegin][i] = index;
+                index++;
+            }
+            rowBegin++;
+
+            //从上到下
+            for (int i = rowBegin; i <= rowEnd; i++) {
+                result[i][colEnd] = index;
+                index++;
+            }
+            colEnd--;
+
+            //从右到左
+            if (colEnd >= colBegin) {
+                for (int i = colEnd; i >= colBegin; i--) {
+                    result[rowEnd][i] = index;
+                    index++;
+                }
+            }
+            rowEnd--;
+
+            //从下到上
+            if (rowEnd >= rowBegin) {
+                for (int i = rowEnd; i >= rowBegin; i--) {
+                    result[i][colBegin] = index;
+                    index++;
+                }
+            }
+            colBegin++;
+        }
+        return result;
+    }
+}
+```
+
 ## **229 Majority Element II** 
 
 ### **原题概述**
@@ -2110,14 +2184,6 @@ class Solution {
     }
 }
 ```
-
-## **59 Spiral Matrix II** 
-
-### **原题概述**
-
-### **题意和分析**
-
-### **代码**
 
 ## **628 Maximum Product of Three Numbers**
 
