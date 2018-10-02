@@ -12,13 +12,65 @@ b=b^a=1001^0010=1011;
 
 a=a^b=0010^1011=1001; 
 
-这样一来a=9,b=11了。
+这样一来a=9, b=11了。
 
 ## 136 - Single Number
 
+### 原题概述
+
+Given a **non-empty** array of integers, every element appears _twice_ except for one. Find that single one.
+
+**Note:**
+
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+**Example 1:**
+
+```text
+Input: [2,2,1]
+Output: 1
+```
+
+**Example 2:**
+
+```text
+Input: [4,1,2,1,2]
+Output: 4
+```
+
+### 题意和分析
+
+给一个数组，每个数字出现两次，找出只出现过一次的数字。中规中矩用HashMap来统计次数自然是没什么难度，这里用位操作中XOR，当两个数相同的时候为0，位数相互进行XOR后，最后的结果一定会是只出现一次的元素。
+
+### 代码
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int result = 0;
+        for (int num : nums) {
+            result ^= num;
+        }
+        return result;
+    }
+}
+```
+
 ## 137 - Single Number II
 
+### 原题概述 {#yuan-ti-gai-shu}
+
+### 题意和分析 {#ti-yi-he-fen-xi}
+
+### 代码 {#dai-ma}
+
 ## 260 - Single Number III
+
+### 原题概述 {#yuan-ti-gai-shu}
+
+### 题意和分析 {#ti-yi-he-fen-xi}
+
+### 代码 {#dai-ma}
 
 ## 268 - Missing Number
 

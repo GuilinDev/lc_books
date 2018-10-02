@@ -30,4 +30,6 @@
       </td>
     </tr>
   </tbody>
-</table>
+</table>* 136 Single Number
+* 771 Jewels and Stones
+
