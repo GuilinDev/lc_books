@@ -1,5 +1,56 @@
 # Hash Table
 
+## 771 Jewels and Stones
+
+### 原题概述
+
+You're given strings `J` representing the types of stones that are jewels, and `S` representing the stones you have.  Each character in `S`is a type of stone you have.  You want to know how many of the stones you have are also jewels.
+
+The letters in `J` are guaranteed distinct, and all characters in `J` and `S` are letters. Letters are case sensitive, so `"a"` is considered a different type of stone from `"A"`.
+
+**Example 1:**
+
+```text
+Input: J = "aA", S = "aAAbbbb"
+Output: 3
+```
+
+**Example 2:**
+
+```text
+Input: J = "z", S = "ZZ"
+Output: 0
+```
+
+**Note:**
+
+* `S` and `J` will consist of letters and have length at most 50.
+* The characters in `J` are distinct.
+
+### 题意和分析
+
+这道题J中的字符全是珠宝分类，没有重复，S中的字符是石头或者珠宝，找出S中所有是珠宝的字符。暴力搜索就是把J中字符分别拿到S中去对比下，match一次就+1；decent一点的做法则是用hashset把J中的字符装入（因为没重复），然后把S中的字符分别来看是否存在。
+
+### 代码
+
+```java
+class Solution {
+    public int numJewelsInStones(String J, String S) {
+        int result = 0;
+        Set<Character> jset = new HashSet<>();
+        for (char j : J.toCharArray()) {
+            jset.add(j);
+        }
+        for (char s : S.toCharArray()) {
+            if (jset.contains(s)) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
+```
+
 ## 500 - Keyboard Row
 
 ### 原题概述
