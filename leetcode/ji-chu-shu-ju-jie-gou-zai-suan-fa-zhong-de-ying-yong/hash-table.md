@@ -89,6 +89,82 @@ public class Codec {
 // codec.decode(codec.encode(url));
 ```
 
+## 202 Happy Number
+
+### 原题概述
+
+Write an algorithm to determine if a number is "happy".
+
+A happy number is a number defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits, and repeat the process until the number equals 1 \(where it will stay\), or it loops endlessly in a cycle which does not include 1. Those numbers for which this process ends in 1 are happy numbers.
+
+**Example:** 
+
+```text
+Input: 19
+Output: true
+Explanation: 
+1^2 + 9^2 = 82
+8^2 + 22 = 68
+6^2 + 8^2 = 100
+1^2 + 0^2 + 0^2 = 1
+```
+
+### 题意和分析
+
+这道题定义了happy number，把一个数的所有位数来进行平方再相加，如果出现结果1，就是happy number，如果一直循环没有出现1就不是。可以用一个hashset来保存所有出现的结果，每次的结果检查一下之前是否出现过，如果有说明会有循环，返回false；
+
+另外一个办法是，如果不是happy number，则平方再相加后的结果一定会出现4（），只要检查是否为4就可以知道是否是happy number。
+
+### 代码
+
+HashSet
+
+```text
+class Solution {
+    public boolean isHappy(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        Set<Integer> sums = new HashSet<>();
+        while (n != 1) {
+            int temp = 0;
+            while (n != 0) {
+                temp += Math.pow(n % 10, 2);
+                n /= 10;
+            }
+            n = temp;//把新计算的数赋值给n
+            if (sums.contains(n)) {
+                break;
+            } else {
+                sums.add(temp);
+            }
+        }
+        return n == 1;
+    }
+}
+```
+
+检查是否有4
+
+```java
+class Solution {
+    public boolean isHappy(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        while (n != 1 && n != 4) {//是happy number一定会出现1，不是则一定会出现4
+            int temp = 0;
+            while (n != 0) {
+                temp += Math.pow(n % 10, 2);
+                n /= 10;
+            }
+            n = temp;
+        }
+        return n == 1;
+    }
+}
+```
+
 ## 500 - Keyboard Row
 
 ### 原题概述
