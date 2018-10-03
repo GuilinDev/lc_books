@@ -63,7 +63,31 @@ Design the `encode` and `decode` methods for the TinyURL service. There is no re
 
 ### 题意和分析
 
+最简单的一种编码就是用个计数器，当前是第几个存入的url就编码成几，然后解码的时候也能根据数字来找到原来的url，题目中推荐用六位随机数。短链接的设计参考[这里](https://leetcode.com/problems/encode-and-decode-tinyurl/discuss/100276/Easy-solution-in-java-5-line-code.)。
+
 ### 代码
+
+```java
+public class Codec {
+    List<String> urls = new ArrayList<>();
+
+    // Encodes a URL to a shortened URL.
+    public String encode(String longUrl) {
+        urls.add(longUrl);
+        return String.valueOf(urls.size() - 1);
+    }
+
+    // Decodes a shortened URL to its original URL.
+    public String decode(String shortUrl) {
+        int index = Integer.valueOf(shortUrl);
+        return (index < urls.size()) ? urls.get(index) : "";
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.decode(codec.encode(url));
+```
 
 ## 500 - Keyboard Row
 
