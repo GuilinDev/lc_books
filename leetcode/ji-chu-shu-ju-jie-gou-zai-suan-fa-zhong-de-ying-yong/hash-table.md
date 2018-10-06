@@ -119,7 +119,7 @@ Explanation:
 
 HashSet
 
-```text
+```java
 class Solution {
     public boolean isHappy(int n) {
         if (n <= 0) {
