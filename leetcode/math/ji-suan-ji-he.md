@@ -43,5 +43,45 @@ Explanation:
 
 ### 代码
 
+```java
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+class Solution {
+    public int maxPoints(Point[] points) {
+        int result = 0;
+        for (int i = 0; i < points.length; i++) {
+            Map<Map<Integer, Integer>, Integer> map = new HashMap<>();
+            int duplicate = 1;//重复的点，不能确定一条直线
+            for (int j = i + 1; j < points.length; j++) {
+                if (points[i].x == points[j].x && points[i].y == points[j].y) {//重复的点
+                    duplicate++;
+                    continue;
+                }
+                int dx = points[j].x - points[i].x;
+                int dy = points[j].y - points[i].y;
+                int d = gcd(dx, dy);//找到最大公约数
+                Map<Integer, Integer> t = new HashMap<>();
+                t.put(dx/d, dy/d);
+                map.put(t, map.getOrDefault(t, 0) + 1);
+            }
+            result = Math.max(result, duplicate);
+            for (Map.Entry<Map<Integer, Integer>, Integer> entry : map.entrySet()) {
+                result = Math.max(result, entry.getValue() + duplicate);
+            }
+        }
+        return result;
+    }
 
+    private int gcd(int a, int b) {
+        return (b == 0) ? a : gcd(b, a % b);//最大公约数的办法，注意递归的办法
+    }
+}
+```
 
