@@ -922,6 +922,92 @@ class Solution {
 }
 ```
 
+## 760 Find Anagram Mappings
+
+### 原体概述
+
+Given two lists `A`and `B`, and `B` is an anagram of `A`. `B` is an anagram of `A` means `B` is made by randomizing the order of the elements in `A`.
+
+We want to find an index mapping `P`, from `A` to `B`. A mapping `P[i] = j` means the `i`th element in `A` appears in `B` at index `j`.
+
+These lists `A` and `B` may contain duplicates. If there are multiple answers, output any of them.
+
+For example, given
+
+```text
+A = [12, 28, 46, 32, 50]
+B = [50, 12, 32, 46, 28]
+```
+
+We should return
+
+```text
+[1, 4, 3, 2, 0]
+```
+
+as `P[0] = 1` because the `0`th element of `A` appears at `B[1]`, and `P[1] = 4` because the `1`st element of `A` appears at `B[4]`, and so on.
+
+**Note:**
+
+1. `A, B` have equal lengths in range `[1, 100]`.
+2. `A[i], B[i]` are integers in range `[0, 10^5]`.
+
+### 题意和分析
+
+给两个整型数组，它们之间是anagrams，找出第一个数组中的元素在第二个数组出现的索引的位置。暴力搜索就是n^2，如果先把数组B的元素放入到一个hashmap里面，元素值为key，索引为value，然后对A的每个元素进行寻找，因为HashMap的get\(\)方法是在hashcode不碰撞的情况下是O\(1\)的，\(如果最坏情况全部元素都是碰撞的，那就退化成线性时间复杂度\)，所以整个时间复杂度是O\(2n\)；
+
+另外这道题并没有说数组中的元素是否可以是重复的，如果用HashMap来解，会出现key相同（value索引值不同）的情况，我们不希望遇到同样值的情况下只取到同一个索引值的情况，需要做特殊处理。
+
+### 代码
+
+不考虑重复值的简单解法，也可以AC
+
+```java
+class Solution {
+    public int[] anagramMappings(int[] A, int[] B) {
+        if (A == null || B == null || A.length == 0 || B.length == 0) {
+            return new int[0];
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        int[] result = new int[A.length];
+        //把数组B中元素放入到map中
+        for (int i = 0; i < B.length; i++) {
+            map.put(B[i], i);
+        }
+
+        //遍历A数组
+        for (int i = 0; i < A.length; i++) {
+            result[i] = map.get(A[i]);
+        }
+        return result;
+    }
+}
+```
+
+考虑重复值
+
+```java
+class Solution {
+    public int[] anagramMappings(int[] A, int[] B) {
+        if (A == null || B == null || A.length == 0 || B.length == 0) {
+            return new int[0];
+        }
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        int[] result = new int[A.length];
+        //把数组B中元素放入到map中
+        for (int i = 0; i < B.length; i++) {
+            map.computeIfAbsent(B[i], k -> new ArrayList<>()).add(i);//如果map里没有B[i]这个key，那么就按照后面的这个function添加对应的key和value，如果有这个key，那么就不添加，这个方法避免了hashcode值碰撞
+        }
+
+        //遍历A数组
+        for (int i = 0; i < A.length; i++) {
+            result[i] = map.get(A[i]).remove(map.get(A[i]).size() - 1);//找到第一个key后加入到result中并从map中删除
+        }
+        return result;
+    }
+}
+```
+
 ## \*447 - Number of Boomerangs
 
 ### 原题概述
