@@ -472,6 +472,109 @@ class Solution {
 }
 ```
 
+## 36 Valid Sudoku
+
+### 原体概述
+
+
+
+Determine if a 9x9 Sudoku board is valid. Only the filled cells need to be validated **according to the following rules**:
+
+1. Each row must contain the digits `1-9` without repetition.
+2. Each column must contain the digits `1-9` without repetition.
+3. Each of the 9 `3x3` sub-boxes of the grid must contain the digits `1-9` without repetition.
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Sudoku-by-L2G-20050714.svg/250px-Sudoku-by-L2G-20050714.svg.png)  
+A partially filled sudoku which is valid.
+
+The Sudoku board could be partially filled, where empty cells are filled with the character `'.'`.
+
+**Example 1:**
+
+```text
+Input:
+[
+  ["5","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input:
+[
+  ["8","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]
+Output: false
+Explanation: Same as Example 1, except with the 5 in the top left corner being 
+    modified to 8. Since there are two 8's in the top left 3x3 sub-box, it is invalid.
+```
+
+**Note:**
+
+* A Sudoku board \(partially filled\) could be valid but is not necessarily solvable.
+* Only the filled cells need to be validated according to the mentioned rules.
+* The given board contain only digits `1-9` and the character `'.'`.
+* The given board size is always `9x9`.
+
+### 题意和分析
+
+一个数独表里面已经填了一些数字，没填数字的cell用'.'表示，检查目前这个数独表是否有效。检查的方式是是行，列和3X3的小方块，对二维数组进行遍历，遍历每一行的时候，新建3个HashSet，来检查该行，该行/该列和该cube对应的set是否含有数字，注意，HashSet的add\(\)方法是有返回值的。
+
+### 代码
+
+```java
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        if (board == null || board.length == 0 || board[0].length == 0) {
+            return false;
+        }
+        int m = board.length, n = board[0].length;
+        for (int i = 0; i < m; i++) {
+            Set<Character> row = new HashSet<>();
+            Set<Character> col = new HashSet<>();
+            Set<Character> cube = new HashSet<>();
+            for (int j = 0; j < n; j++) {
+                //判断数字是否不在1～9范围之内
+                if (board[i][j] != '.' && (board[i][j] < '1' || board[i][j] > '9')) {
+                    return false;
+                }
+                //check row
+                if (board[i][j] != '.' && !row.add(board[i][j])) {
+                    return false;
+                }
+                //check col
+                if (board[j][i] != '.' && !col.add(board[j][i])) {
+                    return false;
+                }
+                //check the cube;
+                if (board[3*(i/3) + j/3][3*(i%3) + j%3] != '.' && !cube.add(board[3*(i/3) + j/3][3*(i%3) + j%3])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+```
+
 ## 349 - Intersection of Two Arrays
 
 ### 原题概述
