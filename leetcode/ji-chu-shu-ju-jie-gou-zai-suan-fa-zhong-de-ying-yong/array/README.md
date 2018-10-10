@@ -36,7 +36,7 @@ The median is (2 + 3)/2 = 2.5
 
 求两个有序数组的中位数，要求复杂度O\(log \(m+n\)\)，看到这个只能是二分法了；如果将两个数组合并后再查找中位数的话为O\(m+n\)，不满足条件（不过这本身是Merge Sort的一个步骤），做法参考了下面链接的第三个解法
 
-{% embed data="{\"url\":\"http://windliang.cc/2018/07/18/leetCode-4-Median-of-Two-Sorted-Arrays/\",\"type\":\"link\",\"title\":\"leetCode\_4\_Median\_of\_Two\_Sorted\_Arrays\",\"description\":\"题目描述（困难难度） 已知两个有序数组，找到两个数组合并后的中位数。 解法一简单粗暴，先将两个数组合并，两个有序数组的合并也是归并排序中的一部分。然后根据奇数，还是偶数，返回中位数。 代码1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public double f\",\"icon\":{\"type\":\"icon\",\"url\":\"http://windliang.cc/images/apple-touch-icon-next.png?v=6.3.0\",\"width\":180,\"height\":180,\"aspectRatio\":1},\"thumbnail\":{\"type\":\"thumbnail\",\"url\":\"http://windliang.oss-cn-beijing.aliyuncs.com/mid8.jpg\",\"width\":1038,\"height\":318,\"aspectRatio\":0.3063583815028902}}" %}
+{% embed url="http://windliang.cc/2018/07/18/leetCode-4-Median-of-Two-Sorted-Arrays/" %}
 
 假设我们要找第 k 小数，我们可以每次循环排除掉 k / 2 个数。看下边一个例子。
 

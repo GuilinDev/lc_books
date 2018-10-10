@@ -1185,5 +1185,31 @@ class Solution {
 }
 ```
 
+## 336 Palindrome Pairs
 
+### 原体概述
+
+Given a list of **unique** words, find all pairs of **distinct** indices `(i, j)` in the given list, so that the concatenation of the two words, i.e. `words[i] + words[j]` is a palindrome.
+
+**Example 1:**
+
+```text
+Input: ["abcd","dcba","lls","s","sssll"]
+Output: [[0,1],[1,0],[3,2],[2,4]] 
+Explanation: The palindromes are ["dcbaabcd","abcddcba","slls","llssssll"]
+```
+
+**Example 2:**
+
+```text
+Input: ["bat","tab","cat"]
+Output: [[0,1],[1,0]] 
+Explanation: The palindromes are ["battab","tabbat"]
+```
+
+### 题意和分析
+
+给了一个字符串数组，要求找到所有能组合成回文的两个词；暴力解法过不了；用了字典树Trie的结构，参考[这里](https://leetcode.com/problems/palindrome-pairs/discuss/79195/O%28n-*-k2%29-java-solution-with-Trie-structure)，首先判断是否是回文得分方法是用两个指针i和j分别指向string的头尾，来比较是否相同；然后判断一个string的时候，比如我们打算将一个单词连接到w0后面，w0的第一个字符是a，那我们只考虑将结尾是a的单词连接到w0后面，然后w0的第二个字符是b
+
+### 代码
 

@@ -444,7 +444,7 @@ Output: false
 
 ### 题意和分析
 
-{% embed data="{\"url\":\"https://blog.csdn.net/linhuanmars/article/details/22358863\",\"type\":\"link\",\"title\":\"Word Break -- LeetCode - CSDN博客\",\"description\":\"原题链接: http://oj.leetcode.com/problems/word-break/  这道题仍然是动态规划的题目，我们总结一下动态规划题目的基本思路。首先我们要决定要存储什么历史信息以及用什么数据结构来存储信息。然后是最重要的递推式，就是如从存储的历史信息中得到当前步的结果。最后我们需要考虑的就是起始条件的值。 接下来我们套用上面的思路来解这道题。首先我们要存储的历史信息res\",\"icon\":{\"type\":\"icon\",\"url\":\"https://csdnimg.cn/public/favicon.ico\",\"aspectRatio\":0}}" %}
+{% embed url="https://blog.csdn.net/linhuanmars/article/details/22358863" %}
 
 > 动态规划题目的基本思路：首先我们要决定要存储什么历史信息以及用什么数据结构来存储信息，然后是最重要的递推式，就是如何从存储的历史信息中得到当前步的结果，最后我们需要考虑的就是起始条件的值。
 
