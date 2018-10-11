@@ -238,7 +238,45 @@ class Solution {
 
 ### 原体概述
 
+Given a column title as appear in an Excel sheet, return its corresponding column number.
+
+For example:
+
+```text
+    A -> 1
+    B -> 2
+    C -> 3
+    ...
+    Z -> 26
+    AA -> 27
+    AB -> 28 
+    ...
+```
+
+**Example 1:**
+
+```text
+Input: "A"
+Output: 1
+```
+
+**Example 2:**
+
+```text
+Input: "AB"
+Output: 28
+```
+
+**Example 3:**
+
+```text
+Input: "ZY"
+Output: 701
+```
+
 ### 题意和分析
+
+
 
 ### 代码
 
