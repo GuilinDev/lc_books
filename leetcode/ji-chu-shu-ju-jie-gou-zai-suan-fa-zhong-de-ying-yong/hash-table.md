@@ -1209,7 +1209,70 @@ Explanation: The palindromes are ["battab","tabbat"]
 
 ### 题意和分析
 
-给了一个字符串数组，要求找到所有能组合成回文的两个词；暴力解法过不了；用了字典树Trie的结构，参考[这里](https://leetcode.com/problems/palindrome-pairs/discuss/79195/O%28n-*-k2%29-java-solution-with-Trie-structure)，首先判断是否是回文得分方法是用两个指针i和j分别指向string的头尾，来比较是否相同；然后判断一个string的时候，比如我们打算将一个单词连接到w0后面，w0的第一个字符是a，那我们只考虑将结尾是a的单词连接到w0后面，然后w0的第二个字符是b
+给了一个字符串数组，要求找到所有能组合成回文的两个词；暴力解法过不了；用了字典树Trie的结构，参考[这里](https://leetcode.com/problems/palindrome-pairs/discuss/79195/O%28n-*-k2%29-java-solution-with-Trie-structure)，暴力解法就是找出所有pairs，逐一验证isPalindrome. 时间复杂度O\(N^2\*k\)。
+
+palindrome最大的特性就是对称，按长度的奇偶可以分为str，char，reverse\(str\)和str，reverse\(str\)型。 我们有一个str，在i这个位置进行切分，得到的前半部分是一个palindrome。比如"lls", 变成"ll"， "s"。 已知"ll"是palindrome，我们只需要知道reverse\("s"\) 放到前边就可以了。 reverse\("s"\)"ll""s", 即reverse\(str\) PalindromeSubString str的类型。
+
+还有一种就是后半部分是palindrome, 我们找到前半部分的reverse,拼到后面。\["abcdc", "ba"\]。 "cdc"是palindrome, reverse\(ab\) 就是 "ba", 我们有这样的string出现过。
+
+代码细节就是有一个isPalindrome的helper function。 一个hashmap存入所有 paris加速查询。 容易出bug的两个地方, 以\["abcd", "dcba", "lls", "s", "sssll"\]为例。 1. 如果一个str本身就是panlindrome，reverse就是本身，一定在hashmap里，去重的方法就是判断map.get\(reverse\(str\)\) != i. \[\[1,0\],\[0,1\],\[3,2\],\[3,3\],\[2,4\]\] 2. 我们在切割str的时候，j ==0时str变成""和"str", j == str.length\(\)的时候str变成"str"和""。 "abcd", "dcba"这两个互为reverse的string, 在"abcd"尾部加上"dcba"也就是在"dcba"头部加上"abcd". 所以后部分不能为空，否则就和头部为空的情况重复了。 \[\[1,0\],\[0,1\],\[0,1\],\[1,0\],\[3,2\],\[2,4\]\]
+
+空间复杂度因为用了额外的hashmap来储存，需要O\(N\)空间。 时间复杂度每个str分为两个部分，调用isPalindrome,前后两部分总长度为k. 所以每次调用为O\(k\)一共\(k+1\)次。 然后一共有N个str, 总共时间复杂度为O\(N\*k^2\).
 
 ### 代码
+
+```java
+class Solution {
+    public List<List<Integer>> palindromePairs(String[] words) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (words == null || words.length == 0) {
+            return result;
+        }
+        HashMap<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < words.length; i++) {//将单词和对应的索引在map中映射
+            map.put(words[i], i);
+        }
+
+        for (int i = 0; i < words.length; i++) {//遍历所有单词
+            for (int j = 0; j <= words[i].length(); j++) {
+                String str1 = words[i].substring(0, j);//单词left
+                String str2 = words[i].substring(j);//单词right
+
+                if (isPalindrome(str1)) {
+                    String str2rvs = new StringBuilder(str2).reverse().toString();//翻转单词，准备下一步查map
+                    if (map.containsKey(str2rvs) && map.get(str2rvs) != i) {//包含翻转后的单词并且不是单词本身
+                        List<Integer> list = new ArrayList<>();
+                        list.add(map.get(str2rvs));
+                        list.add(i);
+                        result.add(list);
+                    }
+                }
+                //同上
+                if (isPalindrome(str2) && str2.length() != 0) {
+                    String str1rvs = new StringBuilder(str1).reverse().toString();
+                    if(map.containsKey(str1rvs) && map.get(str1rvs) != i) {
+                        List<Integer> list = new ArrayList<>();
+                        list.add(i);
+                        list.add(map.get(str1rvs));
+                        result.add(list);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    //判断字符串是否是回文
+    private boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+```
 
