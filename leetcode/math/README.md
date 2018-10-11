@@ -276,7 +276,22 @@ Output: 701
 
 ### 题意和分析
 
-
+给一个字符串，返回相应的数字。相当于一个26进制转换数，每次多一个字母都会乘以26.
 
 ### 代码
+
+```java
+class Solution {
+    public int titleToNumber(String s) {
+        if (s == null) {
+            return 0;
+        }
+        int result =0;
+        for (int i = 0; i < s.length(); i++) {
+            result = result * 26 + (s.charAt(i) - 'A' + 1);
+        }
+        return result;
+    }
+}
+```
 
