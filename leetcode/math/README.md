@@ -112,3 +112,133 @@ class Solution {
 }
 ```
 
+## 258 Add Digits
+
+### 原题概述
+
+Given a non-negative integer `num`, repeatedly add all its digits until the result has only one digit.
+
+**Example:**
+
+```text
+Input: 38
+Output: 2 
+Explanation: The process is like: 3 + 8 = 11, 1 + 1 = 2. 
+             Since 2 has only one digit, return it.
+```
+
+**Follow up:**  
+Could you do it without any loop/recursion in O\(1\) runtime?
+
+### 题意和分析
+
+这个题比较简单，follow up是常数级的复杂度；如果用正常的loop或者递归的话是线性时间复杂度，因此需要略微取巧。
+
+### 代码
+
+正常的loop
+
+```java
+class Solution {
+    public int addDigits(int num) {
+        if (num < 10) {
+            return num;
+        }
+        int temp = num;
+        int result = 0;
+        while (true) {
+            while (temp != 0) {
+                result += temp % 10;
+                temp /= 10;
+            }
+            if (result < 10) {
+                return result;
+            } else {
+                temp = result;
+                result = 0;
+            }
+        }
+    }
+}
+```
+
+递归
+
+```java
+class Solution {
+    public int addDigits(int num) {
+        if (num < 10) {
+            return num;
+        }
+        return addDigits(num % 10 + num / 10);
+    }
+}
+```
+
+接下来看常数的解法，对9进行取模,当作9进制来算（证明略），[参考这里](https://leetcode.com/problems/add-digits/discuss/68622/Java-Code-with-Explanation)
+
+```java
+class Solution {
+    public int addDigits(int num) {
+        if (num < 10) {
+            return num;
+        } else if (num % 9 == 0) {
+            return 9;
+        } else {
+            return num % 9;
+        }
+    }
+}
+```
+
+## 172 Factorial Trailing Zeros
+
+### 原体概述
+
+Given an integer n, return the number of trailing zeroes in n!.
+
+**Example 1:**
+
+```text
+Input: 3
+Output: 0
+Explanation: 3! = 6, no trailing zero.
+```
+
+**Example 2:**
+
+```text
+Input: 5
+Output: 1
+Explanation: 5! = 120, one trailing zero.
+```
+
+**Note:** Your solution should be in logarithmic time complexity.
+
+### 题意和分析
+
+题目要求用对数级复杂度O\(logn\)，如果使用朴素解法就是先求出`n!`的值然后取模看最后有多少个0，这个会超出范围；O\(logn\)的解法：考虑`n!`的质数因子，0的得到总是2和5相乘来的，因此需要计算2和5的个数，就解决了， 例如：n=5，\(5\*4\*3\*2\*1\) = \(5\*2\*2\*3\*2\*1\)，包含1个5和3个2，因此后缀0的个数是1； 例如：n=11 \(...\)包含2个5和3个2，因为468可以分解成2，所以质数因子中2的个数总是多于5的个数，因此只要计算5的个数就知道多少个0了； 还有一点要注意的就是25这种，5和5相乘的结果，所以，应该计算n/5里面有多少个5，也就相当于看n里面有多少个25，还有125，625.等等
+
+### 代码
+
+```java
+class Solution {
+    public int trailingZeroes(int n) {
+        int answer = 0;
+        while (n > 0) {
+            answer += n/5;//这里n/5的个数表示有多少个质数因子5，所以是累加
+            n /= 5;
+        }
+        return answer;
+    }
+}
+```
+
+## 171 Excel Sheet Column Number
+
+### 原体概述
+
+### 题意和分析
+
+### 代码
+
