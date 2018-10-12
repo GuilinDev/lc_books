@@ -65,11 +65,11 @@ class Solution {
                             }
                         }
                     }
-                    return false;
+                    return false;//中间某一条路走不通
                 }
             }
         }
-        return true;//这是回溯法里面递归的返回值
+        return true;//这是回溯法里面递归的返回值,最后一层/一次递归
     }
 
     //判断新加的数字是否有效，返回值为boolean
