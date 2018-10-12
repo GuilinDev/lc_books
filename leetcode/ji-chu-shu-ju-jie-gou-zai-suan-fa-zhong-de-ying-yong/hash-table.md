@@ -1277,5 +1277,92 @@ class Solution {
 }
 ```
 
-## 
+## 205 Isomorphic Strings
+
+### 原题概述
+
+Given two strings **s** and **t**, determine if they are isomorphic.
+
+Two strings are isomorphic if the characters in **s** can be replaced to get **t**.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+
+**Example 1:**
+
+```text
+Input: s = "egg", t = "add"
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input: s = "foo", t = "bar"
+Output: false
+```
+
+**Example 3:**
+
+```text
+Input: s = "paper", t = "title"
+Output: true
+```
+
+**Note:**  
+You may assume both **s** and **t** have the same length.
+
+### 题意和分析
+
+判断两个词是否是同构词， 原字符串中的每个字符可由另外一个字符替代，可以被其本身替代，相同的字符一定要被同一个字符替代，且一个字符不能被多个字符替代，即不能出现一对多的映射，跟word pattern比较类似。
+
+正常做法是用一个HashMap来做映射，然后逐个检查；当然，不用HashMap而用数组来对照字符也可以，做法是数组前半截存第一个字符串的字符，后半截存第二个字符串的字符，原本两个字符串的字符作为index来记忆位置。
+
+### 代码
+
+使用HashMap
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        Map<Character, Character> map = new HashMap<>();
+        int len = s.length();
+
+        for (int i = 0; i < len; i++) {
+            char c1 = s.charAt(i);
+            char c2 = t.charAt(i);
+            if (map.containsKey(c1)) {
+                if (map.get(c1) != c2) {
+                    return false;
+                }
+            } else {//不包含key为c1的映射，可能没加入或者加入的是别的pattern
+                if (!map.containsValue(c2)) {
+                    map.put(c1, c2);
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+```
+
+利用数组
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        int[] map = new int[512];//正常的ASCII是128位，扩展的ASCII是256位，但不是标准
+        for (int i = 0; i < s.length(); i++) {
+            if (map[s.charAt(i)] != map[t.charAt(i) + 256]) {//遇到之前存的记录，前后半截不相等
+                return false;
+            }
+            map[s.charAt(i)] = map[t.charAt(i) + 256] = i + 1;//两个字符串做相应的索引，存相同的整数
+        }
+        return true;
+    }
+}
+```
+
+
 
