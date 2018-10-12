@@ -59,3 +59,70 @@ class Solution {
 }
 ```
 
+## 30 Substring with Concatenation of All Words
+
+### 原题概述
+
+You are given a string, **s**, and a list of words, **words**, that are all of the same length. Find all starting indices of substring\(s\) in **s** that is a concatenation of each word in **words** exactly once and without any intervening characters.
+
+**Example 1:**
+
+```text
+Input:
+  s = "barfoothefoobarman",
+  words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoor" and "foobar" respectively.
+The output order does not matter, returning [9,0] is fine too.
+```
+
+**Example 2:**
+
+```text
+Input:
+  s = "wordgoodstudentgoodword",
+  words = ["word","student"]
+Output: []
+```
+
+### 题意和分析
+
+这道题跟上一道题76 Minimum Window Substring的找子字符串的方法类似。给定一个目标字符串s，一个单词集合words。 要求使得words集合中所有元素连续出现在s中的首位置组成的集合（元素顺序不考虑）。
+
+正如所给实例，目标字符串s: “barfoothefoobarman” 对比单词集合words: \[“foo”, “bar”\] 我们发现，在pos=0 ~ 5时“barfoo”恰好匹配，则0存入结果；在pos=9 ~ 14时“foobar”恰好匹配，则9存入结果；
+
+参考了discuss的解法，利用两个map，一个来记录每个单词的次数，另一个来记录看到的次数。
+
+### 代码
+
+```java
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        List<Integer> res = new ArrayList<>();
+        if (words.length == 0) {
+            return res;
+        }
+        Map<String, Integer> dict = new HashMap<>();
+        Map<String, Integer> found = new HashMap<>();
+        for (String word : words) {
+            dict.put(word, dict.getOrDefault(word, 0) + 1);
+        }
+        int wordLen = words[0].length(), totalLen = words.length * wordLen, strLen = s.length();
+        for (int start = 0; start < strLen - totalLen + 1; start++) {
+            int end = start;
+            while (end < start + totalLen) {
+                String substr = s.substring(end, end + wordLen);
+                found.put(substr, found.getOrDefault(substr, 0) + 1);
+                if (found.get(substr) > dict.getOrDefault(substr, 0)) { break; }
+                end += wordLen;
+            }
+            if (end == start + totalLen) { res.add(start); }
+            found.clear();
+        }
+        return res;
+    }
+}
+```
+
+
+
