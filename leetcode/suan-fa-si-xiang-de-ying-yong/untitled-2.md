@@ -124,5 +124,59 @@ class Solution {
 }
 ```
 
+## 125 Valid Palindrome
 
+### 原题概述
+
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+**Note:** For the purpose of this problem, we define empty string as valid palindrome.
+
+**Example 1:**
+
+```text
+Input: "A man, a plan, a canal: Panama"
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input: "race a car"
+Output: false
+```
+
+### 题意和分析
+
+判断一个字符串是否是回文字符串，忽略大小写和空格标点等，只考虑字母，难度比较小，用一下Java的api里的Character的isLetterOrDigit\(\)和toLowerCase\(\)/toUpperCase\(\)方法即可。
+
+### 代码
+
+```java
+public class Solution {
+    public boolean isPalindrome(String s) {
+        if (s.isEmpty()) {
+            return true;
+        }
+
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            char c1 = s.charAt(left);
+            char c2 = s.charAt(right);
+            if (!Character.isLetterOrDigit(c1)) {
+                left++;
+            } else if (!Character.isLetterOrDigit(c2)) {
+                right--;
+            } else {
+                if (Character.toLowerCase(c1) != Character.toLowerCase(c2)) {
+                    return false;
+                }
+                left++;
+                right--;
+            }
+        }
+        return true;
+    }
+}
+```
 
