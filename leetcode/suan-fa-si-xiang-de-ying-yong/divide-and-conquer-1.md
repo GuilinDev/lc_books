@@ -129,7 +129,27 @@ You may assume k is always valid, 1 ≤ k ≤ array's length.
 
 ### 题意和分析
 
+给一个未排序的数组，找出第k大的值，元素可以有重复。[这里](https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651961587&idx=1&sn=54bf39db7043cc638315caf70f24d94b&chksm=bd2d0d2f8a5a84395246be4522d10fbfc1f744658047d5fb3fad8e9f3c3d76baab3a2ce84867&mpshare=1&scene=1&srcid=1013ubGhakvFDhaPBctqTtWl#rd)有总结的topk的办法，总共有四个逐渐优化的办法：
 
+1）全局排序，将整个数组排序后取第k-1个数，O\(nlogn\)；
+
+![](../../.gitbook/assets/image%20%2815%29.png)
+
+2）局部排序，只排最大的k个数，利用冒泡排序的办法，冒泡一次，找出一个最大值，冒k次就找到第kth的最大值了，O\(n\*k\)；
+
+![](../../.gitbook/assets/image%20%2818%29.png)
+
+3）利用heap，创建一个最小堆用来存储当前最大的k个元素
+
+![](../../.gitbook/assets/image%20%289%29.png)
+
+接着，从第k+1个元素开始扫描，和堆顶（堆中最小的元素）比较，如果被扫描的元素大于堆顶，则替换堆顶的元素，并调整堆，以保证堆内的k个元素，总是当前最大的k个元素。
+
+![](https://mmbiz.qpic.cn/mmbiz_png/YrezxckhYOzzA7pbponFmibHaMYQ5Vkk9xBxbWpznlYmMsItZ7Vd3B4MA0TzALhulicsNWrQ1icjaacibL19XOmicVg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+直到，扫描完所有n-k个元素，最终堆中的k个元素，就是猥琐求的TopK。复杂度 O\(n\*lg\(k\)\)。
+
+4）随机选择
 
 ### 代码
 

@@ -2,7 +2,7 @@
 
 ## 基础排序算法
 
-![](../.gitbook/assets/image%20%2824%29.png)
+![](../.gitbook/assets/image%20%2827%29.png)
 
 ### 选择排序
 
@@ -87,7 +87,7 @@ public void insert(int[] a)
 
 ## 高级排序算法
 
-![](../.gitbook/assets/image%20%2819%29.png)
+![](../.gitbook/assets/image%20%2822%29.png)
 
 
 
