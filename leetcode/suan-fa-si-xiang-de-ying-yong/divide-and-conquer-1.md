@@ -172,9 +172,29 @@ class Solution {
 }
 ```
 
-利用Heap
+利用Heap，只选择topK，不排序topK
 
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        //建立一个k个元素的最小堆，来存储
+        PriorityQueue<Integer> heap = new PriorityQueue<Integer>(k);
 
+        //先把前k个元素存入，作为初始值
+        for (int i = 0; i < k; i++) {
+            heap.add(nums[i]);
+        }
+
+        for (int i = k; i < nums.length; i++) {
+            if (nums[i] > heap.peek()) {//如果新来的元素大于堆顶的元素
+                heap.add(nums[i]);
+                heap.poll();//移除并返回队列的头部
+            }
+        }
+        return heap.peek();//返回队列头部
+    }
+}
+```
 
 随机选择
 
