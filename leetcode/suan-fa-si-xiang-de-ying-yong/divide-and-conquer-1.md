@@ -135,7 +135,7 @@ You may assume k is always valid, 1 ≤ k ≤ array's length.
 
 ![](../../.gitbook/assets/image%20%2815%29.png)
 
-2）局部排序，只排最大的k个数，利用冒泡排序的办法，冒泡一次，找出一个最大值，冒k次就找到第kth的最大值了，O\(n\*k\)；
+2）局部排序，只排最大的k个数，利用冒泡排序的办法（因为能知道kth的位置），冒泡一次，找出一个最大值，冒k次就找到第kth的最大值了，O\(n\*k\)；
 
 ![](../../.gitbook/assets/image%20%2818%29.png)
 
@@ -153,5 +153,30 @@ You may assume k is always valid, 1 ≤ k ≤ array's length.
 
 ### 代码
 
-###  
+利用冒泡排序，进行局部排序
+
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        for (int i = 0; i < k; i++) {//冒泡排序外循环控制排序的趟数，排好k个数
+            for (int j = nums.length - 1; j > i; j--) {//冒泡排序内循环控制每次排序涉及的元素的个数
+                if (nums[j] > nums[j - 1]) {//先放大的在前面，小的放后面去
+                    int temp = nums[j];
+                    nums[j] = nums[j - 1];
+                    nums[j - 1] = temp;
+                }
+            }
+        }
+        return nums[k-1];//第k-1个元素是第k大的数
+    }
+}
+```
+
+利用Heap
+
+
+
+随机选择
+
+
 
