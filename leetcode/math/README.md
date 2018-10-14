@@ -295,3 +295,42 @@ class Solution {
 }
 ```
 
+## 319 Bulb Switcher
+
+### 原题概述
+
+There are n bulbs that are initially off. You first turn on all the bulbs. Then, you turn off every second bulb. On the third round, you toggle every third bulb \(turning on if it's off or turning off if it's on\). For the i-th round, you toggle every i bulb. For the n-th round, you only toggle the last bulb. Find how many bulbs are on after n rounds.
+
+**Example:**
+
+```text
+Input: 3
+Output: 1 
+Explanation: 
+At first, the three bulbs are [off, off, off].
+After first round, the three bulbs are [on, on, on].
+After second round, the three bulbs are [on, off, on].
+After third round, the three bulbs are [on, off, off]. 
+
+So you should return 1, because there is only one bulb is on.
+```
+
+### 题意和分析
+
+ 有n个灯泡，第一次打开所有的灯泡，第二次每2个更改灯泡的开关状态，第三次每三个更改灯泡的开关状态，以此类推，第n次每n个更改灯泡的状态，求n次后，所有亮的灯泡的个数。这个一看就是找规律的题，不可能一轮一轮去算，这道题的规律就是画出例子后看哪些灯是亮的，最后发现完全平方数的位置总是亮着的，于是求1到n的完全平方数就行了。如果follow up是按1，3，5，7/2，4，6，8这样来toggle， 那么toggle的次数跟奇数因子的数字有关（不包括1），只要有奇数个奇因子，那么灯就是灭的，只要有偶数个奇因子，那么灯就是亮的，比如6（2X3\)，两个奇数因子，亮的，8（2X2X2），三个，灭的。
+
+### 代码
+
+```java
+class Solution {
+    public int bulbSwitch(int n) {
+        if (n < 1) {
+            return 0;
+        }
+        return (int)Math.sqrt(n);
+    }
+}
+```
+
+
+
