@@ -149,7 +149,135 @@ You may assume k is always valid, 1 ≤ k ≤ array's length.
 
 直到，扫描完所有n-k个元素，最终堆中的k个元素，就是猥琐求的TopK。复杂度 O\(n\*lg\(k\)\)。
 
-4）随机选择
+4）随机选择，利用快排中partition的思想，**这里以找到topk的所有数举例来说明**
+
+首先看看快排的伪代码
+
+```text
+void quick_sort(int[]arr, int low, inthigh){
+
+    if(low== high) return;
+
+    int i = partition(arr, low, high);
+
+    quick_sort(arr, low, i-1);
+
+    quick_sort(arr, i+1, high);
+
+}
+```
+
+其核心算法思想是，分治法。
+
+**分治法**（Divide & Conquer），把一个大的问题，转化为若干个子问题（Divide），每个子问题“**都**”解决，大的问题便随之解决（Conquer）。这里的关键词是**“都”**。从伪代码里可以看到，快速排序递归时，先通过partition把数组分隔为两个部分，两个部分“都”要再次递归。
+
+分治法有一个特例，叫减治法。
+
+**减治法**（Reduce & Conquer），把一个大的问题，转化为若干个子问题（Reduce），这些子问题中“**只**”解决一个，大的问题便随之解决（Conquer）。这里的关键词是**“只”**。
+
+ **二分查找binary\_search**，是一个典型的运用减治法思想的算法，其伪代码是：
+
+```text
+int BS(int[]arr, int low, inthigh, int target){
+
+    if(low> high) return -1;
+
+    mid= low +(high - low) / 2;
+
+    if(arr[mid]== target) return mid;
+
+    if(arr[mid]> target)
+
+        return BS(arr, low, mid-1, target);
+
+    else
+
+        return BS(arr, mid+1, high, target);
+
+}
+```
+
+ 二分查找，一个大的问题，可以用一个mid元素，分成左半区，右半区两个子问题。而左右两个子问题，只需要解决其中一个，递归一次，就能够解决二分查找全局的问题。
+
+通过分治法与减治法的描述，可以发现，分治法的复杂度一般来说是大于减治法的：
+
+快速排序：O\(n\*lg\(n\)\)
+
+二分查找：O\(lg\(n\)\)
+
+回到**快速排序，它的**核心是：
+
+`i = partition(arr, low, high);`
+
+**这个partition是干嘛的呢？**
+
+顾名思义，partition会把整体分为两个部分。
+
+更具体的，会用数组arr中的一个元素（默认是第一个元素t=arr\[low\]）为划分依据，将数据arr\[low, high\]划分成左右两个子数组：
+
+* 左半部分，都比t大
+* 右半部分，都比t小
+* 中间位置i是划分元素
+
+![](https://mmbiz.qpic.cn/mmbiz_png/YrezxckhYOzzA7pbponFmibHaMYQ5Vkk9ic4TjkicnCpTAVJJqq4WgbE6tQhl5XORGiaJnZj3UboKBpUhTq1kad5Ng/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+以上述TopK的数组为例，先用第一个元素t=arr\[low\]为划分依据，扫描一遍数组，把数组分成了两个半区：
+
+* 左半区比t大
+* 右半区比t小
+* 中间是t
+
+partition返回的是t最终的位置i。
+
+很容易知道，partition的时间复杂度是O\(n\)，也就是把整个数组扫一遍，比t大的放左边，比t小的放右边，最后t放在中间N\[i\]。
+
+**partition和TopK问题有什么关系呢？**
+
+TopK是希望求出arr\[1,n\]中最大的k个数，那如果找到了**第k大**的数，做一次partition，不就一次性找到最大的k个数了么？（ 本例即partition后左半区的k个数）
+
+问题变成了arr\[1, n\]中找到第k大的数。
+
+再回过头来看看**第一次**partition，划分之后：
+
+i = partition\(arr, 1, n\);
+
+* 如果i大于k，则说明arr\[i\]左边的元素都大于k，于是只递归arr\[1, i-1\]里第k大的元素即可；
+* 如果i小于k，则说明说明第k大的元素在arr\[i\]的右边，于是只递归arr\[i+1, n\]里第k-i大的元素即可；
+
+ 这就是**随机选择**算法randomized\_select，属于上面说的**减治法**，伪代码如下：
+
+```java
+int RS(arr, low, high, k){
+
+    if(low== high) return arr[low];
+
+    i= partition(arr, low, high);
+
+    temp= i-low; //数组前半部分元素个数
+
+    if(temp>=k)
+
+        return RS(arr, low, i-1, k); //求前半部分第k大
+
+    else
+
+        return RS(arr, i+1, high, k-i); //求后半部分第k-i大
+
+}
+```
+
+![](https://mmbiz.qpic.cn/mmbiz_png/YrezxckhYOzzA7pbponFmibHaMYQ5Vkk9kb1JqQdt0av8kK59VvicibDNOrbIXsZicaHAFhk8u1A7BQW1aYIr84pQg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+这是一个典型的减治算法，递归内的两个分支，最终只会执行一个，它的时间复杂度是O\(n\)。
+
+再次强调一下：
+
+* **分治法**，大问题分解为小问题，小问题都要递归各个分支，例如：快速排序
+* **减治法**，大问题分解为小问题，小问题只要递归一个分支，例如：二分查找，随机选择
+
+通过随机选择（randomized\_select），就能找到arr\[1, n\]中第k大的数；
+
+如果再进行一次partition，就能得到所有TopK的结果。
 
 ### 代码
 
@@ -196,7 +324,49 @@ class Solution {
 }
 ```
 
-随机选择
+快速选择
 
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        int left =0, right = nums.length - 1;
+        int index = nums.length - k;
+        while (left < right) {
+            int pivot = partition(nums, left, right);
+            if (pivot < index) {
+                left = pivot + 1;
+            } else if (pivot > index) {
+                right = pivot - 1;
+            } else {
+                return nums[pivot];
+            }
+        }
+        return nums[left];
+    }
 
+    private int partition(int[] nums, int left, int right) {
+        int pivot = left;
+        while (left <= right) {
+            while (left <= right && nums[left] <= nums[pivot]) {
+                left++;
+            }
+            while (left <= right && nums[right] > nums[pivot]) {
+                right--;
+            }
+            if (left > right) {
+                break;
+            }
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+        }
+
+        //
+        int temp = nums[right];
+        nums[right] = nums[pivot];
+        nums[pivot] = temp;
+        return right;
+    }
+}
+```
 
