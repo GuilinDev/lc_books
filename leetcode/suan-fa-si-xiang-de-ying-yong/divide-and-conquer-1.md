@@ -344,43 +344,46 @@ class Solution {
 ```java
 class Solution {
     public int findKthLargest(int[] nums, int k) {
-        int left =0, right = nums.length - 1;
-        int index = nums.length - k;
-        while (left < right) {
-            int pivot = partition(nums, left, right);
-            if (pivot < index) {
-                left = pivot + 1;
-            } else if (pivot > index) {
-                right = pivot - 1;
-            } else {
-                return nums[pivot];
-            }
-        }
-        return nums[left];
+        //传入的参数nums.length - k表示找到nums.length - k最小的
+        return findK(nums, nums.length - k, 0, nums.length - 1);
     }
 
-    private int partition(int[] nums, int left, int right) {
-        int pivot = left;
-        while (left <= right) {
-            while (left <= right && nums[left] <= nums[pivot]) {
-                left++;
-            }
-            while (left <= right && nums[right] > nums[pivot]) {
-                right--;
-            }
-            if (left > right) {
-                break;
-            }
-            int temp = nums[left];
-            nums[left] = nums[right];
-            nums[right] = temp;
+    private int findK(int[] nums, int k, int left, int right) {
+        if (left >= right) {//递归的终止条件，表示已经递归找完整个数组
+            return nums[left];
         }
 
-        //
-        int temp = nums[right];
-        nums[right] = nums[pivot];
-        nums[pivot] = temp;
-        return right;
+        int i = partition(nums, left, right);
+        if (i == k) {//恰好是第k大的数
+            return nums[i];
+        } else if (i < k) {//在选定的pivot右边
+            return findK(nums, k, i + 1, right);
+        } else {//左边
+            return findK(nums, k, left, i - 1);
+        }
+    }
+
+    //只partition一次
+    private int partition(int[] nums, int start, int end) {
+        int pivot = nums[start];//基准
+        int slow = start;//开始
+        int fast = start + 1;//从start位置后面一位元素准备开始swap
+
+        while (fast <= end) {//到最后一个元素前
+            if (nums[fast] < pivot) {//将小的元素挪到pivot前面
+                slow++;//这里需要先让指向pivot索引后移一位
+                swap (nums, slow, fast);
+            }
+            fast++;//可能的交换结束后，fast继续右移
+        }
+        swap (nums, start, slow);//最后需要交换一下初始位置元素和pivot索引的元素
+        return slow;//pivot所处的位置
+    }
+
+    private void swap (int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
 ```
