@@ -67,7 +67,7 @@ public class SelectionSort {
 
 插入排序包括：直接插入排序、二分插入排序以及希尔排序。
 
-```text
+```java
 public void insert(int[] a)
 	{
 		for(int i=1;i<a.length;i++)     //n-1此扫描，依次向前插入n-1个元素
@@ -87,9 +87,9 @@ public void insert(int[] a)
 
 ## 高级排序算法
 
-![](../.gitbook/assets/image%20%2822%29.png)
+**快速排序**
 
-
+\*\*\*\*
 
 ## 堆
 
