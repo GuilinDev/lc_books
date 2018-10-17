@@ -1733,5 +1733,67 @@ as "[1,2,3,null,null,4,5]"
 
 ### 题意和分析
 
+将一个数据结构或者对象（比如这道题的一个二叉树）转换为位序列，为序列化；同时还可以转换回来，为反序列化。位序列可以存储在内存，文件或者网络连接中。 这题有两种解法，分别为先序遍历的递归解法\([参考这里](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/74253/Easy-to-understand-Java-Solution)\)和层序遍历的非递归解法\(\)。
+
 ### 代码
+
+先序遍历的递归解法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+    private static final String spliter = ",";//将node进行split的分割符
+    private static final String NN = "X";//表示null node
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        buildString(root, sb);
+        return sb.toString();
+    }
+
+    private void buildString(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append(NN).append(spliter);
+        } else {
+            sb.append(node.val).append(spliter);
+            buildString(node.left, sb);
+            buildString(node.right, sb);
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        Deque<String> nodes = new LinkedList<>();
+        nodes.addAll(Arrays.asList(data.split(spliter)));
+        return buildTree(nodes);
+    }
+
+    private TreeNode buildTree(Deque<String> nodes) {
+        String val = nodes.remove();
+        if (val.equals(NN)) {
+            return null;
+        } else {
+            TreeNode node = new TreeNode(Integer.valueOf(val));
+            node.left = buildTree(nodes);
+            node.right = buildTree(nodes);
+            return node;
+        }
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+```
+
+层序遍历的非递归解法
 
