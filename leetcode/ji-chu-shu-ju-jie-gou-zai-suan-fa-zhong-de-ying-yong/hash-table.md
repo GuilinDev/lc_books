@@ -89,6 +89,8 @@ public class Codec {
 // codec.decode(codec.encode(url));
 ```
 
+两个HashMap的做法（[https://www.youtube.com/watch?v=T2xk6xv9-rs&t=517s](https://www.youtube.com/watch?v=T2xk6xv9-rs&t=517s)）
+
 ## 202 Happy Number
 
 ### 原题概述
