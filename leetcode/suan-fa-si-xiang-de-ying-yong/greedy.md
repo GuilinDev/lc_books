@@ -55,6 +55,110 @@ class Solution {
 }
 ```
 
+## **134 Gas Station**
+
+### 原题概述
+
+There are _N_ gas stations along a circular route, where the amount of gas at station _i_ is `gas[i]`.
+
+You have a car with an unlimited gas tank and it costs `cost[i]` of gas to travel from station _i_ to its next station \(_i_+1\). You begin the journey with an empty tank at one of the gas stations.
+
+Return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1.
+
+**Note:**
+
+* If there exists a solution, it is guaranteed to be unique.
+* Both input arrays are non-empty and have the same length.
+* Each element in the input arrays is a non-negative integer.
+
+**Example 1:**
+
+```text
+Input: 
+gas  = [1,2,3,4,5]
+cost = [3,4,5,1,2]
+
+Output: 3
+
+Explanation:
+Start at station 3 (index 3) and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+Travel to station 4. Your tank = 4 - 1 + 5 = 8
+Travel to station 0. Your tank = 8 - 2 + 1 = 7
+Travel to station 1. Your tank = 7 - 3 + 2 = 6
+Travel to station 2. Your tank = 6 - 4 + 3 = 5
+Travel to station 3. The cost is 5. Your gas is just enough to travel back to station 3.
+Therefore, return 3 as the starting index.
+```
+
+**Example 2:**
+
+```text
+Input: 
+gas  = [2,3,4]
+cost = [3,4,3]
+
+Output: -1
+
+Explanation:
+You can't start at station 0 or 1, as there is not enough gas to travel to the next station.
+Let's start at station 2 and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+Travel to station 0. Your tank = 4 - 3 + 2 = 3
+Travel to station 1. Your tank = 3 - 3 + 3 = 3
+You cannot travel back to station 2, as it requires 4 unit of gas but you only have 3.
+Therefore, you can't travel around the circuit once no matter w
+```
+
+### 题意和分析
+
+首先要知道能走完整个环的前提是gas的总量要大于cost的总量，这样才会有起点的存在。假设开始设置起点start = 0, 并从这里出发，如果当前的gas值大于cost值，就可以继续前进，此时到下一个站点，剩余的gas加上当前的gas再减去cost，看是否大于0，若大于0，则继续前进。当到达某一站点时，若这个值小于0了，则说明从起点到这个点中间的任何一个点都不能作为起点（因为总体不够，前面的油有剩余，中间任何点作为起点的话油肯定不够），则把起点设为下一个点，继续遍历。当遍历完整个环时，当前保存的起点即为所求。
+
+也可以从后往前遍历，用一个变量max来记录出现过的剩余油量的最大值，total记录当前剩余油量的值，start还是记录起点的位置。当total大于max的时候，说明当前位置可以作为起点，更新start，并且更新max。为啥呢？因为每次total加上的都是当前位置的油量减去消耗，如果这个差值大于0的话，说明当前位置可以当作起点，因为从当前位置到末尾都不会出现油量不够的情况，而一旦差值小于0的话，说明当前位置如果是起点的话，油量就不够，无法走完全程，所以我们不更新起点位置start。最后结束后还是看total是否大于等于0，如果其小于0的话，说明没有任何一个起点能走完全程，因为总油量都不够。
+
+### 代码
+
+正常的greedy
+
+```java
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int total = 0;//总路程的油量
+        int remain = 0;//以某个点为起点，某站点剩余的油量
+        int start = 0;//起点
+
+        for (int i = 0; i < gas.length; i++) {
+            total += gas[i] - cost[i];//循环完所有的加油站点的油量
+            remain += gas[i] - cost[i];
+            if (remain < 0) {
+                start = i + 1;
+                remain = 0;//从起点重新开始
+            }
+        }
+        return total < 0 ? -1 : start;
+    }
+}
+```
+
+从后开始算
+
+```java
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int total = 0;
+        int max = -1;
+        int start = 0;
+
+        for (int i = gas.length - 1; i >= 0; i--) {
+            total += gas[i] - cost[i];
+            if (total > max) {
+                start = i;
+                max = total;
+            }
+        }
+        return total < 0 ? -1 : start;
+    }
+}
+```
+
 ## **55 Jump Game** 
 
 ### **原题概述**
