@@ -32,6 +32,29 @@ Output:
 
 ### 代码
 
+```java
+class Solution {
+    public int[][] reconstructQueue(int[][] people) {
+        Arrays.sort(people, new Comparator<int[]>() {//按身高降序排序(h大的在前面)，按k的大小升序排列(k小的在前面)
+            public int compare(int[] a, int[] b) {
+                if (a[0] != b[0]) {
+                    return -a[0] + b[0];//先排身高
+                } else {
+                    return a[1] - b[1];//身高一样再排前面的人数
+                }
+            }
+        });
+
+        List<int[]> result = new LinkedList<int[]>();//在结果中选择合适的位置插入存储结果
+        for (int i = 0; i < people.length; i++) {
+            int[] onePeople = people[i];
+            result.add(onePeople[1], onePeople);
+        }
+        return result.toArray(new int[people.length][]);
+    }
+}
+```
+
 ## **55 Jump Game** 
 
 ### **原题概述**
