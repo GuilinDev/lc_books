@@ -940,9 +940,9 @@ class Solution {
 }
 ```
 
-##  **59 Spiral Matrix II** {#59-spiral-matrix-ii}
+##  **59 Spiral Matrix II** <a id="59-spiral-matrix-ii"></a>
 
-### **原题概述** {#yuan-ti-gai-shu-29}
+### **原题概述** <a id="yuan-ti-gai-shu-29"></a>
 
 Given a positive integer _n_, generate a square matrix filled with elements from 1 to _n_2 in spiral order.
 
@@ -958,11 +958,11 @@ Output:
 ]
 ```
 
-### **题意和分析** {#ti-yi-he-fen-xi-29}
+### **题意和分析** <a id="ti-yi-he-fen-xi-29"></a>
 
 这道题根据打印顺序来创建二维数组，和54 Spiral Matrix一样的思路。
 
-### **代码** {#dai-ma-29}
+### **代码** <a id="dai-ma-29"></a>
 
 ```java
 class Solution {

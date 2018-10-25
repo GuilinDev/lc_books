@@ -58,19 +58,19 @@ class Solution {
 
 ## 137 - Single Number II
 
-### 原题概述 {#yuan-ti-gai-shu}
+### 原题概述 <a id="yuan-ti-gai-shu"></a>
 
-### 题意和分析 {#ti-yi-he-fen-xi}
+### 题意和分析 <a id="ti-yi-he-fen-xi"></a>
 
-### 代码 {#dai-ma}
+### 代码 <a id="dai-ma"></a>
 
 ## 260 - Single Number III
 
-### 原题概述 {#yuan-ti-gai-shu}
+### 原题概述 <a id="yuan-ti-gai-shu"></a>
 
-### 题意和分析 {#ti-yi-he-fen-xi}
+### 题意和分析 <a id="ti-yi-he-fen-xi"></a>
 
-### 代码 {#dai-ma}
+### 代码 <a id="dai-ma"></a>
 
 ## 268 - Missing Number
 

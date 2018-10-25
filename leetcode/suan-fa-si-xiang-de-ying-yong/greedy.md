@@ -4,6 +4,34 @@ description: '贪心准备下Jump Game, 加油站， 迪杰斯特拉， 最小�
 
 # Greedy
 
+## **406 Queue Reconstruction by Height**
+
+### 原题概述
+
+Suppose you have a random list of people standing in a queue. Each person is described by a pair of integers `(h, k)`, where `h` is the height of the person and `k` is the number of people in front of this person who have a height greater than or equal to `h`. Write an algorithm to reconstruct the queue.
+
+**Note:**  
+The number of people is less than 1,100.  
+
+
+**Example**
+
+```text
+Input:
+[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+
+Output:
+[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+```
+
+### 题意和分析
+
+给一个队列，里面的人用\[h,k\]二元组表示，h代表当前人的高度，k代表在这个人前面且高度大于等于它的h的人数，现在要求按照这个二元组重构这个队列使之变得有效。这道题的思路是\(贪心算法\)： \(1\)首先找到身高最高的人并对他们进行排序。 \(2\)然后找到身高次高的人，按照他们的前面的人数把他们插入到最高的人群中。 \(3\) 以此类推。
+
+因此这是一个排序和插入的过程，按照身高进行降序排序，如果我们按照先处理身高最高的，那他们的k值就是他们所应该在的位置——因为已经没有比他们更高的了。 所以我们从高度从高到低按照k值的位置一直插入到答案中即可。
+
+### 代码
+
 ## **55 Jump Game** 
 
 ### **原题概述**
@@ -79,7 +107,7 @@ class Solution {
 
 ##  **45 Jump Game II**
 
-### **原题概述** {#yuan-ti-gai-shu-30}
+### **原题概述** <a id="yuan-ti-gai-shu-30"></a>
 
 Given an array of non-negative integers, you are initially positioned at the first index of the array.
 
@@ -100,11 +128,11 @@ Explanation: The minimum number of jumps to reach the last index is 2.
 
 You can assume that you can always reach the last index.
 
-### **题意和分析** {#ti-yi-he-fen-xi-30}
+### **题意和分析** <a id="ti-yi-he-fen-xi-30"></a>
 
 上一道题55 Jump Game是判断能否到达最后，这一道题是找出步数最少的走法，[参考这里](https://www.cnblogs.com/lichen782/p/leetcode_Jump_Game_II.html)；遍历数组，把上一道题的全局最优变化成第step步最优和第step-1步最优，step表示走了多少步，当走到超过第step-1步所能达到最远距离的时候，说明step-1不能到达当前步，这时候更新步数step-1。
 
-### **代码** {#dai-ma-30}
+### **代码** <a id="dai-ma-30"></a>
 
 ```java
 class Solution {
