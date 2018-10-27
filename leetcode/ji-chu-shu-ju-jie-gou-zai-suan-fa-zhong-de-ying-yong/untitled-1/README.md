@@ -267,6 +267,38 @@ class Solution {
 
 迭代
 
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+
+        TreeNode current = root;
+
+        while (current != null || !stack.isEmpty()) {
+            while (current != null) {
+                stack.add(current);
+                current = current.left;//先移动指针去左儿子
+            }
+            //左儿子没了开始从二叉树的最底层弹，同时考虑每个结点的右儿子
+            current = stack.pop();
+            result.add(current.val);//这时候可以add了
+            current = current.right;
+        }
+        return result;
+    }
+}
+```
+
 ## 104 - Maximum Depth of Binary Tree
 
 ### 原题概述
