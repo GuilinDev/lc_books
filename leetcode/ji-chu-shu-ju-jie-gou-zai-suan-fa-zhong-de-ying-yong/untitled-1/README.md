@@ -93,9 +93,50 @@ class Solution {
 
 ### 原题概述
 
+Given a binary tree, return the _postorder_ traversal of its nodes' values.
+
+**Example:**
+
+```text
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+Output: [3,2,1]
+```
+
+**Follow up:** Recursive solution is trivial, could you do it iteratively?
+
 ### 题意和分析
 
+后序遍历，左右根。
+
 ### 代码
+
+递归
+
+```java
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<Integer>();
+        postorderTraversal (root, result);
+        return result;
+    }
+    private void postorderTraversal(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        postorderTraversal (root.left, result);
+        postorderTraversal (root.right, result);
+        result.add(root.val);
+    }
+}
+```
+
+迭代
 
 ## 94 Binary Tree Inorder Traversal
 
