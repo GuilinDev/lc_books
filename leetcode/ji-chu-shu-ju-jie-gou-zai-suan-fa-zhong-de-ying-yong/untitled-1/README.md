@@ -1,5 +1,29 @@
 # Tree
 
+## 144 Binary Tree Preorder Traversal
+
+### 原题概述
+
+### 题意和分析
+
+### 代码
+
+## 145 Binary Tree Postorder Traversal
+
+### 原题概述
+
+### 题意和分析
+
+### 代码
+
+## 94 Binary Tree Inorder Traversal
+
+### 原题概述
+
+### 题意和分析
+
+### 代码
+
 ## 104 - Maximum Depth of Binary Tree
 
 ### 原题概述
