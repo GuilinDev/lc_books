@@ -213,9 +213,59 @@ class Solution {
 
 ### 原题概述
 
+Given a binary tree, return the _inorder_ traversal of its nodes' values.
+
+**Example:**
+
+```text
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+Output: [1,3,2]
+```
+
+**Follow up:** Recursive solution is trivial, could you do it iteratively?
+
 ### 题意和分析
 
+中序遍历，左根右。
+
 ### 代码
+
+递归
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        inorderTraversalHelper(root, result);
+        return result;
+    }
+    private void inorderTraversalHelper(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        inorderTraversalHelper(root.left, result);
+        result.add(root.val);
+        inorderTraversalHelper(root.right, result);
+    }
+}
+```
+
+迭代
 
 ## 104 - Maximum Depth of Binary Tree
 
