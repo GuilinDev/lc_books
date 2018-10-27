@@ -4,9 +4,90 @@
 
 ### 原题概述
 
+Given a binary tree, return the _preorder_ traversal of its nodes' values.
+
+**Example:**
+
+```text
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+Output: [1,2,3]
+```
+
+**Follow up:** Recursive solution is trivial, could you do it iteratively?
+
 ### 题意和分析
 
+前序遍历，根左右。
+
 ### 代码
+
+递归
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        preorderTraversalHelper(root, result);
+        return result;
+    }
+    private void preorderTraversalHelper(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        result.add(root.val);
+        preorderTraversalHelper(root.left, result);
+        preorderTraversalHelper(root.right, result);
+    }
+}
+```
+
+迭代
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+
+        TreeNode current = root;
+        while (current != null) {
+            result.add(current.val);
+            if (current.right != null) {//按照从上到下，逐次放入右儿子
+                stack.push(current.right);
+            }
+            current = current.left;
+            if (current == null && !stack.isEmpty()) {//说明左儿子已经放完了
+                current = stack.pop();
+            }
+        }
+        return result;
+    }
+}
+```
 
 ## 145 Binary Tree Postorder Traversal
 
