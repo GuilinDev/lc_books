@@ -7,6 +7,7 @@
   * [网络基础](ji-chu-zhi-shi/wang-luo-ji-chu.md)
   * [Java语言相关的面试问题](ji-chu-zhi-shi/java-yu-yan-xiang-guan-de-mian-shi-wen-ti.md)
   * [公开课](ji-chu-zhi-shi/gong-kai-ke.md)
+* [剑指Offer题目](jian-zhi-offer-ti-mu.md)
 * [LeetCode刷题](leetcode/README.md)
   * [0. LeetCode Strategy](leetcode/introduction.md)
   * [1. 基础算法和算法思想](leetcode/ji-chu-suan-fa.md)

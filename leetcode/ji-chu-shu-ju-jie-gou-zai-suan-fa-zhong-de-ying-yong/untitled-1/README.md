@@ -1,8 +1,8 @@
 # Tree
 
-### 104 - Maximum Depth of Binary Tree
+## 104 - Maximum Depth of Binary Tree
 
-#### 原题概述
+### 原题概述
 
 Given a binary tree, find its maximum depth.
 
@@ -24,11 +24,11 @@ Given binary tree `[3,9,20,null,null,15,7]`,
 
 return its depth = 3.
 
-#### 题意和分析
+### 题意和分析
 
 给一颗二叉树，找到其最大的深度并返回。可以用递归，DFS和BFS来做。
 
-#### 代码
+### 代码
 
 递归做法
 
@@ -132,9 +132,9 @@ class Solution {
 }
 ```
 
-### 226 - Invert Binary Tree
+## 226 - Invert Binary Tree
 
-#### 原题概述
+### 原题概述
 
 Invert a binary tree.
 
@@ -165,11 +165,11 @@ This problem was inspired by [this original tweet](https://twitter.com/mxcl/stat
 
 > Google: 90% of our engineers use the software you wrote \(Homebrew\), but you can’t invert a binary tree on a whiteboard so f\*\*\* off.
 
-#### 题意和分析
+### 题意和分析
 
 同样可以用递归，DFS和BFS来做。
 
-#### 代码
+### 代码
 
 递归的写法很简单，只是复杂度没有什么好优化的。
 
@@ -273,9 +273,9 @@ class Solution {
 }
 ```
 
-### 617 - Merge Two  Binary Tree
+## 617 - Merge Two  Binary Tree
 
-#### 原题概述
+### 原题概述
 
 Given two binary trees and imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not.
 
@@ -303,11 +303,11 @@ Merged tree:
 
 **Note:** The merging process must start from the root nodes of both trees.
 
-#### 题意和分析
+### 题意和分析
 
 同样可以用递归来做，将一棵树merge到另一颗树中。
 
-#### 代码
+### 代码
 
 递归
 
@@ -338,9 +338,9 @@ class Solution {
 }
 ```
 
-### 100 - Same Tree
+## 100 - Same Tree
 
-#### 原题概述
+### 原题概述
 
 Given two binary trees, write a function to check if they are the same or not.
 
@@ -382,11 +382,11 @@ Input:     1         1
 Output: false
 ```
 
-#### 题意和分析
+### 题意和分析
 
 用递归和非递归分别实现。
 
-#### 代码
+### 代码
 
 递归
 
@@ -459,9 +459,9 @@ class Solution {
 }
 ```
 
-### 173 - Binary Search Tree Iterator
+## 173 - Binary Search Tree Iterator
 
-#### 原题概述
+### 原题概述
 
 Implement an iterator over a binary search tree \(BST\). Your iterator will be initialized with the root node of a BST.
 
@@ -469,7 +469,7 @@ Calling `next()` will return the next smallest number in the BST.
 
 **Note:** `next()` and `hasNext()` should run in average O\(1\) time and uses O\(h\) memory, where h is the height of the tree.
 
-#### 题意和分析
+### 题意和分析
 
 这道题是对二叉搜索树的遍历，要求next\(\)返回下一个最小的val，next\(\)和hasNext\(\)的时间复杂度为O\(1\)，空间为O\(h\)，其中h为高度。BST的建树规则是left-root-right，这个跟中序遍历一样。
 
@@ -560,7 +560,7 @@ Calling `next()` will return the next smallest number in the BST.
 
 然后，我们的这个数据结构是否满足题目要求。我们可以看到每一个结点一定要进入栈中，且该操作是在构造过程和next\(\)中执行的，其中构造过程只执行一次，而next\(\)执行多次。但是进栈的操作存在差异性，有时候调用next\(\)不会往栈中添加任何元素，有时候会添加多个，但是至多不超过h个，其中h是树的高度，因为添加时只顺着树的左分支往下添加。我们一共要调用n次next\(\)，在这n次调用中，每个结点都进栈/出栈，共n次入栈操作，n次出栈操作，平均起来，**每次next\(\)只有`一次入栈操作+一次出栈操作`**，因此**满足平均时间复杂度O\(1\)**的要求。再看空间复杂度，刚才我们已经说过，在往栈中添加元素时**只顺着树的左分支往下添加**，因此**至多添加h个结点**，其中h就是树的高度，因此**满足空间复杂度O\(h\)**的要求。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -611,9 +611,9 @@ public class BSTIterator {
  */
 ```
 
-### 96 - Unique Binary Search Trees
+## 96 - Unique Binary Search Trees
 
-#### 原题概述
+### 原题概述
 
 Given _n_, how many structurally unique **BST's** \(binary search trees\) that store values 1 ... _n_?
 
@@ -632,7 +632,7 @@ Given n = 3, there are a total of 5 unique BST's:
    2     1         2                 3
 ```
 
-#### 题意和分析
+### 题意和分析
 
 这个解释来自[http://fisherlei.blogspot.com/2013/03/leetcode-unique-binary-search-trees.html](http://fisherlei.blogspot.com/2013/03/leetcode-unique-binary-search-trees.html)，略作修改
 
@@ -675,7 +675,7 @@ Count\[3\] = Count\[0\]\*Count\[2\]  \(1为根的情况\)
 
 时间上每次求解i个结点的二叉查找树数量的需要一个i步的循环，总体要求n次，所以总时间复杂度是O\(1+2+...+n\)=O\(n^2\)。空间上需要一个数组来维护，并且需要前i个的所有信息，所以是O\(n\)。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -702,9 +702,9 @@ class Solution {
 }
 ```
 
-### 95 - Unique Binary Search Trees II
+## 95 - Unique Binary Search Trees II
 
-#### 原题概述
+### 原题概述
 
 Given an integer _n_, generate all structurally unique **BST's** \(binary search trees\) that store values 1 ... _n_.
 
@@ -730,7 +730,7 @@ The above output corresponds to the 5 unique BST's shown below:
    2     1         2                 3
 ```
 
-#### 题意和分析
+### 题意和分析
 
 跟上一题相比，这道题要求不是总数，而是打印出所有符合条件的BST。
 
@@ -747,7 +747,7 @@ The above output corresponds to the 5 unique BST's shown below:
 
 3. 最后，把根结点放入链表中。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -795,9 +795,9 @@ class Solution {
 }
 ```
 
-### 110 - Balanced Binary Tree
+## 110 - Balanced Binary Tree
 
-#### 原题概述
+### 原题概述
 
 Given a binary tree, determine if it is height-balanced.
 
@@ -835,11 +835,11 @@ Given the following tree `[1,2,2,3,3,null,null,4,4]`:
 
 Return false.
 
-#### 题意和分析
+### 题意和分析
 
 平衡二叉树的定义：两个子树的高度相差不会超过1，而且左右子树都是平衡的。用动态规划的两个套路，**自底向上**和**自顶向下来解**。
 
-#### 代码
+### 代码
 
 自顶向下 - 这个办法利用递归，算出左右子树的深度，然后严格按照平衡二叉树的定义看左右子树的深度是否相差大于1。其中findDepth\(\)的复杂度需要遍历每个结点为O\(n\)，而对所有结点都会执行以下findDepth\(\)，所以总体时间复杂度为O\(n^2\)，空间为O\(n\)。
 
@@ -917,9 +917,9 @@ class Solution {
 }
 ```
 
-### 108 - Convert Sorted Array to Binary Search Tree
+## 108 - Convert Sorted Array to Binary Search Tree
 
-#### 原题概述
+### 原题概述
 
 Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
 
@@ -939,11 +939,11 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
  -10  5
 ```
 
-#### 题意和分析
+### 题意和分析
 
 这道题是要将有序数组转为二叉搜索树，二叉搜索树始终满足左&lt;=根&lt;=右的特性，如果将二叉搜索树按中序遍历的话，得到的就是一个有序数组。那么反过来，根节点应该是有序数组的中间点，从中间点分开为左右两个有序数组，在分别找出其中间点作为原中间点的左右两个子节点，这不就是是二分查找法的核心思想么。所以这道题考的就是二分查找法。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -974,9 +974,9 @@ class Solution {
 }
 ```
 
-### 235 - Lowest Common Ancestor of a Binary Search Tree
+## 235 - Lowest Common Ancestor of a Binary Search Tree
 
-#### 原题概述
+### 原题概述
 
 Given a binary search tree \(BST\), find the lowest common ancestor \(LCA\) of two given nodes in the BST.
 
@@ -1016,13 +1016,13 @@ Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of 
 * All of the nodes' values will be unique.
 * p and q are different and both values will exist in the BST.
 
-#### 题意和分析
+### 题意和分析
 
 求二叉搜索树的最小共同祖先，正常的思路是用递归来求解，由于二叉搜索树的特点是左&lt;=根&lt;=右，所以根节点的值一直都是中间值，大于左子树的所有节点值，小于右子树的所有节点值，所以如果根节点的值大于给定的两个值p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归寻找共同父节点；如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么就进入根节点的右子节点继续递归，如果都不是（大于p和q中较小值而小于较大值），则说明当前根节点就是最小共同父节点，直接返回； 
 
 如果是非递归的写法，就是把递归的过程用while来代替，但是每次循环需要更新一下当前的根节点。
 
-#### 代码
+### 代码
 
 递归
 
@@ -1083,9 +1083,9 @@ class Solution {
 }
 ```
 
-### 669 - Trim a Binary Search Tree
+## 669 - Trim a Binary Search Tree
 
-#### 原题概述
+### 原题概述
 
 Given a binary search tree and the lowest and highest boundaries as `L` and `R`, trim the tree so that all its elements lies in `[L, R]` \(R &gt;= L\). You might need to change the root of the tree, so the result should return the new root of the trimmed binary search tree.
 
@@ -1131,13 +1131,13 @@ Output:
  1
 ```
 
-#### 题意和分析
+### 题意和分析
 
 给一个边界返回\[L, R\]，修剪给定的BST，所有不在范围内的结点都应该被剪掉，但是剩下的应该还是BST，左&lt;=根&lt;=右，如果是先遍历一遍BST，把符合要求的结点放入到一个Array里面，然后再重建一个新的BST，这样的想法可能会改变原来BST的总体结构；
 
 所以用另外一种思路，在遍历的过程就对二叉树进行修剪，在递归的过程中判定根结点是否在范围中，如果根结点的值小于L，就返回根结点的右子结点调用递归的值；如果根结点大于R，就返回根结点的左子结点调用递归函数的值；如果根结点在范围内，就将起左右子结点同时更新为对其左右子结点调用递归函数的值，最后返回root。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1210,9 +1210,9 @@ class Solution {
 }
 ```
 
-### 101 - Symmetric Tree
+## 101 - Symmetric Tree
 
-#### 原题概述
+### 原题概述
 
 Given a binary tree, check whether it is a mirror of itself \(ie, symmetric around its center\).
 
@@ -1240,11 +1240,11 @@ But the following `[1,2,2,null,3,null,3]` is not:
 **Note:**  
 Bonus points if you could solve it both recursively and iteratively.
 
-#### 题意和分析
+### 题意和分析
 
 判断一个Binary Tree是否是平衡树，两个结点n1和n2，需要判断n1的左子结点和n2的右子结点是否相同，以及n1的右子结点和n2的左子结点是否相同。加分项是用递归和迭代的办法分别做出来。
 
-#### 代码
+### 代码
 
 递归
 
@@ -1326,9 +1326,9 @@ class Solution {
 }
 ```
 
-### 124 - Binary Tree Maximum Path Sum
+## 124 - Binary Tree Maximum Path Sum
 
-#### 原题概述
+### 原题概述
 
 Given a **non-empty** binary tree, find the maximum path sum.
 
@@ -1360,7 +1360,7 @@ Input: [-10,9,20,null,null,15,7]
 Output: 42
 ```
 
-#### 题意和分析
+### 题意和分析
 
 求二叉树的最大路径，这道题很容易想到DFS，但因为起始位置和结束位置可以是任意位置，所以有点难度。我们知道Tree相关的题目一般都用递归来做，树的递归解法一般是二话不说先递归到leaf，然后回溯到root，同时在回溯的过程中处理结点。以给定的例子稍微改变一下来看
 
@@ -1376,7 +1376,7 @@ Output: 42
 
 在递归函数中，如果当前结点不存在，那么直接返回0。否则就分别对其左右子节点调用递归函数，由于路径和（是 路径的和，不是某个结点的值）有可能为负数，而我们当然不希望加上负的路径和，所以我们和0相比，取较大的那个，就是要么不加，加就要加正数。然后我们来更新全局最大值结果result，就是以左子结点为终点的最大path之和加上以右子结点为终点的最大path之和，还要加上当前结点值，这样就组成了一个条完整的路径。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1414,9 +1414,9 @@ class Solution {
 
 这道题的Follow up是打印这个最大路径，这时候递归函数得返回该路径上所有的结点组成的数组，对左右子节点调用递归函数后得到的是数组，需要统计出数组之和，跟0比较，如果小于0，这个和就清零，同时数组清空，然后更新最大路径之和跟数组，最后拼出来返回值的数组。
 
-### 236 - Lowest Common Ancestor of Binary Tree
+## 236 - Lowest Common Ancestor of Binary Tree
 
-#### 原题概述
+### 原题概述
 
 Given a binary tree, find the lowest common ancestor \(LCA\) of two given nodes in the tree.
 
@@ -1456,7 +1456,7 @@ Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of 
 * All of the nodes' values will be unique.
 * p and q are different and both values will exist in the binary tree.
 
-#### 题意和分析
+### 题意和分析
 
 这道题跟[235-Lowest Common Ancestor of a Binary Search Tree](https://guilindev.gitbook.io/interview/~/edit/drafts/-LITBKR8sHSxeQQ_2a5r/leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1#235-lowest-common-ancestor-of-a-binary-search-tree)相比，这道题是普通的二叉树，结点的值不会重复，不能用二叉搜索树的特征，同样用递归，先看当前结点是否为null，若为null直接返回null，如果为p或q中的任意一个，直接返回当前结点；如果都不是就对齐左右子结点，然后分别调用递归函数，因为p和q一定存在，所以如果当前结点不等于p或q的时候，有可能：
 
@@ -1466,7 +1466,7 @@ Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of 
 
 3）若p和q同时位于右子树，同样这里有两种情况，一种情况是right会返回p和q中较高的那个位置，而left会返回空，所以我们最终返回非空的right即可，还有一种情况是会返回p和q的最小父结点，就是说当前结点的右子树中的某个结点才是p和q的最小父结点，返回。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1531,9 +1531,9 @@ class Solution {
 }
 ```
 
-###  654 - Maximum Binary Tree
+##  654 - Maximum Binary Tree
 
-#### 原题概述
+### 原题概述
 
 Given an integer array with no duplicates. A maximum tree building on this array is defined as follow:
 
@@ -1564,11 +1564,11 @@ Output: return the tree root node representing the following tree:
 
 1. The size of the given array will be in the range \[1,1000\].
 
-#### 题意和分析
+### 题意和分析
 
 给一个整数数组，创建一个最大二叉树，最大二叉树的定义是最大值为root，然后它的左子树和右子树也是最大二叉树，分治法来递归；使用到了一个辅助数据结构v来让保持降序。遍历原数组，对于每个遍历到的元素，创建一个结点，然后进行循环，如果v不空，且末尾结点值小于当前数字，那么将末尾结点连到当前结点的左子结点，并且移除数组中的末尾结点，这样可以保证子结点都会小于父结点。循环结束后，如果此时v仍不为空，说明结点值很大，那么将当前结点连到数组末尾结点的右子结点上。之后将当前结点加入v中，最后返回v的首结点。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1630,9 +1630,9 @@ class Solution {
 }
 ```
 
-### 105 - Construct Binary Tree from Preorder and Inorder Traversal
+## 105 - Construct Binary Tree from Preorder and Inorder Traversal
 
-#### 原题概述
+### 原题概述
 
 Given preorder and inorder traversal of a tree, construct the binary tree.
 
@@ -1656,11 +1656,11 @@ Return the following binary tree:
    15   7
 ```
 
-#### 题意和分析
+### 题意和分析
 
 这道题用先序和中序来建立二叉树，先序的顺序第一个肯定是root，所以二叉树的根结点可以确定，由于题目中说了没有相同的元素，所以利用先序的根我们可以找到这个根在中序的位置，并且在中序的数组中根结点为中心拆分成左右两部分，然后又用我们熟悉的递归调用就可以重建二叉树了
 
-#### 代码
+### 代码
 
 ```java
 /**
