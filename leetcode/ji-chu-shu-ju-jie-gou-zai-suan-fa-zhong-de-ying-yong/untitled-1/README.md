@@ -136,7 +136,78 @@ class Solution {
 }
 ```
 
-迭代
+迭代，可以用不同的数据结构，从后往前插入比较方便
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        LinkedList<Integer> result = new LinkedList<>();
+        Stack<TreeNode> stack = new Stack<>();
+
+        if (root == null) {
+            return result;
+        }
+
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode current = stack.pop();
+            result.addFirst(current.val);
+            if (current.left != null) {
+                stack.push(current.left);
+            }
+            if (current.right != null) {
+                stack.push(current.right);
+            }
+        }
+        return result;
+    }
+}
+```
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode current = stack.pop();
+            result.add(0, current.val);
+            if (current.left != null) {
+                stack.push(current.left);
+            }
+            if (current.right != null) {
+                stack.push(current.right);
+            }
+        }
+        return result;
+    }
+}
+```
 
 ## 94 Binary Tree Inorder Traversal
 
