@@ -299,6 +299,14 @@ class Solution {
 }
 ```
 
+## 102 Binary Tree Level Order Traversal
+
+### 原题概述
+
+### 题意和分析
+
+### 代码
+
 ## 104 - Maximum Depth of Binary Tree
 
 ### 原题概述
@@ -2157,6 +2165,71 @@ public class Codec {
 // Codec codec = new Codec();
 // codec.deserialize(codec.serialize(root));
 ```
+
+## 99 Recover Binary Search Tree
+
+### 原题概述
+
+Two elements of a binary search tree \(BST\) are swapped by mistake.
+
+Recover the tree without changing its structure.
+
+**Example 1:**
+
+```text
+Input: [1,3,null,null,2]
+
+   1
+  /
+ 3
+  \
+   2
+
+Output: [3,1,null,null,2]
+
+   3
+  /
+ 1
+  \
+   2
+```
+
+**Example 2:**
+
+```text
+Input: [3,1,4,null,null,2]
+
+  3
+ / \
+1   4
+   /
+  2
+
+Output: [2,1,4,null,null,3]
+
+  2
+ / \
+1   4
+   /
+  3
+```
+
+**Follow up:**
+
+* A solution using O\(_n_\) space is pretty straight forward.
+* Could you devise a constant space solution?
+
+### 题意和分析
+
+### 代码
+
+## 116 Populating Next Right Pointers in Each Node
+
+### 原题概述
+
+### 题意和分析
+
+### 代码
 
 ## 653 - 2Sum - Input is a BST
 
