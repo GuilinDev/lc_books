@@ -2032,7 +2032,7 @@ as "[1,2,3,null,null,4,5]"
 
 ### 题意和分析
 
-将一个数据结构或者对象（比如这道题的一个二叉树）转换为位序列，为序列化；同时还可以转换回来，为反序列化。位序列可以存储在内存，文件或者网络连接中。 这题有两种解法，分别为先序遍历的递归解法\([参考这里](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/74253/Easy-to-understand-Java-Solution)\)和层序遍历的非递归解法\(\)。
+将一个数据结构或者对象（比如这道题的一个二叉树）转换为位序列，为序列化；同时还可以转换回来，为反序列化。位序列可以存储在内存，文件或者网络连接中。 这题有两种解法，分别为先序遍历的递归解法\([参考这里](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/74253/Easy-to-understand-Java-Solution)\)和层序遍历的非递归解法\([参考这里](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/74264/Short-and-straight-forward-BFS-Java-code-with-a-queue)\)。
 
 ### 代码
 
@@ -2096,7 +2096,67 @@ public class Codec {
 
 层序遍历的非递归解法
 
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
 
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) return "";
+        Queue<TreeNode> q = new LinkedList<>();
+        StringBuilder res = new StringBuilder();
+        q.add(root);
+        while (!q.isEmpty()) {
+            TreeNode node = q.poll();
+            if (node == null) {
+                res.append("n ");
+                continue;
+            }
+            res.append(node.val + " ");
+            q.add(node.left);
+            q.add(node.right);
+        }
+        return res.toString();
+    }
+
+
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data == "") return null;
+        Queue<TreeNode> q = new LinkedList<>();
+        String[] values = data.split(" ");
+        TreeNode root = new TreeNode(Integer.parseInt(values[0]));
+        q.add(root);
+        for (int i = 1; i < values.length; i++) {
+            TreeNode parent = q.poll();
+            if (!values[i].equals("n")) {
+                TreeNode left = new TreeNode(Integer.parseInt(values[i]));
+                parent.left = left;
+                q.add(left);
+            }
+            if (!values[++i].equals("n")) {
+                TreeNode right = new TreeNode(Integer.parseInt(values[i]));
+                parent.right = right;
+                q.add(right);
+            }
+        }
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+```
 
 ## 653 - 2Sum - Input is a BST
 
