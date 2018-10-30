@@ -2440,9 +2440,114 @@ class Solution {
 
 ### 原题概述
 
+Given a binary tree
+
+```text
+struct TreeLinkNode {
+  TreeLinkNode *left;
+  TreeLinkNode *right;
+  TreeLinkNode *next;
+}
+```
+
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to `NULL`.
+
+Initially, all next pointers are set to `NULL`.
+
+**Note:**
+
+* You may only use constant extra space.
+* Recursive approach is fine, implicit stack space does not count as extra space for this problem.
+* You may assume that it is a perfect binary tree \(ie, all leaves are at the same level, and every parent has two children\).
+
+**Example:**
+
+Given the following perfect binary tree,
+
+```text
+     1
+   /  \
+  2    3
+ / \  / \
+4  5  6  7
+```
+
+After calling your function, the tree should look like:
+
+```text
+     1 -> NULL
+   /  \
+  2 -> 3 -> NULL
+ / \  / \
+4->5->6->7 -> NULL
+```
+
 ### 题意和分析
 
+这道题是层序遍历的应用，找到每一层右边的结点，遍历的递归和非递归的方法都需要掌握。
+
 ### 代码
+
+递归
+
+```java
+/**
+ * Definition for binary tree with next pointer.
+ * public class TreeLinkNode {
+ *     int val;
+ *     TreeLinkNode left, right, next;
+ *     TreeLinkNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        connectHelper(root);
+    }
+    private void connectHelper(TreeLinkNode current) {
+        if (current == null || current.left == null) {
+            return;
+        }
+        current.left.next = current.right;
+        if (current.next != null) {
+            current.right.next = current.next.left;
+        }
+        connectHelper(current.left);
+        connectHelper(current.right);
+    }
+}
+```
+
+非递归
+
+```java
+/**
+ * Definition for binary tree with next pointer.
+ * public class TreeLinkNode {
+ *     int val;
+ *     TreeLinkNode left, right, next;
+ *     TreeLinkNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if (root == null) {
+            return;
+        }
+        TreeLinkNode current = root;
+        TreeLinkNode nextLeftmost = null;
+
+        while (current.left != null) {
+            nextLeftmost = current.left;//记录下一层的起点
+            while (current != null) {
+                current.left.next = current.right;
+                current.right.next = (current.next == null ? null : current.next.left);
+                current = current.next;
+            }
+            current = nextLeftmost;//指向下一层
+        }
+    }
+}
+```
 
 ## 653 - 2Sum - Input is a BST
 
