@@ -2132,3 +2132,83 @@ class Solution {
 }
 ```
 
+## 273 Integer to English Words
+
+### 原题概述
+
+Convert a non-negative integer to its english words representation. Given input is guaranteed to be less than 231 - 1.
+
+**Example 1:**
+
+```text
+Input: 123
+Output: "One Hundred Twenty Three"
+```
+
+**Example 2:**
+
+```text
+Input: 12345
+Output: "Twelve Thousand Three Hundred Forty Five"
+```
+
+**Example 3:**
+
+```text
+Input: 1234567
+Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+```
+
+**Example 4:**
+
+```text
+Input: 1234567891
+Output: "One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"
+```
+
+### 题意和分析
+
+要求把整数转换成英文单词，利用数组来枚举， 3个一组的进行处理，而且题目中限定了输入数字范围为0到2^31 - 1之间，最高只能到billion位，3个一组也只需处理四组即可，那么我们需要些一个处理三个一组数字的函数，我们需要把1到19的英文单词都列出来，放到一个数组里，还要把20,30，... 到90的英文单词列出来放到另一个数组里，然后需要用写技巧，比如一个三位数n，百位数表示为n/100，后两位数一起表示为n%100，十位数表示为n%100/10，个位数表示为n%10，然后我们看后两位数是否小于20，小于的话直接从数组中取出单词，如果大于等于20的话，则分别将十位和个位数字的单词从两个数组中取出来。然后再来处理百位上的数字，还要记得加上Hundred。主函数中调用四次这个帮助函数，然后中间要插入"Thousand", "Million", "Billion"到对应的位置，最后check一下末尾是否有空格，把空格都删掉，返回的时候检查下输入是否为0，是的话要返回'Zero'。
+
+### 代码
+
+```java
+class Solution {
+    private final String[] LESS_THAN_20 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+    private final String[] TENS = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    private final String[] THOUSANDS = {"", "Thousand", "Million", "Billion"};
+
+    public String numberToWords(int num) {
+        if (num == 0) {
+            return "Zero";
+        }
+
+        int i = 0;
+        String words = "";
+
+        while (num > 0) {
+            if (num % 1000 != 0) {
+                words = numberToWordsHelper(num % 1000) + THOUSANDS[i] + " " + words;
+            }
+            num /= 1000;
+            i++;
+        }
+        return words.trim();
+    }
+
+    private String numberToWordsHelper(int num) {
+        if (num == 0) {
+            return "";
+        } else if (num < 20) {
+            return LESS_THAN_20[num] + " ";
+        } else if (num < 100) {
+            return TENS[num / 10] + " " + numberToWordsHelper(num % 10);
+        } else {
+            return LESS_THAN_20[num / 100] + " Hundred " + numberToWordsHelper(num % 100);
+        }
+    }
+}
+```
+
+
+
