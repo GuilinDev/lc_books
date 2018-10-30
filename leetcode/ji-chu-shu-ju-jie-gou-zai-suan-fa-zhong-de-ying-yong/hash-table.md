@@ -65,6 +65,8 @@ Design the `encode` and `decode` methods for the TinyURL service. There is no re
 
 最简单的一种编码就是用个计数器，当前是第几个存入的url就编码成几，然后解码的时候也能根据数字来找到原来的url，题目中推荐用六位随机数。短链接的设计参考[这里](https://leetcode.com/problems/encode-and-decode-tinyurl/discuss/100276/Easy-solution-in-java-5-line-code.)。
 
+> 上面这种方法虽然简单，但是缺点却很多，首先，如果接受到多次同一url地址，仍然会当做不同的url来处理。当然这个缺点可以通过将vector换成哈希表，每次先查找url是否已经存在。虽然这个缺点可以克服掉，但是由于是用计数器编码，那么当前服务器存了多少url就曝露出来了，也许会有安全隐患。而且计数器编码另一个缺点就是数字会不断的增大，那么编码的长度也就不是确定的了。而题目中明确推荐了使用六位随机字符来编码，那么我们只要在所有大小写字母和数字中随机产生6个字符就可以了，我们用哈希表建立6位字符和url之间的映射，如果随机生成的字符之前已经存在了，我们就继续随机生成新的字符串，直到生成了之前没有的字符串为止。下面的代码中使用了两个哈希表，目的是为了建立六位随机字符串和url之间的相互映射，这样进来大量的相同url时，就不用生成新的随机字符串了。
+
 ### 代码
 
 ```java
@@ -90,6 +92,43 @@ public class Codec {
 ```
 
 两个HashMap的做法（[https://www.youtube.com/watch?v=T2xk6xv9-rs&t=517s](https://www.youtube.com/watch?v=T2xk6xv9-rs&t=517s)）
+
+```java
+public class Codec {
+    HashMap<String, String> urlToHash = new HashMap<>();
+    HashMap<String, String> hashToUrl = new HashMap<>();
+
+    String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    String baseUrl = "http://tinyurl.com/";
+    Random random = new Random();
+
+    // Encodes a URL to a shortened URL.
+    public String encode(String longUrl) {
+        if (urlToHash.containsKey(longUrl)) {
+            return baseUrl + urlToHash.get(longUrl);
+        }
+        StringBuilder hash = new StringBuilder();
+        do {
+            for (int i = 0; i < 6; i++) {
+                hash.append(characters.charAt(random.nextInt(characters.length())));
+            }
+        } while (hashToUrl.containsKey(hash.toString()));
+        urlToHash.put(longUrl, hash.toString());
+        hashToUrl.put(hash.toString(), longUrl);
+
+        return baseUrl + hash.toString();
+    }
+
+    // Decodes a shortened URL to its original URL.
+    public String decode(String shortUrl) {
+        return hashToUrl.get(shortUrl.substring(baseUrl.length()));
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.decode(codec.encode(url));
+```
 
 ## 202 Happy Number
 
