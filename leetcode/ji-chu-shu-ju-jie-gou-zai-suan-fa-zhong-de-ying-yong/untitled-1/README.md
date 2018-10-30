@@ -2221,7 +2221,115 @@ Output: [2,1,4,null,null,3]
 
 ### 题意和分析
 
+参考了这里（[http://blog.csdn.net/linhuanmars/article/details/24566995](http://blog.csdn.net/linhuanmars/article/details/24566995) ）这道题是要求恢复一颗有两个元素调换错了的二叉查找树。一开始拿到可能会觉得比较复杂，其实观察出规律了就比较简单。主要还是利用二叉查找树的主要性质，就是中序遍历是有序的性质。那么如果其中有元素被调换了，意味着中序遍历中必然出现违背有序的情况。那么会出现几次呢？
+
+有两种情况，如果是中序遍历相邻的两个元素被调换了，很容易想到就只需会出现一次违反情况，只需要把这个两个节点记录下来最后调换值就可以；如果是不相邻的两个元素被调换了，举个例子很容易可以发现，会发生两次逆序的情况，那么这时候需要调换的元素应该是第一次逆序前面的元素，和第二次逆序后面的元素。比如1234567,1和5调换了，会得到5234167，逆序发生在52和41，我们需要把4和1调过来，那么就是52的第一个元素，41的第二个元素调换即可。 搞清楚了规律就容易实现了，中序遍历寻找逆序情况，调换的第一个元素，永远是第一个逆序的第一个元素，而调换的第二个元素如果只有一次逆序，则是那一次的后一个，如果有两次逆序则是第二次的后一个。算法只需要一次中序遍历，所以时间复杂度是O\(n\)，空间是栈大小O\(logn\)。
+
 ### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+
+    public void recoverTree(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        ArrayList<TreeNode> pre = new ArrayList<TreeNode>();
+        pre.add(null);
+        ArrayList<TreeNode> result = new ArrayList<TreeNode>();
+        helper(root, pre, result);
+        if (result.size() > 0) {
+            int temp = result.get(0).val;
+            result.get(0).val = result.get(1).val;
+            result.get(1).val = temp;
+        }
+    }
+    private void helper(TreeNode root, ArrayList<TreeNode> pre, ArrayList<TreeNode> result) {
+        if (root == null) {
+            return;
+        }
+        helper(root.left, pre, result);
+        if (pre.get(0) != null && pre.get(0).val > root.val) {
+            if (result.size() == 0) {
+                result.add(pre.get(0));
+                result.add(root);
+            } else {
+                result.set(1, root);
+            }
+        }
+        pre.set(0, root);
+        helper(root.right, pre, result);
+    }
+}
+```
+
+这里有大神介绍了Morris Traversal（[http://www.cnblogs.com/AnnieKim/archive/2013/06/15/morristraversal.html](http://www.cnblogs.com/AnnieKim/archive/2013/06/15/morristraversal.html)），为常数级空间复杂度，符合followup的要求。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+
+    public void recoverTree(TreeNode root) {
+        TreeNode pre = null;
+        TreeNode first = null, second = null;
+        // Morris Traversal
+        TreeNode temp = null;
+        while(root!=null){
+            if(root.left!=null){
+                // connect threading for root
+                temp = root.left;
+                while(temp.right!=null && temp.right != root)
+                    temp = temp.right;
+                // the threading already exists
+                if(temp.right!=null){
+                    if(pre!=null && pre.val > root.val){
+                        if(first==null){first = pre;second = root;}
+                        else{second = root;}
+                    }
+                    pre = root;
+
+                    temp.right = null;
+                    root = root.right;
+                }else{
+                    // construct the threading
+                    temp.right = root;
+                    root = root.left;
+                }
+            }else{
+                if(pre!=null && pre.val > root.val){
+                    if(first==null){first = pre;second = root;}
+                    else{second = root;}
+                }
+                pre = root;
+                root = root.right;
+            }
+        }
+        // swap two node values;
+        if(first!= null && second != null){
+            int t = first.val;
+            first.val = second.val;
+            second.val = t;
+        }
+    }
+}
+```
 
 ## 116 Populating Next Right Pointers in Each Node
 
