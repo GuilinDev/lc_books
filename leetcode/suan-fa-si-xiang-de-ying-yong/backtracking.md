@@ -379,3 +379,91 @@ class Solution {
 }
 ```
 
+## 89 Gray Code
+
+### 原题概述
+
+The gray code is a binary numeral system where two successive values differ in only one bit.
+
+Given a non-negative integer _n_ representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.
+
+**Example 1:**
+
+```text
+Input: 2
+Output: [0,1,3,2]
+Explanation:
+00 - 0
+01 - 1
+11 - 3
+10 - 2
+
+For a given n, a gray code sequence may not be uniquely defined.
+For example, [0,2,3,1] is also a valid gray code sequence.
+
+00 - 0
+10 - 2
+11 - 3
+01 - 1
+```
+
+**Example 2:**
+
+```text
+Input: 0
+Output: [0]
+Explanation: We define the gray code sequence to begin with 0.
+             A gray code sequence of n has size = 2n, which for n = 0 the size is 20 = 1.
+             Therefore, for n = 0 the gray code sequence is [0].
+```
+
+### 题意和分析
+
+这道题要求求出n位的格雷码对应的二进制数，主要在于找到一种格雷码的递增方法（格雷码并不是唯一的，可以有多种）。 
+
+如果有了n-1位的格雷码，想得到n位置的格雷码，首先在n-1位的格雷码前面都添加0作为前2^\(n-1\)个格雷码，它们一定是合法的。因为除了第一位（都是0）其余位都跟n-1的格雷码一致，所以两两之间只相差一位，满足要求。接下来看看如何接上剩下的2^\(n-1\)个，我们把n-1位的格雷码倒序排列，然后在每个前面添加1，然后接到上述的前2^\(n-1\)个就可以了。首先因为是倒序过来，所以中间两个元素除去第一位其他都是一样的（因为原来最后一个，现在倒序过来就是第一个），而他们第一位分别是0和1，满足格雷码的要求。而剩下的元素因为我们是n-1位的格雷码倒序排列，所以两两都是满足要求的，加上前面都一样的位1，仍然满足条件。最后看看这些数字是不是都不一样，前半部分和后半部分肯定不会一样，而因为前半部分都是0开头，后半部分都是1打头，所以互相之间也不会有重复，可以看出覆盖了所有数字，而且依次下来均满足条件。 如此我们提出了格雷码的递推方法，我们只需要做一次位数的循环，每次根据上面结果构造当前位数的结果即可。算法复杂度是O\(2+2^2+...+2^n-1\)=O\(2^n\)，所以是指数量级的，因为是结果数量无法避免。空间复杂度则是结果的大小，也是O\(2^n\)。
+
+另外，第i位置的格雷码还满足G\(i\) = i ^ \(i / 2\);所以用异或来做也是可以的。
+
+### 代码
+
+```java
+class Solution {
+    public List<Integer> grayCode(int n) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (n < 0) {
+            return result;
+        }
+        if (n == 0) {
+            result.add(0);
+            return result;
+        }
+        result.add(0);
+        result.add(1);
+        for (int i = 2; i <= n; i++) {
+            int size = result.size();
+            for (int j = size -1; j >= 0; j--) {
+                result.add(result.get(j) + (1<<(i-1)));
+            }
+        }
+        return result;
+    }
+}
+```
+
+位操作
+
+```java
+class Solution {
+    public List<Integer> grayCode(int n) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < 1 << n; i++) {
+            result.add(i ^ i >> 1);//G(i) = i ^ (i / 2)
+        }
+        return result;
+    }
+}
+```
+
+
+
