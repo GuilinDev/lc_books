@@ -153,7 +153,54 @@ class Solution {
 
 ### 原题概述
 
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+**Example:**
+
+```text
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+```
+
 ### 题意和分析
 
+跟第46题相比较，这道题多了一个条件就是有重复数字，题目要求是unique的组合，多了一个步骤就是在结果中去重，总体解法是类似的。
+
 ### 代码
+
+```java
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        Arrays.sort(nums);//排序的作用是防止利用重复相等的数字
+        backtrack(result, new ArrayList<>(), nums, new boolean[nums.length]);//用一个一维数组来记录元素是否被用过
+        return result;
+    }
+    private void backtrack(List<List<Integer>> result, List<Integer> oneList, int[] nums, boolean[] used) {
+        if (oneList.size() == nums.length) {
+            result.add(new ArrayList<>(oneList));
+        } else {
+            for (int i = 0; i < nums.length; i++) {
+                if (used[i] //被用过
+                        || (i > 0 && nums[i] == nums[i - 1] && !used[i - 1])) {//有重复数字的情况
+                    continue;
+                }
+                used[i] = true;
+                oneList.add(nums[i]);
+                backtrack(result, oneList, nums, used);
+                used[i] = false;
+                oneList.remove(oneList.size() - 1);
+            }
+        }
+    }
+}
+```
 
