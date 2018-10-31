@@ -95,3 +95,65 @@ class Solution {
 }
 ```
 
+## 46 Permutations
+
+### 原题概述
+
+Given a collection of **distinct** integers, return all possible permutations.
+
+**Example:**
+
+```text
+Input: [1,2,3]
+Output:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+```
+
+### 题意和分析
+
+给一个distinct数字元素的集合，返回所有可能的组合，这道题依然用Backtracking的模板来做，注意这不是最快的办法。
+
+### 代码
+
+```java
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        //Arrays.sort(nums);//因为没有重复元素，所以这道题不用排序
+        backtrack(result, nums, new ArrayList<Integer>());
+        return result;
+    }
+    private void backtrack(List<List<Integer>> result, int[] nums, List<Integer> oneList) {
+        if (oneList.size() == nums.length) {
+            result.add(new ArrayList<>(oneList));
+        } else {
+            for (int i = 0; i < nums.length; i++) {
+                if (!oneList.contains(nums[i])) {//有重复元素则跳过此次循环
+                    oneList.add(nums[i]);
+                    backtrack(result, nums, oneList);
+                    oneList.remove(oneList.size() - 1);
+                }
+            }
+        }
+    }
+}
+```
+
+## 47 Permutations II
+
+### 原题概述
+
+### 题意和分析
+
+### 代码
+
