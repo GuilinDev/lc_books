@@ -2127,56 +2127,6 @@ class Solution {
 }
 ```
 
-## **78 Subsets** 
-
-### **原题概述**
-
-Given a set of **distinct** integers, _nums_, return all possible subsets \(the power set\).
-
-**Note:** The solution set must not contain duplicate subsets.
-
-**Example:**
-
-```text
-Input: nums = [1,2,3]
-Output:
-[
-  [3],
-  [1],
-  [2],
-  [1,2,3],
-  [1,3],
-  [2,3],
-  [1,2],
-  []
-]
-```
-
-### **题意和分析**
-
-跟上面的39 Combination Sum的解法和分析一模一样。
-
-### **代码**
-
-```java
-class Solution {
-    public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        Arrays.sort(nums);
-        backtrack(result, new ArrayList<>(), nums, 0);
-        return result;
-    }
-    private void backtrack(List<List<Integer>> result, List<Integer> tempList, int[] nums, int start) {
-        result.add(new ArrayList<>(tempList));//注意添加的方式，是新建一个ArrayList对象
-        for (int i = start; i < nums.length; i++) {
-            tempList.add(nums[i]);
-            backtrack(result, tempList, nums, i + 1);
-            tempList.remove(tempList.size() - 1);//每一轮需要清空
-        }
-    }
-}
-```
-
 ## **628 Maximum Product of Three Numbers**
 
 ### **原题概述**
