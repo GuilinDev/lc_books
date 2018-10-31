@@ -54,7 +54,6 @@
       * [递归知识](leetcode/suan-fa-si-xiang-de-ying-yong/di-gui-recursion/di-gui-zhi-shi.md)
     * [Dynamic Programming](leetcode/suan-fa-si-xiang-de-ying-yong/divide-and-conquer/README.md)
       * [动态规划必要知识](leetcode/suan-fa-si-xiang-de-ying-yong/divide-and-conquer/dong-tai-gui-hua-bi-yao-zhi-shi.md)
-    * [滑动窗口](leetcode/suan-fa-si-xiang-de-ying-yong/hua-dong-chuang-kou.md)
     * [Greedy](leetcode/suan-fa-si-xiang-de-ying-yong/greedy.md)
     * [Geometry](leetcode/suan-fa-si-xiang-de-ying-yong/geometry.md)
     * [Design](leetcode/suan-fa-si-xiang-de-ying-yong/design.md)
