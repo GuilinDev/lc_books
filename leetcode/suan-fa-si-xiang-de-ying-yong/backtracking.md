@@ -254,3 +254,57 @@ class Solution {
 }
 ```
 
+## 90 Subsets II
+
+### 原题概述
+
+Given a collection of integers that might contain duplicates, _**nums**_, return all possible subsets \(the power set\).
+
+**Note:** The solution set must not contain duplicate subsets.
+
+**Example:**
+
+```text
+Input: [1,2,2]
+Output:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+```
+
+### 题意和分析
+
+同上题的做法，多了一个判断待加入的元素是否是重复的判断。
+
+### 代码
+
+```java
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if (nums == null) {
+            return result;
+        }
+        Arrays.sort(nums);
+        backtrack(result, nums, new ArrayList<Integer>(), 0);
+        return result;
+    }
+    private void backtrack(List<List<Integer>> result, int[] nums, List<Integer> oneList, int start) {
+        result.add(new ArrayList<>(oneList));
+        for (int i = start; i < nums.length; i++) {
+            if (i > start && nums[i] == nums[i - 1]) {//判断重复值
+                continue;
+            }
+            oneList.add(nums[i]);
+            backtrack(result, nums, oneList, i + 1);//i+1是右移一位再判断，跟permutation的题这里不同
+            oneList.remove(oneList.size() - 1);
+        }
+    }
+}
+```
+
