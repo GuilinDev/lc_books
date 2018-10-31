@@ -1,5 +1,120 @@
 # Backtracking
 
+## **79 Word Search** 
+
+### **原题概述**
+
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+**Example:**
+
+```text
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+Given word = "ABCCED", return true.
+Given word = "SEE", return true.
+Given word = "ABCB", return false.
+```
+
+### **题意和分析**
+
+这道题是比较明显的深搜，又是经典的两种做法，一是用跟原本二维数组同等大小的数组来记录是否visited过，其中元素为boolean， 如果二维数组board的当前字符和目标字符串word对应的字符相等，则对其上下左右四个邻字符分别调用DFS的递归函数，只要有一个返回true，那么就表示可以找到对应的字符串，否则就不能找到；第二是对第一种做法空间上的优化，每次用一个char来记录当前二维数组里面的char，在递归调用前用一个特殊的字符，比如‘\#’，来代替当前字符说明已经检查过了，然后再递归调用后再改回来方便下次检查。
+
+### **代码**
+
+```java
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || board[0].length == 0) {
+            return false;
+        }
+        int m = board.length, n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                visited[i][j] = false;
+            }
+        }
+        int index = 0;//字符串的索引
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dfs(board, word, index, i, j, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(char[][] board, String word, int index, int i, int j, boolean[][] visited) {
+        if (index == word.length()) {//找完了
+            return true;
+        }
+        int m = board.length, n = board[0].length;
+        if (i < 0 || j < 0 || i >= m || j >= n
+                || visited[i][j] //已被访问过
+                || board[i][j] != word.charAt(index)) {//两个字符不相等
+            return false;
+        }
+        visited[i][j] = true;//设定当前字符已被访问过
+        boolean result = (dfs(board, word, index + 1, i - 1, j, visited)//左
+                || dfs(board, word, index + 1, i + 1, j, visited)//右
+                || dfs(board, word, index + 1, i, j - 1, visited)//上
+                || dfs(board, word, index + 1, i, j + 1, visited));//下
+        visited[i][j] = false;//让“当前的”位置归为初始值，为别的路径的查找准备
+        return result;
+    }
+}
+```
+
+优化空间
+
+```java
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || board[0].length == 0) {
+            return false;
+        }
+        int m = board.length, n = board[0].length;
+        int index = 0;//字符串的索引
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dfs(board, word, index, i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(char[][] board, String word, int index, int i, int j) {
+        if (index == word.length()) {//找完了
+            return true;
+        }
+        int m = board.length, n = board[0].length;
+        if (i < 0 || j < 0 || i >= m || j >= n
+                || board[i][j] != word.charAt(index)) {//两个字符不相等
+            return false;
+        }
+        char temp = board[i][j];//临时存一下当前的字符
+        board[i][j] = '#';
+        boolean result = (dfs(board, word, index + 1, i - 1, j)//左
+                || dfs(board, word, index + 1, i + 1, j)//右
+                || dfs(board, word, index + 1, i, j - 1)//上
+                || dfs(board, word, index + 1, i, j + 1));//下
+        board[i][j] = temp;//修改回来
+        return result;
+    }
+}
+```
+
 ## 37 Sudoku Solver
 
 ### 原题概述
