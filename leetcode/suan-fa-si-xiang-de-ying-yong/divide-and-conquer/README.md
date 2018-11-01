@@ -473,6 +473,90 @@ class Solution {
 }
 ```
 
+## 140 Word Break II
+
+### 原题概述
+
+Given a **non-empty** string _s_ and a dictionary _wordDict_ containing a list of **non-empty** words, add spaces in _s_ to construct a sentence where each word is a valid dictionary word. Return all such possible sentences.
+
+**Note:**
+
+* The same word in the dictionary may be reused multiple times in the segmentation.
+* You may assume the dictionary does not contain duplicate words.
+
+**Example 1:**
+
+```text
+Input:
+s = "catsanddog"
+wordDict = ["cat", "cats", "and", "sand", "dog"]
+Output:
+[
+  "cats and dog",
+  "cat sand dog"
+]
+```
+
+**Example 2:**
+
+```text
+Input:
+s = "pineapplepenapple"
+wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]
+Output:
+[
+  "pine apple pen apple",
+  "pineapple pen apple",
+  "pine applepen apple"
+]
+Explanation: Note that you are allowed to reuse a dictionary word.
+```
+
+**Example 3:**
+
+```text
+Input:
+s = "catsandog"
+wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output:
+[]
+```
+
+### 题意和分析
+
+第139题只要求判断能否拆分成字典中的单词，这道题则要求返回所有的情况，既然是列举所有情况，一般使用递归来做，以第一个case做例子，单词c开始那就在字典里找到cat和cats，如果是cat剩下的就是sanddog，然后再根据s来找，但“ 如果不用记忆数组做减少重复计算的优化，那么递归方法跟brute force没什么区别”， 所以如果当s变成 "sanddog"的时候，那么此时我们知道其可以拆分成sand和dog，当某个时候如果又遇到了这个 "sanddog"的时候，就不用重新计算了， 因此要将这个中间结果保存起来，也就是同时保存s和其所有的拆分的字符串，这可以使用一个HashMap来建立二者之间的映射，那么在递归函数中，首先检测当前s是否已经有映射，有的话直接返回即可。 题目中说了给定的s为non-empty，但是递归函数处理时s是会变空的，这时候是否直接返回空集？是的返回一个空字符串，为啥要这么做呢？题目中的Output，发现单词之间是有空格，而最后一个单词后面没有空格，所以这个空字符串就起到了标记当前单词是最后一个，那么最后一个单词就不要再加空格了。接着往下看，遍历wordDict数组，如果某个单词是s字符串中的开头单词的话，对后面部分调用递归函数，将结果保存到rem中，然后遍历里面的所有字符串，和当前的单词拼接起来，这里就用到了我们前面说的trick。for循环结束后，记得返回结果res之前建立其和s之间的映射，方便下次使用。
+
+### 代码
+
+```java
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Map<String, LinkedList<String>> map = new HashMap<String, LinkedList<String>>();
+        return wordBreakHelper(s, wordDict, map);
+    }
+    private List<String> wordBreakHelper(String s, List<String> wordDict, Map<String, LinkedList<String>> map) {
+        if (map.containsKey(s)) {//记忆化的DFS
+            return map.get(s);
+        }
+        LinkedList<String> result = new LinkedList<String>();
+        if (s.length() == 0) {
+            result.add("");//s递归完后最后返回空串
+            return result;
+        }
+        for (String word : wordDict) {
+            if (s.startsWith(word)) {
+                List<String> subList = wordBreakHelper(s.substring(word.length()), wordDict, map);
+                for (String sub : subList) {
+                    result.add(word + (sub.isEmpty() ? "" : " ") + sub);//检查是否是返回一组结果的最后一个单词
+                }
+            }
+        }
+        map.put(s, result);//将目前“子串”s和对应result做映射，方便搜索
+        return result;
+    }
+}
+```
+
 ## 72 - Edit Distance
 
 ### 原题概述
