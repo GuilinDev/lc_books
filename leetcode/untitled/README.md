@@ -225,3 +225,61 @@ class Solution {
 }
 ```
 
+## 461 Hamming Distance
+
+### 原题概述
+
+The [Hamming distance](https://en.wikipedia.org/wiki/Hamming_distance) between two integers is the number of positions at which the corresponding bits are different.
+
+Given two integers `x` and `y`, calculate the Hamming distance.
+
+**Note:**  
+ 0 ≤ `x`, `y` &lt; 231.
+
+**Example:**
+
+```text
+Input: x = 1, y = 4
+
+Output: 2
+
+Explanation:
+1   (0 0 0 1)
+4   (0 1 0 0)
+       ↑   ↑
+
+The above arrows point to positions where the corresponding bits are different.
+```
+
+### 题意和分析
+
+求两个数的Hamming Distance，二进制的形式转变多少次即为hamming distance，异或一下数有多少个1即可。
+
+### 代码
+
+```java
+class Solution {
+    public int hammingDistance(int x, int y) {
+        int distance = 0;
+        int xor = x ^ y;
+        while (xor != 0) {
+            xor = xor & (xor - 1);//每次移除掉最后一个1
+            distance++;
+        }
+        return distance;
+    }
+}
+```
+
+Java本身自带的APIbigCount
+
+```java
+class Solution {
+    public int hammingDistance(int x, int y) {
+        return Integer.bitCount(x ^ y);
+    }
+}
+```
+
+
+
