@@ -2176,6 +2176,7 @@ Output: "One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Th
 class Solution {
     private final String[] LESS_THAN_20 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
     private final String[] TENS = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    private final String[] HUNDREDS = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
     private final String[] THOUSANDS = {"", "Thousand", "Million", "Billion"};
 
     public String numberToWords(int num) {
@@ -2191,7 +2192,7 @@ class Solution {
                 words = numberToWordsHelper(num % 1000) + THOUSANDS[i] + " " + words;
             }
             num /= 1000;
-            i++;
+            i++;//指针每次在THOUSANDS数组里面挪动读取对应的字母
         }
         return words.trim();
     }
@@ -2204,7 +2205,7 @@ class Solution {
         } else if (num < 100) {
             return TENS[num / 10] + " " + numberToWordsHelper(num % 10);
         } else {
-            return LESS_THAN_20[num / 100] + " Hundred " + numberToWordsHelper(num % 100);
+            return HUNDREDS[num / 100] + " Hundred " + numberToWordsHelper(num % 100);
         }
     }
 }
