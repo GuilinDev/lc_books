@@ -2210,5 +2210,82 @@ class Solution {
 }
 ```
 
+## 65 Valid Number
 
+### 原题概述
+
+Validate if a given string can be interpreted as a decimal number.
+
+Some examples:  
+`"0"` =&gt; `true`  
+`" 0.1 "` =&gt; `true`  
+`"abc"` =&gt; `false`  
+`"1 a"` =&gt; `false`  
+`"2e10"` =&gt; `true`  
+`" -90e3   "` =&gt; `true`  
+`" 1e"` =&gt; `false`  
+`"e3"` =&gt; `false`  
+`" 6e-1"` =&gt; `true`  
+`" 99e2.5 "` =&gt; `false`  
+`"53.5e93"` =&gt; `true`  
+`" --6 "` =&gt; `false`  
+`"-+3"` =&gt; `false`  
+`"95a54e53"` =&gt; `false`
+
+**Note:** It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one. However, here is a list of characters that can be in a valid decimal number:
+
+* Numbers 0-9
+* Exponent - "e"
+* Positive/negative sign - "+"/"-"
+* Decimal point - "."
+
+Of course, the context of these characters also matters in the input.
+
+**Update \(2015-02-10\):**  
+The signature of the `C++` function had been updated. If you still see your function signature accepts a `const char *` argument, please click the reload button to reset your code definition.
+
+### 题意和分析
+
+这道题主要考察各种corner cases，包括正负号/e/点，来判断字符串是否是有效的数字。如果是在最近的面经里看到这道题可以刷一下，否则不用理会。
+
+### 代码
+
+```java
+class Solution {
+   public boolean isNumber(String s) {
+      s = s.trim();
+
+      boolean numberSeen = false;
+      boolean pointSeen = false;
+      boolean eSeen = false;
+      boolean numberAfterE = true;//表示e之后是否有number，因为最后要返回，这里初始值为true（之有数字的情况，可以过）
+
+      for (int i = 0; i < s.length(); i++) {
+         if (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+            numberSeen = true;
+            numberAfterE = true;//再有数字出现，再把numberAfterE赋值为true，注意第25行
+         } else if (s.charAt(i) == '.') {
+            if (eSeen || pointSeen) {//'.'可以在'e'前面，比如1.2e3；但不能在e后面，比如4e1.2就不行；另外同时出现两个'.'也不行，比如1..2
+               return false;
+            }
+            pointSeen = true;
+         } else if (s.charAt(i) == 'e') {
+            if (eSeen //e之前不能有另外的e
+                  || !numberSeen) {//e之前必须有number出现
+               return false;
+            }
+            eSeen = true;
+            numberAfterE = false;//首先有e出现，numberAfterE必为false，注意第13行
+         } else if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+            if (i != 0 && s.charAt(i - 1) != 'e') {//+和-只能在第一位或者e后面出现
+               return false;
+            }
+         } else {
+            return false;
+         }
+      }
+      return numberSeen && numberAfterE;//必须有数字；以及如果有e的话，e后面必须跟数字
+   }
+}
+```
 
