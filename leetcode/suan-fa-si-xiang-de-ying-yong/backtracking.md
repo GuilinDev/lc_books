@@ -624,57 +624,62 @@ Explanation: There exist two distinct solutions to the 4-queens puzzle as shown 
 
 ### 题意和分析
 
-
+N皇后问题，棋盘上每一行每一列和每一斜线都不能都两个皇后；这道题是经典的回溯法，按照每一行遍历，每次加一个皇后，然后利用回溯法检查每一列和每个对角线是否已经有皇后了，有则回溯到前面一个状态，否则继续向下递归，直到最后一行的皇后放好就将结果加入到result里面。时间复杂度O\(n^2\)，空间会创建一个记录每一行皇后所在的列的位置的一维数组，为O\(n\)。
 
 ### 代码
 
 ```java
 class Solution {
-    public List<List<String>> solveNQueens(int n) {
-        List<List<String>> res = new ArrayList<>();
-        if (n <= 0) return res;
-        solveNQueensHelper(res, new int[n], 0);
-        return res;
-    }
-    public void solveNQueensHelper(List<List<String>> res, int[] queens, int pos) {
-        if (pos == queens.length) {
-            addOneSolution(res, queens);
-            return;
-        }
-        for (int i = 0; i < queens.length; i++) {
-            queens[pos] = i;
-            if (isValid(queens, pos)) {
-                helper(res, queens, pos + 1);
-            }
-        }
-    }
+	public List<List<String>> solveNQueens(int n) {
+		List<List<String>> result = new ArrayList<>();
+		if (n <= 0) {
+			return result;
+		}
+		solveNQueensHelper(result, 0, new int[n]);
+		return result;
+	}
+	//传入的参数是结果集，循环的行数，循环到该行-皇后所处的列的位置
+	private void solveNQueensHelper(List<List<String>> result, int pos, int[] queens) {
+		//递归的结束条件
+		if (pos == queens.length) {
+			addOneSolution(result, queens);
+			return;
+		}
 
-    public boolean isValid(int[] queens, int pos) {
-        for (int i = 0; i < pos; i++) {
-            if (queens[i] == queens[pos]) { // 同一列
-                return false;
-            } else if (Math.abs(queens[pos] - queens[i]) == Math.abs(i - pos)) { //是否在对角线上
-                return false;
-            }
-        }
-        return true;
-    }
+		for (int i = 0; i < queens.length; i++) {
+			queens[pos] = i;
+			if (isValid(queens, pos)) {
+				solveNQueensHelper(result, pos + 1, queens);
+			}
+		}
+	}
 
-    public void addOneSolution(List<List<String>> res, int[] queens) {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < queens.length; i++) {
-            StringBuilder sb = new StringBuilder();
-            for (int j = 0; j < queens.length; j++) {
-                if (queens[i] == j) {
-                    sb.append('Q');
-                } else {
-                    sb.append('.');
-                }
-            }
-            list.add(sb.toString());
-        }
-        res.add(list);
-    }
+	private boolean isValid(int[] queens, int pos) {
+		for (int i = 0; i < pos; i++) {
+			if (queens[i] == queens[pos]) {//判断同一列中是否有重复的皇后
+				return false;
+			} else if (Math.abs(queens[pos] - queens[i]) == Math.abs(i - pos)) {//判断对角线上是否有重复的皇后
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void addOneSolution(List<List<String>> result, int[] queens) {
+		List<String> oneResult = new ArrayList<>();
+		for (int i = 0; i < queens.length; i++) {
+			StringBuilder sb = new StringBuilder();
+			for (int j = 0; j < queens.length; j++) {
+				if (queens[i] == j) {
+					sb.append('Q');
+				} else {
+					sb.append('.');
+				}
+			}
+			oneResult.add(sb.toString());
+		}
+		result.add(oneResult);
+	}
 }
 ```
 
