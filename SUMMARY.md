@@ -14,7 +14,6 @@
   * [2. 基础数据结构底层实现](leetcode/1.-shu-ju-jie-gou-de-di-ceng-shi-xian.md)
   * [3. 数据结构在算法中应用](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/README.md)
     * [Array](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/README.md)
-      * [Array中做加减法](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/66-plus-one.md)
       * [Array中移除元素](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/26-27-80-zai-array-zhong-yi-chu-yuan-su.md)
       * [kSum问题](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/ksum.md)
       * [Array元素与几何图形](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/array-zhong-de-shu-zi-zu-cheng-san-jiao-xing.md)
