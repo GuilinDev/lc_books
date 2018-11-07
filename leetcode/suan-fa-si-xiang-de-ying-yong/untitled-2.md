@@ -59,6 +59,38 @@ class Solution {
 }
 ```
 
+清爽一点的写法
+
+```java
+class Solution {
+    public String minWindow(String s, String t) {
+        int[] count = new int[128];
+        for (char c : t.toCharArray()) {
+            count[c]++;
+        }
+        int from = 0;
+        int total = t.length();//所有的长度
+        int min = Integer.MAX_VALUE;//最小子字符串的长度
+        for (int i = 0, j = 0; i < s.length(); i++) {//双指针，i在前，正常遍历；j在后，记录包含所有t字符串的字符的起始位置
+            if (count[s.charAt(i)]-- > 0) {//i位置的字符在之前出现过（包括count数组的初始化），再出现就是重复的了，把total减1；每个字符的位置也得次数也得-1
+                total--;
+            }
+            while (total == 0) {//t中的字符都找到了
+                if (i - j + 1 < min) {//比较一下是否有更短的子字符串
+                    min = i - j + 1;
+                    from = j;
+                }
+                count[s.charAt(j)]++;//移动j把刚才减的1加回来，促使前面的指针i继续往前走寻找t中字符
+                if (count[s.charAt(j++)] > 0) {
+                    total++;
+                }
+            }
+        }
+        return (min == Integer.MAX_VALUE) ? "" : s.substring(from, from + min);
+    }
+}
+```
+
 ## 30 Substring with Concatenation of All Words
 
 ### 原题概述
