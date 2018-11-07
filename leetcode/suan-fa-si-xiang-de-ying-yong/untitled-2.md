@@ -69,10 +69,12 @@ class Solution {
             count[c]++;
         }
         int from = 0;
-        int total = t.length();//所有的长度
+        //total数目表示当前尚未找到的t字符串里面的字符数，比如total==2表示当前该子字符串还有2个字符尚未在s中找到，
+        //具体哪两个字符则由count数组的相应出现字符的数目来确定的
+        int total = t.length();
         int min = Integer.MAX_VALUE;//最小子字符串的长度
         for (int i = 0, j = 0; i < s.length(); i++) {//双指针，i在前，正常遍历；j在后，记录包含所有t字符串的字符的起始位置
-            if (count[s.charAt(i)]-- > 0) {//i位置的字符在之前出现过（包括count数组的初始化），再出现就是重复的了，把total减1；每个字符的位置也得次数也得-1
+            if (count[s.charAt(i)]-- > 0) {//i位置的字符在之前出现过（count数组的初始化），再出现就是重复的了，把total减1；每个字符的位置也得次数也得-1
                 total--;
             }
             while (total == 0) {//t中的字符都找到了
