@@ -699,11 +699,18 @@ class Solution {
 
 ### 原题概述
 
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
 
+**Example:**
+
+```text
+Input: "25525511135"
+Output: ["255.255.11.135", "255.255.111.35"]
+```
 
 ### 题意和分析
 
-
+没什么特殊的，就是典型的回溯法，有一种
 
 ### 代码
 
