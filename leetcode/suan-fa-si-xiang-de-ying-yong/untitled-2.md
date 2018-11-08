@@ -117,11 +117,68 @@ Explanation: t is "aabbb" which its length is 5.
 
 ### 题意和分析
 
-
+所有滑动窗口的题目的总结在[这里](https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/discuss/49708/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)。维护一个hashmap，保存字符和其位置索引，通过判断其size来确定现在滑动窗口有几个字符，如果大于2个，则找到最左边的位置索引删除，同时保存最大子字符串的长度。
 
 ### 代码
 
+```java
+class Solution {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        if (s == null && s.length() == 0) {
+            return -1;
+        }
+        int slow = 0, fast = 0;
+        int maxLength = 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        while (fast < s.length()) {
+            if (map.size() <= 2) {
+                map.put(s.charAt(fast), fast);
+                fast++;
+            }
+            if (map.size() > 2) {
+                int leftMost = s.length();//初始值只要不是在0到s.length()-1之间就行
+                for (int i : map.values()) {
+                    leftMost = Math.min(leftMost, i);
+                }
+                char toBeDeleted = s.charAt(leftMost);
+                map.remove(toBeDeleted);
+                slow = leftMost + 1;//删除的字符的下一个
+            }
+            maxLength = Math.max(maxLength, fast - slow);
+        }
+        return maxLength;
+    }
+}
+```
 
+另外一种写法，比较高效但不好扩展
+
+```java
+class Solution {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        char[] tree = s.toCharArray();
+        int result = 0;
+        int[] basket = {-1, -1};
+        for(int i = 0; i < tree.length; i++){
+            if(basket[0] == -1){
+                basket[0] = i;
+            }
+            if(basket[1] == -1){
+                basket[1] = i;
+            }else if(tree[i] != tree[basket[1]] && tree[i] != tree[basket[0]]){
+                basket[1] = i;
+                int j = i - 1;
+                while(j > 0 && tree[j - 1] == tree[j]){//从i前面一个数字开始查找，直到找到不同的字符（因为滑动窗口最多两个字符u）
+                    j--;
+                }
+                basket[0] = j;
+            }
+            result = Math.max(result, i - Math.min(basket[0], basket[1]) + 1);
+        }
+        return result;
+    }
+}
+```
 
 ## 30 Substring with Concatenation of All Words
 
