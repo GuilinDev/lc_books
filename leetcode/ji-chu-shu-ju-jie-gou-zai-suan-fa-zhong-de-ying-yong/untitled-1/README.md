@@ -2182,6 +2182,118 @@ class Solution {
 }
 ```
 
+## 889 Construct Binary from Preorder and Postorder Traversal
+
+### 原题概述
+
+Return any binary tree that matches the given preorder and postorder traversals.
+
+Values in the traversals `pre` and `post` are distinct positive integers.
+
+**Example 1:**
+
+```text
+Input: pre = [1,2,4,5,3,6,7], post = [4,5,2,6,7,3,1]
+Output: [1,2,3,4,5,6,7]
+```
+
+**Note:**
+
+* `1 <= pre.length == post.length <= 30`
+* `pre[]` and `post[]` are both permutations of `1, 2, ..., pre.length`.
+* It is guaranteed an answer exists. If there exists multiple answers, you can return any of them.
+
+### 题意和分析
+
+前序和后序没有办法确定唯一的二叉树，返回任意一棵树就行。
+
+### 代码
+
+迭代， O\(n\)
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    /**
+     * 遍历pre，逐个重建node
+     * 与pre+in和in+post一样，利用queue存储当前路径
+     * node = new TreeNode(pre[i])，如果不是左孩子，就加到右孩子上面
+     * 如果在pre和post中遇到了同样的值，说明当前子树的构建完成，从queue中pop出来
+     */
+    public TreeNode constructFromPrePost(int[] pre, int[] post) {
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        queue.offer(new TreeNode(pre[0]));
+        for (int i = 1,j =0; i < pre.length; i++) {
+            TreeNode node = new TreeNode(pre[i]);
+            while (queue.getLast().val == post[j]) {
+                queue.pollLast();
+                j++;
+            }
+            if (queue.getLast().left == null) {
+                queue.getLast().left = node;
+            } else {
+                queue.getLast().right = node;
+            }
+            queue.offer(node);
+        }
+        return queue.getFirst();
+    }
+}
+```
+
+递归
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode constructFromPrePost(int[] pre, int[] post) {
+        return constructFromPrePost(pre, 0, pre.length-1, post, 0, post.length-1);
+    }
+
+    public TreeNode constructFromPrePost(int[] pre, int preL, int preR, int[] post, int postL, int postR) {
+        if (preL > preR || postL > postR) {
+            return null;
+        }
+        TreeNode root = new TreeNode(pre[preL]);
+        if (preL == preR) {
+            return root;
+        }
+
+        int index = -1;
+        for (int i = postL ; i < postR ; i++) {
+            if (pre[preL+1] == post[i]) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            return root;
+        }
+
+        root.left = constructFromPrePost(pre, preL+1, preL+1+(index-postL), post, postL, index);
+        root.right = constructFromPrePost(pre, preL+1+(index-postL)+1, preR, post, index+1, postR);
+
+        return root;
+    }
+}
+```
+
 ## 297 Serialize and Deserialize Binary Tree
 
 ### 原题概述
