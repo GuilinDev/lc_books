@@ -710,7 +710,38 @@ Output: ["255.255.11.135", "255.255.111.35"]
 
 ### 题意和分析
 
-没什么特殊的，就是典型的回溯法，有一种
+没什么特殊的，就是典型的回溯法，ip地址的每段的取值是1～255，每次最多取3位，如果是取到2位或者3位，第一个数字不能是0；因为给定的串的长度是固定的，所以时间复杂度是O\(3^4\) = O\(1\)，空间复杂度就是栈空间O\(n\)，同样字符串固定长度，也可以看作是O\(1\)。
 
 ### 代码
+
+```java
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> result = new ArrayList<>();
+        restoreIp(result, s, 0, "", 0);
+        return result;
+    }
+    private void restoreIp(List<String> result, String s, int index, String oneResult, int count) {
+        //传统的回溯法，先写边界条件
+        if (count > 4) {
+            return;
+        }
+        if (count == 4 && index == s.length()) {
+            result.add(oneResult);
+            return;
+        }
+        for (int i = 1; i < 4; i++) {//取值为1～255，取三位数
+            if (index + i > s.length()) {//越界了，后面的substring取不到了，直接break
+                break;
+            }
+            String temp = s.substring(index, index + i);//每次取1位，2位或3位
+            //虽然取到1～3位，但依然不合法的情况
+            if ((temp.startsWith("0") && temp.length() > 1) || (i == 3 && Integer.parseInt(temp) >= 256)) {
+                continue;
+            }
+            restoreIp(result, s, index + i, oneResult + temp + (count == 3 ? "" : "."), count + 1);
+        }
+    }
+}
+```
 
