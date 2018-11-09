@@ -1037,3 +1037,98 @@ class Solution {
 
 DP
 
+
+
+## 91 Decode Ways
+
+### 原题概述
+
+A message containing letters from `A-Z` is being encoded to numbers using the following mapping:
+
+```text
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+```
+
+Given a **non-empty** string containing only digits, determine the total number of ways to decode it.
+
+**Example 1:**
+
+```text
+Input: "12"
+Output: 2
+Explanation: It could be decoded as "AB" (1 2) or "L" (12).
+```
+
+**Example 2:**
+
+```text
+Input: "226"
+Output: 3
+Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+```
+
+### 题意和分析
+
+这道题用DP来做，是对DP的一种直接实现，空间复杂度可以是O\(n\)或者O\(1\)，两种方法都要掌握。
+
+### 代码
+
+时间O\(n\)，空间O\(n\)
+
+```java
+class Solution {
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int len = s.length();
+        int[] dp = new int[len + 1];//空的时候返回为0
+        dp[0] = 1;//至少有一种
+        dp[1] = s.charAt(0) != '0' ? 1 : 0;//判断头字母是否为0，不等于0就为1
+
+        for (int i = 2; i <= len; i++) {
+            //可能是一个数或者两个数
+            int first = Integer.valueOf(s.substring(i - 1, i));
+            int second = Integer.valueOf(s.substring(i - 2, i));
+            if (first >= 1 && first <= 9) {//取一个数，只要不是0，那肯定可以组成一个字符
+                dp[i] += dp[i - 1];
+            }
+            if (second >= 10 && second <= 26) {//取两个数
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp[len];
+    }
+}
+```
+
+时间O\(n\)，空间O\(1\)，只需保存上一种方法的dp\[i - 1\]和dp\[i - 2\]两个数即可，因此只用两个变量就行了。
+
+```java
+class Solution {
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0 || s.charAt(0) == '0') {
+            return 0;
+        }
+
+        int c1 = 1;
+        int c2 = 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == '0') {
+                c1 = 0;
+            }
+            if (s.charAt(i - 1) == '1' || (s.charAt(i - 1) == '2' && s.charAt(i) <= '6')) {//如果第一位是2，那第二位自然不能大于6
+                c1 = c1 + c2;
+                c2 = c1 - c2;
+            } else {
+                c2 = c1;
+            }
+        }
+        return c1;
+    }
+}
+```
+
