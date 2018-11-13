@@ -500,6 +500,85 @@ class Solution {
 }
 ```
 
-  
+## 252 Meeting Rooms
 
+### 原题概述
+
+Given an array of meeting time intervals consisting of start and end times `[[s1,e1],[s2,e2],...]` \(si &lt; ei\), determine if a person could attend all meetings.
+
+**Example 1:**
+
+```text
+Input: [[0,30],[5,10],[15,20]]
+Output: false
+```
+
+**Example 2:**
+
+```text
+Input: [[7,10],[2,4]]
+Output: true
+```
+
+### 题意和分析
+
+给了一系列会议的时间，问能否同时参见所有的会议，这实际上是求区间是否有交集，朴素解法就是两个for loop，每两个区间比较一下，看是否有overlap，有的话直接返回false。比较两个区间a和b是否有overlap，只用看一个区间的起始位置就好，有两种情况，1）如果a的起始位置大于等于b的起始位置，且a的起始位置小于b的结束位置，那么一定有overlap，2）反过来，如果b的起始位置大于等于a的起始位置，且此时b的起始位置小于a的结束位置，那么也一定有overlap。
+
+先给intervals按照起始时间排个序，然后再只比较起始时间，如果后一个会议的起始时间小于前一个会议的结束时间，返回false，复杂度O\(nlogn\)会好一点。
+
+### 代码
+
+```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public boolean canAttendMeetings(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {//没有会议，返回true，可以参加
+            return true;
+        }
+        Arrays.sort(intervals, new Comparator<Interval>(){
+            public int compare(Interval a, Interval b) {
+                return a.start - b.start;
+            }
+        });
+        for (int i = 1; i < intervals.length; i++) {//因为需要跟前面的interval比较，所以从index 1开始
+            if (intervals[i].start < intervals[i - 1].end) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+## 253 Meeting Rooms II
+
+### 原题概述
+
+Given an array of meeting time intervals consisting of start and end times `[[s1,e1],[s2,e2],...]` \(si &lt; ei\), find the minimum number of conference rooms required.
+
+**Example 1:**
+
+```text
+Input: [[0, 30],[5, 10],[15, 20]]
+Output: 2
+```
+
+**Example 2:**
+
+```text
+Input: [[7,10],[2,4]]
+Output: 1
+```
+
+### 题意和分析
+
+### 代码
 
