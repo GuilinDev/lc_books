@@ -2290,3 +2290,73 @@ class Solution {
 }
 ```
 
+## 819 Most Common Word
+
+### 原题概述
+
+Given a paragraph and a list of banned words, return the most frequent word that is not in the list of banned words.  It is guaranteed there is at least one word that isn't banned, and that the answer is unique.
+
+Words in the list of banned words are given in lowercase, and free of punctuation.  Words in the paragraph are not case sensitive.  The answer is in lowercase.
+
+**Example:**
+
+```text
+Input: 
+paragraph = "Bob hit a ball, the hit BALL flew far after it was hit."
+banned = ["hit"]
+Output: "ball"
+Explanation: 
+"hit" occurs 3 times, but it is a banned word.
+"ball" occurs twice (and no other word does), so it is the most frequent non-banned word in the paragraph. 
+Note that words in the paragraph are not case sensitive,
+that punctuation is ignored (even if adjacent to words, such as "ball,"), 
+and that "hit" isn't the answer even though it occurs more because it is banned.
+```
+
+**Note:**
+
+* `1 <= paragraph.length <= 1000`.
+* `1 <= banned.length <= 100`.
+* `1 <= banned[i].length <= 10`.
+* The answer is unique, and written in lowercase \(even if its occurrences in `paragraph` may have uppercase symbols, and even if it is a proper noun.\)
+* `paragraph` only consists of letters, spaces, or the punctuation symbols `!?',;.`
+* There are no hyphens or hyphenated words.
+* Words only consist of letters, never apostrophes or other punctuation symbols.
+
+### 题意和分析
+
+找到段落中出现次数最多的单词，并且该单词不出现在被禁止的列表当中。思路很简单，用hashmap统计所有单词频率，将map中banned的单词去除，然后统计出现次数最多的单词即可。
+
+### 代码
+
+```java
+class Solution {
+   public String mostCommonWord(String paragraph, String[] banned) {
+      String result = new String();
+      if (paragraph.isEmpty()) {
+         return result;
+      }
+      String[] words = paragraph.replaceAll("\\W+" , " ").toLowerCase().split("\\s+");//将所有单词提取出来，并小写存入到array中
+
+      HashMap<String, Integer> map = new HashMap<>();
+      //将所有的paragraph里面的单词加入到hashmap中，value为出现的次数
+      for (String word : words) {
+         map.put(word, map.getOrDefault(word, 0) + 1);
+      }
+      //剔除banned里面的单词
+      for (String bannedWord : banned) {
+         if (map.containsKey(bannedWord)) {
+            map.remove(bannedWord);
+         }
+      }
+      //找到map中出现最多的单词
+      for (Map.Entry<String, Integer> wordEntry : map.entrySet()) {
+         if (result.length() == 0 || wordEntry.getValue() > map.get(result)) {
+            result = wordEntry.getKey();
+         }
+      }
+      return result;
+   }
+}
+```
+
