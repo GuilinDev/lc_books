@@ -710,3 +710,35 @@ class Solution {
 
 最小堆MinHeap
 
+```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        int rooms = 0;
+        Arrays.sort(intervals, (Interval a, Interval b) -> (a.start - b.start));
+
+        PriorityQueue<Integer> heap = new PriorityQueue();
+        for (int i = 0; i < intervals.length; i++) {
+            while (!heap.isEmpty() && intervals[i].start >= heap.peek()) {//有些meeting开始前另外一些meeting已经结束了
+                heap.poll();
+            }
+            heap.add(intervals[i].end);
+            rooms = Math.max(rooms, heap.size());
+        }
+
+        return rooms;
+    }
+}
+```
+
