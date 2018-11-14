@@ -526,6 +526,8 @@ Output: true
 
 先给intervals按照起始时间排个序，然后再只比较起始时间，如果后一个会议的起始时间小于前一个会议的结束时间，返回false，复杂度O\(nlogn\)会好一点。
 
+这道题利用treemap的特性也可以解。
+
 ### 代码
 
 ```java
@@ -558,6 +560,35 @@ class Solution {
 }
 ```
 
+Java8 Lamda的写法，将函数体作为参数，进行排序
+
+```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public boolean canAttendMeetings(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {//没有会议，返回true，可以参加
+            return true;
+        }
+        Arrays.sort(intervals, (a, b) -> a.start - b.start);
+        
+        for (int i = 1; i < intervals.length; i++) {//因为需要跟前面的interval比较，所以从index 1开始
+            if (intervals[i].start < intervals[i - 1].end) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
 ## 253 Meeting Rooms II
 
 ### 原题概述
@@ -580,5 +611,102 @@ Output: 1
 
 ### 题意和分析
 
+这道题是252的扩展，问最少需要多少个房间，如果同一时间有时间冲突，那就得安排不同的会议室。 这道题有以下解法
+
+1）排序，用两个一维数组来分别保存起始时间和结束时间，各自排序，我们定义结果变量result和结束时间指针endIndex，然后我们开始遍历，如果当前起始时间小于结束时间指针的时间，则结果自增1，反之endIndex自增1，这样我们可以找出重叠的时间段，从而安排新的会议室；
+
+2）TreeMap， 遍历intervals，对于起始时间，映射值自增1，对于结束时间，映射值自减1，然后我们定义结果变量curRoom，和房间数rooms，遍历TreeMap，时间从小到大，房间数每次加上映射值，然后更新结果res，遇到起始时间，映射是正数，则房间数会增加，如果一个时间是一个会议的结束时间，也是另一个会议的开始时间，则映射值先减后加仍为0，并不用分配新的房间，而结束时间的映射值为负数更不会增加房间数；
+
+3）最小堆Min Heap
+
 ### 代码
+
+排序解法
+
+```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        int len = intervals.length;
+        int[] starts = new int[len];
+        int[] ends = new int[len];
+
+        int rooms = 0;
+        int endIndex = 0;
+
+        for (int i = 0; i < len; i++) {
+            starts[i] = intervals[i].start;
+            ends[i] = intervals[i].end;
+        }
+        
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+
+        for (int i = 0; i < len; i++) {
+            if (starts[i] < ends[endIndex]) {//有冲突，新的会议开始了而前面endIndex指向的会议还没结束
+                rooms++;
+            } else {//没冲突
+                endIndex++;
+            }
+        }
+        return rooms;
+    }
+}
+```
+
+TreeMap解法
+
+```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        Map<Integer, Integer> map = new TreeMap<Integer, Integer>();//TreeMap会自动升序sort keys
+        int rooms = 0;
+        int curRoom = 0;
+
+        for (Interval interval : intervals) {
+            if (map.containsKey(interval.start)) {
+                map.put(interval.start, map.get(interval.start) + 1);
+            } else {
+                map.put(interval.start, 1);
+            }
+
+            if (map.containsKey(interval.end)) {
+                map.put(interval.end, map.get(interval.end) - 1);
+            } else {
+                map.put(interval.end, -1);
+            }
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            rooms = Math.max(rooms, curRoom += entry.getValue());
+        }
+        return rooms;
+    }
+}
+```
+
+最小堆MinHeap
 
