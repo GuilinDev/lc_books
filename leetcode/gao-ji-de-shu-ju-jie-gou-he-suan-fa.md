@@ -201,9 +201,137 @@ so the 0th and 2nd students are indirect friends. All of them are in the same fr
 
 ### 题意和分析
 
+求朋友圈的个数，题目中对于朋友圈的定义是transitive的，比如A和B是好友，B和C是好友，那么即使A和C不是好友，那么他们三人也属于一个朋友圈。
 
+1）DFS， 对于某个人，遍历其好友，然后再遍历其好友的好友，那么就能把属于同一个朋友圈的人都遍历一遍，同时标记出已经遍历过的人，然后累积朋友圈的个数，再去对于没有遍历到的人在找其朋友圈的人，这样就能求出个数。
+
+2）BFS，思路同DFS，较慢
+
+3）Union Find，这道题是并查集的典型实现，跟323  [Number of Connected Components in an Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph) 和 261  [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree) 解法类似； 初始时给每一个对象都赋上不同的标签，然后对于属于同一类的对象，在root中查找其标签，如果不同，那么将其中一个对象的标签赋值给另一个对象，注意root数组中的数字跟数字的坐标是有很大关系的，root存的是属于同一组的另一个对象的坐标，这样通过getRoot函数可以使同一个组的对象返回相同的值。
 
 ### 代码
+
+DFS
+
+```java
+class Solution {
+   public int findCircleNum(int[][] M) {
+      int[] visited = new int[M.length];
+      int result = 0;
+      for (int i =0; i < M.length; i++) {
+         if (visited[i] == 0) {
+            dfs(M, visited, i);
+            result++;
+         }
+      }
+      return result;
+   }
+
+   private void dfs(int[][] M, int[] visited, int i) {
+      for (int j = 0; j < M.length; j++) {
+         if (M[i][j] == 1 && visited[j] == 0) {
+            visited[j] = 1;
+            dfs(M, visited, j);
+         }
+      }
+   }
+}
+```
+
+BFS
+
+```java
+class Solution {
+   public int findCircleNum(int[][] M) {
+      int result = 0;
+      for (int i=0; i < M.length; i++) {
+         if (M[i][i] == 1) {
+            result++; BFS(i, M);
+         }
+      }
+
+      return result;
+   }
+
+   public void BFS(int student, int[][] M) {
+      Queue<Integer> queue = new LinkedList<>();
+      queue.add(student);
+      while (queue.size() > 0) {
+         int queueSize = queue.size();
+         for (int i=0;i<queueSize;i++) {
+            int j = queue.poll();
+            M[j][j] = 2; // marks as visited
+            for (int k = 0; k < M[0].length; k++) {
+               if (M[j][k] == 1 && M[k][k] == 1) {
+                  queue.add(k);
+               }
+            }
+         }
+      }
+   }
+}
+```
+
+Union Find
+
+```java
+class Solution {
+
+   class UnionFind {
+      private int count = 0;
+      private int[] parent, rank;
+
+      public UnionFind(int n) {
+         count = n;
+         parent = new int[n];
+         rank = new int[n];
+         for (int i = 0; i < n; i++) {
+            parent[i] = i;
+         }
+      }
+
+      public int find(int p) {
+         while (p != parent[p]) {
+            parent[p] = parent[parent[p]];    // path compression by halving
+            p = parent[p];
+         }
+         return p;
+      }
+
+      public void union(int p, int q) {
+         int rootP = find(p);
+         int rootQ = find(q);
+         if (rootP == rootQ) return;
+         if (rank[rootQ] > rank[rootP]) {
+            parent[rootP] = rootQ;
+         }
+         else {
+            parent[rootQ] = rootP;
+            if (rank[rootP] == rank[rootQ]) {
+               rank[rootP]++;
+            }
+         }
+         count--;
+      }
+
+      public int count() {
+         return count;
+      }
+   }
+
+   public int findCircleNum(int[][] M) {
+      int n = M.length;
+      UnionFind uf = new UnionFind(n);
+      for (int i = 0; i < n - 1; i++) {
+         for (int j = i + 1; j < n; j++) {
+            if (M[i][j] == 1) uf.union(i, j);
+         }
+      }
+      return uf.count();
+   }
+
+}
+```
 
 ## 1\) 红黑树
 
