@@ -205,7 +205,7 @@ so the 0th and 2nd students are indirect friends. All of them are in the same fr
 
 1）DFS， 对于某个人，遍历其好友，然后再遍历其好友的好友，那么就能把属于同一个朋友圈的人都遍历一遍，同时标记出已经遍历过的人，然后累积朋友圈的个数，再去对于没有遍历到的人在找其朋友圈的人，这样就能求出个数。
 
-2）BFS，思路同DFS，较慢
+2）BFS，思路同DFS，较慢。
 
 3）Union Find，这道题是并查集的典型实现，跟323  [Number of Connected Components in an Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph) 和 261  [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree) 解法类似； 初始时给每一个对象都赋上不同的标签，然后对于属于同一类的对象，在root中查找其标签，如果不同，那么将其中一个对象的标签赋值给另一个对象，注意root数组中的数字跟数字的坐标是有很大关系的，root存的是属于同一组的另一个对象的坐标，这样通过getRoot函数可以使同一个组的对象返回相同的值。
 
@@ -228,7 +228,7 @@ class Solution {
    }
 
    private void dfs(int[][] M, int[] visited, int i) {
-      for (int j = 0; j < M.length; j++) {
+      for (int j = 0; j < M[i].length; j++) {
          if (M[i][j] == 1 && visited[j] == 0) {
             visited[j] = 1;
             dfs(M, visited, j);
