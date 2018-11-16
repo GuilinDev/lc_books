@@ -6,7 +6,7 @@ description: >-
 
 # Dynamic Programming
 
-![](../../../.gitbook/assets/image%20%2838%29.png)
+![](../../../.gitbook/assets/image%20%2840%29.png)
 
 ## 121 - Best Time to Buy and Sell Stock
 
