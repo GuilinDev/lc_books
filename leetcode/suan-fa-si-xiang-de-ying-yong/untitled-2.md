@@ -360,5 +360,41 @@ If we started at the first tree or the eighth tree, we would only collect 4 frui
 
 ### 题意和分析
 
+Two Pointers问题，主要的思路是利用两个指针来构造一个滑动窗口，且要求窗口中的元素类型不得超过2种。
+
 ### 代码
+
+```java
+class Solution {
+    public int totalFruit(int[] tree) {
+        int lastFruit = -1;
+        int secondLastFruit = -1;
+        int lastFruitCount = 0;
+        int currentMax = 0;
+        int max = 0;
+
+        for (int fruit : tree) {
+            if (fruit == lastFruit || fruit == secondLastFruit) {
+                currentMax++;
+            } else {
+                currentMax = lastFruitCount + 1;// last fruit + new fruit
+            }
+
+            if (fruit == lastFruit) {
+                lastFruitCount++;
+            } else {
+                lastFruitCount = 1;
+            }
+
+            if (fruit != lastFruit) {
+                secondLastFruit = lastFruit;
+                lastFruit = fruit;
+            }
+
+            max = Math.max(max, currentMax);
+        }
+        return max;
+    }
+}
+```
 
