@@ -1,8 +1,8 @@
 # Array中移除元素
 
-### 27 - Remove Element
+## 27 - Remove Element
 
-#### 原题概述
+### 原题概述
 
 > Given an array _nums_ and a value _val_, remove all instances of that value [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm) and return the new length.
 >
@@ -51,7 +51,7 @@
 > }
 > ```
 
-#### 题意和分析
+### 题意和分析
 
 这道题很简单，in place的做法就是把非val的值找出来全部排到原Array的前面，用一个index来记录位置，最后返回index的位置就是除去val的数组的长度。
 
@@ -59,7 +59,7 @@
 
 **注意：按照题意，这样的处理方式改变了数组里面的元素顺序。**
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -80,9 +80,9 @@ class Solution {
 }
 ```
 
-### 26 - Remove Duplicates from Sorted Array
+## 26 - Remove Duplicates from Sorted Array
 
-#### 原题概述
+### 原题概述
 
 > Given a sorted array _nums_, remove the duplicates [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm) such that each element appear only _once_ and return the new length.
 >
@@ -127,7 +127,7 @@ class Solution {
 > }
 > ```
 
-#### 题意和分析
+### 题意和分析
 
 与第27题的解法基本相同，这道题是在一个排好序的Array中，找到有多少个非duplicate的值然后存储在index里，index则在in place的位置上。
 
@@ -135,7 +135,7 @@ Time：O\(n\)
 
 **注意：按照题意，这样的处理方式改变了数组里面的元素顺序，如果尾数有重复值的时候，无法处理。**
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -157,9 +157,9 @@ class Solution {
 }
 ```
 
-### 80 - Remove Duplicates from Sorted Array II
+## 80 - Remove Duplicates from Sorted Array II
 
-#### 原题概述
+### 原题概述
 
 > Given a sorted array _nums_, remove the duplicates [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm) such that duplicates appeared at most _twice_ and return the new length.
 >
@@ -204,7 +204,7 @@ class Solution {
 > }
 > ```
 
-#### 题意和分析
+### 题意和分析
 
 与第26题相比，也是在排好序的Array里面移除重复元素，但是允许元素最多出现两次，思路跟26题也是类似，就是需要额外维护一个计数器counter，同样的元素如果如果counter等于2，直接跳过；遇到新元素时重置counter。
 
@@ -212,7 +212,7 @@ class Solution {
 
 **注意：按照题意，这样的处理方式改变了数组里面的元素顺序，如果尾数有三个或以上重复值的时候，无法处理（多出所有操作所覆盖元素的个数）。**
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
