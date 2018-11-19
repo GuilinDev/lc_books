@@ -1,8 +1,8 @@
 # Stack
 
-### 20 - Valid Parentheses
+## 20 - Valid Parentheses
 
-#### 原题概述
+### 原题概述
 
 Given a string containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.
 
@@ -48,11 +48,11 @@ Input: "{[]}"
 Output: true
 ```
 
-#### 题意和分析
+### 题意和分析
 
 验证输入的字符串是否是括号字符串，用栈，开始遍历输入字符串，如果当前字符为左半边括号就压入栈中；如果是右半边括号，先判断此时栈是否为空，是的话就直接返回false，如不为空，取出栈顶元素，如果是对应的左半边括号，继续循环，否则不成对就返回false。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -76,9 +76,9 @@ class Solution {
 }
 ```
 
-### 155 - Min Stack
+## 155 - Min Stack
 
-#### 原题概述
+### 原题概述
 
 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
 
@@ -100,11 +100,11 @@ minStack.top();      --> Returns 0.
 minStack.getMin();   --> Returns -2.
 ```
 
-#### 题意和分析
+### 题意和分析
 
 跟普通的栈相比，就多了一个取最小值的方法，使用两个栈，一个栈按顺序存储进来的数据，另外一个存出现过的最小值。
 
-#### 代码
+### 代码
 
 使用两个栈
 
@@ -201,9 +201,9 @@ class MinStack {
  */
 ```
 
-### 42 - Trapping Rain Water
+## 42 - Trapping Rain Water
 
-#### 原题概述
+### 原题概述
 
 Given _n_ non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
 
@@ -217,11 +217,11 @@ Input: [0,1,0,2,1,0,1,3,2,1,2,1]
 Output: 6
 ```
 
-#### 题意和分析
+### 题意和分析
 
 跟84 - Largest Rectangle in Histogram类似，收集雨水，可以用DP或者stack来做。
 
-#### 代码
+### 代码
 
 DP方法一，维护一个一位dp数组，遍历两遍数组，第一遍遍历dp\[i\]中存入i位置左边的最大值；然后第二遍遍历，找到dp\[i\]右边的最大值；然后两个最大值取较小值，跟当前值A\[i\]比较，如果大于A\[i\]，将差值存入结果。
 
@@ -317,9 +317,9 @@ class Solution {
 }
 ```
 
-### 150 - Evaluate Reverse Polish Notation
+## 150 - Evaluate Reverse Polish Notation
 
-#### 原题概述
+### 原题概述
 
 Evaluate the value of an arithmetic expression in [Reverse Polish Notation](http://en.wikipedia.org/wiki/Reverse_Polish_notation).
 
@@ -361,11 +361,11 @@ Explanation:
 = 22
 ```
 
-#### 题意和分析
+### 题意和分析
 
 将操作数放前面，操作符后置的写法是逆波兰表达式。从前往后遍历数组，遇到数字则压入栈中，遇到符号，则把栈顶的两个数字拿出来运算，把结果再压入栈中，直到遍历完整个数组，栈顶数字即为最终答案。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -460,9 +460,9 @@ class Solution {
 
 ### 
 
-### 224 - Basic Calculator
+## 224 - Basic Calculator
 
-#### 原题概述
+### 原题概述
 
 Implement a basic calculator to evaluate a simple expression string.
 
@@ -494,11 +494,11 @@ Output: 23
 * You may assume that the given expression is always valid.
 * **Do not** use the `eval` built-in library function.
 
-#### 题意和分析
+### 题意和分析
 
 实现一个简单的计算器，表达式中只有加减号，数字，括号和空格，没有乘除，所以没有计算的优先级之分，因此这道题就变的没有那么复杂。用一个栈来辅助计算，用个变量sign来表示当前的符号，遍历给定的字符串s，如果遇到了数字，由于可能是个多位数，所以我们要用while循环把之后的数字都读进来，然后用sign\*num来更新结果res；如果遇到了加号，则sign赋为1，如果遇到了符号，则赋为-1；如果遇到了左括号，则把当前结果res和符号sign压入栈，res重置为0，sign重置为1；如果遇到了右括号，结果res乘以栈顶的符号，栈顶元素出栈，结果res加上栈顶的数字，栈顶元素出栈。
 
-#### 代码
+### 代码
 
 ```java
 class Solution {
@@ -611,9 +611,9 @@ class Solution {
 }
 ```
 
-### 341 - Flatten Nested List Iterator
+## 341 - Flatten Nested List Iterator
 
-#### 原题概述
+### 原题概述
 
 Given a nested list of integers, implement an iterator to flatten it.
 
@@ -629,11 +629,11 @@ Given the list `[1,[4,[6]]]`,
 
 By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: `[1,4,6]`.
 
-#### 题意和分析
+### 题意和分析
 
 建立压平嵌套链表的迭代器，而迭代器一般都是用迭代的方法来解，如果要用递归一般都需用栈来辅助遍历，由于栈的后进先出的特性，在对向量遍历的时候，从后往前把对象压入栈中，那么第一个对象最后压入栈就会第一个取出来处理，我们的hasNext\(\)函数需要遍历栈，并进行处理，如果栈顶元素是整数，直接返回true，如果不是，那么移除栈顶元素，并开始遍历这个取出的list，还是从后往前压入栈，循环停止条件是栈为空，返回false。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -690,9 +690,9 @@ public class NestedIterator implements Iterator<Integer> {
  */
 ```
 
-### 232 - Implement Queue using Stacks
+## 232 - Implement Queue using Stacks
 
-#### 原题概述
+### 原题概述
 
 Implement the following operations of a queue using stacks.
 
@@ -719,11 +719,11 @@ queue.empty(); // returns false
 * Depending on your language, stack may not be supported natively. You may simulate a stack by using a list or deque \(double-ended queue\), as long as you use only standard operations of a stack.
 * You may assume that all operations are valid \(for example, no pop or peek operations will be called on an empty queue\).
 
-#### 题意和分析
+### 题意和分析
 
 用栈来实现队列，刚好和225-Implement Stack using Queues相反。栈和队列的核心不同点就是栈是先进后出，而队列是先进先出，所以要用栈的先进后出的特性来模拟出队列的先进先出。那么怎么做呢，其实很简单，只要我们在插入元素的时候每次都从前面插入即可，比如如果一个队列是1,2,3,4，那么在栈中保存为4,3,2,1，那么返回栈顶元素1，也就是队列的首元素，则问题迎刃而解。所以此题的难度是push函数，我们需要一个辅助栈temp，把s的元素也逆着顺序存入temp中，此时加入新元素x，再把temp中的元素存回来，这样就是我们要的顺序了，其他三个操作也就直接调用栈的操作即可。
 
-#### 代码
+### 代码
 
 ```java
 class MyQueue {
