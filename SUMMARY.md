@@ -56,6 +56,7 @@
     * [Design](leetcode/suan-fa-si-xiang-de-ying-yong/design.md)
   * [5. Math](leetcode/math.md)
   * [6. Bit Manipulation](leetcode/untitled/README.md)
+    * [位操作基本知识](leetcode/untitled/wei-cao-zuo-ji-ben-zhi-shi.md)
     * [妙用n & \(n-1\)](leetcode/untitled/er-jin-zhi-zhong-1-de-ge-shu.md)
     * [异或XOR操作](leetcode/untitled/gao-di-wei-jiao-huan.md)
   * [7. 高级数据结构和算法](leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa.md)
