@@ -1165,12 +1165,12 @@ class Solution {
         ListNode current = head;
         ListNode next = null;
         while (current != null) {
-            next = current.next;//记录当前结点的下一位
+            next = current.next;//第一个步骤是维持住接下来的链表，防止丢失
             current.next = prev;
             prev = current; //挪动前一个结点到现在的结点
-            current = next; //指向刚才记录的下一位
+            current = next; //这个时候current.next已经发生了改变，所以把当前node移动到next才可以
         }
-        head = prev;//prev会停在最后一个结点处，current会停在最后一个结点后面的null处
+        head = prev;//prev会停在最后一个结点处，current会停在最后一个结点后面的null处，head需要从头交换到尾
         return head;
     }
 }
@@ -1188,16 +1188,18 @@ class Solution {
  * }
  */
 class Solution {
-    public ListNode reverseList(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-        ListNode nextNode = head.next;
-        ListNode newHead = reverseList(nextNode);
-        nextNode.next = head;//放置原来的head
-        head.next = null;//移除原来的head
-        return newHead;
-    }
+	public ListNode reverseList(ListNode head) {
+		if (head == null || head.next == null) {
+			return head;
+		}
+		ListNode result = reverseList(head.next);//逐步递归来反转
+				
+		//接下来两个步骤考虑头节点的操作
+		head.next.next = head;
+		head.next = null;
+
+		return result;
+	}
 }
 ```
 
