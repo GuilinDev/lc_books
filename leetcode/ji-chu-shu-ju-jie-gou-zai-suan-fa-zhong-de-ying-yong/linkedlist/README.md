@@ -809,7 +809,7 @@ class Solution {
 }
 ```
 
-另外一种解法是，奇偶在指针分别指向奇偶结点的其实位置，另外创建一个其实结点even来保存偶结点的起始位置，然后把奇结点指向偶结点的下一个奇结点，然后奇结点后移一步，再把偶结点指向下一个奇结点的下一个（是偶结点），然后再把这个偶结点移一步，以此类推到末尾。
+另外一种解法是，奇偶在指针分别指向奇偶结点的其实位置，另外创建一个起始结点even来保存偶结点的起始位置，然后把奇结点指向偶结点的下一个奇结点，然后奇结点后移一步，再把偶结点指向下一个奇结点的下一个（是偶结点），然后再把这个偶结点移一步，以此类推到末尾。
 
 ```java
 /**
@@ -1113,6 +1113,41 @@ Time：都是O\(n\)；Space：递归是O\(n\)，迭代是O\(1\)。
 
 ![&#x6709;&#x65F6;&#x5728;&#x5355;&#x94FE;&#x8868;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x7ED3;&#x70B9;&#x4E4B;&#x524D;&#x9644;&#x8BBE;&#x4E00;&#x4E2A;&#x7ED3;&#x70B9;&#xFF0C;&#x79F0;&#x4E4B;&#x4E3A;&#x5934;&#x7ED3;&#x70B9;&#x3002;&#x5934;&#x7ED3;&#x70B9;&#x7684;&#x6570;&#x636E;&#x57DF;&#x53EF;&#x4EE5;&#x4E0D;&#x5B58;&#x50A8;&#x4EFB;&#x4F55;&#x4FE1;&#x606F;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x5B58;&#x50A8;&#x5982;&#x7EBF;&#x6027;&#x8868;&#x957F;&#x5EA6;&#x7B49;&#x7C7B;&#x7684;&#x9644;&#x52A0;&#x4FE1;&#x606F;&#xFF0C;&#x5934;&#x7ED3;&#x70B9;&#x7684;&#x6307;&#x9488;&#x57DF;&#x5B58;&#x50A8;&#x6307;&#x5411;&#x7B2C;&#x4E00;&#x4E2A;&#x7ED3;&#x70B9;&#x7684;&#x6307;&#x9488;&#xFF08;&#x5373;&#x7B2C;&#x4E00;&#x4E2A;&#x5143;&#x7D20;&#x7ED3;&#x70B9;&#x7684;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;&#xFF09;&#x3002;&#x6B64;&#x65F6;&#xFF0C;&#x5355;&#x94FE;&#x8868;&#x7684;&#x5934;&#x6307;&#x9488;&#x6307;&#x5411;&#x5934;&#x7ED3;&#x70B9;&#x3002;&#x82E5;&#x7EBF;&#x6027;&#x8868;&#x4E3A;&#x7A7A;&#xFF0C;&#x5219;&#x5934;&#x7ED3;&#x70B9;&#x7684;&#x6307;&#x9488;&#x57DF;&#x4E3A;&#x201C;&#x7A7A;&#x201D;&#x3002;](../../../.gitbook/assets/image%20%2844%29.png)
 
+\([http://www.cnblogs.com/keeya/p/9218352.html](http://www.cnblogs.com/keeya/p/9218352.html)\)
+
+* * > 遍历法就是在链表遍历的过程中将指针顺序置换  
+    > ![enter image description here](https://images2015.cnblogs.com/blog/571584/201707/571584-20170711122621556-142752551.png)  
+    > 先上代码：
+
+  ```text
+  public static Node reverseList(Node node) {
+    Node pre = null;
+    Node next = null;
+    while (node != null) {
+        next = node.next;
+        node.next = pre;
+        pre = node;
+        node = next;
+    }
+    return pre;
+  }
+  ```
+
+  依旧是1-&gt;2-&gt;3-&gt;4
+
+* 准备两个空结点 pre用来保存先前结点、next用来做临时变量
+* 在头结点node遍历的时候此时为1结点
+  * next = 1结点.next\(2结点\)
+  * 1结点.next=pre\(null\)
+  * pre = 1结点
+  * node = 2结点
+* 进行下一次循环node=2结点
+  * next = 2结点.next\(3结点\)
+  * 2结点.next=pre\(1结点\)=&gt;即完成2-&gt;1
+  * pre = 2结点
+  * node = 3结点
+* 进行循环...
+
 迭代的过程：
 
 1. Initialize three pointers prev as NULL, curr as head and next as NULL.
@@ -1157,22 +1192,22 @@ Time：都是O\(n\)；Space：递归是O\(n\)，迭代是O\(1\)。
  * }
  */
 class Solution {
-    public ListNode reverseList(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-        ListNode prev = null;
-        ListNode current = head;
-        ListNode next = null;
-        while (current != null) {
-            next = current.next;//第一个步骤是维持住接下来的链表，防止丢失
-            current.next = prev;
-            prev = current; //挪动前一个结点到现在的结点
-            current = next; //这个时候current.next已经发生了改变，所以把当前node移动到next才可以
-        }
-        head = prev;//prev会停在最后一个结点处，current会停在最后一个结点后面的null处，head需要从头交换到尾
-        return head;
-    }
+	public ListNode reverseList(ListNode head) {
+		if (head == null || head.next == null) {
+			return head;
+		}
+		ListNode pre = null;
+		ListNode temp = null;
+
+		while (head != null) {
+			temp = head.next;
+			head.next = pre;
+			//更新两个结点
+			pre = head;
+			head = temp;
+		}
+		return pre;
+	}
 }
 ```
 
