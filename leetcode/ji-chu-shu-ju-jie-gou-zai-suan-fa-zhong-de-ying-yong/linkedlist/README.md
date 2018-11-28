@@ -141,6 +141,134 @@ class Solution {
 }
 ```
 
+## 369 Plus One Linked List
+
+### 原题概述
+
+Given a non-negative integer represented as **non-empty** a singly linked list of digits, plus one to the integer.
+
+You may assume the integer do not contain any leading zero, except the number 0 itself.
+
+The digits are stored such that the most significant digit is at the head of the list.
+
+**Example :**
+
+```text
+Input: [1,2,3]
+Output: [1,2,4]
+```
+
+### 题意和分析
+
+在链表尾部+1，要考虑进位问题，有四种解法：
+
+1）先翻转链表，然后在头部元素+1，处理好进位，最后再翻转过来；
+
+2）递归做法，因为递归是先递到最后一位，这时候+1，然后在回溯的途中处理进位，最后发现还有进位就在表头加一个node；
+
+3）上面递归解法的迭代写法，这个需要额外的空间，利用栈先进后出的特征来+1；
+
+4）遍历链表，找到右起第一个不为9的数字，如果找不到这样的数字，说明所有数字均为9，那么在表头新建一个值为0的新节点，进行加1处理，然后把右边所有的数字都置为0即可。举例来说：
+
+比如1-&gt;2-&gt;3，那么第一个不为9的数字为3，对3进行加1，变成4，右边没有节点了，所以不做处理，返回1-&gt;2-&gt;4。
+
+再比如说8-&gt;9-&gt;9，找第一个不为9的数字为8，进行加1处理变成了9，然后把后面的数字都置0，得到结果9-&gt;0-&gt;0。
+
+再来看9-&gt;9-&gt;9的情况，找不到不为9的数字，那么再前面新建一个值为0的节点，进行加1处理变成了1，把后面的数字都置0，得到1-&gt;0-&gt;0-&gt;0。
+
+### 代码
+
+解法1，翻转链表
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public ListNode plusOne(ListNode head) {
+
+      ListNode dummy = new ListNode(-1);
+      dummy.next = head;
+
+      ListNode reveredHead = revereNodes(dummy.next);
+
+      ListNode cur = reveredHead;
+      ListNode pre = cur;//这个指针用来记录可能需要添加的最后一位
+      int carry = 1;
+      while (cur != null) {
+         pre = cur;
+         int temp = cur.val + carry;
+         cur.val = temp % 10;
+         carry = temp / 10;
+         if (carry == 0) {//没有进位，不用往后加了
+            break;
+         }
+         cur = cur.next;
+      }
+      if (carry != 0) {
+         pre.next = new ListNode(carry);
+      }
+      return revereNodes(reveredHead);
+   }
+   private ListNode revereNodes(ListNode head) {
+      ListNode pre = null;
+      ListNode next = null;
+      while (head != null) {
+         next = head.next;
+         head.next = pre;
+         pre = head;
+         head = next;
+      }
+      return pre;
+   }
+}
+```
+
+解法2，递归
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public ListNode plusOne(ListNode head) {
+      if (head == null) {
+         return head;
+      }
+      int carry = recursion(head);
+      if (carry == 1) {
+         ListNode result = new ListNode(1);
+         result.next = head;
+         return result;
+      }
+      return head;
+   }
+   private int recursion(ListNode node) {
+      if (node == null) {//递归到最后一层，返回1，相当于plus one的作用
+         return 1;
+      }
+      int localCarry = recursion(node.next);
+      int sum = node.val + localCarry;
+      node.val = sum % 10;
+      return sum / 10;//最后一次计算的进位
+   }
+}
+```
+
+解法3，利用栈
+
+解法4，寻找最右边的9
+
 ## 合并有序链表
 
 ### 21  Merge Two Sorted Lists
