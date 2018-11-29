@@ -267,7 +267,83 @@ class Solution {
 
 解法3，利用栈
 
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public ListNode plusOne(ListNode head) {
+      if (head == null) {
+         return head;
+      }
+      Stack<ListNode> stack = new Stack<>();
+      ListNode cur = head;
+      int carry = 1;
+      while (cur != null) {
+         stack.push(cur);
+         cur = cur.next;
+      }
+      while (!stack.isEmpty() && carry != 0) {
+         ListNode temp = stack.pop();
+         int sum = temp.val + carry;
+         temp.val = sum % 10;
+         carry = sum / 10;
+      }
+      if (carry != 0) {
+         ListNode newHead = new ListNode(carry);
+         newHead.next = head;
+         return newHead;
+      }
+      return head;
+   }
+}
+```
+
 解法4，寻找最右边的9
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public ListNode plusOne(ListNode head) {
+      if (head == null) {
+         return head;
+      }
+      ListNode cur = head;
+      ListNode right = null;
+
+      while (cur != null) {
+         if (cur.val != 9) {
+            right = cur;
+         }
+         cur = cur.next;
+      }
+      if (right == null) {//全是9的情况
+         right = new ListNode(0);
+         right.next = head;
+         head = right;
+      }
+      right.val++;
+      cur = right.next;//从最右边不为9的node的右边的node开始处理
+      while (cur != null) {
+         cur.val = 0;
+         cur = cur.next;
+      }
+      return head;
+   }
+}
+```
 
 ## 合并有序链表
 
