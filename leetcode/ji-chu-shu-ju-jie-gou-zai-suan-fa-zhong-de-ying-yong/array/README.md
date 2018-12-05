@@ -1698,43 +1698,45 @@ Output:
 
 ### **代码**
 
+\*\*\*\*[**https://leetcode.com/problems/game-of-life/discuss/73223/Easiest-JAVA-solution-with-explanation**](https://leetcode.com/problems/game-of-life/discuss/73223/Easiest-JAVA-solution-with-explanation)\*\*\*\*
+
 ```java
 class Solution {
-    public void gameOfLife(int[][] board) {
-        if (board == null || board.length == 0 || board[0].length == 0) {
-            return;
-        }
-        int m = board.length, n = board[0].length;
+	public void gameOfLife(int[][] board) {
+		if (board == null || board.length == 0 || board[0].length == 0) {
+			return;
+		}
+		int m = board.length;
+		int n = board[0].length;
 
-        //控制元素的索引，检查8个方向，分别是左上，左，左下，下，右下，右，右上，上
-        int[] dx = {-1, -1, -1, 0, 1, 1, 1, 0};
-        int[] dy = {-1, 0, 1, 1, 1, 0, -1, -1};
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				int lives = livesNeighbors(board, m, n, i, j);
+				if (board[i][j] == 1 && lives >= 2 && lives <= 3) {
+					board[i][j] = 3;
+				}
+				if (board[i][j] == 0 && lives == 3) {
+					board[i][j] = 2;
+				}
+			}
+		}
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int count = 0;
-                for (int k = 0; k < 8; k++) {//8个位置
-                    int x = i + dx[k], y = j + dy[k];//求得不同的位置
-                    //遇到状态1或者状态2就计数器+1
-                    if (x >= 0 && x < m && y >= 0 && y < n && (board[x][y] == 1 || board[x][y] == 2)) {
-                        count++;
-                    }
-                }
-                if (board[i][j] != 0 && (count < 2 || count > 3)) {//活细胞周围少于两个活细胞或者大于三个活细胞
-                    board[i][j] = 2;
-                } else if (board[i][j] == 0 && count == 3) {//死细胞周围有三个活细胞
-                    board[i][j] = 3;
-                }
-            }
-        }
-
-        //扫描一遍更新状态为0或1
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                board[i][j] %= 2;
-            }
-        }
-    }
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				board[i][j] >>= 1;//除以2
+			}
+		}
+	}
+	public int livesNeighbors(int[][] board, int m, int n, int i,int j) {
+		int lives = 0;
+		for (int x = Math.max(i - 1, 0); x <= Math.min(i + 1, m - 1); x++) {//Math.max和Math.min处理边界问题
+			for (int y = Math.max(j - 1, 0); y <= Math.min(j + 1, n - 1); y++) {
+				lives += board[x][y] & 1;
+			}
+		}
+		lives -= board[i][j] & 1;
+		return lives;
+	}
 }
 ```
 
