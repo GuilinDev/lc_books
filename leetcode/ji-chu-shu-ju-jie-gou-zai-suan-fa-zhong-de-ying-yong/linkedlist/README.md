@@ -1088,9 +1088,9 @@ public class Solution {
 }
 ```
 
-### 142 - Linked List Cycle II
+## 142 - Linked List Cycle II
 
-#### 原题概述
+### 原题概述
 
 Given a linked list, return the node where the cycle begins. If there is no cycle, return `null`.
 
@@ -1099,7 +1099,7 @@ Given a linked list, return the node where the cycle begins. If there is no cycl
 **Follow up**:  
 Can you solve it without using extra space?
 
-#### 题意和分析
+### 题意和分析
 
 这道题是上一道的延伸，如果有环，判断环的入口，如果没有环就返回null，不要改变原先的链表。下面三种情况，链表无环，链表头尾相接，链表一部分有环。
 
@@ -1123,7 +1123,7 @@ slow走的路径： a+b ＝ n； fast走的路径： a+b+k_L = 2_n，fast 比 sl
 
 循环变成两个，但是时间空间复杂度还是一样的。
 
-#### 代码
+### 代码
 
 ```java
 /**
