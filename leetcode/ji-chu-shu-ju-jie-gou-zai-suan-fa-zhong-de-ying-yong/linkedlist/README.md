@@ -2123,6 +2123,43 @@ class Solution {
 }
 ```
 
+另一种写法，时间和空间复杂度都是O（n）
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public ListNode partition(ListNode head, int x) {
+      ListNode smallHead = new ListNode(-1);
+      ListNode bigHead = new ListNode(-1);
+
+      ListNode small = smallHead;
+      ListNode big = bigHead;
+
+      while (head != null) {
+         ListNode temp = new ListNode(head.val);
+         if (head.val < x) {
+            small.next = temp;
+            small = small.next;
+         } else {
+            big.next = temp;
+            big = big.next;
+         }
+         head = head.next;
+      }
+      small.next = bigHead.next;
+
+      return smallHead.next;
+   }
+}
+```
+
 ### 24 - Swap Nodes in Pairs
 
 #### 原题概述
