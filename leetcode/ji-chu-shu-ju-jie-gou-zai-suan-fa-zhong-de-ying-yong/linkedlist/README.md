@@ -1044,22 +1044,22 @@ class Solution {
 
 ## 判断单链表是否有环
 
-### 141 - Linked List Cycle
+## 141 - Linked List Cycle
 
-#### 原题概述
+### 原题概述
 
 Given a linked list, determine if it has a cycle in it.
 
 Follow up:  
 Can you solve it without using extra space?
 
-#### 题意和分析
+### 题意和分析
 
 题目给的链表的class是单链表，判断一个单链表是否有环是经典的快慢指针的应用，只需要设置两个指针，一个每次走一步另一个每次走两步，如果有环的话两个指针迟早会相遇，否则到结尾指向null。
 
 Time：O\(n\); Space：O\(1\);
 
-#### 代码
+### 代码
 
 ```java
 /**
