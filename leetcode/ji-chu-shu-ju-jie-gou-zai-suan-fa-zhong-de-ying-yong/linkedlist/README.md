@@ -459,9 +459,9 @@ class Solution {
 }
 ```
 
-### 23  Merge k Sorted Lists
+## 23  Merge k Sorted Lists
 
-#### 原题概述
+### 原题概述
 
 Merge _k_ sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
 
@@ -477,7 +477,7 @@ Input:
 Output: 1->1->2->3->4->4->5->6
 ```
 
-#### 题意和分析
+### 题意和分析
 
 这道题是多个有序链表合并成一个，在分布式系统中比较常见，比如来自不同客户端的sorted lists数据要在central server上面merge起来。
 
@@ -521,7 +521,7 @@ _归并操作的过程如下：_
 
 
 
-#### 代码
+### 代码
 
 分治法
 
