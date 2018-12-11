@@ -6,9 +6,9 @@
 
 ## 链表元素相加
 
-### 2 - Add Two Numbers
+## 2 - Add Two Numbers
 
-#### 原题概述
+### 原题概述
 
 You are given two **non-empty** linked lists representing two non-negative integers. The digits are stored in **reverse order** and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
 
@@ -22,11 +22,11 @@ Output: 7 -> 0 -> 8
 Explanation: 342 + 465 = 807.
 ```
 
-#### 题意和分析
+### 题意和分析
 
 给两个链表，个位十位百位从左到右存储，两个链表相加返回一个新链表。这道题也是链表的基本操作，创建一个dummy，原先的两个链表挨个结点相加，然后注意下进位就行了。时间O\(m+n\)，空间创建了一个新的链表O\(m\)，m是长度较长的那个链表。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -67,9 +67,9 @@ class Solution {
 }
 ```
 
-### 445 - Add Two Numbers II
+## 445 - Add Two Numbers II
 
-#### 原题概述
+### 原题概述
 
 You are given two **non-empty** linked lists representing two non-negative integers. The most significant digit comes first and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
 
@@ -85,11 +85,11 @@ Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
 Output: 7 -> 8 -> 0 -> 7
 ```
 
-#### 题意和分析
+### 题意和分析
 
 这道题跟前面一道题比，significant digit在前面了，所以个位就在最后。用stack的办法来让最后的位数先相加即可。时间O\(2m + 2n\) = O\(m + n\)；空间创建了两个新的stack，O\(m+n\)。
 
-#### 代码
+### 代码
 
 ```java
  * Definition for singly-linked list.
@@ -347,9 +347,9 @@ class Solution {
 
 ## 合并有序链表
 
-### 21  Merge Two Sorted Lists
+## 21  Merge Two Sorted Lists
 
-#### 原题概述
+### 原题概述
 
 Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
 
@@ -360,7 +360,7 @@ Input: 1->2->4, 1->3->4
 Output: 1->1->2->3->4->4
 ```
 
-#### 题意和分析
+### 题意和分析
 
 这道题很可能跟[Merge Sorted Array](https://guilindev.gitbook.io/interview/leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/array/he-bing-you-xu-de-arrays)一起问。可以用递归方法，判断哪个链表的节点值小就把该节点的下一个节点递归，最后返回最小的那个head；迭代，比较直接，两个链表都不为空的时候按顺序比较就是。
 
@@ -392,7 +392,7 @@ Output: 1->1->2->3->4->4
 
 ![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRXFmicQDh6Es9zz0j5R5p9oFIzelCkedrStyzicI5GvvWOHjTbX4BxQMQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
-#### 代码
+### 代码
 
 递归
 
@@ -636,9 +636,9 @@ class Solution {
 
 ## 删除链表结点
 
-### 237 - Delete Note in a Linked List
+## 237 - Delete Note in a Linked List
 
-#### 原题概述
+### 原题概述
 
 Write a function to delete a node \(except the tail\) in a singly linked list, given only access to that node.
 
@@ -673,13 +673,13 @@ Explanation: You are given the third node with value 1, the linked list
 * The given node will not be the tail and it will always be a valid node of the linked list.
 * Do not return anything from your function.
 
-#### 题意和分析
+### 题意和分析
 
 这道题要删除链表的一个结点，但是并没有给链表的起点。正常的删除过程是把待删除的结点的前一个结点的next指向待删除节点的下一个结点。但这道题没有起点，不知道这个结点的上一个结点，所以做法是将这个结点的下一个结点的值复制到这个结点，然后删除下一个结点。
 
 时间空间都是O\(1\)。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -698,9 +698,9 @@ class Solution {
 }
 ```
 
-### 19 - Remove Nth Node From End of List
+## 19 - Remove Nth Node From End of List
 
-#### 原题概述
+### 原题概述
 
 Given a linked list, remove the _n_-th node from the end of list and return its head.
 
@@ -720,11 +720,11 @@ Given _n_ will always be valid.
 
 Could you do this in one pass?
 
-#### 题意和分析
+### 题意和分析
 
 要求移除链表倒数的第N个节点，n不会大于链表的元素总数，如果两次遍历就简单了，先找到链表长度，然后移除len-N+1的的元素，但是要求一次遍历解决问题，所以就要求遍历到这个结点就应该删除了。应用双指针，pre和cur；首先cur指针向前走N步，如果cur此时指向空，这个为corner case，那就需要移除为首元素，此时返回head.next即可；如果cur不指向空，那就让cur和cur同时走，直到cur走到最后一个元素，此时pre指向的就是要移除元素的前一个元素，此时将下一个元素移除即可。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -761,9 +761,9 @@ class Solution {
 }
 ```
 
-### 203 - Remove Linked List Elements
+## 203 - Remove Linked List Elements
 
-#### 原题概述
+### 原题概述
 
 Remove all elements from a linked list of integers that have value **val**.
 
@@ -774,11 +774,11 @@ Input:  1->2->6->3->4->5->6, val = 6
 Output: 1->2->3->4->5
 ```
 
-#### 题意和分析
+### 题意和分析
 
 考察链表的基本操作，因为第一结点有可能也会被删除，所以使用dummy假头，然后返回dummy.next。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -832,9 +832,9 @@ class Solution {
 
 ## 判断链表是否是回文
 
-### 234 - Palindrome Linked List
+## 234 - Palindrome Linked List
 
-#### 原题概述
+### 原题概述
 
 Given a singly linked list, determine if it is a palindrome.
 
@@ -855,13 +855,13 @@ Output: true
 **Follow up:**  
 Could you do it in O\(n\) time and O\(1\) space?
 
-#### 题意和分析
+### 题意和分析
 
 这道题要求判断链表是否是回文的，跟Array相比链表没办法通过索引来读取后面的元素。首先可以用快慢指针来找到中点，在寻找重点过程中慢指针每走一步就把链表元素存入到一个stack中，当慢指针到达中点的时候就将存入到栈内的前半截元素和后半截进行比较；时间和空间都是O\(n\)，另外用递归的办法也是同样的复杂度。
 
 其次如果想用O\(n\)的时间和O\(1\)的空间，那就在快慢指针找到中点的时候，将后半截链表元素进行翻转后再进行比较。
 
-#### 代码
+### 代码
 
 用Stack
 
@@ -949,9 +949,9 @@ class Solution {
 
 ## 链表中的结点
 
-### 328 - Odd Even Linked List
+## 328 - Odd Even Linked List
 
-#### 原题概述
+### 原题概述
 
 Given a singly linked list, group all odd nodes together followed by the even nodes. Please note here we are talking about the node number and not the value in the nodes.
 
@@ -976,11 +976,11 @@ Output: 2->3->6->7->1->5->4->NULL
 * The relative order inside both the even and odd groups should remain as it was in the input.
 * The first node is considered odd, the second node even and so on ...
 
-#### 题意和分析
+### 题意和分析
 
 这道题给一个链表，对奇偶结点进行分组，所有的奇结点在前面，所有偶结点在后面。利用双指针，第一个是奇结点，第二个是偶结点，首先pre指向奇结点，cur指向偶结点，然后把cur后面的奇结点插入到pre的后面，再然后pre和cur同时前进一步，这个时候pre又指向了奇结点，cur又指向了偶结点；如此类推，就把所有的奇结点提到前面来了。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1165,9 +1165,9 @@ public class Solution {
 
 ## 链表相交
 
-### 160 - Intersection of Two Linked Lists
+## 160 - Intersection of Two Linked Lists
 
-#### 原题概述
+### 原题概述
 
 Write a program to find the node at which the intersection of two singly linked lists begins.  
 
@@ -1192,7 +1192,7 @@ begin to intersect at node c1.
 * You may assume there are no cycles anywhere in the entire linked structure.
 * Your code should preferably run in O\(n\) time and use only O\(1\) memory.
 
-#### 题意和分析
+### 题意和分析
 
 给两个链表，判断是否相交，如果有相交就返回相交的node，没有则相交返回null；不要改变链表的结构，链表中没有环；要求O\(n\)的时间复杂度和O\(1\)的空间复杂度。
 
@@ -1204,7 +1204,7 @@ begin to intersect at node c1.
 4. 虽然题目中强调了链表中不存在环，但是我们可以用环的思想来做，我们让两条链表分别从各自的开头开始往后遍历，当其中一条遍历到末尾时，我们跳到另一个条链表的开头继续遍历。两个指针最终会相等，而且只有两种情况，一种情况是在交点处相遇（有交叉），另一种情况是在各自的末尾的空节点（没有交叉）处相等。为什么一定会相等呢，因为两个指针走过的路程相同，是两个链表的长度之和，所以一定会相等。这个方法的时间复杂度是线性的，空间是常数，符合要求。
 5. 进一步考虑“如果两个没有环的链表相交于某一节点，那么在这个节点之后的所有节点都是两个链表共有的”这个特点，我们可以知道，如果它们相交，则最后一个节点一定是共有的。而我们很容易能得到链表的最后一个节点，所以这成了我们简化解法的一个主要突破口。那么，我们只要判断两个链表的尾指针是否相等。相等，则链表相交；否则，链表不相交。 所以，先遍历第一个链表，记住最后一个节点。然后遍历第二个链表，到最后一个节点时和第一个链表的最后一个节点做比较，如果相同，则相交，否则，不相交。这样我们就得到了一个时间复杂度，它为O\(\(Length\(h1\) + Length\(h2\)\)，而且只用了一个额外的指针来存储最后一个节点。这个方法时间复杂度为线性O\(N\)，空间复杂度为O\(1\)，如果只是判断是否相交这个办法很好，但没有办法知道从哪个node开始相交的。
 
-#### 代码
+### 代码
 
 用办法3减length来做
 
@@ -1290,9 +1290,9 @@ public class Solution {
 
 ## 单链表的翻转
 
-### 206 - Reverse Linked List
+## 206 - Reverse Linked List
 
-#### 原题概述
+### 原题概述
 
 Reverse a singly linked list.
 
@@ -1382,7 +1382,7 @@ Time：都是O\(n\)；Space：递归是O\(n\)，迭代是O\(1\)。
 
 ![](../../../.gitbook/assets/image%20%282%29.png)
 
-#### 代码
+### 代码
 
 迭代
 
@@ -1442,9 +1442,9 @@ class Solution {
 }
 ```
 
-### 92 - Reverse Linked List II
+## 92 - Reverse Linked List II
 
-#### 原题概述
+### 原题概述
 
 Reverse a linked list from position _m_ to _n_. Do it in one-pass.
 
@@ -1457,11 +1457,11 @@ Input: 1->2->3->4->5->NULL, m = 2, n = 4
 Output: 1->4->3->2->5->NULL
 ```
 
-#### 题意和分析
+### 题意和分析
 
 相对于上一道题，这道题是要求对链表从m到n的区间进行翻转（从位置1开始计算）。方法还是一样的，可以维护指针来标记遍历到哪里了，到m位置处再开始做翻转处理，然后到n位置结束翻转即可。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1506,9 +1506,9 @@ class Solution {
 }
 ```
 
-### 25 - Reverse Nodes in k-Group
+## 25 - Reverse Nodes in k-Group
 
-#### 原题概述
+### 原题概述
 
 Given a linked list, reverse the nodes of a linked list _k_ at a time and return its modified list.
 
@@ -1527,7 +1527,7 @@ For _k_ = 3, you should return: `3->2->1->4->5`
 * Only constant extra memory is allowed.
 * You may not alter the values in the list's nodes, only nodes itself may be changed.
 
-#### 题意和分析
+### 题意和分析
 
 这道题要求以k个结点为一组进行翻转，实际上是把原链表分成若干小段，然后分别对其进行翻转，以题目中给的例子来看，对于给定链表1-&gt;2-&gt;3-&gt;4-&gt;5，一般在处理链表问题时，我们大多时候都会在开头再加一个dummy node，因为翻转链表时头结点可能会变化，为了记录当前最新的头结点的位置而引入的dummy node，那么我们加入dummy node后的链表变为-1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;5，如果k为3的话，我们的目标是将1,2,3翻转一下，那么我们需要一些指针，pre和next分别指向要翻转的链表的前后的位置，然后翻转后pre的位置更新到如下新的位置：[![&#x590D;&#x5236;&#x4EE3;&#x7801;](https://common.cnblogs.com/images/copycode.gif)](javascript:void%280%29;)
 
@@ -1547,7 +1547,7 @@ pre         next
 
 也可以使用递归来做，我们用head记录每段的开始位置，current记录结束位置的下一个节点，然后我们调用reverse函数来将这段翻转，然后得到一个newHead，原来的head就变成了末尾，这时候后面接上递归调用下一段得到的新节点，返回newHead即可。
 
-#### 代码
+### 代码
 
 Iterative的办法
 
@@ -1646,9 +1646,9 @@ class Solution {
 
 ## 链表元素去重复
 
-### 83 - Remove Duplicates from Sorted List
+## 83 - Remove Duplicates from Sorted List
 
-#### 原题概述
+### 原题概述
 
 Given a sorted linked list, delete all duplicates such that each element appear only _once_.
 
@@ -1666,7 +1666,7 @@ Input: 1->1->2->3->3
 Output: 1->2->3
 ```
 
-#### 题意和分析
+### 题意和分析
 
 给一个有序链表，检查里面的元素，去重，让每个元素只出现一次。
 
@@ -1674,7 +1674,7 @@ Output: 1->2->3
 
 时间上只需要一次扫描，所以是O\(n\)，空间上两个额外指针，O\(1\)。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1706,7 +1706,7 @@ class Solution {
 }
 ```
 
-### 82 - Remove Duplicates from Sorted List II
+## 82 - Remove Duplicates from Sorted List II
 
 #### 原题概述
 
@@ -1726,13 +1726,13 @@ Input: 1->1->1->2->3
 Output: 2->3
 ```
 
-#### 题意和分析
+### 题意和分析
 
 给一个链表，检查里面的元素，移除所有有重复的元素，只要重复就一个不留，不重复的保留。这道题与83题的区别就是要把所有重复的node删除。因此，还是利用I中去重的方法，引用双指针，遍历链表，注意这里建立一个dummy head，让dummy head的next指向head，这样最后返回就是dummy.next就行。
 
 同样，时间上只需要一次扫描，所以是O\(n\)，空间上两个额外指针，O\(1\)。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1797,9 +1797,9 @@ class Solution {
 
 ## 链表的各种操作 
 
-### 148 - Sort List
+## 148 - Sort List
 
-#### 原题概述
+### 原题概述
 
 Sort a linked list in _O_\(_n_ log _n_\) time using constant space complexity.
 
@@ -1817,11 +1817,11 @@ Input: -1->5->3->4->0
 Output: -1->0->3->4->5
 ```
 
-#### 题意和分析
+### 题意和分析
 
 用 _O_\(_n_ log _n_\) 的复杂度对链表中的元素进行排序。既然是_O_\(_n_ log _n_\)复杂度的排序，那自然就是想到快排（复杂度平均）或者归并排序，这里用归并排序比较合适。根据Merge Sort的基本思想，就是找到中间结点，然后对左右两半部分分别进行归并排序，最后对排好序的两部分链表进行merge。通常Merge Sort是针对数组来看的，这里是链表，找到中间结点的办法是快慢指针；然后是合并两个有序链表，迭代或递归。最后返回。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1874,7 +1874,7 @@ class Solution {
 }
 ```
 
-### \* 147 - Insertion Sort List
+## \* 147 - Insertion Sort List
 
 #### 原题概述
 
@@ -1907,13 +1907,13 @@ Input: -1->5->3->4->0
 Output: -1->0->3->4->5
 ```
 
-#### 题意和分析
+### 题意和分析
 
 首先，For God's sake, don't try sorting a linked list during the interview.所以我们这道题练习链表的基本操作。
 
 要求对链表实现插入排序，这是一种O\(n^2\)复杂度的算法，就是每次循环找到一个元素在当前排好的结果中相对应的位置，然后插进去，经过n次迭代之后就得到排好序的结果了。了解了思路之后就是链表的基本操作了，搜索并进行相应的插入。时间复杂度是排序算法的O\(n^2\)，空间复杂度是O\(1\)。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -1952,9 +1952,9 @@ class Solution {
 }
 ```
 
-### 61 - Rotate List
+## 61 - Rotate List
 
-#### 原题概述
+### 原题概述
 
 Given a linked list, rotate the list to the right by _k_ places, where _k_ is non-negative.
 
@@ -1980,13 +1980,13 @@ rotate 3 steps to the right: 0->1->2->NULL
 rotate 4 steps to the right: 2->0->1->NULL
 ```
 
-#### 题意和分析
+### 题意和分析
 
 一个链表把右边k位的结点挪到左边来，可以分三步来做：1）计算链表长度；2）定位到len - k % len的位置因为k可能比len大，所有是k % len；3）在定位好的位置处开始rotate。
 
 时间O\(n\)，空间O\(1\)。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -2160,9 +2160,9 @@ class Solution {
 }
 ```
 
-### 24 - Swap Nodes in Pairs
+## 24 - Swap Nodes in Pairs
 
-#### 原题概述
+### 原题概述
 
 Given a linked list, swap every two adjacent nodes and return its head.
 
@@ -2177,13 +2177,13 @@ Given 1->2->3->4, you should return the list as 2->1->4->3.
 * Your algorithm should use only constant extra space.
 * You may **not** modify the values in the list's nodes, only nodes itself may be changed.
 
-#### 题意和分析
+### 题意和分析
 
 给一个链表，两两交换位置，每次跳两位，比如第一结点和第二结点交换位置，但第二结点和第三结点就不必交换位置，如果是单数个结点，就剩一个；要求空间为常数，所以如果用递归，先递归到最后一个结点，然后和倒数第二个交换的这种办法，因为空间是O\(n\)所以不行。另外也不能通过改变value的值来“交换”，只能交换结点。
 
 时间复杂度O\(n\)。
 
-#### 代码
+### 代码
 
 ```java
 /**
@@ -2243,9 +2243,9 @@ class Solution {
 }
 ```
 
-### 143 - Reorder List
+## 143 - Reorder List
 
-#### 原题概述
+### 原题概述
 
 Given a singly linked list _L_: _L_0→_L_1→…→_Ln_-1→_L_n,  
 reorder it to: _L_0→_Ln_→_L_1→_Ln_-1→_L_2→_Ln_-2→…
@@ -2264,7 +2264,7 @@ Given 1->2->3->4, reorder it to 1->4->2->3.
 Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
 ```
 
-#### 题意和分析
+### 题意和分析
 
 这道题做法是分为三步：1）找到链表的中间结点；2）将后半部分的链表倒转；3）将倒转后的后半部分链表插入到前半部分。时间复杂度O\(n\)，空间O\(n\)。
 
@@ -2272,7 +2272,7 @@ Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
 
 #### 代码
 
-后半截reverse的做法
+### 后半截reverse的做法
 
 ```java
 /**
