@@ -288,7 +288,7 @@ Explanation: The perimeter is the 16 yellow stripes in the image below:
 
 ```
 
-![](../../.gitbook/assets/image%20%2839%29.png)
+![](../../.gitbook/assets/image%20%2840%29.png)
 
 ### 题意和分析
 
