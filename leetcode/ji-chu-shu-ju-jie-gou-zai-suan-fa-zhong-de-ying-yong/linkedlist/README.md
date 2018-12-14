@@ -1307,7 +1307,7 @@ Output: 5->4->3->2->1->NULL
 
 A linked list can be reversed either iteratively or recursively. Could you implement both?
 
-#### 题意和分析
+### 题意和分析
 
 翻转一个单向链表，用递归和迭代的办法各实现一下。递归的办法；迭代的办法就是遍历每个结点然后把该节点的赋值为之前链表结点的next，然后把该结点的next赋值为之前链表的结点即可。
 
