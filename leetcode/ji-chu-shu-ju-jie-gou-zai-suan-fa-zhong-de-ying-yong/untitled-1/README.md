@@ -660,10 +660,12 @@ class Solution {
         if (root == null) {//递归的终止条件
             return root;
         }
-        TreeNode left = root.left;
-        TreeNode right = root.right;
-        root.left = invertTree(right);
-        root.right = invertTree(left);
+        TreeNode left = invertTree(root.left);
+	    TreeNode right = invertTree(root.right);
+        
+        //递归调用后的最后一步
+        root.left = right;
+		root.right = left;
 
         return root;
     }
