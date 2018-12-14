@@ -2675,6 +2675,106 @@ class Solution {
 }
 ```
 
+## 257 Binary Tree Paths
+
+### 原题概述
+
+Given a binary tree, return all root-to-leaf paths.
+
+**Note:** A leaf is a node with no children.
+
+**Example:**
+
+```text
+Input:
+
+   1
+ /   \
+2     3
+ \
+  5
+
+Output: ["1->2->5", "1->3"]
+
+Explanation: All root-to-leaf paths are: 1->2->5, 1->3
+```
+
+### 题意和分析
+
+直接递归来做，比较简单，时间和空间都是O\(n\)。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public List<String> binaryTreePaths(TreeNode root) {
+      List<String> result = new ArrayList<>();
+      if (root == null) {
+         return result;
+      }
+      findPaths(root, result, "");
+      return result;
+   }
+   private void findPaths(TreeNode root, List<String> result, String onePath) {
+      if (root.left == null && root.right == null) {
+         result.add(onePath + root.val);
+      }
+      if (root.left != null) {
+         findPaths(root.left, result, onePath + root.val + "->");
+      }
+      if (root.right != null) {
+         findPaths(root.right, result, onePath + root.val + "->");
+      }
+   }
+}
+```
+
+另外一种递归的写法，不用额外的方法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+   public List<String> binaryTreePaths(TreeNode root) {
+      List<String> paths = new ArrayList<String>();
+
+      if (root == null) {
+         return paths;
+      }
+      if (root.left == null && root.right== null) {
+         paths.add(root.val + "");
+         return paths;
+      }
+
+      for (String path : binaryTreePaths(root.left)) {
+         paths.add(root.val + "->" + path);
+      }
+
+      for (String path : binaryTreePaths(root.right)) {
+         paths.add(root.val + "->" + path);
+      }
+
+      return paths;
+   }
+}
+```
+
 ## 116 Populating Next Right Pointers in Each Node
 
 ### 原题概述
