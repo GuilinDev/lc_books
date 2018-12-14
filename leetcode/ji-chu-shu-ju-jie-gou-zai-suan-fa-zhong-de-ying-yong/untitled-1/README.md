@@ -873,18 +873,17 @@ Output: false
  * }
  */
 class Solution {
-    public boolean isSameTree(TreeNode p, TreeNode q) {
-        if (p == null && q == null) {//递归检查到末尾还没return false那就是return true了
-            return true;
-        }
-        if (p == null || q == null) {
-            return false;
-        }
-        if (p.val != q.val) {
-            return false;
-        }
-        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
-    }
+	public boolean isSameTree(TreeNode p, TreeNode q) {
+		if (p == null && q == null) {
+			return true;
+		} else if (p == null || q == null) {
+			return false;
+		}
+		if (p.val != q.val) {
+			return false;
+		}
+		return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+	}
 }
 ```
 
@@ -1731,22 +1730,23 @@ Bonus points if you could solve it both recursively and iteratively.
  * }
  */
 class Solution {
-    public boolean isSymmetric(TreeNode root) {
-        if (root == null) {
-            return true;
-        }
-        return isSymmetric(root.left, root.right);
-    }
-    private boolean isSymmetric(TreeNode left, TreeNode right) {
-        //递归的两个终止条件
-        if (left == null && right == null) {
-            return true;
-        }
-        if (left == null || right == null || left.val != right.val) {
-            return false;
-        }
-        return isSymmetric(left.left, right.right) && isSymmetric(left.right, right.left);
-    }
+	public boolean isSymmetric(TreeNode root) {
+		if (root == null) {
+			return true;
+		}
+		return isSymmetricLeftRight(root.left, root.right);
+	}
+	private boolean isSymmetricLeftRight(TreeNode treeLeft, TreeNode treeRight) {
+		if (treeLeft == null && treeRight == null) {
+			return true;
+		} else if (treeLeft == null || treeRight == null) {
+			return false;
+		}
+		if (treeLeft.val != treeRight.val) {
+			return false;
+		}
+		return isSymmetricLeftRight(treeLeft.left, treeRight.right) && isSymmetricLeftRight(treeLeft.right, treeRight.left);
+	}
 }
 ```
 
