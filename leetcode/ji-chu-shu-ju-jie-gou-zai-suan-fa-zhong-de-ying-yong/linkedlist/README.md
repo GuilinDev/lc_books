@@ -2270,9 +2270,9 @@ Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
 
 也可以用stack的办法来做，先把所有结点存入到一个stack并计算长度，然后重新遍历链表，同时把所有结点弹出，超过长度一半的时候弹出的那些结点挨个插入，复杂度一样。
 
-#### 代码
+### 代码
 
-### 后半截reverse的做法
+后半截reverse的做法
 
 ```java
 /**
@@ -2370,15 +2370,15 @@ class Solution {
 }
 ```
 
-### 138 - Copy List with Random Pointer
+## 138 - Copy List with Random Pointer
 
-#### 原题概述
+### 原题概述
 
 A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
 
 Return a deep copy of the list.
 
-#### 题意和分析
+### 题意和分析
 
 这道题还是链表的操作，给一个链表，这个链表在正常链表的基础上还带有一个random pointer，这个random pointer可以指向别的结点，也可以指向null，然后问题是如何deep copy这个链表。
 
@@ -2394,7 +2394,15 @@ Return a deep copy of the list.
 
 然后在上图的基础上进行如下两步
 
-1、构建新链表的random指针：比如new1.random = new1.random.random.next, new2.random = NULL, new3.random = NULL, new4.random = new4.random.random.next
+1、构建新链表的random指针：比如
+
+new1.random = new1.random.random.next, 
+
+new2.random = NULL, 
+
+new3.random = NULL, 
+
+new4.random = new4.random.random.next
 
 2、恢复原始链表：根据最开始保存的原始链表next指针映射关系恢复原始链表
 
@@ -2412,7 +2420,7 @@ Return a deep copy of the list.
 
 该算法时间复杂度O\(N\)，空间复杂度O\(1\)。
 
-#### 代码
+### 代码
 
 HashMap的做法，需要一个哈希表的原因是当我们访问一个结点时可能它的随机指针指向的结点还没有访问过，结点还没有创建，所以需要线性的额外空间
 
