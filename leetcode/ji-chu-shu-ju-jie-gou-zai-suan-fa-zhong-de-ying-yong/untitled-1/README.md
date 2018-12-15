@@ -2775,6 +2775,211 @@ public class Solution {
 }
 ```
 
+## 112 Path Sum 
+
+### 原题概述 
+
+Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.
+
+**Note:** A leaf is a node with no children.
+
+**Example:**
+
+Given the below binary tree and `sum = 22`,
+
+```text
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \      \
+7    2      1
+```
+
+return true, as there exist a root-to-leaf path `5->4->11->2` which sum is 22.
+
+### 题意和分析 
+
+典型的递归解法，每次递归以后注意sum需要减去当前root的val。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public boolean hasPathSum(TreeNode root, int sum) {
+      return dfs(root, sum);
+   }
+   private boolean dfs(TreeNode root, int sum) {
+      if (root == null) {
+         return false;
+      }
+      if (root.left == null && root.right == null && sum == root.val) {
+         return true;
+      }
+
+      return dfs(root.left, sum - root.val) || dfs(root.right, sum - root.val);
+   }
+}
+```
+
+## 113 Path Sum II 
+
+### 原题概述 
+
+Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+
+**Note:** A leaf is a node with no children.
+
+**Example:**
+
+Given the below binary tree and `sum = 22`,
+
+```text
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \    / \
+7    2  5   1
+```
+
+Return:
+
+```text
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+```
+
+### 题意和分析 
+
+解法跟上面类似，只是需要找出所有的路径。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public List<List<Integer>> pathSum(TreeNode root, int sum) {
+      List<List<Integer>> result = new ArrayList<>();
+      List<Integer> onePath = new ArrayList<>();
+      dfs(root, sum, result, onePath);
+      return result;
+   }
+   private void dfs(TreeNode root, int sum, List<List<Integer>> result, List<Integer> onePath) {
+      if (root == null) {
+         return;//说明这条path已经走完，不符合要求，需要return
+      }
+      onePath.add(new Integer(root.val));//?
+      if (root.left == null && root.right == null && sum == root.val) {
+         result.add(new ArrayList<>(onePath));
+         onePath.remove(onePath.size() - 1);
+         return;//说明这条path已经走完，已经加入result，需要return
+      }
+
+      dfs(root.left, sum - root.val, result, onePath);
+      dfs(root.right, sum - root.val, result, onePath);
+
+      onePath.remove(onePath.size() - 1);
+   }
+}
+```
+
+## 129 Sum Root to Leaf Numbers 
+
+### 原题概述 
+
+Given a binary tree containing digits from `0-9` only, each root-to-leaf path could represent a number.
+
+An example is the root-to-leaf path `1->2->3` which represents the number `123`.
+
+Find the total sum of all root-to-leaf numbers.
+
+**Note:** A leaf is a node with no children.
+
+**Example:**
+
+```text
+Input: [1,2,3]
+    1
+   / \
+  2   3
+Output: 25
+Explanation:
+The root-to-leaf path 1->2 represents the number 12.
+The root-to-leaf path 1->3 represents the number 13.
+Therefore, sum = 12 + 13 = 25.
+```
+
+**Example 2:**
+
+```text
+Input: [4,9,0,5,1]
+    4
+   / \
+  9   0
+ / \
+5   1
+Output: 1026
+Explanation:
+The root-to-leaf path 4->9->5 represents the number 495.
+The root-to-leaf path 4->9->1 represents the number 491.
+The root-to-leaf path 4->0 represents the number 40.
+Therefore, sum = 495 + 491 + 40 = 1026.
+```
+
+### 题意和分析 
+
+还是典型递归解法，每次递归乘以10在之前数值上。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public int sumNumbers(TreeNode root) {
+      return dfs(root, 0);
+   }
+   private int dfs(TreeNode root, int sum) {
+      if (root == null) {
+         return 0;
+      }
+      if (root.left == null && root.right == null) {
+         return sum * 10 + root.val;
+      }
+      return dfs(root.left, sum * 10 + root.val) + dfs(root.right, sum * 10 + root.val);
+   }
+}
+```
+
 ## 116 Populating Next Right Pointers in Each Node
 
 ### 原题概述
