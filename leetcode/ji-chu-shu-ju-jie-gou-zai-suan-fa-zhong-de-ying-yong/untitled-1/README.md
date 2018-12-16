@@ -3093,6 +3093,90 @@ public class Solution {
 }
 ```
 
+## 298  Binary Tree Longest Consecutive Sequence
+
+### 原题概述
+
+Given a binary tree, find the length of the longest consecutive sequence path.
+
+The path refers to any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The longest consecutive path need to be from parent to child \(cannot be the reverse\).
+
+**Example 1:**
+
+```text
+Input:
+
+   1
+    \
+     3
+    / \
+   2   4
+        \
+         5
+
+Output: 3
+
+Explanation: Longest consecutive sequence path is 3-4-5, so return 3.
+```
+
+**Example 2:**
+
+```text
+Input:
+
+   2
+    \
+     3
+    / 
+   2    
+  / 
+ 1
+
+Output: 2 
+
+Explanation: Longest consecutive sequence path is 2-3, not 3-2-1, so return 2.
+```
+
+### 题意和分析
+
+在二叉树中求连续递增最长长度，依然用递归，传入的值包括当前结点，当前结点为止的长度，和应该达到的值（上一结点的值+1），对比当前，左子树和右子树，挑一个最大值返回。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   public int longestConsecutive(TreeNode root) {
+      if (root == null) {
+         return 0;
+      }
+      return dfs(root, 0, root.val);
+   }
+   private int dfs(TreeNode root, int soFarLongest, int target) {
+      if (root == null) {
+         return soFarLongest;
+      }
+      if (root.val == target) {
+         soFarLongest++;
+      } else {
+         soFarLongest = 1;
+      }
+      int left = dfs(root.left, soFarLongest, root.val + 1);
+      int right = dfs(root.right, soFarLongest, root.val + 1);
+
+      return Math.max(soFarLongest, Math.max(left, right));//比较当前为止的路径的结果，和左右子树的结果，返回最大的
+   }
+}
+```
+
 ## 653 - 2Sum - Input is a BST
 
 ### 原题概述
