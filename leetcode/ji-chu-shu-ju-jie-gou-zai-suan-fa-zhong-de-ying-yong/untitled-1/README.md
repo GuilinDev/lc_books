@@ -3093,6 +3093,73 @@ public class Solution {
 }
 ```
 
+## 250 Count Univalue Subtrees
+
+### 原题概述
+
+Given a binary tree, count the number of uni-value subtrees.
+
+A Uni-value subtree means all nodes of the subtree have the same value.
+
+**Example :**
+
+```text
+Input:  root = [5,1,5,5,5,null,5]
+
+              5
+             / \
+            1   5
+           / \   \
+          5   5   5
+
+Output: 4
+```
+
+### 题意和分析
+
+ 可以用递归来做，第一种解法的思路是先序遍历树的所有的节点，然后对每一个节点调用判断以当前节点为根的字数的所有节点是否相同，用的是分治法的思想，分别对左右字数分别调用递归。
+
+上面的那种解法简单但不是很高效，含有大量的重复check，可以一次遍历就都搞定，我们这样想，符合条件的相同值的字数肯定是有叶节点的，而且叶节点也都相同\(注意单独的一个叶节点也被看做是一个相同值子树\)，那么可以从下往上check，采用后序遍历的顺序，左右根，还是递归调用函数，对于当前遍历到的节点，如果对其左右子节点分别递归调用函数，返回均为true的话，那么说明当前节点的值和左右子树的值都相同，那么又多了一棵树，所以结果自增1，然后返回当前节点值和给定值\(其父节点值\)是否相同，从而回归上一层递归调用。这里特别说明一下在子函数中要使用的那个单竖杠或，为什么不用双竖杠的或，因为单竖杠的或是位或，就是说左右两部分都需要被计算，然后再或，C++这里将true当作1，false当作0，然后进行Bit OR 运算。不能使用双竖杠或的原因是，如果是双竖杠或，一旦左半边为true了，整个就直接是true了，右半边就不会再计算了，这样的话，一旦右子树中有值相同的子树也不会被计算到结果res中了
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int countUnivalSubtrees(TreeNode root) {
+        int[] arr = new int[1];
+        postOrder(arr, root);
+        return arr[0];
+    }
+    private boolean postOrder(int[] arr, TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        boolean left = postOrder(arr, root.left);
+        boolean right = postOrder(arr,root.right);
+        if (left && right) {
+            if (root.left != null && root.left.val != root.val) {
+                return false;
+            }
+            if (root.right != null && root.right.val != root.val) {
+                return false;
+            }
+            arr[0]++;
+            return true;
+        }
+        return false;
+    }
+}
+```
+
 ## 298  Binary Tree Longest Consecutive Sequence
 
 ### 原题概述
