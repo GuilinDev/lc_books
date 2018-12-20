@@ -294,7 +294,26 @@ Time：O\(n\)；Space：新建一个Stack，O\(n\)；
 
 ### 代码
 
-
+```java
+public class Solution {
+    public int largestRectangleArea(int[] height) {
+        int len = height.length;
+        Stack<Integer> s = new Stack<Integer>();
+        int maxArea = 0;
+        for(int i = 0; i <= len; i++){
+            int h = (i == len ? 0 : height[i]);
+            if(s.isEmpty() || h >= height[s.peek()]){
+                s.push(i);
+            }else{
+                int tp = s.pop();
+                maxArea = Math.max(maxArea, height[tp] * (s.isEmpty() ? i : i - 1 - s.peek()));
+                i--;
+            }
+        }
+        return maxArea;
+    }
+}
+```
 
 ## 85 - Maximum Rectangle
 
@@ -317,7 +336,54 @@ Output: 6
 
 ### 题意和分析
 
+The DP solution proceeds row by row, starting from the first row. Let the maximal rectangle area at row i and column j be computed by \[right\(i,j\) - left\(i,j\)\]\*height\(i,j\).
+
+All the 3 variables left, right, and height can be determined by the information from previous row, and also information from the current row. So it can be regarded as a DP solution. The transition equations are:
+
+> left\(i,j\) = max\(left\(i-1,j\), cur\_left\), cur\_left can be determined from the current row
+
+> right\(i,j\) = min\(right\(i-1,j\), cur\_right\), cur\_right can be determined from the current row
+
+> height\(i,j\) = height\(i-1,j\) + 1, if matrix\[i\]\[j\]=='1';
+
+> height\(i,j\) = 0, if matrix\[i\]\[j\]=='0'
+
 ### 代码
 
-
+```java
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) return 0;
+        int m = matrix.length, n = matrix[0].length, maxArea = 0;
+        int[] left = new int[n];
+        int[] right = new int[n];
+        int[] height = new int[n];
+        Arrays.fill(right, n - 1);
+        for (int i = 0; i < m; i++) {
+            int rB = n - 1;
+            for (int j = n - 1; j >= 0; j--) {
+                if (matrix[i][j] == '1') {
+                    right[j] = Math.min(right[j], rB);
+                } else {
+                    right[j] = n - 1;
+                    rB = j - 1;
+                }
+            }
+            int lB = 0;
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '1') {
+                    left[j] = Math.max(left[j], lB);
+                    height[j]++;
+                    maxArea = Math.max(maxArea, height[j] * (right[j] - left[j] + 1));
+                } else {
+                    height[j] = 0;
+                    left[j] = 0;
+                    lB = j + 1;
+                }
+            }
+        }
+        return maxArea;
+    }
+}
+```
 
