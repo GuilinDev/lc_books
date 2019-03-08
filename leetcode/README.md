@@ -15,7 +15,7 @@
     <tr>
       <th style="text-align:left">#</th>
       <th style="text-align:left">Title</th>
-      <th style="text-align:left">难度</th>
+      <th style="text-align:left">&#x96BE;&#x5EA6;</th>
       <th style="text-align:left">Frequency</th>
       <th style="text-align:left">Time</th>
       <th style="text-align:left">Tags</th>
