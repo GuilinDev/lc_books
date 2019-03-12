@@ -401,7 +401,7 @@ class Solution {
         if (current == null) {
             return;
         }
-        if (result.size() == level) {//先DFS一条路走到底把每一层的arraylist创建好，然后回溯的时候在call stack中取到level的值，把对应的层的值传进去
+        if (result.size() == level) {
             result.add(new ArrayList<Integer>());
         }
         result.get(level).add(current.val);
@@ -540,119 +540,6 @@ class Solution {
             count++;
         }
         return count;
-    }
-}
-```
-
-## 107 Binary Tree Level Order Traversal II
-
-### 原题概述
-
-Given a binary tree, return the bottom-up level order traversal of its nodes' values. \(ie, from left to right, level by level from leaf to root\).
-
-For example:  
-Given binary tree `[3,9,20,null,null,15,7]`,  
-
-
-```text
-    3
-   / \
-  9  20
-    /  \
-   15   7
-```
-
-return its bottom-up level order traversal as:  
-
-
-```text
-[
-  [15,7],
-  [9,20],
-  [3]
-]
-```
-
-### 题意和分析
-
-跟102比，DFS - 递归到最后一层再加,递的过程中先在总list的头部建好各层的list，最后取层数的时候从最后开始取，results.get\(results.size\(\) - 1 - level\).add\(current.val\)； BFS - 加每一层list的时候直接加在总list 0的位置；
-
-### 代码
-
-DFS
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
-class Solution {
-    public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if (root == null) {
-            return result;
-        }
-        levelOrderHelper(result, root, 0);
-        return result;
-    }
-    private void levelOrderHelper(List<List<Integer>> result, TreeNode current, int level) {
-        if (current == null) {
-            return;
-        }
-        if (result.size() == level) {//先DFS一条路走到底把每一层的arraylist创建好，然后回溯的时候在call stack中取到level的值，把对应的层的值传进去
-            result.add(new ArrayList<Integer>());
-        }
-        result.get(result.size() - 1 - level).add(current.val);
-
-        levelOrderHelper(result, current.left, level + 1);
-        levelOrderHelper(result, current.right, level + 1);
-    }
-}
-```
-
-BFS
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
-class Solution {
-    public List<List<Integer>> levelOrderBottom(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<>();
-        if (root == null) {
-            return result;
-        }
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
-
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            List<Integer> oneLevel = new ArrayList<>();
-            while (size > 0) {
-                TreeNode node = queue.poll();
-                oneLevel.add(node.val);
-                if (node.left != null) {
-                    queue.add(node.left);
-                }
-                if (node.right != null) {
-                    queue.add(node.right);
-                }
-                size--;
-            }
-            result.add(0, oneLevel);//唯一的不同点
-        }
-        return result;
     }
 }
 ```
