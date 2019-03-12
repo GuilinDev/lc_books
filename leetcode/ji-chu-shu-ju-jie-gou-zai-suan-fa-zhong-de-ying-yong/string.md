@@ -1044,21 +1044,51 @@ class Solution {
 ```java
 class Solution {
     public List<String> letterCombinations(String digits) {
-        LinkedList<String> result = new LinkedList<>();
-        if (digits.length() == 0) {
+        LinkedList<String> result = new LinkedList<>();//创建一个queue
+        if (digits.isEmpty()) {
             return result;
         }
-        //把电话键盘上数字对应的字母列出来，比如输入为2，对应"abc"
-        String[] mapping = new String[]{"0","1","abc","def","ghi","mno","pqrs","tuv","wxyz"};
+        
+        String[] mapping = new String[]{"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
         result.add("");
-        while(result.peek().length() != digits.length()) {
-            String remove = result.remove();
-            String map = mapping[digits.charAt(remove.length()) - '0'];
-            for (char c : map.toCharArray()) {
-                result.addLast(remove + c);
+        
+        while (result.peek().length() < digits.length()) {//如果队列中的字符串的长度还小与input digits的长度，就继续BFS
+            String shorterStr = result.remove(); // 从队列中弹出长度还未到达结果长度的临时字符串元素
+            char ch = digits.charAt(shorterStr.length());//e.g.,比如给定的例子中树形结构的第二层有三个元素，分别是a，b，c，这时候长度还不满足最后条件，继续做BFS到树形结构下一层
+            String map = mapping[ch - '0'];//该层的所有元素
+            for (char temp : map.toCharArray()) {//该层的所有元素分别加入一个字符成为下一层的树形结构节点
+                result.addLast(shorterStr + temp);
             }
         }
         return result;
+    }
+}
+```
+
+DFS
+
+```java
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        LinkedList<String> result = new LinkedList<>();
+        if (digits.isEmpty()) {
+            return result;
+        }
+        String[] mapping = new String[]{"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        backtracking(result, mapping, digits, "", 0);
+        return result;
+    }
+    private void backtracking(LinkedList<String> result, String[] mapping, String digits, String prefix, int offset) {
+        if (offset >= digits.length()) {
+            result.add(prefix);
+            return;
+        }
+        
+        int index = digits.charAt(offset) - '0';
+        String map = mapping[index];
+        for (int i = 0; i < map.length(); i++) {
+            backtracking(result, mapping, digits, prefix + map.charAt(i), offset + 1);
+        }
     }
 }
 ```
