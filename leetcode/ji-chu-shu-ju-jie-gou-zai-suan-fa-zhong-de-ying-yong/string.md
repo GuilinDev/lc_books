@@ -567,7 +567,7 @@ dp\[i, j\] = 1                                               if i == j为回文�
 
            = s\[i\] == s\[j\] && dp\[i + 1\]\[j - 1\]    if j &gt; i + 1     
 
-3）O\(n\)的马拉车算法Manacher's Algorithm，线型时间，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍
+3）O\(n\)的马拉车算法Manacher's Algorithm，线型时间，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍，这个看情况掌握。
 
 ### 代码
 
