@@ -61,6 +61,5 @@
 * [HackerRank - 点技能点](hackerrank.md)
 * [OOD](ood.md)
 * [System Design](untitled.md)
-* [前端面试](qian-duan-mian-shi.md)
 * [Behavior Questions](untitled-1.md)
 
