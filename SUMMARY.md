@@ -7,7 +7,6 @@
   * [网络基础](ji-chu-zhi-shi/wang-luo-ji-chu.md)
   * [Java语言相关的面试问题](ji-chu-zhi-shi/java-yu-yan-xiang-guan-de-mian-shi-wen-ti.md)
   * [公开课](ji-chu-zhi-shi/gong-kai-ke.md)
-* [剑指Offer题目](jian-zhi-offer-ti-mu.md)
 * [LeetCode刷题](leetcode/README.md)
   * [0. LeetCode Strategy](leetcode/introduction.md)
   * [1. 基础算法和算法思想](leetcode/ji-chu-suan-fa.md)
@@ -59,7 +58,6 @@
     * [位操作基本知识](leetcode/untitled/wei-cao-zuo-ji-ben-zhi-shi.md)
   * [7. 高级数据结构和算法](leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa.md)
 * [HackerRank - 点技能点](hackerrank.md)
-* [OOD](ood.md)
 * [System Design](untitled.md)
 * [Behavior Questions](untitled-1.md)
 
