@@ -1120,22 +1120,24 @@ For example, given n = 3, a solution set is:
 ```java
 class Solution {
     public List<String> generateParenthesis(int n) {
-        List<String> result = new ArrayList<>();
-        helper(n, n, "", result);//先传入初始状态，再递归
-        return result;
+        List<String> results = new ArrayList<>();
+        generateParenthesisOneByOne(results, n, n, "");
+        return results;
     }
-    private void helper(int left, int right, String out, List<String> result) {
-        if (left < 0 || right < 0 || left > right) {//已经取完甚至超过了，所以直接返回，left>right表示')('成对
-            return;
-        }
-        if (left == 0 && right == 0) {//左右括号都取完了
-            result.add(out);
+    private void generateParenthesisOneByOne(List<String> results, int left, int right, String oneResult) {
+        //左右括号都没剩余的，已经组装完一个合法的括号组合字符串，这时候才可以加入到结果中
+        if (left == 0 && right == 0) {
+            results.add(oneResult);
             return;
         }
 
-        //仍在继续下一层
-        helper(left-1, right, out + '(', result);//这一层拿出左括号，下一层少一个左括号递归
-        helper(left, right-1, out + ')', result);//这一层拿出右括号，下一层少一个右括号递归
+        if (left > 0) {//左括号还有剩余，可以继续加
+            generateParenthesisOneByOne(results, left - 1, right, oneResult + "(");
+        }
+
+        if (right > left) {//严格来说这里的条件是right > 0 && right > left，因为right个括号还有剩余并且不能更多地放在left个括号之前
+            generateParenthesisOneByOne(results, left, right - 1, oneResult + ")");
+        }
     }
 }
 ```
