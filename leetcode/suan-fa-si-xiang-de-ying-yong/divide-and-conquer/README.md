@@ -453,6 +453,29 @@ Output: false
 ```java
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
+        if (s.isEmpty()) {
+            return true;
+        }
+        int len = s.length();
+        boolean[] results = new boolean[len + 1];
+        results[0] = true;
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j <= i; j++) {
+                String str = s.substring(j, i + 1);
+                if (results[j] && wordDict.contains(str)) {
+                    results[i + 1] = true;
+                    break;//
+                }
+            }
+        }
+        return results[len];
+    }
+}
+```
+
+```java
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
         if (s == null || s.length() == 0) {
             return true;
         }
