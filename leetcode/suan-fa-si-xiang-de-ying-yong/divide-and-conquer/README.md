@@ -396,7 +396,7 @@ class Solution {
     public int[] countBits(int num) {
         int[] result = new int[num+1];
         int offset = 1;
-        for (int index = 1; index <= num; index++) {//规律从1开始
+        for (int index = 1; index <= num; index++) {
             if (offset*2 == index) {
                 offset *= 2;
             }
@@ -407,9 +407,22 @@ class Solution {
 }
 ```
 
-## 139 - Word Break
-
 ### 原题概述
+
+```java
+class Solution {
+    public int[] countBits(int num) {
+        int[] results = new int[num + 1];//从0到num
+        Arrays.fill(results, 0); //results[0] = 0;
+        for (int i = 1; i <= num; i++) {
+            results[i] = results[i & i - 1] + 1;//dp递推式，下一个元素是上一个元素+1（下一个元素和上一个元素的关系是相差一个二进制的1）
+        }
+        return results;
+    }
+}
+```
+
+## 139 - Word Break
 
 Given a **non-empty** string _s_ and a dictionary _wordDict_ containing a list of **non-empty** words, determine if _s_ can be segmented into a space-separated sequence of one or more dictionary words.
 
@@ -448,8 +461,6 @@ Output: false
 
 > 动态规划题目的基本思路：首先我们要决定要存储什么历史信息以及用什么数据结构来存储信息，然后是最重要的递推式，就是如何从存储的历史信息中得到当前步的结果，最后我们需要考虑的就是起始条件的值。
 
-### 代码
-
 ```java
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
@@ -473,6 +484,8 @@ class Solution {
 }
 ```
 
+### 代码
+
 ```java
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
@@ -492,6 +505,29 @@ class Solution {
             }
         }
         return res[s.length()];
+    }
+}
+```
+
+```java
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s.isEmpty()) {
+            return true;
+        }
+        int len = s.length();
+        boolean[] results = new boolean[len + 1];
+        results[0] = true;
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j <= i; j++) {
+                String str = s.substring(j, i + 1);
+                if (results[j] && wordDict.contains(str)) {
+                    results[i + 1] = true;
+                    break;//
+                }
+            }
+        }
+        return results[len];
     }
 }
 ```
