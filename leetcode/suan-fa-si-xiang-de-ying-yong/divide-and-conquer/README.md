@@ -407,7 +407,7 @@ class Solution {
 }
 ```
 
-### 原题概述
+### 
 
 ```java
 class Solution {
@@ -484,7 +484,7 @@ class Solution {
 }
 ```
 
-### 代码
+代码
 
 ```java
 class Solution {
