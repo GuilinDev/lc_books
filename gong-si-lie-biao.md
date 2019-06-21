@@ -1,6 +1,6 @@
 # 公司列表
 
-这里列举了几类公司，分类跟公司名气/大小/盈利有些关系但不完全是，主要代表我们想去的公司的分级，没加括号的公司总部都在湾区。
+这里列举了几类公司，分类跟公司名气/大小/盈利有些关系但不完全是
 
 | **`1st`** |  |  |  |
 | :--- | :--- | :--- | :--- |
@@ -24,12 +24,12 @@
 | Ebay | Expedia（西雅图） | Intuit | Nvidia |
 | Cisco | Riverbed | Akamai\(波士顿\) | Blizzard\(洛杉矶\) |
 | Tesla | Concur\(西雅图\) | Arista | Teradata/Aster Data |
-| Citrix | Evernote | Priceline\(康州\) | EPIC |
-| Tripadvisor\(波士顿\) | Redfin\(波士顿\) | Symantec | Zillow\(西雅图\) |
-|  Twilio |  Wayfair\(波士顿\) | Houzz |  Zynga |
-|  HP/EMC\(波士顿\) |  Amobee | Verizon/Yahoo |  Opendoor |
+| Citrix | Evernote |  | EPIC |
+|  | Redfin\(波士顿\) | Symantec | Zillow\(西雅图\) |
+|  Twilio |   | Houzz |  Zynga |
+|  |  Amobee | Verizon/Yahoo |  Opendoor |
 | IXL | Intel |  Qualcomm | SAP |
-| RapidMiner\(波士顿\) | Ask.com | Ebates | Hearsay Systems |
+|  | Ask.com | Ebates | Hearsay Systems |
 | SurveyMonkey | Zendesk |  |  |
 
 
