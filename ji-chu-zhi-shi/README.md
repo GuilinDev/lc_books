@@ -5,10 +5,6 @@ description: >-
 
 # 基础知识
 
-{% embed url="https://github.com/vipshop/vjtools/tree/master/docs/standard" %}
-
-## 本文涉及的内容有：
-
 ## 网络层次划分／TCP／IP协议、三次握手和四次握手／进程与线程／进程调度算法／死锁／高速缓存Cache／最近最久未使用置换算法LRU的JAVA实现
 
 **网络层次划分**  

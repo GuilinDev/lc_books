@@ -1,7 +1,6 @@
 # Table of contents
 
 * [前言](README.md)
-* [公司列表](gong-si-lie-biao.md)
 * [基础知识](ji-chu-zhi-shi/README.md)
   * [操作系统](ji-chu-zhi-shi/cao-zuo-xi-tong.md)
   * [网络基础](ji-chu-zhi-shi/wang-luo-ji-chu.md)
