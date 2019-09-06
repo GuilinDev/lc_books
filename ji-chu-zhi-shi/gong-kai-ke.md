@@ -1,6 +1,6 @@
 # 公开课
 
-只刷题不上课肯定是不行的，根据大神[李小白](https://zhuanlan.zhihu.com/p/24774857)的推荐（更新了一下文章里面的链接从而链接到最新的课程）选择打牢基础的五门课程
+选择打牢基础的五门课程
 
 ## Udacity: Introduction to Computer Science（计算机科学导论）
 
