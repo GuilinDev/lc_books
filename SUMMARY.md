@@ -59,4 +59,6 @@
 * [HackerRank - 点技能点](hackerrank.md)
 * [System Design](untitled.md)
 * [Behavior Questions](untitled-1.md)
+* [Practices](practices/README.md)
+  * [K8S](practices/k8s.md)
 
