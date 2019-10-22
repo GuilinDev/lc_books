@@ -275,21 +275,17 @@ class Solution {
 
 ```java
 class Solution {
-    public int singleNumber(int[] nums) {
-        int[] count = new int[32];
-        int result = 0;
-        for (int i = 0; i < 32; i++) {
-            for (int j = 0; j < nums.length; j++) {
-                if (((nums[j] >> i) & 1) == 1) {//nums中当前元素的32位二进制形式，从右边的位开始，每位右移i位，来判断是否为1，然后在数组count中的i位置递增
-                    count[i]++;
-                }
-            }
-            //遍历完数组nums里面的所有元素后，除以3再左移还原
-            result |= ((count[i] % 3) << i);
-        }
-        //余数为只出现一次的那个数
-        return result;
+  public int singleNumber(int[] nums) {
+    int result = 0;
+    for (int i = 0; i < 32; i++) {
+      int sum = 0; //位操作一个整数就是32位
+      for (int num : nums) {
+        sum += (num >> i) & 1; //通过右移计算该位上，所有数组中数字的1的个数
+      }
+      result |= (sum % 3) << i; // 除以3相当于“去掉三个重复数”，然后再左移还原i位，然后|拼接还原
     }
+    return result;
+  }
 }
 ```
 
