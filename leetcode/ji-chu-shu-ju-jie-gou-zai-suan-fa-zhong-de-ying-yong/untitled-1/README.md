@@ -299,6 +299,120 @@ class Solution {
 }
 ```
 
+## 230 Kth Smallest Element in BST
+
+### 原题概述
+
+Given a binary search tree, write a function `kthSmallest` to find the **k**th smallest element in it.
+
+**Note:**  
+You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
+
+**Example 1:**
+
+```text
+Input: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+Output: 1
+```
+
+**Example 2:**
+
+```text
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+Output: 3
+```
+
+**Follow up:**  
+What if the BST is modified \(insert/delete operations\) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine?
+
+### 题意和分析
+
+使用中序遍历，遍历到第k个元素就是第k小的，作为结果返回，因为BST的中序遍历的结果刚好是从小到大排列，同样，也可以通过递归和迭代来做。
+
+### 代码
+
+迭代解法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+  public int kthSmallest(TreeNode root, int k) {
+    Stack<TreeNode> stack = new Stack<>();
+
+    TreeNode current = root;
+    while(current != null || !stack.isEmpty()) {
+      while (current != null) {
+        stack.push(current);
+        current = current.left;
+      }
+      current = stack.pop();
+      k--;
+      if (k == 0) {
+        return current.val;
+      }
+      current = current.right;
+    }
+    return -1;
+  }
+}
+```
+
+递归解法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+  private static int count = 0;
+  private static int result = 0;
+  public int kthSmallest(TreeNode root, int k) {
+    count = k;
+    kthSmallestHelper(root);
+    return result;
+  }
+  private void kthSmallestHelper(TreeNode current) {
+    if (current.left != null) {
+      kthSmallestHelper(current.left);
+    }
+    count--;
+    if (count == 0) {
+      result = current.val;
+      return;
+    }
+    if (current.right != null) {
+      kthSmallestHelper(current.right);
+    }
+  }
+}
+```
+
 ## 102 Binary Tree Level Order Traversal
 
 ### 原题概述
