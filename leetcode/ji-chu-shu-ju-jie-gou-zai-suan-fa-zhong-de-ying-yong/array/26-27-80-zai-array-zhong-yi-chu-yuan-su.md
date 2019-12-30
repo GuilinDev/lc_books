@@ -53,7 +53,7 @@
 
 ### 题意和分析
 
-这道题很简单，in place的做法就是把非val的值找出来全部排到原Array的前面，用一个index来记录位置，最后返回index的位置就是除去val的数组的长度。
+这道题很简单，与283 - Move Zeros类似，只不过只管左边不用swap值，in place的做法就是把非val的值找出来全部排到原Array的前面，用一个index来记录位置，最后返回index的位置就是除去val的数组的长度。
 
 整个数组扫一遍，Time：O\(n\)
 
@@ -63,20 +63,22 @@
 
 ```java
 class Solution {
-    public int removeElement(int[] nums, int val) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        
-        int index= 0;//记录位置，从0开始
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != val) {//找到不同等于val的值就排到nums的左边去，然后递增准备存储下一个非val的元素
-                nums[index] = nums[i];
-                index++;
-            }
-        }
-        return index;
+  public int removeElement(int[] nums, int val) {
+    if (nums == null || nums.length == 0) {
+      return 0;
     }
+
+    int slow = 0;
+    for (int fast = 0; fast <= nums.length - 1; fast++) { //[0...nums.length - 1]
+      if (nums[fast] != val) {//找到不同等于val的值就排到nums的左边去，然后递增准备存储下一个非val的元素
+        if (slow != fast) { //优化下让自己跟自己不要赋值，例如[1,2,3,4,5]
+          nums[slow] = nums[fast];
+        }
+        slow++;
+      }
+    }
+    return slow;
+  }
 }
 ```
 
@@ -141,16 +143,16 @@ class Solution {
     if (nums == null || nums.length == 0) {
       return 0;
     }
-    int index = 0;//最左边可以swap的位置
-    for (int i = 0; i <= nums.length - 1; i++) {
-      if (i < 1 || nums[i] != nums[index - 1]) {
-        if (index != i) { // 优化下，自己与自己不用再赋值赋值,[1,2,3,4,5]这种情况
-          nums[index] = nums[i];
+    int slow = 0;//最左边可以swap的位置
+    for (int fast = 0; fast <= nums.length - 1; fast++) {
+      if (fast < 1 || nums[fast] != nums[slow - 1]) {
+        if (slow != fast) { // 优化下，自己与自己不用再赋值赋值,[1,2,3,4,5]这种情况
+          nums[slow] = nums[fast];
         }
-        index++;
+        slow++;
       }
     }
-    return index;
+    return slow;
   }
 }
 ```
@@ -217,16 +219,16 @@ class Solution {
       return 0;
     }
 
-    int index = 0; //index的意思是最左边的可以被替代的位置
-    for (int i = 0; i <= nums.length - 1; i++) {
-      if (i < 2 || nums[i] != nums[index - 2]) {
-        if (i != index) { //这个条件是优化下自己与自己进行赋值,比如[1,2,3,4,5]这种情况
-          nums[index] = nums[i];
+    int slow = 0; //index的意思是最左边的可以被替代的位置
+    for (int fast = 0; fast <= nums.length - 1; fast++) {
+      if (fast < 2 || nums[fast] != nums[slow - 2]) {
+        if (fast != slow) { //这个条件是优化下自己与自己进行赋值,比如[1,2,3,4,5]这种情况
+          nums[slow] = nums[fast];
         }
-        index++;
+        slow++;
       }
     }
-    return index;
+    return slow;
   }
 }
 ```
