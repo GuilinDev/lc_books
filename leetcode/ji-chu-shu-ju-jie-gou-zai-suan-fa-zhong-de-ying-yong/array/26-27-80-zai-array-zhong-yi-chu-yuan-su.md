@@ -208,39 +208,28 @@ class Solution {
 
 与第26题相比，也是在排好序的Array里面移除重复元素，但是允许元素最多出现两次，思路跟26题也是类似，就是需要额外维护一个计数器counter，同样的元素如果如果counter等于2，直接跳过；遇到新元素时重置counter。
 
-整个数组扫一遍，Time：O\(n\)；空间上就维护一个index和一个counter，为O\(1\)。
-
-**注意：按照题意，这样的处理方式改变了数组里面的元素顺序，如果尾数有三个或以上重复值的时候，无法处理（多出所有操作所覆盖元素的个数）。**
+整个数组扫一遍，Time：O\(n\)；空间上就维护一个index表示最左边可以被取代的位置，然后较快的指针i与index-2位的元素对比（因为index-2的位置可以保证这个元素和index位置的这个元素不一样-大）。
 
 ### 代码
 
 ```java
 class Solution {
-    public int removeDuplicates(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        
-        int index = 1;
-        int counter = 1;
-        
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] == nums[i - 1]) {
-                counter++;
-                //i对应的当前值出现次数>=3次，直接跳过该次循环，这时候i继续前移，
-                //但index停在原地，等待下一个不等于当前index对应的值来更新
-                if (counter >= 3) { 
-                    continue;
-                }
-            } else { //遇到不同的数就重置counter
-                counter = 1;
-            }
-            //如果出现次数不到<3次，就更新index（所停留的地方）对应的值为当前i对应的值
-            nums[index] = nums[i]; 
-            index++;
-        }
-        return index;
+  public int removeDuplicates(int[] nums) {
+    if (nums == null || nums.length == 0) {
+      return 0;
     }
+
+    int index = 0; //index的意思是最左边的可以被替代的位置
+    for (int i = 0; i <= nums.length - 1; i++) {
+      if (i < 2 || nums[i] != nums[index - 2]) {
+        if (i != index) { //这个条件是优化下自己与自己进行赋值,比如[1,2,3,4,5]这种情况
+          nums[index] = nums[i];
+        }
+        index++;
+      }
+    }
+    return index;
+  }
 }
 ```
 
