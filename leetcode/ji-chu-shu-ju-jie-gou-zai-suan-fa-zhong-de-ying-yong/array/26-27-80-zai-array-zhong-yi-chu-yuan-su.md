@@ -131,29 +131,27 @@ class Solution {
 
 与第27题的解法基本相同，这道题是在一个排好序的Array中，找到有多少个非duplicate的值然后存储在index里，index则在in place的位置上。
 
-Time：O\(n\)
-
-**注意：按照题意，这样的处理方式改变了数组里面的元素顺序，如果尾数有重复值的时候，无法处理。**
+Time：O\(n\)。
 
 ### 代码
 
 ```java
 class Solution {
-    public int removeDuplicates(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        
-        int index = 1; //从第1位与第0位开始比较,遇到不同的值则增加一位
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[i - 1]) {
-                nums[index] = nums[i];
-                index++;
-            }
-        }
-        return index;
-        
+  public int removeDuplicates(int[] nums) {
+    if (nums == null || nums.length == 0) {
+      return 0;
     }
+    int index = 0;//最左边可以swap的位置
+    for (int i = 0; i <= nums.length - 1; i++) {
+      if (i < 1 || nums[i] != nums[index - 1]) {
+        if (index != i) { // 优化下，自己与自己不用再赋值赋值,[1,2,3,4,5]这种情况
+          nums[index] = nums[i];
+        }
+        index++;
+      }
+    }
+    return index;
+  }
 }
 ```
 
