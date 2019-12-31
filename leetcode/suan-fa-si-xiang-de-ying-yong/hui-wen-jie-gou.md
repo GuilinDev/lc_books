@@ -500,7 +500,7 @@ class Solution {
         int temp = nums[index1];
         nums[index1] = nums[index2];
         nums[index2] = temp;
-        //注意这里是pass by reference,以下两种解法会影响只有一个元素的比如[2]这样的例子，交换双方nums[index1]和nums[index2]一起修改
+        //注意这里是pass by value of reference,以下两种解法会影响只有一个元素的比如[2]这样的例子，交换双方nums[index1]和nums[index2]一起修改
         //nums[index1] = nums[index1] + nums[index2];
         //nums[index2] = nums[index1] - nums[index2];
         //nums[index1] = nums[index1] - nums[index2];
@@ -508,6 +508,45 @@ class Solution {
         //nums[index1] = nums[index1] ^ nums[index2];
         //nums[index2] = nums[index1] ^ nums[index2];
         //nums[index1] = nums[index1] ^ nums[index2];
+        //或者写成以下的解法
+    }
+}
+
+
+//——————————————————————————————————————————————————
+class Solution {
+    public void sortColors(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+        
+        int zero = -1; // [0...zero]
+        int two = nums.length; // [two...nums.length - 1] 
+        for (int i = 0; i < two; ) { //i在交换后不一定会i++,可能继续处理当前元素.two索引以及后面的元素不用管
+            if (nums[i] == 0) {
+                zero++;
+                if (zero != i) {
+                    //传引用的值
+                    swap(nums, zero, i);
+                }
+                i++; //当前元素i为0，交换后zero位置（区间最右边的0）的元素为0，所以需要往右处理下一个元素
+            } else if (nums[i] == 2) {
+                two--;
+                if (two != i) {
+                    //传引用的值
+                    swap(nums, two, i);
+                }
+                //这里当前元素i为2，交换到two的位置（区间最左边的2）的元素为2，但是交换到i位置的元素还不知道是什么，下一轮循环需要继续处理
+            } else { // should be 1 now
+                assert(nums[i] == 1);
+                i++;//遇到1直接往右走，不用交换
+            }
+        }
+    }
+    private static void swap(int[] nums, int index1, int index2) {
+        nums[index1] = nums[index1] ^ nums[index2];
+        nums[index2] = nums[index1] ^ nums[index2];
+        nums[index1] = nums[index1] ^ nums[index2];
     }
 }
 ```
