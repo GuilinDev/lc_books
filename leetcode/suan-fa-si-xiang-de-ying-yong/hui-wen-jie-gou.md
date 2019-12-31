@@ -436,66 +436,78 @@ Output: [0,0,1,1,2,2]
 
 ### **题意和分析**
 
-题目中说了如果两次扫描的做法，先计数，然后打印出来，利用HashMap或者count来统计，然后再把打印即可。如果想一次扫描就排好序，利用双指针的办法，因为0，1，2分别代表red，white，blue，最后需要排成012这样的顺序，那就把第一个索引指向头部，第二个索引指向尾部，然后遍历数组，如果遇到当前元素为0，则当前元素与第一个索引交换值，同时第一个索引往后移动一步；如果遇到2，则当前元素与第二个索引交换值，同时第二个索引往前移动一步；如果遇到1，继续遍历不作改变。
+题目中说了如果两次扫描的做法，先计数，然后打印出来，利用一个三个元素的array或者HashMap或，然后再把打印即可。
+
+如果想一次扫描就排好序，利用三路快排的思想，因为0，1，2分别代表one，two，three，最后需要排成012这样的顺序，那就用两个索引，把第一个索引指向头部\(-1\)，第二个索引指向尾部\(nums.length\(\)\)，然后遍历数组，如果遇到当前元素为0，则当前元素与第一个索引交换值，同时第一个索引往后移动一步；如果遇到2，则当前元素与第二个索引交换值，同时第二个索引往前移动一步；如果遇到1，继续遍历不作改变。
 
 当然，三个指针也是可以的，都从0开始，遍历nums，如果等于2，只有第三个指针移动；如果等于1，第二个和第三个指针一起移动；如果等于0，三个指针都移动。
 
 ### **代码**
 
+计数排序的办法，先算出每个元素出现的次数，然后再填充回nums中，需要扫描两遍。
+
 ```java
 class Solution {
     public void sortColors(int[] nums) {
-        if (nums == null || nums.length == 0 || nums.length == 1) {
+        if (nums == null || nums.length == 0) {
             return;
         }
-        int red = 0, blue = nums.length - 1;
-        for (int i = 0; i <= blue; i++) {//循环到第二个索引处就可以停止了
-            if (nums[i] == 0) {
-                int temp0 = nums[i];
-                nums[i] = nums[red];
-                nums[red] = temp0;
-                red++;
+        //统计0，1，2各自出现的次数
+        int[] counts = new int[3];
+        for (int i = 0; i <= nums.length - 1; i++) {
+            assert(nums[i] >= 0 && nums[i] <= 2);
+            counts[nums[i]]++;
+        }
+        int index = 0;//from left to right in nums[],表示0，1各自的锚定点
+        for (int i = 0; i <= counts.length - 1; i++){ // 0, 1, 2
+            for (int j = index; j <= index + counts[i] - 1; j++) {
+                nums[j] = i;
             }
-            if (nums[i] == 2) {
-                int temp2 = nums[i];
-                nums[i] = nums[blue];
-                nums[blue] = temp2;
-                blue--;
-                i--;//i的值需要自减1是因为从blue的索引处交换一个元素到前面，需要停在当前步再检查一下
-            }
+            //填完0/1后移动锚定点
+            index += counts[i];
         }
     }
 }
 ```
 
-三个指针
+三路快排思想
 
 ```java
 class Solution {
     public void sortColors(int[] nums) {
-        if (nums == null || nums.length == 0 || nums.length == 1) {
+        if (nums == null || nums.length == 0) {
             return;
         }
-        int red = 0, white = 0, blue = 0;
-        for (int n : nums) {
-            if (n == 2) {
-                nums[blue] = 2;
-                blue++;
-            } else if (n == 1) {
-                nums[blue] = 2;
-                blue++;
-                nums[white] = 1;
-                white++;
-            } else {
-                nums[blue] = 2;
-                blue++;
-                nums[white] = 1;
-                white++;
-                nums[red] = 0;
-                red++;
+        
+        int zero = -1; // [0...zero]
+        int two = nums.length; // [two...nums.length - 1] 
+        for (int i = 0; i < two; ) { //i在交换后不一定会i++,可能继续处理当前元素.two索引以及后面的元素不用管
+            if (nums[i] == 0) {
+                zero++;
+                swap(nums, zero, i);
+                i++; //当前元素i为0，交换后zero位置（区间最右边的0）的元素为0，所以需要往右处理下一个元素
+            } else if (nums[i] == 2) {
+                two--;
+                swap(nums, two, i);
+                //这里当前元素i为2，交换到two的位置（区间最左边的2）的元素为2，但是交换到i位置的元素还不知道是什么，下一轮循环需要继续处理
+            } else { // should be 1 now
+                assert(nums[i] == 1);
+                i++;//遇到1直接往右走，不用交换
             }
         }
-
+    }
+    private static void swap(int[] nums, int index1, int index2) { 
+        int temp = nums[index1];
+        nums[index1] = nums[index2];
+        nums[index2] = temp;
+        //注意这里是pass by reference,以下两种解法会影响只有一个元素的比如[2]这样的例子，交换双方nums[index1]和nums[index2]一起修改
+        //nums[index1] = nums[index1] + nums[index2];
+        //nums[index2] = nums[index1] - nums[index2];
+        //nums[index1] = nums[index1] - nums[index2];
+        //或
+        //nums[index1] = nums[index1] ^ nums[index2];
+        //nums[index2] = nums[index1] ^ nums[index2];
+        //nums[index1] = nums[index1] ^ nums[index2];
     }
 }
 ```
