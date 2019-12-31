@@ -31,24 +31,74 @@ Time：O\(m + n\)；Space：O\(1\)；
 
 ### 代码
 
+直观解法
+
 ```java
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int length = m + n;
-
-        while (n > 0) { //表示nums2里面的元素还没有加完
-            //从最后一位开始检查，每次循环前移一位
-            length--;
-            if (m == 0 || nums1[m - 1] < nums2[n - 1]) {//m=0表示只剩nums2的元素了，直接加入就好
-                n--;//从nums2最后一位开始
-                nums1[length] = nums2[n];
-            } else {//m != 0 &&　nums1[m - 1] > nums2[n - 1]
-                m--;//从nums1最后一位开始
-                nums1[length] = nums1[m];
+        if (nums1 == null || nums2 == null || nums1.length == 0 || nums2.length == 0) {
+            return;
+        }
+        int index = m + n - 1;
+        int index1 = m - 1;
+        int index2 = n - 1;
+        
+        //直接比较
+        while (index1 >= 0 && index2 >= 0) {
+            if (nums1[index1] >= nums2[index2]) {
+                nums1[index] = nums1[index1];
+                index1--;
+            } else {
+                nums1[index] = nums2[index2];
+                index2--;
+            }
+            index--;
+        }
+        //如果nums1没有加完，这段可省略
+        if (index1 >= 0) {
+            while (index1 >= 0) {
+                nums1[index] = nums1[index1];
+                index--;
+                index1--;
             }
         }
-        //这样写可以短一点: nums1[--length] = (m == 0 || nums[m - 1] < nums[n - 1]) ? nums2[--n] : nums1[--m];
+        //如果nums2没有加完
+        if (index2 >= 0) {
+            while (index2 >= 0) {
+                nums1[index] = nums2[index2];
+                index--;
+                index2--;
+            }
+        }
     }
 }
+```
+
+简约解法
+
+```java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        if (nums1 == null || nums2 == null || nums1.length == 0 || nums2.length == 0) {
+            return;
+        }
+        int index = m + n - 1;
+        int index1 = m - 1;
+        int index2 = n - 1;
+        
+        while (index2 >= 0) { //nums2中还有元素
+            if (index1 < 0 || nums2[index2] >= nums1[index1]) { //index1 < 0 表示nums1中的元素已经比较完了
+                nums1[index] = nums2[index2];
+                index2--;
+            } else {
+                nums1[index] = nums1[index1];
+                index1--;
+            }
+            index--;
+        }
+    }
+}
+
+//这样写可以短一点: nums1[--length] = (m == 0 || nums[m - 1] < nums[n - 1]) ? nums2[--n] : nums1[--m];可读性为0
 ```
 
