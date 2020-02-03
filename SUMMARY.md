@@ -62,4 +62,11 @@
 * [Behavior Questions](untitled-1.md)
 * [Practices](practices/README.md)
   * [K8S](practices/k8s.md)
+* [给非编程人员的Python入门](gei-fei-bian-cheng-ren-yuan-de-python-ru-men/README.md)
+  * [第一章 入门](gei-fei-bian-cheng-ren-yuan-de-python-ru-men/di-yi-zhang-ru-men.md)
+  * [第二章 如同其它编程语言一样](gei-fei-bian-cheng-ren-yuan-de-python-ru-men/di-er-zhang-ru-tong-qi-ta-bian-cheng-yu-yan-yi-yang.md)
+  * [第三章 Python自己的语言特性](gei-fei-bian-cheng-ren-yuan-de-python-ru-men/di-san-zhang-python-zi-ji-de-yu-yan-te-xing.md)
+  * [第五章 除了语言特性外还需要掌握的](gei-fei-bian-cheng-ren-yuan-de-python-ru-men/di-wu-zhang-chu-le-yu-yan-te-xing-wai-hai-xu-yao-zhang-wo-de.md)
+  * [第四章 学完语言特性后的进阶路径](gei-fei-bian-cheng-ren-yuan-de-python-ru-men/di-si-zhang-xue-wan-yu-yan-te-xing-hou-de-jin-jie-lu-jing.md)
+  * [第六章 勤学如春起之苗 不见其增 日有所长](gei-fei-bian-cheng-ren-yuan-de-python-ru-men/di-liu-zhang-qin-xue-ru-chun-qi-zhi-miao-bu-jian-qi-zeng-ri-you-suo-chang.md)
 
