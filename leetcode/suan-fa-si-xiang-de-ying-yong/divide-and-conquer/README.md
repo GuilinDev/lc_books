@@ -1191,3 +1191,71 @@ class Solution {
 }
 ```
 
+## 300 Longest Increasing Subsequence
+
+### 原题概述
+
+Given an unsorted array of integers, find the length of longest increasing subsequence.
+
+**Example:**
+
+```text
+Input: [10,9,2,5,3,7,101,18]
+Output: 4 
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4. 
+```
+
+**Note:**
+
+* There may be more than one LIS combination, it is only necessary for you to return the length.
+* Your algorithm should run in O\(n2\) complexity.
+
+**Follow up:** Could you improve it to O\(n log n\) time complexity?
+
+### 题意和分析
+
+这是经典题，如果采取暴力法来解复杂度得是排列组合的阶乘级。求最优解一般可以用动态规划，这是动态规划中的区间型题目，首先状态定义，dp\[i\]表示数组中第i个元素为止的最长子序列长度（从0开始），那么dp\[i+1\]就是在i后面多一个元素的情况下，如果nums\[i\] &lt; nums\[i+1\] \(表示在i+1这个位置上，最长子序列的长度有可能会有更长的情况了\)，那么这时候检查dp\[i+1\]是否小于dp\[i\]+1（在i+1这个位置上，最长子序列的长度出现更长的情况了，这时候更新i+1位置dp\[i+1\]的值），否则不动，最后找出各个位置最大的子序列的数值，时间复杂度，用递推，外面套一层循环表示每个元素都计算下，里面套一个循环表示在外层元素的基础上，根据递推公式和之前保存的值，计算最长子序列，所以为O\(n^2\)。
+
+这道题还要求优化到O\(nlogn\)，这时候需要用到二分查找。
+
+### 代码
+
+DP O\(n^2）
+
+```java
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int len = nums.length;
+        if (len == 1) {
+            return 1;
+        }
+        int[] regionLongest = new int[len];//regionLongest[k]表示到第k+1个元素的最长升序长度；regionLongest[0]表示初始状态（0个元素的时候，依然为1）, regionLongest[1]表示第0个元素的最长长度，regionLongest[len]表示最后一个元素的最长长度
+        Arrays.fill(regionLongest, 1);//每个位置初始值为1，起码包含自己为1
+        
+        for (int i = 1; i <= len - 1; i++) {//从第二个元素开始，让其之前有元素
+            for (int j = 0; j < i; j++) {//i之前的状态
+                if (nums[j] < nums[i]) {
+                    if (regionLongest[j] + 1 > regionLongest[i]) {//DP中每个位置存储的值由上一个状态+1组成，因为nums[j] < nums[j]这个条件成立才可能来判断是否要+1（升序多一个），要不然regionLongest[i]就保持不变
+                        regionLongest[i] = regionLongest[j] + 1;
+                    }
+                }
+            }
+        }
+        
+        //找到数组中所有位置的最大升序的数字
+        int globalLongest = 0;
+        for (int longest : regionLongest) {
+            globalLongest = Math.max(globalLongest, longest);
+        }
+        return globalLongest;
+    }
+}
+```
+
+二分查找 O\(nlogn\)
+
+
+

@@ -50,7 +50,7 @@ class Solution {
             return half * half;
         } else if (n > 0) {//奇数，并且n不等于0的时候
             return half * half * x;
-        } else {//n为负数的情况
+        } else {//n小于等于0，刚才多乘了一次
             return half * half / x;
         }
     }
@@ -150,92 +150,5 @@ class Solution {
         return (int)result;
     }
 }
-
 ```
-
-## 34 Find First and Last Position of Element in Sorted Array
-
-### 原题概述
-
-Given an array of integers `nums` sorted in ascending order, find the starting and ending position of a given `target` value.
-
-Your algorithm's runtime complexity must be in the order of _O_\(log _n_\).
-
-If the target is not found in the array, return `[-1, -1]`.
-
-**Example 1:**
-
-```text
-Input: nums = [5,7,7,8,8,10], target = 8
-Output: [3,4]
-```
-
-**Example 2:**
-
-```text
-Input: nums = [5,7,7,8,8,10], target = 6
-Output: [-1,-1]
-```
-
-### 题意和分析
-
-这个要求时间复杂度log\(n\)，那一定就是二分查找了，毕竟线性查找没有技术含量，具体做法是分别做两次二分查找，第一次找到target的左边界，第二次找到target的右边界，二分查找根据自己熟悉的写法，需要注意越界的问题。
-
-### 代码
-
-```java
-class Solution {
-    public int[] searchRange(int[] nums, int target) {
-        int[] result = {-1, -1};
-        if (nums == null || nums.length == 0) {
-            return result;
-        }
-        
-        int left = 0;
-        int right = nums.length - 1;
-        int startPoint = -1;
-        int endPoint = -1;
-        
-        // 找到target的左边界left
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] >= target) {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
-        }
-        if (left <= nums.length - 1 && nums[left] == target) {//left有可能超过right到右边
-            startPoint = left;
-        } 
-        if (startPoint == -1) {
-            return result;
-        }
-        
-        //找到target的右边界right
-        left = 0;
-        right = nums.length - 1;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] <= target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
-        if (right >= 0 && nums[right] == target) {//right有可能越过left到左边
-            endPoint = right;
-        } 
-        
-        result[0] = startPoint;
-        result[1] = endPoint;
-        
-        return result;
-    }
-}
-```
-
-
-
-
 
