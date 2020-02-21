@@ -1405,5 +1405,110 @@ class Solution {
 }
 ```
 
+## 299 Bulls and Cows
 
+### 题目
+
+You are playing the following [Bulls and Cows](https://en.wikipedia.org/wiki/Bulls_and_Cows) game with your friend: You write down a number and ask your friend to guess what the number is. Each time your friend makes a guess, you provide a hint that indicates how many digits in said guess match your secret number exactly in both digit and position \(called "bulls"\) and how many digits match the secret number but locate in the wrong position \(called "cows"\). Your friend will use successive guesses and hints to eventually derive the secret number.
+
+Write a function to return a hint according to the secret number and friend's guess, use `A` to indicate the bulls and `B` to indicate the cows. 
+
+Please note that both secret number and friend's guess may contain duplicate digits.
+
+**Example 1:**
+
+```text
+Input: secret = "1807", guess = "7810"
+
+Output: "1A3B"
+
+Explanation: 1 bull and 3 cows. The bull is 8, the cows are 0, 1 and 7.
+```
+
+**Example 2:**
+
+```text
+Input: secret = "1123", guess = "0111"
+
+Output: "1A1B"
+
+Explanation: The 1st 1 in friend's guess is a bull, the 2nd or 3rd 1 is a cow.
+```
+
+**Note:** You may assume that the secret number and your friend's guess only contain digits, and their lengths are always equal.
+
+### 分析
+
+题意比较简单，统计同位置同数字A和不同位置同数字B分别出现的个数，A比较好求，直接比较即可；B的话如果循环两次就是分别统计secret和guess中数字出现的次数，然后按位数比较取较小值代表可重复（需要减去同位置同数字的A）；
+
+如果是一次循环就有点取巧了，secret和guess中的次数分别往两个方向走，判断条件则是各自相反的方向。时间复杂度都是O\(n\)。
+
+### 代码
+
+两次遍历，正常容易想到的
+
+```java
+class Solution {
+    /*
+    A的意思是位置正确且数字正确的个数； 
+    B的意思是位置不正确但数字正确的个数。
+    */
+    public String getHint(String secret, String guess) {
+        char[] sc = secret.toCharArray();
+        char[] gc = guess.toCharArray();
+        
+        int[] secret_digits = new int[10];
+        int[] guess_digits = new int[10];
+        
+        int A = 0, total = 0;
+        for (int i = 0; i < secret.length(); i++) {
+            secret_digits[sc[i] - '0']++;
+            guess_digits[gc[i] - '0']++;
+            if (sc[i] == gc[i]) {
+                A++;
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            //挨个比较取二者较小值，代表所有重复元素
+            total += Integer.min(secret_digits[i], guess_digits[i]);
+        }
+        String ans = A + "A" + (total - A) + "B";//需要减去A
+        return ans;
+    }
+}
+```
+
+一次遍历，真是取巧的办法
+
+```java
+class Solution {
+    public String getHint(String secret, String guess) {
+        int numA = 0;
+        int numB = 0;
+        
+        int[] nums = new int[10];
+        
+        for (int i = 0; i < secret.length(); i++) {
+            char s = secret.charAt(i);
+            char g = guess.charAt(i);
+            if (s == g) {
+                numA++;
+            } else {//位置和数值都相同的不管
+                //以下两个if条件克服了重复元素的问题，要么secret被减掉证明有cows，要么guess被加上也证明有cows
+                if (nums[s - '0'] < 0) {//每次循环s不一样
+                    numB++;
+                }
+                if (nums[g - '0'] > 0) {//每次循环g不一样
+                    numB++;
+                }
+                //这里操作与判断条件相反，如果没有同样的元素则不会去相反的方向，cows不会增加
+                nums[s - '0']++;
+                nums[g - '0']--;
+            }
+        }
+        
+        return numA + "A" + numB + "B";
+    }
+}
+```
 
