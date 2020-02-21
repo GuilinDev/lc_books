@@ -1512,3 +1512,109 @@ class Solution {
 }
 ```
 
+## 290 Word Pattern
+
+### 题目
+
+Given a `pattern` and a string `str`, find if `str` follows the same pattern.
+
+Here **follow** means a full match, such that there is a bijection between a letter in `pattern` and a **non-empty** word in `str`.
+
+**Example 1:**
+
+```text
+Input: pattern = "abba", str = "dog cat cat dog"
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input:pattern = "abba", str = "dog cat cat fish"
+Output: false
+```
+
+**Example 3:**
+
+```text
+Input: pattern = "aaaa", str = "dog cat cat dog"
+Output: false
+```
+
+**Example 4:**
+
+```text
+Input: pattern = "abba", str = "dog dog dog dog"
+Output: false
+```
+
+**Notes:**  
+You may assume `pattern` contains only lowercase letters, and `str` contains lowercase letters that may be separated by a single space.
+
+### 分析
+
+要求求出字符串A的每个字符和字符串B中的单词是否是一个pattern，最后的notes说明可以输入的格式还是比较标准的。这里用HashTable来做，字符串A中的字符作为key，字符串B中的单词作为value，循环一遍挨个比较，中间如果发现有key存在了，就比较当前遍历的value和之前存的value是否相同，不同则返回false；同时也要检查当前的value是否在之前被加入了，这时候要是key不一样也返回false，直到最后没有返回false就为true。
+
+Java中的HashMap的结构要熟悉，containsKey\(\)没有哈希冲突的情况下是O\(1\) ；containsValue\(\)本身的时间复杂度为O\(n\)，如果想优化下就用两个HashTables。
+
+### 代码
+
+使用containsValue\(\)，严格来说最坏的时间复杂度是O\(n^2\)
+
+```java
+class Solution {
+    public boolean wordPattern(String pattern, String str) {
+        String[] strs = str.split(" ");
+        if (pattern.length() != strs.length) {
+            return false;
+        }
+        HashMap<Character, String> map = new HashMap<>();
+        
+        for (int i = 0; i <= pattern.length() - 1; i++) {
+            if (map.containsKey(pattern.charAt(i))) {
+                if (!map.get(pattern.charAt(i)).equals(strs[i])) {
+                    return false;
+                }
+            } else {
+                if (map.containsValue(strs[i])) {
+                    return false;
+                }
+                map.put(pattern.charAt(i), strs[i]);
+            }
+        }
+        return true;
+    }
+}
+```
+
+用额外的一个hashmap来保存第二个字符串中单词的信息，又是空间换时间，时间复杂度O\(n\)
+
+```java
+class Solution {
+    public boolean wordPattern(String pattern, String str) {
+        String[] strs = str.split(" ");
+        if (pattern.length() != strs.length) {
+            return false;
+        }
+        HashMap<Character, String> map = new HashMap<>();
+        HashMap<String, Character> mapStr = new HashMap<>();
+        
+        for (int i = 0; i <= pattern.length() - 1; i++) {
+            if (map.containsKey(pattern.charAt(i))) {
+                if (!map.get(pattern.charAt(i)).equals(strs[i])) {
+                    return false;
+                }
+                //这里无需检查mapStr是否containsKey(strs[i])
+            } else {
+                if (mapStr.containsKey(strs[i])) {
+                    return false;
+                }
+                map.put(pattern.charAt(i), strs[i]);
+                mapStr.put(strs[i], pattern.charAt(i));
+            }
+        }
+        return true;
+    }
+}
+```
+
