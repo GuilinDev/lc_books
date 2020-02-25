@@ -1403,19 +1403,7 @@ n+1长度的数组，找出唯一的那个有重复的数字，可能重复多�
 
 1）二分查找，利用数组的元素的值在区间\[1, n\]的特点进行搜索，首先求出中间的索引mid，然后遍历整个数组，统计所有小于等于索引mid的元素的个数，如果元素个数大于mid索引，则说明重复值在\[mid+1, n\]这些索引之间，因为“较小的数比较多”，反之，重复值应在\[1, mid-1\]之间（“较大的数比较多”），然后依次类推，直到搜索完成，此时的low就是我们要求的重复值；
 
-2）双指针，数组元素的范围是\[1, n\]，利用数组元素和坐标的转换来形成一个闭环，利用快慢指针找到重复的值，这个做法如同142题带环链表一样，第二次快慢指针相遇的时候即为重复的元素。
-
-```java
-// [1,3,4,2,2]
-/**
- * 按照index来形成带环链表，从index = 0开始，将该index所在的value作为下一个结点的index，以此来走到下一步；因为有n+1个元素，范围是1~n，所以不会越界
- (index=0)1(index=1) -> (index=1)3(index=3) -> (index=3)2(index=2) -> (index=2)4(index=4)
-                                                        ^                      |
-                                                        |......................|
- */
-```
-
-参考[这里](http://bookshadow.com/weblog/2015/09/28/leetcode-find-duplicate-number/)[这里](https://leetcode.com/problems/find-the-duplicate-number/discuss/72845/Java-O%28n%29-time-and-O%281%29-space-solution.-Similar-to-find-loop-in-linkedlist.)。
+2）双指针，数组元素的范围是\[1, n\]，利用数组元素和坐标的转换来形成一个闭环，利用快慢指针找到重复的值，参考[这里](http://bookshadow.com/weblog/2015/09/28/leetcode-find-duplicate-number/)[这里](https://leetcode.com/problems/find-the-duplicate-number/discuss/72845/Java-O%28n%29-time-and-O%281%29-space-solution.-Similar-to-find-loop-in-linkedlist.)。
 
 ### **代码**
 
@@ -1424,17 +1412,16 @@ n+1长度的数组，找出唯一的那个有重复的数字，可能重复多�
 ```java
 class Solution {
     public int findDuplicate(int[] nums) {
-        int low = 1; //数字从1到n，因此index/value至少为1
-        int high = nums.length - 1; //数字从1到n，n+1个数字，最大值（index）为n
+        int low = 1, high = nums.length - 1;
         while (low <= high) {
             int mid = low + (high - low) / 2;
             int count = 0;
             for (int num : nums) {
-                if (num <= mid) { //如果等于mid，说明index和value在左边都是1：1，重复值依然在[1, mid-1]之间（“较大的数多一个”）
+                if (num <= mid) {
                     count++;
                 }
             }
-            if (count <= mid) { //同上
+            if (count <= mid) {
                 low = mid + 1;
             } else {
                 high = mid - 1;
@@ -1445,29 +1432,22 @@ class Solution {
 }
 ```
 
-快慢指针
+双指针
 
 ```java
 class Solution {
     public int findDuplicate(int[] nums) {
-        int slow = 0;
-        int fast = 0;
-        
-        //快指针走两步，慢指针走一步
-        while (true) {
-            slow = nums[slow];
-            fast = nums[nums[fast]];
-            if (slow == fast) {
-                break;
-            }
+        int len = nums.length, slow = len, fast = len;
+        do {
+            slow = nums[slow - 1];
+            fast = nums[nums[fast-1] - 1];
+        } while (slow != fast);
+        slow = len;
+        while (slow != fast) {
+            slow = nums[slow - 1];
+            fast = nums[fast - 1];
         }
-        fast = 0;
-        // 快慢指针都走一步
-        while (fast != slow) {
-            fast = nums[fast];
-            slow = nums[slow];
-        }
-        return slow; //return fast;
+        return slow;
     }
 }
 ```
