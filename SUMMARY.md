@@ -31,6 +31,7 @@
       * [Tree的面试知识](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/tree-de-zhi-shi-dian.md)
     * [Graph](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/graph.md)
   * [4. 算法思想的应用](leetcode/suan-fa-si-xiang-de-ying-yong/README.md)
+    * [滑动窗口](leetcode/suan-fa-si-xiang-de-ying-yong/hua-dong-chuang-kou.md)
     * [Divide and Conquer](leetcode/suan-fa-si-xiang-de-ying-yong/divide-and-conquer-1.md)
     * [Two Pointers](leetcode/suan-fa-si-xiang-de-ying-yong/untitled-2.md)
     * [排序](leetcode/suan-fa-si-xiang-de-ying-yong/hui-wen-jie-gou.md)
