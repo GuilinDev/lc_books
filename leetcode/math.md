@@ -540,3 +540,63 @@ class Solution {
 }
 ```
 
+## 263 Ugly Number
+
+### 题目
+
+Write a program to check whether a given number is an ugly number.
+
+Ugly numbers are **positive numbers** whose prime factors only include `2, 3, 5`.
+
+**Example 1:**
+
+```text
+Input: 6
+Output: true
+Explanation: 6 = 2 × 3
+```
+
+**Example 2:**
+
+```text
+Input: 8
+Output: true
+Explanation: 8 = 2 × 2 × 2
+```
+
+**Example 3:**
+
+```text
+Input: 14
+Output: false 
+Explanation: 14 is not ugly since it includes another prime factor 7.
+```
+
+**Note:**
+
+1. `1` is typically treated as an ugly number.
+2. Input is within the 32-bit signed integer range: \[−231,  231 − 1\].
+
+### 分析
+
+看给定的一个数是否是正整数并且是否只包含2， 3，5这三个因子，做法就是遍历2，3，5，如果可以整除就逮住一直除，最后判断是否为1，如果除到最后不为1就说明还有别的因子，不是丑数。
+
+### 代码
+
+```java
+class Solution {
+    public boolean isUgly(int num) {
+        if (num <= 0) {
+            return false;
+        }
+        int[] divisions = new int[]{2, 3, 5};
+        for (int division : divisions) {
+            while (num % division == 0) {
+                num /= division;
+            }
+        }
+        return num == 1;
+    }
+}
+```
+
