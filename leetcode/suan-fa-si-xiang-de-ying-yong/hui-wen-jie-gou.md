@@ -793,3 +793,59 @@ class Solution {
 }
 ```
 
+## 274 H-Index
+
+### 原题
+
+Given an array of citations \(each citation is a non-negative integer\) of a researcher, write a function to compute the researcher's h-index.
+
+According to the [definition of h-index on Wikipedia](https://en.wikipedia.org/wiki/H-index): "A scientist has index h if h of his/her N papers have **at least** h citations each, and the other N − h papers have **no more than** h citations each."
+
+**Example:**
+
+```text
+Input: citations = [3,0,6,1,5]
+Output: 3 
+Explanation: [3,0,6,1,5] means the researcher has 5 papers in total and each of them had 
+             received 3, 0, 6, 1, 5 citations respectively. 
+             Since the researcher has 3 papers with at least 3 citations each and the remaining 
+             two with no more than 3 citations each, her h-index is 3.
+```
+
+**Note:** If there are several possible values for _h_, the maximum one is taken as the h-index.
+
+### 题意
+
+这道题要求文章数量的引用数，用H-Index来表示，H-Index为i的意思是至少有i篇文章的引用数大于等于i。没有思路的时候想想暴力解法，假设总文章数为n，那么先试试H-Index为n的情况-看看是否至少有n篇文章引用数&gt;=n，不行试试n-1，时间复杂度为O\(n^2\)；暴力解法脑子里过一遍后会比较容易想到桶排序，用空间换时间，先把每篇文章做一个桶，其中是该文章对应的引用数，共n+1个桶（文章数从0开始），其中第n+1个桶统计&gt;=n的引用数（因为这个桶不专门对应一篇文章），第一次遍历就从小到大统计引用数；第二次遍历从后向前，先找最大的引用数，找到直接返回，时间复杂度两次分开遍历，为O\(n\)。
+
+### 代码
+
+```java
+class Solution {
+    public int hIndex(int[] citations) {
+        int len = citations.length;
+        int[] buckets = new int[len + 1];
+        
+        for (int citation : citations) {
+            if (citation >= len) { //大于文章数量的，存在桶排序的最后一个位置
+                buckets[len]++;
+            } else { //
+                buckets[citation]++; 
+            }
+        }
+        
+        //从桶的最后一个遍历，那是最大的h-index
+        int count = 0;
+        for (int i = buckets.length - 1; i >= 0; i--) {
+            count += buckets[i]; // 这里是累加，原因是排后面较大的引用数也应该记到前面较小的引用数上
+            if (count >= i) { //
+                return i;
+            }
+        }
+        return 0;
+    }
+}
+```
+
+
+
