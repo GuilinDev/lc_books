@@ -186,11 +186,54 @@ class Solution {
 
 ## 260 - Single Number III
 
-### 原题概述 <a id="yuan-ti-gai-shu"></a>
+### 题目 <a id="yuan-ti-gai-shu"></a>
 
-### 题意和分析 <a id="ti-yi-he-fen-xi"></a>
+Given an array of numbers `nums`, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once.
+
+**Example:**
+
+```text
+Input:  [1,2,1,3,2,5]
+Output: [3,5]
+```
+
+**Note**:
+
+1. The order of the result is not important. So in the above example, `[5, 3]` is also correct.
+2. Your algorithm should run in linear runtime complexity. Could you implement it using only constant space complexity?
+
+### 分析 <a id="ti-yi-he-fen-xi"></a>
+
+这道题考察的是位操作，需要比较清楚的二进制编码，反码，补码的知识；首先第一次遍历将array中所有的元素进行XOR操作，得到的结果diff是需要找出的两个只出现一次的元素相互之间的XOR操作，这时候将diff和其负数作&与操作，得到新的diff包含了所有1的位置，然后作第二次遍历，同样，出现两次的元素自我抵消掉；剩下的两个单独数字之中，其中有一个必然与diff作与&操作为0，记录，另一个不为零，记录。
 
 ### 代码 <a id="dai-ma"></a>
+
+```java
+class Solution {
+    public int[] singleNumber(int[] nums) {
+        
+        int diff = 0;
+        
+        //找到两个只出现一次的数字的xor后的结果
+        for (int num : nums) {
+            diff ^= num;
+        }
+        
+        diff &= -diff;//与自己的补码进行与操作，得到最后一个bit，0或者1（自己与自己负数-补码，只是最后一位相同，别的31位都不同）
+        
+        int[] result = new int[2];
+        for (int num : nums) {
+            if ((diff & num) == 0) {
+                result[0] ^= num; //用xor是因为要把diff &= -diff这步得到的bit相同的num彼此消掉（别的num出现两次）
+            } else {
+                result[1] ^= num; //用xor是因为要把diff &= -diff这步得到的bit不同的num彼此消掉（别的num出现两次）
+            }
+        }
+        
+        return result;
+    }
+}
+```
 
 ## 268 - Missing Number
 
