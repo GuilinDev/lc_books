@@ -623,7 +623,45 @@ Explanation: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly
 
 ### 分析
 
-这个题用263的方式来判断是否ugly number，逐个检查会超时，
+这个题用263的方式来判断是否ugly number，逐个检查会超时。
+
+ugly number的顺序是这样：1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, …，所有的数只能被2，3，5整除，其中一个方式可以把这个数列分成三个groups：
+
+\(1\) 1×2, 2×2, 3×2, 4×2, 5×2, 6×2, 8×2… 
+
+\(2\) 1×3, 2×3, 3×3, 4×3, 5×3, 6×3, 8×3,… 
+
+\(3\) 1×5, 2×5, 3×5, 4×5, 5×5, 6×5, 8×5,…
+
+可以看到这三个ugly number的子序列就是本来的序列\(1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, …\)分别乘以2，3，5，如此我们可以在三个子序列中挑一个最小的值出来（这样能保证本来的ugly number序列是从小到大按顺序增加的），创建三个索引记录三个子序列的位置，三者加起来一共遍历n次为止。
 
 ### 代码
+
+直接应用上述思想的递推式
+
+```java
+class Solution {
+    public int nthUglyNumber(int n) {
+        int index2 = 0;
+        int index3 = 0;
+        int index5 = 0;
+        int[] dp = new int[n]; //dp[i]表示第i个ugly number
+        
+        dp[0] = 1;
+        for (int i = 1; i < n; i++) { //dp[0]已有值
+            dp[i] = Math.min(dp[index2] * 2, Math.min(dp[index3] * 3, dp[index5]*5));
+            if (dp[i] == dp[index2] * 2) {
+                index2++;
+            }
+            if (dp[i] == dp[index3] * 3) {
+                index3++;
+            }
+            if (dp[i] == dp[index5] * 5) {
+                index5++;
+            }
+        }
+        return dp[n-1];
+    }
+}
+```
 
