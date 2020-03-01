@@ -1431,9 +1431,9 @@ class Solution {
 		if (head == null || head.next == null) {
 			return head;
 		}
-		ListNode result = reverseList(head.next);//逐步递归到最后两个结点
+		ListNode result = reverseList(head.next);//逐步递归来反转
 				
-		//现在开始翻转两个结点，并“归”回去
+		//接下来两个步骤考虑头节点的操作
 		head.next.next = head;
 		head.next = null;
 
