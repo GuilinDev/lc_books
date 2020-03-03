@@ -1396,22 +1396,23 @@ Time：都是O\(n\)；Space：递归是O\(n\)，迭代是O\(1\)。
  * }
  */
 class Solution {
-	public ListNode reverseList(ListNode head) {
-		if (head == null || head.next == null) {
-			return head;
-		}
-		ListNode pre = null;
-		ListNode temp = null;
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
 
-		while (head != null) {
-			temp = head.next;
-			head.next = pre;
-			//更新两个结点
-			pre = head;
-			head = temp;
-		}
-		return pre;
-	}
+        ListNode pre = null;
+        ListNode temp = null;
+
+        while (head != null) {
+            temp = head.next; //head作为"当前"的结点，先记住“当前”结点的next以防丢失，这通常是链表操作的第一步
+            head.next = pre; // 将当前结点的next指向前面
+            pre = head; //将pre索引移动一步到“当前”结点
+            head = temp; //“当前”结点向下一个结点挪动一步
+            //以此类推
+        }
+        return pre; //遍历结束后当前结点head已经在最后一个结点的下一个null的位置，而pre则是在最后一个结点
+    }
 }
 ```
 
@@ -1431,9 +1432,9 @@ class Solution {
 		if (head == null || head.next == null) {
 			return head;
 		}
-		ListNode result = reverseList(head.next);//逐步递归来反转
+		ListNode result = reverseList(head.next);//逐步递归到最后两个结点
 				
-		//接下来两个步骤考虑头节点的操作
+		//现在开始翻转两个结点，并“归”回去
 		head.next.next = head;
 		head.next = null;
 
