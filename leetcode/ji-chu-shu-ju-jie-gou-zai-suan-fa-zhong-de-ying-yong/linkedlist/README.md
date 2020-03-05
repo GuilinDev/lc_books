@@ -867,7 +867,7 @@ Could you do it in O\(n\) time and O\(1\) space?
 
 
 
-用递归，这样就不用翻转链表后半截从而改变结构
+用递归，这样就不用翻转链表后半截从而改变结构，做法是用一个索引index记录头结点，然后头递归到最后end，比较index和end的val，然后递归往上一层的同时挪动index到下一步，再进行比较，以此类推。这个做法比较简洁和锻炼递归思维，但空间是常数级的。
 
 ```java
 /**
@@ -879,22 +879,23 @@ Could you do it in O\(n\) time and O\(1\) space?
  * }
  */
 class Solution {
-    public ListNode root;
+    ListNode ref; //类变量保证两个methods都可以用同一个变量
     public boolean isPalindrome(ListNode head) {
-        root = head;
-        return (head == null) ? true : _isPalindrome(head);
+        ref = head;
+        return checkPalindrome(head);
     }
-
-    public boolean _isPalindrome(ListNode head) {
-        boolean flag = true;
-        if (head.next != null) {
-            flag = _isPalindrome(head.next);
-        }
-        if (flag && root.val == head.val) {
-            root = root.next;
+    private boolean checkPalindrome(ListNode node) {
+        if (node == null) { //基线条件，null是回文
             return true;
         }
-        return false;
+        boolean dcResult = checkPalindrome(node.next); //头递归一直递归到最后一个结点后面的null，返回后到最后一个结点
+        if (ref.val != node.val) {//对比第一个结点和最后一个结点，每次递归将ref往后移动与递归本身同步
+            return false;
+        } else {
+            ref = ref.next;
+        }
+        
+        return dcResult; //如果没有返回false，就看子递归返回的boolean值
     }
 }
 ```
