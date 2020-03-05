@@ -2181,6 +2181,7 @@ Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of 
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        //递归的基线条件，要么返回null，要么返回p或者q，然后递归回来的时候根据此结果判断
         if (root == null || p == root || q == root) {
             return root;
         }
