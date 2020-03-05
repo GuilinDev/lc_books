@@ -721,11 +721,9 @@ queue.empty(); // returns false
 
 ### 题意和分析
 
-用栈来实现队列，刚好和225-Implement Stack using Queues相反。栈和队列的核心不同点就是栈是先进后出，而队列是先进先出，所以要用栈的先进后出的特性来模拟出队列的先进先出。那么怎么做呢，只要我们在插入元素的时候每次都从前面插入即可，比如如果一个队列是1,2,3,4，那么在栈中保存为4,3,2,1，那么返回栈顶元素1，也就是队列的首元素，则问题迎刃而解。所以此题的难度是push函数，我们需要一个辅助栈s2，把s的元素也逆着顺序存入temp中，此时加入新元素x，再把temp中的元素存回来，这样就是我们要的顺序了，其他三个操作也就直接调用栈的操作即可。
+用栈来实现队列，刚好和225-Implement Stack using Queues相反。栈和队列的核心不同点就是栈是先进后出，而队列是先进先出，所以要用栈的先进后出的特性来模拟出队列的先进先出。那么怎么做呢，其实很简单，只要我们在插入元素的时候每次都从前面插入即可，比如如果一个队列是1,2,3,4，那么在栈中保存为4,3,2,1，那么返回栈顶元素1，也就是队列的首元素，则问题迎刃而解。所以此题的难度是push函数，我们需要一个辅助栈temp，把s的元素也逆着顺序存入temp中，此时加入新元素x，再把temp中的元素存回来，这样就是我们要的顺序了，其他三个操作也就直接调用栈的操作即可。
 
 ### 代码
-
-另外一种写法，把逻辑都写在push里面
 
 ```java
 class MyQueue {
@@ -777,8 +775,6 @@ class MyQueue {
 
 上面那个解法简单容易理解，但是效率不高，因为每次在push的时候，都要翻转两边栈，下面这个方法使用了两个栈s1和s2，其中新进栈的都先缓存在s1中，当要pop和peek的时候，才将s1中所有元素移到s2中操作，这样可以得到优化。
 
-
-
 ```java
 class MyQueue {
 
@@ -826,59 +822,4 @@ class MyQueue {
  * boolean param_4 = obj.empty();
  */
 ```
-
-直接调用原生stack的方法，遇到push就把元素从s2往s1倒，遇到pop和peek就把元素从s1往s2倒
-
-```java
-class MyQueue {
-
-    Stack<Integer> s1;
-    Stack<Integer> s2;
-    /** Initialize your data structure here. */
-    public MyQueue() {
-        s1 = new Stack<>();
-        s2 = new Stack<>();
-    }
-    
-    /** Push element x to the back of queue. */
-    public void push(int x) {
-        while (!s2.isEmpty()) {
-            s1.push(s2.pop());
-        }
-        s1.push(x);
-    }
-    
-    /** Removes the element from in front of queue and returns that element. */
-    public int pop() {
-        while (!s1.isEmpty()) {
-            s2.push(s1.pop());
-        }
-        return s2.pop();
-    }
-    
-    /** Get the front element. */
-    public int peek() {
-        while(!s1.isEmpty()) {
-            s2.push(s1.pop());
-        }
-        return s2.peek();
-    }
-    
-    /** Returns whether the queue is empty. */
-    public boolean empty() {
-        return s1.isEmpty() && s2.isEmpty();
-    }
-}
-
-/**
- * Your MyQueue object will be instantiated and called as such:
- * MyQueue obj = new MyQueue();
- * obj.push(x);
- * int param_2 = obj.pop();
- * int param_3 = obj.peek();
- * boolean param_4 = obj.empty();
- */
-```
-
-
 
