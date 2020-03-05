@@ -863,7 +863,11 @@ Could you do it in O\(n\) time and O\(1\) space?
 
 ### 代码
 
-用Stack，先找到中点，把后半截的元素放入到stack中，根据stack后进先出的特点，从头开始比较，时空都是线性的
+用Stack
+
+
+
+用递归，这样就不用翻转链表后半截从而改变结构
 
 ```java
 /**
@@ -875,67 +879,22 @@ Could you do it in O\(n\) time and O\(1\) space?
  * }
  */
 class Solution {
+    public ListNode root;
     public boolean isPalindrome(ListNode head) {
-        if (head == null || head.next == null) {
+        root = head;
+        return (head == null) ? true : _isPalindrome(head);
+    }
+
+    public boolean _isPalindrome(ListNode head) {
+        boolean flag = true;
+        if (head.next != null) {
+            flag = _isPalindrome(head.next);
+        }
+        if (flag && root.val == head.val) {
+            root = root.next;
             return true;
         }
-        Stack<Integer> stack = new Stack<>();
-        ListNode slow = head;
-        ListNode fast = head;
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        
-        // 如果是奇数个，slow这时候在正中间，如果是偶数个，slow这时候在中间偏左一个位置
-        slow = slow.next;
-        
-        while (slow != null) {
-            stack.push(slow.val);
-            slow = slow.next;
-        }
-        
-        slow = head;
-        while (!stack.isEmpty()) { //注意这里用iterator或者stream的forEach循环的话就是先进先出了，所以要用pop()
-            if (stack.pop() != slow.val) {
-                return false;
-            }
-            slow = slow.next;
-        }
-        return true;
-    }
-}
-```
-
-用递归，这样就不用翻转链表后半截从而改变结构，做法是用一个索引index记录头结点，然后头递归到最后end，比较index和end的val，然后递归往上一层的同时挪动index到下一步，再进行比较，以此类推。这个做法比较简洁和锻炼递归思维，但空间是常数级的。
-
-```java
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */
-class Solution {
-    ListNode ref; //类变量保证两个methods都可以用同一个变量
-    public boolean isPalindrome(ListNode head) {
-        ref = head;
-        return checkPalindrome(head);
-    }
-    private boolean checkPalindrome(ListNode node) {
-        if (node == null) { //基线条件，null是回文
-            return true;
-        }
-        boolean dcResult = checkPalindrome(node.next); //头递归一直递归到最后一个结点后面的null，返回后到最后一个结点
-        if (ref.val != node.val) {//对比第一个结点和最后一个结点，每次递归将ref往后移动与递归本身同步
-            return false;
-        } else {
-            ref = ref.next;
-        }
-        
-        return dcResult; //如果没有返回false，就看子递归返回的boolean值
+        return false;
     }
 }
 ```
