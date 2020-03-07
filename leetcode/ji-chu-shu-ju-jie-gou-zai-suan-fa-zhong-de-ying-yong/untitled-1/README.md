@@ -372,7 +372,7 @@ class Solution {
       }
       current = current.right;
     }
-    return -1;
+    throw new IllegalArgumentException("There is no kth smallest element.");
   }
 }
 ```
