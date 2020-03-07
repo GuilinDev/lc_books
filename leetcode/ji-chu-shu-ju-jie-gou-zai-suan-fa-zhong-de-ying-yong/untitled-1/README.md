@@ -343,7 +343,7 @@ What if the BST is modified \(insert/delete operations\) often and you need to f
 
 ### 代码
 
-迭代解法
+迭代解法，将k左子树的元素放入到stack中，如果不够k再放入右子树的元素，然后到k后就返回当前值
 
 ```java
 /**
@@ -377,7 +377,7 @@ class Solution {
 }
 ```
 
-递归解法
+递归解法，先递归左子树，不够再递归右子树，到k个时返回即可
 
 ```java
 /**
@@ -2181,6 +2181,7 @@ Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of 
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        //递归的基线条件，要么返回null，要么返回p或者q，然后递归回来的时候根据此结果判断
         if (root == null || p == root || q == root) {
             return root;
         }
