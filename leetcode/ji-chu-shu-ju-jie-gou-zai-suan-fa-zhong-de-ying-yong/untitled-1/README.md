@@ -3516,3 +3516,65 @@ Output: False
 
 ### 代码
 
+## 543 Diameter of Binary Tree
+
+### 题目
+
+Given a binary tree, you need to compute the length of the diameter of the tree. The diameter of a binary tree is the length of the **longest** path between any two nodes in a tree. This path may or may not pass through the root.
+
+**Example:**  
+Given a binary tree  
+
+
+```text
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+```
+
+Return **3**, which is the length of the path \[4,2,1,3\] or \[5,2,1,3\].
+
+**Note:** The length of path between two nodes is represented by the number of edges between them.
+
+### 分析
+
+要求求出一个二叉树的直径，所谓直径就是树中一个结点到另外一个结点距离最长，用边表示直径。树的做法就用递归，DFS检查所有结点为顶点的直径，选择一个最大的，在每次递归的层里面，将所有结点的左子树和右子树递归的结果选择一个较大值，进入递归的上一层。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int result;
+    public int diameterOfBinaryTree(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        result = 1;
+        paths(root);
+        return result - 1;//边的数量是path中所有结点数量减1
+    }
+    private int paths(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        int L = paths(node.left);
+        int R = paths(node.right);
+        result = Math.max(result, L + R + 1); //以每个结点为root，计算通过自己root的最长path，与之前递归层比较
+
+        //当前递归层应该返回左右子树中比较大的一个path
+        return Math.max(L, R) + 1; //比较左右子树看那个path更长
+    }
+}
+```
+

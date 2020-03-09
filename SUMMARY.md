@@ -28,6 +28,7 @@
     * [Hash Table](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/hash-table.md)
     * [Tree](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/README.md)
       * [Tree的面试知识](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/tree-de-zhi-shi-dian.md)
+      * [树的代码模板总结](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/untitled-1/shu-de-dai-ma-mo-ban-zong-jie.md)
     * [Graph](leetcode/ji-chu-shu-ju-jie-gou-zai-suan-fa-zhong-de-ying-yong/graph.md)
   * [4. 算法思想的应用](leetcode/suan-fa-si-xiang-de-ying-yong/README.md)
     * [滑动窗口](leetcode/suan-fa-si-xiang-de-ying-yong/hua-dong-chuang-kou.md)
