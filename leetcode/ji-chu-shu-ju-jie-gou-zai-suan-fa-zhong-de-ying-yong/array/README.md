@@ -1132,9 +1132,12 @@ class Solution {
       count1 = 0;
       count2 = 0;
       for (int num : nums) {
-         if (num == candidate1) count1++;
-         else if (num == candidate2) count2++;
-      }
+            if (candidate1 == num) {
+                count1++;
+            } else if (candidate2 == num) { //else if 表示candidate1和candidate2不会是一个数
+                count2++;
+            }
+        }
       if (count1 > nums.length/3) result.add(candidate1);
       if (count2 > nums.length/3) result.add(candidate2);
 
@@ -1167,7 +1170,7 @@ Explanation: 2,3,4 form a continuous range; 8,9 form a continuous range.
 
 ### **题意和分析**
 
-这道题的思路比较简单，从左边找到右边即可，注意判断一下如果是连续的元素就用"-&gt;"，否则就是元素自己，注意下边界就行。
+这道题的思路比较简单，从左边找到右边即可，注意判断一下如果是连续的元素就用"-&gt;"，否则就是元素自己，注意下边界，在for循环中，注意每次i在循环中是一段连续数字移动到终止地方的位置，同时每次for循环i还会自增1。
 
 ### **代码**
 
