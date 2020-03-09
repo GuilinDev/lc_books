@@ -1132,9 +1132,12 @@ class Solution {
       count1 = 0;
       count2 = 0;
       for (int num : nums) {
-         if (num == candidate1) count1++;
-         else if (num == candidate2) count2++;
-      }
+            if (candidate1 == num) {
+                count1++;
+            } else if (candidate2 == num) { //else if 表示candidate1和candidate2不会是一个数
+                count2++;
+            }
+        }
       if (count1 > nums.length/3) result.add(candidate1);
       if (count2 > nums.length/3) result.add(candidate2);
 
