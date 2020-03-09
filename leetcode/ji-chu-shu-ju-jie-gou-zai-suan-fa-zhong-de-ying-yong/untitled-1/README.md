@@ -1674,115 +1674,6 @@ class Solution {
 }
 ```
 
-## 235 - Lowest Common Ancestor of a Binary Search Tree
-
-### 原题概述
-
-Given a binary search tree \(BST\), find the lowest common ancestor \(LCA\) of two given nodes in the BST.
-
-According to the [definition of LCA on Wikipedia](https://en.wikipedia.org/wiki/Lowest_common_ancestor): “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants \(where we allow **a node to be a descendant of itself**\).”
-
-Given binary search tree:  root = \[6,2,8,0,4,7,9,null,null,3,5\]
-
-```text
-        _______6______
-       /              \
-    ___2__          ___8__
-   /      \        /      \
-   0      _4       7       9
-         /  \
-         3   5
-```
-
-**Example 1:**
-
-```text
-Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
-Output: 6
-Explanation: The LCA of nodes 2 and 8 is 6.
-```
-
-**Example 2:**
-
-```text
-Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
-Output: 2
-Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself 
-             according to the LCA definition.
-```
-
-**Note:**
-
-* All of the nodes' values will be unique.
-* p and q are different and both values will exist in the BST.
-
-### 题意和分析
-
-求二叉搜索树的最小共同祖先，正常的思路是用递归来求解，由于二叉搜索树的特点是左&lt;=根&lt;=右，所以根节点的值一直都是中间值，大于左子树的所有节点值，小于右子树的所有节点值，所以如果根节点的值大于给定的两个值p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归寻找共同父节点；如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么就进入根节点的右子节点继续递归，如果都不是（大于p和q中较小值而小于较大值），则说明当前根节点就是最小共同父节点，直接返回； 
-
-如果是非递归的写法，就是把递归的过程用while来代替，但是每次循环需要更新一下当前的根节点。
-
-### 代码
-
-递归
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
-class Solution {
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null) {
-            return null;
-        }
-        if (root.val < Math.min(p.val, q.val)) {//p，q都在右子树中
-            return lowestCommonAncestor(root.right, p, q);
-        } else if (root.val > Math.max(p.val, q.val)) {//p，q都在左子树中
-            return lowestCommonAncestor(root.left, p, q);
-        } else {//p，q一个在左一个在右，直接返回
-            return root;
-        }
-    }
-}
-```
-
-非递归
-
-```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
-class Solution {
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null) {
-            return null;
-        }
-        while (true) {
-            if (root.val < Math.min(p.val, q.val)) {
-                root = root.right;
-            } else if (root.val > Math.max(p.val, q.val)) {
-                root = root.left;
-            } else {
-                break;
-            }
-        }
-        return root;
-    }
-}
-```
-
 ## 669 - Trim a Binary Search Tree
 
 ### 原题概述
@@ -2114,6 +2005,115 @@ class Solution {
 ```
 
 这道题的Follow up是打印这个最大路径，这时候递归函数得返回该路径上所有的结点组成的数组，对左右子节点调用递归函数后得到的是数组，需要统计出数组之和，跟0比较，如果小于0，这个和就清零，同时数组清空，然后更新最大路径之和跟数组，最后拼出来返回值的数组。
+
+## 235 - Lowest Common Ancestor of a Binary Search Tree
+
+### 原题概述
+
+Given a binary search tree \(BST\), find the lowest common ancestor \(LCA\) of two given nodes in the BST.
+
+According to the [definition of LCA on Wikipedia](https://en.wikipedia.org/wiki/Lowest_common_ancestor): “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants \(where we allow **a node to be a descendant of itself**\).”
+
+Given binary search tree:  root = \[6,2,8,0,4,7,9,null,null,3,5\]
+
+```text
+        _______6______
+       /              \
+    ___2__          ___8__
+   /      \        /      \
+   0      _4       7       9
+         /  \
+         3   5
+```
+
+**Example 1:**
+
+```text
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+Output: 6
+Explanation: The LCA of nodes 2 and 8 is 6.
+```
+
+**Example 2:**
+
+```text
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+Output: 2
+Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself 
+             according to the LCA definition.
+```
+
+**Note:**
+
+* All of the nodes' values will be unique.
+* p and q are different and both values will exist in the BST.
+
+### 题意和分析
+
+求二叉搜索树的最小共同祖先，正常的思路是用递归来求解，由于二叉搜索树的特点是左&lt;=根&lt;=右，所以根节点的值一直都是中间值，大于左子树的所有节点值，小于右子树的所有节点值，所以如果根节点的值大于给定的两个值p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归寻找共同父节点；如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么就进入根节点的右子节点继续递归，如果都不是（大于p和q中较小值而小于较大值），则说明当前根节点就是最小共同父节点，直接返回； 
+
+如果是非递归的写法，就是把递归的过程用while来代替，但是每次循环需要更新一下当前的根节点。
+
+### 代码
+
+递归
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return null;
+        }
+        if (root.val < Math.min(p.val, q.val)) {//p，q都在右子树中
+            return lowestCommonAncestor(root.right, p, q);
+        } else if (root.val > Math.max(p.val, q.val)) {//p，q都在左子树中
+            return lowestCommonAncestor(root.left, p, q);
+        } else {//p，q一个在左一个在右，直接返回
+            return root;
+        }
+    }
+}
+```
+
+非递归
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return null;
+        }
+        while (true) {
+            if (root.val < Math.min(p.val, q.val)) {
+                root = root.right;
+            } else if (root.val > Math.max(p.val, q.val)) {
+                root = root.left;
+            } else {
+                break;
+            }
+        }
+        return root;
+    }
+}
+```
 
 ## 236 - Lowest Common Ancestor of Binary Tree
 
