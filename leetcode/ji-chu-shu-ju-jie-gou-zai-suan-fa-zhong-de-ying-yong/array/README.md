@@ -2117,3 +2117,91 @@ class Solution {
 }
 ```
 
+## 1013 Partition Array Into Three Parts With Equal Sum
+
+### 题目
+
+Given an array `A` of integers, return `true` if and only if we can partition the array into three **non-empty** parts with equal sums.
+
+Formally, we can partition the array if we can find indexes `i+1 < j` with `(A[0] + A[1] + ... + A[i] == A[i+1] + A[i+2] + ... + A[j-1] == A[j] + A[j-1] + ... + A[A.length - 1])`
+
+**Example 1:**
+
+```text
+Input: A = [0,2,1,-6,6,-7,9,1,2,0,1]
+Output: true
+Explanation: 0 + 2 + 1 = -6 + 6 - 7 + 9 + 1 = 2 + 0 + 1
+```
+
+**Example 2:**
+
+```text
+Input: A = [0,2,1,-6,6,7,9,-1,2,0,1]
+Output: false
+```
+
+**Example 3:**
+
+```text
+Input: A = [3,3,6,5,-2,2,5,1,-9,4]
+Output: true
+Explanation: 3 + 3 = 6 = 5 - 2 + 2 + 5 + 1 - 9 + 4
+```
+
+**Constraints:**
+
+* `3 <= A.length <= 50000`
+* `-10^4 <= A[i] <= 10^4`
+
+### 分析
+
+这道题要求把Array分成三部分，每部分至少一个元素，三部分的和是一样的，做法是将元素的和加起来，首先检查对3取余是否为0，然后顺序找两个断点看是否存在，如果不是顺序找也可以用双指针来做，一个道理。
+
+### 代码
+
+```java
+class Solution {
+    public boolean canThreePartsEqualSum(int[] A) {
+        if (A == null || A.length < 3) {
+            return false;
+        }
+        int len = A.length;
+        int sum = 0;
+        for (int a : A) {
+            sum += a;
+        }
+        if (sum % 3 != 0) {
+            return false;
+        }
+
+        // 分别检查两个断点的位置
+        int index1 = 0;
+        int index2 = 0;
+        boolean isFirst = false;
+        boolean isSecond = false;
+        int part = sum / 3;
+        int temp = 0;
+        for (int i = 0; i < len; i++) {
+            temp += A[i];
+            if (temp == part) {
+                temp = 0;
+                index1 = i;
+                isFirst = true;
+                break;
+            }
+        }
+        for (int i = index1 + 1; i < len; i++) {
+            temp += A[i];
+            if (temp == part) {
+                temp = 0;
+                index2 = i;
+                isSecond = true;
+                break;
+            }
+        }
+
+        return isFirst && isSecond && (index2 < len - 1); //len - 1 表示最后一部分需要有值
+    }
+}
+```
+
