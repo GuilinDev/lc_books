@@ -486,6 +486,8 @@ Given `"pwwkew"`, the answer is `"wke"`, with the length of 3. Note that the ans
 
 2）使用HashSet，出现过的字符都放入set中，遇到set中没有的字符就加入set并更新结果result，如果有重复的，从左边开始删除字符，知道删到重复的字符为止。
 
+3）两个索引的滑动窗口，左索引和右索引，当右边新进来字符时，检查有没有重复（用一个array来装），没有就直接加入，有的话一直删除最左边的字符直到没有重复，这个效率最高。
+
 ### 代码
 
 HashMap
@@ -527,6 +529,34 @@ class Solution {
                 left++;
             }
         }
+        return result;
+    }
+}
+```
+
+两个索引的滑动窗口用array来存
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int[] freq = new int[256];
+        int left = 0;
+        int right = -1;
+        int result = 0;
+        
+        while (right + 1 < s.length()) {
+            if (right + 1 < s.length() && freq[s.charAt(right + 1)] == 0) {
+                freq[s.charAt(right + 1)] = 1;
+                right++;
+            } else { //freq[s.charAt(right + 1)] == 1
+                //移掉一个左边的字符，并减掉相应的freq
+                //一直到减掉重复的字符之前，虽然有重复的字符，但中间不会是最长的子字符串
+                freq[s.charAt(left)]--;
+                left++;
+            }
+            result = Math.max(result, right - left + 1);
+        }
+        
         return result;
     }
 }
@@ -2391,4 +2421,43 @@ class Solution {
    }
 }
 ```
+
+## 1071 Greatest Common Divisor of Strings
+
+## 题目
+
+For strings `S` and `T`, we say "`T` divides `S`" if and only if `S = T + ... + T`  \(`T` concatenated with itself 1 or more times\)
+
+Return the largest string `X` such that `X` divides str1 and `X` divides str2.
+
+**Example 1:**
+
+```text
+Input: str1 = "ABCABC", str2 = "ABC"
+Output: "ABC"
+```
+
+**Example 2:**
+
+```text
+Input: str1 = "ABABAB", str2 = "ABAB"
+Output: "AB"
+```
+
+**Example 3:**
+
+```text
+Input: str1 = "LEET", str2 = "CODE"
+Output: ""
+```
+
+**Note:**
+
+1. `1 <= str1.length <= 1000`
+2. `1 <= str2.length <= 1000`
+3. `str1[i]` and `str2[i]` are English uppercase letters.
+
+### 分析
+
+### 代码
 
