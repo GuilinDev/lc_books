@@ -1,7 +1,7 @@
 # Table of contents
 
 * [前言](README.md)
-* [LeetCode](leetcode/README.md)
+* [LeetCode - 分类别](leetcode/README.md)
   * [Array](leetcode/array/README.md)
     * [Array中移除元素](leetcode/array/26-27-80-zai-array-zhong-yi-chu-yuan-su.md)
     * [kSum问题](leetcode/array/ksum.md)

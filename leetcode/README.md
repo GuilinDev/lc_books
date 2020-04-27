@@ -1,4 +1,4 @@
-# LeetCode
+# LeetCode - 分类别
 
 ## 算法思维导图
 
@@ -8,7 +8,7 @@
 
 ![](../.gitbook/assets/suan-fa-si-wei-dao-tu.png)
 
-## 题目索引
+## 题目索引（进行中）
 
 <table>
   <thead>
@@ -34,6 +34,4 @@
       </td>
     </tr>
   </tbody>
-</table>* 136 Single Number
-* 771 Jewels and Stones
-
+</table>
