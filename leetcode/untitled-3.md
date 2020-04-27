@@ -143,3 +143,113 @@ class Solution {
 }
 ```
 
+## 994 Rotting Oranges
+
+### 题目
+
+In a given grid, each cell can have one of three values:
+
+* the value `0` representing an empty cell;
+* the value `1` representing a fresh orange;
+* the value `2` representing a rotten orange.
+
+Every minute, any fresh orange that is adjacent \(4-directionally\) to a rotten orange becomes rotten.
+
+Return the minimum number of minutes that must elapse until no cell has a fresh orange.  If this is impossible, return `-1` instead.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2019/02/16/oranges.png)
+
+```text
+Input: [[2,1,1],[1,1,0],[0,1,1]]
+Output: 4
+```
+
+**Example 2:**
+
+```text
+Input: [[2,1,1],[0,1,1],[1,0,1]]
+Output: -1
+Explanation:  The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
+```
+
+**Example 3:**
+
+```text
+Input: [[0,2]]
+Output: 0
+Explanation:  Since there are already no fresh oranges at minute 0, the answer is just 0.
+```
+
+**Note:**
+
+1. `1 <= grid.length <= 10`
+2. `1 <= grid[0].length <= 10`
+3. `grid[i][j]` is only `0`, `1`, or `2`.
+
+### 分析
+
+这道题计算烂番茄对周围的影响的层数（天数），因为是一层层往外扩散，所以要想到可以用BFS来做，BFS的写法比较固定，使用Queue，首先统计所有烂橘子的坐标放入到队列中，同时计算好橘子的个数；然后将每个烂橘子的坐标取出，将其周围四个方向的好橘子转变为烂橘子，同时将新产生的烂橘子坐标放入queue中，每次从queue中取出一个烂橘子的坐标就代表过了一分钟，如此一直到queue中为空。
+
+### 代码
+
+```java
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        int layers = 0;
+        int fresh = 0;
+        Queue<int[]> queue = new LinkedList<>();
+
+        // 统计所有烂番茄的坐标 - 接下来会用到这个坐标进行BFS，并计算新鲜番茄的个数
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 2) {
+                    //将烂番茄的坐标存入到队列中
+                    queue.offer(new int[]{i, j});
+                } else if (grid[i][j] == 1) {
+                    fresh++;
+                }
+            }
+        }
+
+        if (fresh == 0) {
+            return 0;
+        }
+
+        //根据每个烂番茄的坐标进行BFS
+        int[][] dirs = {{1, 0},{-1, 0},{0, 1},{0, -1}};//上左右下四个方向
+        while(!queue.isEmpty()) {
+            layers++; //往外扩散一层
+            int size = queue.size(); //BFS将烂番茄的坐标去除并计算四周
+            for (int i = 0; i < size; i++) {
+                int[] position = queue.poll();
+                for (int[] dir : dirs) { // 遍历四个方向
+                    int nearby_x = position[0] + dir[0];
+                    int nearby_y = position[1] + dir[1];
+
+                    if (nearby_x < 0 || nearby_x >= rows || nearby_y < 0 || nearby_y >= cols || //越界
+                        grid[nearby_x][nearby_y] == 2 || //往外扩散的时候，本身就是烂番茄
+                        grid[nearby_x][nearby_y] == 0) { //空格子
+                            continue;
+                        }
+                    grid[nearby_x][nearby_y] = 2; //将新鲜番茄改成烂番茄
+
+                    queue.offer(new int[]{nearby_x, nearby_y});//将新产生的烂番茄放入队列中
+
+                    fresh--; //新鲜番茄减少
+                }
+            }
+        }
+
+        return fresh == 0 ? layers - 1 : -1; // layers - 1是因为比如共两层但只扩散了一天
+    }
+}
+```
+

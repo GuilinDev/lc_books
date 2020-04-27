@@ -1,4 +1,4 @@
-# LeetCode题海刷题
+# LeetCode
 
 ## 算法思维导图
 

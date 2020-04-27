@@ -184,15 +184,15 @@ You may assume k is always valid, 1 ≤ k ≤ array's length.
 
 1）全局排序，将整个数组排序后取第k-1个数，O\(nlogn\)；
 
-![](../../.gitbook/assets/image%20%2815%29.png)
+![](../.gitbook/assets/image%20%2815%29.png)
 
 2）局部排序，只排最大的k个数，利用冒泡排序的办法（因为能知道kth的位置），冒泡一次，找出一个最大值，冒k次就找到第kth的最大值了，O\(n\*k\)；
 
-![](../../.gitbook/assets/image%20%2818%29.png)
+![](../.gitbook/assets/image%20%2818%29.png)
 
 3）利用heap，创建一个最小堆用来存储当前最大的k个元素
 
-![](../../.gitbook/assets/image%20%289%29.png)
+![](../.gitbook/assets/image%20%289%29.png)
 
 接着，从第k+1个元素开始扫描，和堆顶（堆中最小的元素）比较，如果被扫描的元素大于堆顶，则替换堆顶的元素，并调整堆，以保证堆内的k个元素，总是当前最大的k个元素。
 

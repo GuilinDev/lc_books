@@ -91,7 +91,7 @@ Explanation: The square root of 8 is 2.82842..., and since
 
 2）使用牛顿迭代法，这个主要是逼近法求方程的根（[http://www.cnblogs.com/AnnieKim/archive/2013/04/18/3028607.html](http://www.cnblogs.com/AnnieKim/archive/2013/04/18/3028607.html)），这里是求x^2的解，因此方程f\(x\) = x^2 - n， 相当于求解f\(x\)=0的解，如图所示
 
-![](../../.gitbook/assets/image%20%288%29.png)
+![](../.gitbook/assets/image%20%288%29.png)
 
 首先取x0，如果x0不是解，做一个经过\(x0,f\(x0\)\)这个点的切线，与x轴的交点为x1。
 

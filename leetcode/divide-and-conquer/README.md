@@ -6,7 +6,7 @@ description: >-
 
 # Dynamic Programming
 
-![](../../../.gitbook/assets/image%20%2841%29.png)
+![](../../.gitbook/assets/image%20%2841%29.png)
 
 ## 121 - Best Time to Buy and Sell Stock
 
@@ -724,33 +724,55 @@ Explanation: 13 = 4 + 9.
 
 ### 题意和分析
 
-给一个正整数，求最少由几个完全平方数组成，考察[四平方和定理](https://zh.wikipedia.org/wiki/%E5%9B%9B%E5%B9%B3%E6%96%B9%E5%92%8C%E5%AE%9A%E7%90%86)（没听说过），如果是DP的办法，其中一个办法是建立一个一维动态数组， 初始化第一个值为0，在循环里计算，每次增加一个dp数组的长度，里面那个for循环一次循环结束就算好下一个数由几个完全平方数组成，直到增加到第n+1个，返回即可；
+给一个正整数，求最少由几个完全平方数组成，考察[四平方和定理](https://zh.wikipedia.org/wiki/%E5%9B%9B%E5%B9%B3%E6%96%B9%E5%92%8C%E5%AE%9A%E7%90%86)（没听说过）。
+
+如果是DP的办法，其中一个办法是建立一个一维数组， dp\[i\]表示组成i这个数字需要的最少的的平方数，DP方程为dp\[i\] = min\(dp\[i - x^2\] + 1 for all x\)，因为x有很多种选择，需要选一个最小的；初始化第一个值为0，在循环里计算选择x和不选择x，谁的次数少。
+
+每次增加一个dp数组的长度，里面那个for循环一次循环结束就算好下一个数由几个完全平方数组成，直到增加到第n+1个，返回即可；
 
 DP的效率不是很高， 一个更加高效的办法是，根据四平方和定理，任意一个正整数均可表示为4个整数的平方和（4个，3个，2个或者1个），首先将数字化简一下，由于一个数如果含有因子4，那么我们可以把4都去掉，并不影响结果，比如2和8,3和12等等，返回的结果是相同的。还有一个可以化简的地方就是，如果一个数除以8余7的话，那么这个数肯定是由4个完全平方数组成。经过两次化简，一个很大的数有可能就会变得很小了，大大减少了运算时间，接下来将化简后的数拆为两个平方数之和，如果拆成功了那么就会返回1或2，因为其中一个平方数可能为0. \(由于输入的n是正整数，所以不存在两个平方数均为0的情况\)，然后看a和b是否为正整数，都为正整数的话返回2，只有一个是正整数的话就返回1。
 
 ### 代码
 
-DP
+DP - 1，比较直观的做法，运行速度比较慢，因为这里Math.sqrt\(\)的复杂度是Quisilinear O\(logn\)，时间复杂度O\(n^2\*logn\)，可以查看Leetcode 69 - sqrt\(x\)
 
 ```java
 class Solution {
     public int numSquares(int n) {
-        ArrayList<Integer> dp = new ArrayList<>();
-        dp.add(0);
-
-        while (dp.size() <= n) {
-            int m = dp.size(), val = Integer.MAX_VALUE;
-            for (int i = 1; i * i <= m; i++) {
-                val = Math.min(val, dp.get(m - i*i) + 1);
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, n);//dp[i]表示i这个数所需的最小平方数,最大不会超过n个
+        dp[0] = 0; //0不会被任何正整数的平方数构成
+        
+        for (int i = 1; i <= n; i++) {
+            for (int x = 1; x <= Math.sqrt(i); x++) {
+                dp[i] = Math.min(dp[i], dp[i - x * x] + 1); //选x这个数和不选x这个数看谁少
             }
-            dp.add(val);
         }
-        return dp.get(dp.size() - 1);
+        return dp[n];
     }
 }
 ```
 
-四平方和的方法
+ DP - 2，只改了下sqrt为乘法，时间复杂度O\(n^2\)，leetcode上运行速度快了很多
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, n);//dp[i]表示i这个数所需的最小平方数,最大不会超过n个
+        dp[0] = 0; //0不会被任何正整数的平方数构成
+        
+        for (int i = 1; i <= n; i++) {
+            for (int x = 1; x * x <= i; x++) {
+                dp[i] = Math.min(dp[i], dp[i - x * x] + 1); //选x这个数和不选x这个数看谁少
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+四平方和的方法，时间复杂度O\(n\)，最快
 
 ```java
 class Solution {
@@ -1214,7 +1236,7 @@ Explanation: The longest increasing subsequence is [2,3,7,101], therefore the le
 
 ### 题意和分析
 
-这是经典题，如果采取暴力法来解复杂度得是排列组合的阶乘级。求最优解一般可以用动态规划，这是动态规划中的区间型题目，首先状态定义，dp\[i\]表示数组中第i个元素为止的最长子序列长度（从0开始），那么dp\[i+1\]就是在i后面多一个元素的情况下，如果nums\[i\] &lt; nums\[i+1\] \(表示在i+1这个位置上，最长子序列的长度有可能会有更长的情况了\)，那么这时候检查dp\[i+1\]是否小于dp\[i\]+1（在i+1这个位置上，最长子序列的长度出现更长的情况了，这时候更新i+1位置dp\[i+1\]的值），否则不动，最后找出各个位置最大的子序列的数值，时间复杂度，用递推，外面套一层循环表示每个元素都计算下，里面套一个循环表示在外层元素的基础上，根据递推公式和之前保存的值，计算最长子序列，所以为O\(n^2\)。
+这是经典题，如果采取暴力法来解复杂度得是排列组合的阶乘级。求最优解一般可以用动态规划，这是动态规划中的区间型题目，首先状态定义，dp\[i\]表示数组中第i个元素为止该位置的最长子序列长度（从0开始），那么dp\[i+1\]就是在i后面多一个元素的情况下，如果nums\[i\] &lt; nums\[i+1\] \(表示在i+1这个位置上，最长子序列的长度有可能会有更长的情况了\)，那么这时候检查dp\[i+1\]是否小于dp\[i\]+1（在i+1这个位置上，最长子序列的长度出现更长的情况了，这时候更新i+1位置dp\[i+1\]的值），否则不动，最后找出各个位置最大的子序列的数值，时间复杂度，用递推，外面套一层循环表示每个元素都计算下，里面套一个循环表示在外层元素的基础上，根据递推公式和之前保存的值，计算最长子序列，所以为O\(n^2\)。
 
 这道题还要求优化到O\(nlogn\)，这时候需要用到二分查找，（参考[https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-O\(nlogn\)-time-with-explanation](https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-O%28nlogn%29-time-with-explanation)），这是一个
 

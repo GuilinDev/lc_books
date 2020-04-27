@@ -1175,7 +1175,7 @@ Calling `next()` will return the next smallest number in the BST.
 
 > 每个节点的val值大于左子节点，小于右子节点。注意它不一定是完全的二叉树。所有结点的val值是唯一的。数组的搜索比较方便，可以直接使用下标，但删除或者插入就比较麻烦了，而链表与之相反，删除和插入都比较简单，但是查找很慢，这自然也与这两种数据结构的存储方式有关，数组是取一段相连的空间，而链表是每创建一个节点便取一个节点所需的空间，只是使用指针进行连接，空间上并不是连续的。而二叉树就既有链表的好处，又有数组的优点。
 
-![&#x4E2D;&#x5E8F;&#x904D;&#x5386;&#x7684;&#x987A;&#x5E8F;&#x662F;GDHBEAKCIJF](../../../.gitbook/assets/image.png)
+![&#x4E2D;&#x5E8F;&#x904D;&#x5386;&#x7684;&#x987A;&#x5E8F;&#x662F;GDHBEAKCIJF](../../.gitbook/assets/image.png)
 
 下面的思路来自于[https://blog.csdn.net/smile\_watermelon/article/details/47280679](https://blog.csdn.net/smile_watermelon/article/details/47280679)并做了修改
 
@@ -1367,7 +1367,7 @@ Count\[3\] = Count\[0\]\*Count\[2\]  \(1为根的情况\)
   
 所以，由此观察，可以得出Count的递推公式为
 
-![](../../../.gitbook/assets/image%20%2813%29.png)
+![](../../.gitbook/assets/image%20%2813%29.png)
 
 这正是[卡塔兰数](http://zh.wikipedia.org/wiki/%E5%8D%A1%E5%A1%94%E5%85%B0%E6%95%B0)的一种定义方式，是一个典型的动态规划的定义方式（根据其实条件和递推式求解结果）。所以思路也很明确了，维护量res\[i\]表示含有i个结点的二叉查找树的数量。根据上述递推式依次求出1到n的的结果即可。
 
@@ -3515,4 +3515,66 @@ Output: False
 在BST中寻找是否有两个nodes的val，它们相加的和等于target，返回true，否则返回false。
 
 ### 代码
+
+## 543 Diameter of Binary Tree
+
+### 题目
+
+Given a binary tree, you need to compute the length of the diameter of the tree. The diameter of a binary tree is the length of the **longest** path between any two nodes in a tree. This path may or may not pass through the root.
+
+**Example:**  
+Given a binary tree  
+
+
+```text
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+```
+
+Return **3**, which is the length of the path \[4,2,1,3\] or \[5,2,1,3\].
+
+**Note:** The length of path between two nodes is represented by the number of edges between them.
+
+### 分析
+
+要求求出一个二叉树的直径，所谓直径就是树中一个结点到另外一个结点距离最长，用边表示直径。树的做法就用递归，DFS检查所有结点为顶点的直径，选择一个最大的，在每次递归的层里面，将所有结点的左子树和右子树递归的结果选择一个较大值，进入递归的上一层。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int result;
+    public int diameterOfBinaryTree(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        result = 1;
+        paths(root);
+        return result - 1;//边的数量是path中所有结点数量减1
+    }
+    private int paths(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        int L = paths(node.left);
+        int R = paths(node.right);
+        result = Math.max(result, L + R + 1); //以每个结点为root，计算通过自己root的最长path，与之前递归层比较
+
+        //当前递归层应该返回左右子树中比较大的一个path
+        return Math.max(L, R) + 1; //比较左右子树看那个path更长
+    }
+}
+```
 
