@@ -1,4 +1,4 @@
-# LeetCode - 分类别
+# LeetCode详细题解 - 分类别
 
 ## 算法思维导图
 
