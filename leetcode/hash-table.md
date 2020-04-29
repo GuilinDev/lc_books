@@ -206,6 +206,35 @@ class Solution {
 }
 ```
 
+尾递归
+
+```java
+class Solution {
+    HashSet<Integer> set;
+    public boolean isHappy(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        set = new HashSet<>();
+        return recursion(set, n);
+    }
+    private boolean recursion(HashSet<Integer> set, int n) {
+        if (n == 1) {
+            return true;
+        }
+        int temp = 0;
+        while (n != 0) {
+            temp += Math.pow(n % 10, 2);
+            n /= 10;
+        }
+        if (!set.add(temp)) {
+            return false;
+        }  
+        return recursion(set, temp);
+    }
+}
+```
+
 ## 500 - Keyboard Row
 
 ### 原题概述
