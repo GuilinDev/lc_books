@@ -268,7 +268,7 @@ class Solution {
         int last = 0;//上一步能到达的最远距离
         int curr = 0;//当前结点最远能覆盖的距离
         for (int i = 0; i < nums.length; i++) {
-            if (i > last) {//上一步不能到达，得再跳一次了
+            if (i > last) {//上一步不能到达，得再跳一次了，步数+1
                 last = curr;
                 step++;
             }
