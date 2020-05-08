@@ -116,19 +116,22 @@ Explanation: The square root of 8 is 2.82842..., and since
 ```java
 class Solution {
     public int mySqrt(int x) {
-        if (x <= 1) {
+        assert x >= 0 : "x should be non-negative";
+        while (x <= 1) {
             return x;
         }
-        int left = 0, right = x;
-        while (left < right) {
+        int left = 0;
+        int right = x;
+        while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (x / mid >= mid) {
-                left = mid + 1; //这里是mid+1是因为最后返回的是right-1
+            int temp = x / mid;
+            if (temp >= mid) {
+                left = mid + 1;
             } else {
-                right = mid;
+                right = mid - 1;
             }
         }
-        return right - 1;
+        return right; // left <= right的条件后，right在左边，刚好符合地板除法
     }
 }
 ```
