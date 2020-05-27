@@ -1,216 +1,280 @@
 # LeetCode精刷200题
 
-1 Two Sum 
+#### 1 Two Sum 
 
-2 Add Two Numbers, reverse linked list inplace 
+#### 2 Add Two Numbers, 
 
-146 LRU Cache single linked list with timestamp. 
+reverse linked list inplace 
 
-5. Longest Palindromic Substring n2 extend way, no need manacher 
+#### 146 LRU Cache 
 
-4 Median of Two Sorted Arrays hard level. 
+single linked list with timestamp. 
 
-973 K Closest Points to Origin heap 
+#### 5. Longest Palindromic Substring 
 
-200 Number of Islands dfs, bfs, unionfind array and node 
+n2 extend way, no need manacher 
 
-42 Trapping Rain Water single array, one way stack, 2 pointer. 
+#### 4 Median of Two Sorted Arrays 
 
-3 Longest Substring Without Repeating Characters one 
+hard level. 
 
-128 size array. incremental pointer. 
+#### 973 K Closest Points to Origin heap 
 
-53 Maximum Subarray 
+#### 200 Number of Islands 
 
-23 Merge k Sorted Lists 
+dfs, bfs, unionfind array and node 
 
-20 Valid Parentheses 2 variable linear time. 
+#### 42 Trapping Rain Water 
 
-56 Merge Intervals, 
+single array, one way stack, 2 pointer. 
 
-253 Meeting Rooms II topo sort, sweep line 
+#### 3 Longest Substring Without Repeating Characters 
 
-301 Remove Invalid Parentheses dfs, not hard but complicated logic 
+one 128/256 size array. incremental pointer. 
 
-33 Search in Rotated Sorted Array conditional binary search 
+#### 53 Maximum Subarray 
 
-297 Serialize and Deserialize Binary Tree python iterator, save space 
+#### 23 Merge k Sorted Lists 
 
-297 Serialize and Deserialize Binary Tree subtle way to use counter dict 
+#### 20 Valid Parentheses 
 
-138 Copy List with Random Pointer very good idea to copy linked list 
+2 variable linear time. 
 
-322 Coin Change 
+#### 56 Merge Intervals, 
 
-79 Word Search 
+#### 253 Meeting Rooms II 
 
-560 Subarray Sum Equals K 
+topo sort, sweep line 
 
-49 Group Anagrams not much good way. could use prime number to multiply but only for small number 
+#### 301 Remove Invalid Parentheses 
 
-31 Next Permutation 
+dfs, not hard but complicated logic 
 
-10 Regular Expression Matching hard 
+#### 33 Search in Rotated Sorted Array 
 
-295 Find Median from Data Stream 2 heap 
+conditional binary search 
 
-46 Permutations 
+#### 297 Serialize and Deserialize Binary Tree 
 
-215 Kth Largest Element in an Array quick select, very important 
+python iterator, save space 
 
-127 Word Ladder dfs, bfs, trie 
+#### 297 Serialize and Deserialize Binary Tree 
 
-139 Word Break dfs with memorization 
+subtle way to use counter dict 
 
-621. Task Scheduler 
+#### 138 Copy List with Random Pointer 
 
-91 Decode Ways 
+very good idea to copy linked list 
 
-103 Binary Tree Zigzag Level Order Traversal simple bfs 
+#### 322 Coin Change 
 
-98 Validate Binary Search Tree use None as min and max 
+#### 79 Word Search 
 
-642 Design Search Autocomplete System trie 
+#### 560 Subarray Sum Equals K 
 
-85 Maximal Rectangle one way stack 
+#### 49 Group Anagrams 
 
-283 Move Zeroes different ways, use less read or write 
+not much good way. could use prime number to multiply but only for small number 
 
-124 Binary Tree Maximum Path Sum 
+#### 31 Next Permutation 
 
-986 Interval List Intersections 
+#### 10 Regular Expression Matching 
 
-39 Combination Sum 
+hard 
 
-227 Basic Calculator II very subtle 
+#### 295 Find Median from Data Stream 
 
-239 Sliding Window Maximum ask many times, could be used for rate limiter 
+2 heap 
 
-236 Lowest Common Ancestor of a Binary Tree 
+#### 46 Permutations 
 
-45 Jump Game II 
+#### 215 Kth Largest Element in an Array 
 
-212 Word Search II 
+quick select, very important 
 
-207 Course Schedule very important, topo sorting, graph, with dependency will need 2 set for marking, pending set, finish set. 
+#### 127 Word Ladder 
 
-34 Find First and Last Position of Element in Sorted Array very important, binary search template. 
+dfs, bfs, trie 
 
-341 Flatten Nested List Iterator 
+#### 139 Word Break
 
-133 Clone Graph 
+dfs with memorization 
 
-695 Max Area of Island 
+#### 621. Task Scheduler 
 
-426 Convert Binary Search Tree to Sorted Doubly Linked List 
+#### 91 Decode Ways 
 
-300 Longest Increasing Subsequence 
+#### 103 Binary Tree Zigzag Level Order Traversal 
 
-50 Pow\(x, n\) 
+simple bfs 
 
-173 Binary Search Tree Iterator 
+#### 98 Validate Binary Search Tree 
 
-210 Course Schedule II 
+use None as min and max 
 
-199 Binary Tree Right Side View 
+#### 642 Design Search Autocomplete System 
 
-329 Longest Increasing Path in a Matrix 
+trie 
 
-128 Longest Consecutive Sequence 
+#### 85 Maximal Rectangle 
 
-105 Construct Binary Tree from Preorder and Inorder Traversal 
+one way stack 
 
-277 Find the Celebrity 
+#### 283 Move Zeroes 
 
-198 House Robber 
+different ways, use less read or write 
 
-211 Add and Search Word - Data structure design 
+#### 124 Binary Tree Maximum Path Sum 
 
-545 Boundary of Binary Tree 
+#### 986 Interval List Intersections 
 
-547 Friend Circles 
+#### 39 Combination Sum 
 
-150 Evaluate Reverse Polish Notation 
+#### 227 Basic Calculator II 
 
-208 Implement Trie \(Prefix Tree\) 
+very subtle 
 
-84 Largest Rectangle in Histogram 
+#### 239 Sliding Window Maximum 
 
-165 Compare Version Numbers 
+ask many times, could be used for rate limiter 
 
-244 Shortest Word Distance II 
+#### 236 Lowest Common Ancestor of a Binary Tree 
 
-28 Implement strStr\(\) kmp 
+#### 45 Jump Game II 
 
-230 Kth Smallest Element in a BST template! 
+#### 212 Word Search II 
 
-36 Valid Sudoku 
+#### 207 Course Schedule 
 
-272 Closest Binary Search Tree Value II template 
+very important, topo sorting, graph, with dependency will need 2 set for marking, pending set, finish set. 
 
-611 Valid Triangle Number 
+#### 34 Find First and Last Position of Element in Sorted Array 
 
-346 Moving Average from Data Stream 
+very important, binary search template. 
 
-366 Find Leaves of Binary Tree 
+#### 341 Flatten Nested List Iterator 
 
-339 Nested List Weight Sum 
+#### 133 Clone Graph 
 
-463 Island Perimeter 
+#### 695 Max Area of Island 
 
-252 Meeting Rooms 
+#### 426 Convert Binary Search Tree to Sorted Doubly Linked List 
 
-104 Maximum Depth of Binary Tree 
+#### 300 Longest Increasing Subsequence 
 
-209 Minimum Size Subarray Sum 
+#### 50 Pow\(x, n\) 
 
-240 Search a 2D Matrix II 
+#### 173 Binary Search Tree Iterator 
 
-123 Best Time to Buy and Sell Stock III, damn hard for google 
+#### 210 Course Schedule II 
 
-407 Trapping Rain Water II heap 
+#### 199 Binary Tree Right Side View 
 
-116 Populating Next Right Pointers in Each Node 
+#### 329 Longest Increasing Path in a Matrix 
 
-114 Flatten Binary Tree to Linked List 
+#### 128 Longest Consecutive Sequence 
 
-284 Peeking Iterator 
+#### 105 Construct Binary Tree from Preorder and Inorder Traversal 
 
-142 Linked List Cycle II 
+#### 277 Find the Celebrity 
 
-109 Convert Sorted List to Binary Search Tree 
+#### 198 House Robber 
 
-110 Balanced Binary Tree 
+#### 211 Add and Search Word - Data structure design 
 
-130 Surrounded Regions 
+#### 545 Boundary of Binary Tree 
 
-285 Inorder Successor in BST 
+#### 547 Friend Circles 
 
-169 Majority Element 
+#### 150 Evaluate Reverse Polish Notation 
 
-235 Lowest Common Ancestor of a Binary Search Tree 
+#### 208 Implement Trie \(Prefix Tree\) 
 
-704 Binary Search, template 
+#### 84 Largest Rectangle in Histogram 
 
-450 Delete Node in a BST 
+#### 165 Compare Version Numbers 
 
-1008 Construct Binary Search Tree from Preorder Traversal 
+#### 244 Shortest Word Distance II 
 
-605 Can Place Flowers 
+#### 28 Implement strStr\(\) 
 
-223 Rectangle Area 
+kmp 
 
-100 Same Tree 
+#### 230 Kth Smallest Element in a BST 
 
-303 Range Sum Query - Immutable 
+template! 
 
-290 Word Pattern 
+#### 36 Valid Sudoku 
 
-654 Maximum Binary Tree 
+#### 272 Closest Binary Search Tree Value II 
 
-1026 Maximum Difference Between Node and Ancestor 
+template 
 
-305 Number of Islands II 
+#### 611 Valid Triangle Number 
 
-307 Range Sum Query - Mutable segment tree!
+#### 346 Moving Average from Data Stream 
+
+#### 366 Find Leaves of Binary Tree 
+
+#### 339 Nested List Weight Sum 
+
+#### 463 Island Perimeter 
+
+#### 252 Meeting Rooms 
+
+#### 104 Maximum Depth of Binary Tree 
+
+#### 209 Minimum Size Subarray Sum 
+
+#### 240 Search a 2D Matrix II 
+
+#### 123 Best Time to Buy and Sell Stock III 
+
+damn hard for google 
+
+#### 407 Trapping Rain Water II heap 
+
+#### 116 Populating Next Right Pointers in Each Node 
+
+#### 114 Flatten Binary Tree to Linked List 
+
+#### 284 Peeking Iterator 
+
+#### 142 Linked List Cycle II 
+
+#### 109 Convert Sorted List to Binary Search Tree 
+
+#### 110 Balanced Binary Tree 
+
+#### 130 Surrounded Regions 
+
+#### 285 Inorder Successor in BST 
+
+#### 169 Majority Element 
+
+#### 235 Lowest Common Ancestor of a Binary Search Tree 
+
+#### 704 Binary Search, template 
+
+#### 450 Delete Node in a BST 
+
+#### 1008 Construct Binary Search Tree from Preorder Traversal 
+
+#### 605 Can Place Flowers 
+
+#### 223 Rectangle Area 
+
+#### 100 Same Tree 
+
+#### 303 Range Sum Query - Immutable 
+
+#### 290 Word Pattern 
+
+#### 654 Maximum Binary Tree 
+
+#### 1026 Maximum Difference Between Node and Ancestor 
+
+#### 305 Number of Islands II 
+
+#### 307 Range Sum Query - Mutable segment tree!
 
