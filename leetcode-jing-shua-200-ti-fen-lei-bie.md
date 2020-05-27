@@ -1,4 +1,4 @@
-# LeetCode精刷200题
+# LeetCode精刷
 
 #### 1 Two Sum 
 
