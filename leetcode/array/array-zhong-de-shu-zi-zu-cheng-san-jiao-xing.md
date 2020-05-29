@@ -246,11 +246,11 @@ Output: 10
 
 ![](../../.gitbook/assets/image%20%2835%29.png)
 
-    3. 此时栈顶元素为index = 2，index = 2对应的值5 &gt; index = 4对应的值2；所以index = 2出栈，计算此时的面积area = 2 x 5 = 10 （因为index = 2距离index = 4，是index = 2和index = 3两个bar）；
+    3. 因为上一步index = 3已经出栈，此时栈顶元素为index = 2，index = 2对应的值5 &gt; index = 4对应的值2；所以index = 2出栈，计算此时的面积area = 2 x 5 = 10 （因为index = 2距离index = 4，是index = 2和index = 3两个bar）；
 
 ![](../../.gitbook/assets/image%20%2844%29.png)
 
-    4. 此时栈顶元素为index = 1，它对应的高度1 &lt; index = 4对应的高度2，所以index = 1不出栈，同时可以压入index = 4到栈中，同样之后index = 5也是上升可以压入，到最后结束的时候index = 6的时候人工压入一个0，此时栈的有效下标元素为{1,4,5}；栈顶元素为index = 6对应高度为0，此时只要高度比0大都需要出栈，所以index = 5先出栈，计算此时的面积area = 1 × 3 = 3，上面area最大值为10，所以不取；
+    4. 此时栈顶元素为index = 1，它对应的高度1 &lt; index = 4对应的高度2，所以index = 1不出栈，同时可以压入index = 4到栈中（刚才的index = 2和index = 3已经出栈），同样之后index = 5也是上升可以压入，到最后结束的时候index = 6的时候人工压入一个0，此时栈的有效下标元素为{1,4,5}\(全部为{1,4,5,0}\)；栈顶元素为index = 6对应高度为0，此时只要高度比0大都需要出栈，所以index = 5先出栈，计算此时的面积area = 1 × 3 = 3，上面area最大值为10，所以不取；
 
 ![](../../.gitbook/assets/image%20%2822%29.png)
 
@@ -308,7 +308,7 @@ public class Solution {
                 int tp = s.pop();
                 //计算面积
                 maxArea = Math.max(maxArea, height[tp] * (s.isEmpty() ? i : i - 1 - s.peek()));
-                i--;//继续往前移
+                i--;//for循环自增了一步，需要退回去，继续和之前的bar比较
             }
         }
         return maxArea;

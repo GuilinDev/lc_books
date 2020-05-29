@@ -192,6 +192,8 @@ very important, binary search template.
 
 #### 84 Largest Rectangle in Histogram 
 
+maintain an increamental list for indices
+
 #### 165 Compare Version Numbers 
 
 #### 244 Shortest Word Distance II 
