@@ -82,6 +82,36 @@ class Solution {
 }
 ```
 
+尾递归
+
+```java
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        return generateHelper(new ArrayList<List<Integer>>(), numRows);
+    }
+    private List<List<Integer>> generateHelper(List<List<Integer>> triangle, int numRows) {
+        if (numRows == 0) { // 基线条件，需要创建的三角形行数
+            return triangle;
+        }
+        
+        List<Integer> newList = new ArrayList<>(); // 新的一行
+        newList.add(1); // 每一行的第一个位置是1
+        if (triangle.size() != 0) { // 第一行加入的时候不用计算中间的值
+            List<Integer> lastList = triangle.get(triangle.size() - 1);
+            for (int i = 0; i < lastList.size() - 1; i++) {//没有包括最后一列
+                int current = lastList.get(i);
+                int next = lastList.get(i + 1);
+                newList.add(current + next); // 计算三角形的值
+            }
+            newList.add(1); //最后一列
+        }
+        triangle.add(newList); // 加入当前一行
+        
+        return generateHelper(triangle, numRows - 1);
+    }
+}
+```
+
 ## 119 - Pascal's Triangle II
 
 ### 原题概述
