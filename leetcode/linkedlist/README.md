@@ -2489,9 +2489,9 @@ public class Solution {
         }
 
         node = head;//重新将node指向第一个结点
-        //第二个循环，assign随机指针和next
+        //第二个循环，assign新结点的随机指针和next
         while (node != null) {
-            map.get(node).next = map.get(node.next);//随机找
+            map.get(node).next = map.get(node.next);//随机找，常数级
             map.get(node).random = map.get(node.random);
             node = node.next;
         }
