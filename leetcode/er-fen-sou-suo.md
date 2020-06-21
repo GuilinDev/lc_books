@@ -66,6 +66,7 @@ class Solution {
         if (n == 0) {
             return 1;
         }
+        // -2147483648,或者把n变成long
         if (n == Integer.MIN_VALUE) {
             x *= x;
             n /= 2;
