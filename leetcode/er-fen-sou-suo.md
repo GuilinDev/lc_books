@@ -66,7 +66,7 @@ class Solution {
         if (n == 0) {
             return 1;
         }
-        // -2147483648,或者把n变成long
+        // 最大的负整数-2147483648，转换成-n（正数）后会越界，所以单独处理,这里也把n变成long
         if (n == Integer.MIN_VALUE) {
             x *= x;
             n /= 2;
