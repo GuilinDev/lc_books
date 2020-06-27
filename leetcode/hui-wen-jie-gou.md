@@ -101,6 +101,8 @@ class Solution {
 }
 ```
 
+也可以一个PriorityQueue，把所有intervals放入到pq中（排好序），然后每次取两个interval出来，比较头尾，如果合并，就创建一个新的interval然后offer到pq中；如果不合并，就将第一个interval加入result中，第2个interval则继续放回pq中，等待下一轮再比较。最后pq中低于两个intervals的时候跳出循环，如果pq中还有interval最后再加一次。
+
 ## **242 Valid Anagram**
 
 ### **原题概述**
