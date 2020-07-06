@@ -1,7 +1,6 @@
 # Table of contents
 
 * [前言](README.md)
-* [LeetCode精刷](leetcode-jing-shua-200-ti-fen-lei-bie.md)
 * [LeetCode详细题解 - 分类别](leetcode/README.md)
   * [Array](leetcode/array/README.md)
     * [Array中移除元素](leetcode/array/26-27-80-zai-array-zhong-yi-chu-yuan-su.md)
