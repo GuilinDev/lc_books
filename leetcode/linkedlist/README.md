@@ -34,23 +34,18 @@ Explanation: 342 + 465 = 807.
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
-        } else if (l2 == null) {
-            return l1;
+        if (l1 == null || l2 == null) {
+            return l1 == null ? l2 : l1;
         }
-        
         ListNode dummy = new ListNode(-1);
         ListNode current = dummy;
         int carry = 0;
-        while (l1 != null || l2 != null) { // 把两个链表遍历到最后
+        while (l1 != null || l2 != null) {
             int sum = carry;
             if (l1 != null) {
                 sum += l1.val;
@@ -60,16 +55,13 @@ class Solution {
                 sum += l2.val;
                 l2 = l2.next;
             }
-            current.next = new ListNode(sum % 10); // 新建一个加后的node
+            current.next = new ListNode(sum % 10);
             current = current.next;
             carry = sum / 10;
         }
-        
-        // 两个数加完后还要检查一下carry是否有剩
-        if (carry != 0) {
+        if (carry != 0) {//循环结束后最后判断下是否还有进位
             current.next = new ListNode(carry);
         }
-        
         return dummy.next;
     }
 }

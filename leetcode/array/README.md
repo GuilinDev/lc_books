@@ -2205,3 +2205,101 @@ class Solution {
 }
 ```
 
+## 769 Max Chunks to Make Sorted
+
+### 题目
+
+Given an array `arr` that is a permutation of `[0, 1, ..., arr.length - 1]`, we split the array into some number of "chunks" \(partitions\), and individually sort each chunk.  After concatenating them, the result equals the sorted array.
+
+What is the most number of chunks we could have made?
+
+**Example 1:**
+
+```text
+Input: arr = [4,3,2,1,0]
+Output: 1
+Explanation:
+Splitting into two or more chunks will not return the required result.
+For example, splitting into [4, 3], [2, 1, 0] will result in [3, 4, 0, 1, 2], which isn't sorted.
+```
+
+**Example 2:**
+
+```text
+Input: arr = [1,0,2,3,4]
+Output: 4
+Explanation:
+We can split into two chunks, such as [1, 0], [2, 3, 4].
+However, splitting into [1, 0], [2], [3], [4] is the highest number of chunks possible.
+```
+
+**Note:**
+
+* `arr` will have length in range `[1, 10]`.
+* `arr[i]` will be a permutation of `[0, 1, ..., arr.length - 1]`.
+
+### 解释
+
+对于这个问题，要我们做的是找到一些分裂线，每个分裂线之间的数字排序后，连在一起整个数组是有序的，求出最大分裂线分出的子数组的数目。
+
+做法是让每条分裂线左边的数字都小于这条线右边的数字。这个想法与快速排序非常相似。用一个额外的max数组来记录达到当前位置时最大的数字，将max\[i\]与当前的索引i比较，如果相等，结果+1。
+
+遍历整个array，每一次左边的元素小于等于右边的元素，都会产生一个新的chunck，证明：
+
+```text
+原始数组:   0, 2, 1, 4, 3, 5, 7, 6
+max数组:   0, 2, 2, 4, 4, 5, 7, 7
+sorted后:  0, 1, 2, 3, 4, 5, 6, 7
+索引:      0, 1, 2, 3, 4, 5, 6, 7
+```
+
+### 代码
+
+O\(n\)和O\(n\)
+
+```java
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int len = arr.length;
+        int[] max = new int[len];
+        int result = 0;
+        max[0] = arr[0];
+        
+        for (int i = 1; i < len; i++) {
+            max[i] = Math.max(max[i - 1], arr[i]);
+        }
+        
+        for (int i = 0; i < len; i++) {
+            if (max[i] == i) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
+```
+
+优化空间，O\(n\)和O\(1\)
+
+```java
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int result = 0;
+        int max = 0; // 跟索引比较，所以不用Integer.MIN_VALUE
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+            if (max == i) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
+```
+
