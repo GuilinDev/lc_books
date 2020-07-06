@@ -156,6 +156,48 @@ class LRUCache {
  */
 ```
 
+如果用Java内置的LinkedHashMap，这个是对HashMap + Double LinkedList进行了封装，不需要自己实现数据结构了，就会简单很多，但有时候面试不让用LinkedHashMap。
+
+```java
+class LRUCache {
+    
+    private volatile Map<Integer, Integer> map;
+    private int cacheSize;
+
+    public LRUCache(int initSize) {
+        this.cacheSize = initSize;
+        this.map = new LinkedHashMap<Integer, Integer>(initSize, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry eldest) {
+                return size() > LRUCache.this.cacheSize;
+            }
+        };
+    }
+    
+    public int get(int inKey) {
+        if (!map.containsKey(inKey)) {
+            return -1;
+        }
+        int val = map.get(inKey);
+        // 利用put方法将数据提前
+        put(inKey, val);
+        return val;
+    }
+    
+    public synchronized void put(int key, int value) {
+        // 直接利用Java中LinkedHashMap实现的put方法
+        map.put(key, value);
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
+```
+
 ## Union Find
 
 ## 547 Friend Circles
