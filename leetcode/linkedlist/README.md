@@ -150,6 +150,62 @@ class Solution {
 }
 ```
 
+用递归来模拟stack的过程
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int len1 = getLength(l1);
+        int len2 = getLength(l2);
+        ListNode current = new ListNode(1);
+         
+        // Make sure l1.length >= l2.length
+        current.next = len1 < len2 ? helper(l2, l1, len2 - len1) : helper(l1, l2, len1 - len2);
+         
+        // Handle the first digit，优化
+        if (current.next.val > 9) {
+            current.next.val = current.next.val % 10;
+            return current;
+        }
+        return current.next;
+    }
+    
+    // get length of the linked list
+    public int getLength(ListNode l) {
+        int count = 0;
+        while(l != null) {
+            l = l.next;
+            count++;
+        }
+        return count;
+    }
+    
+    // offset is the difference of length between l1 and l2
+    public ListNode helper(ListNode l1, ListNode l2, int offset) {
+        if (l1 == null) return null;
+        // check whether l1 becomes the same length as l2
+        ListNode newHead = (offset == 0) ? new ListNode(l1.val + l2.val) : new ListNode(l1.val);
+        ListNode post = (offset == 0) ? helper(l1.next, l2.next, 0) : helper(l1.next, l2, offset - 1);
+        // handle carry 
+        if (post != null && post.val > 9) {
+            newHead.val += 1;
+            post.val = post.val % 10;
+        }
+        // combine nodes
+        newHead.next = post;
+        return newHead;
+    }
+}
+```
+
 ## 369 Plus One Linked List
 
 ### 原题概述
