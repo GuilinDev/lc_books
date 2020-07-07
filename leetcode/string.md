@@ -541,7 +541,7 @@ class Solution {
     public int lengthOfLongestSubstring(String s) {
         int[] freq = new int[256];
         int left = 0;
-        int right = -1;
+        int right = -1; // 刚开始设定窗口里面什么都没有
         int result = 0;
         
         while (right + 1 < s.length()) {
