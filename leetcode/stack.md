@@ -261,7 +261,7 @@ class Solution {
         int right_max = 0;
         int n = height.length;
         
-        int[] dp = new int[n]; //
+        int[] dp = new int[n]; //根据当前元素i的两边柱子计算的顶上可以储存的水
         
         //缓存i位置左边的最大值
         for (int i = 0; i < n; i++) {
