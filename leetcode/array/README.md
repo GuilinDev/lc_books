@@ -101,7 +101,7 @@ The median is (2 + 3)/2 = 2.5
 
 {% embed url="http://windliang.cc/2018/07/18/leetCode-4-Median-of-Two-Sorted-Arrays/" %}
 
-假设我们要找第 k 小数，我们可以每次循环排除掉 k / 2 个数。看下边一个例子。
+假设我们要找第 k 小数（从1开始数），我们可以每次循环排除掉 k / 2 个数。看下边一个例子。
 
 假设我们要找第 7 小的数字。
 
@@ -176,6 +176,113 @@ class Solution {
         } else {
             return getKth(nums1, i + 1, end1, nums2, start2, end2, k - (i - start1 + 1));
         }
+    }
+}
+```
+
+同样的思路，另一种写法，更清楚一点
+
+```java
+class Solution {
+    /**
+    * 寻找一个unioned sorted array中的第k大（从1开始数）的数。因而等价于寻找并判断两个sorted array中第k/2（从1开始数）大的数。
+    * 特殊化到求median，那么对于奇数来说，就是求第(m + n) / 2 + 1（地板除法，从1开始数）大的数。
+    * 而对于偶数来说，就是求第(m + n) / 2大（地板除法，从1开始数）和第(m + n) / 2 + 1大（地板除法，从1开始数）的数的算术平均值。
+    */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) { 
+        /**
+        * 那么如何判断两个有序数组A,B中第k大的数呢？
+
+        * 我们需要判断A[k/2-1]和B[k/2-1]的大小。
+
+        * 如果A[k/2-1]==B[k/2-1]，那么这个数就是两个数组中第k大的数。
+
+        * 如果A[k/2-1] < B[k/2-1], 那么说明A[0]到A[k/2-1]都不可能是第k大的数，所以需要舍弃这一半，继续从A[k/2]到A[A.length-1]继续找。当然，因为这里舍弃了A[0]到A[k/2-1]这k/2个数，那么第k大也就变成了，第k-k/2个大的数了。
+
+        如果 A[k/2-1]>B[k/2-1]，就做之前对称的操作就好。
+        */
+        
+        int m = nums1.length;
+        int n = nums2.length;
+        int total = m + n;
+        
+        if (total % 2 != 0) { // exact one or algrebic divied by two 
+            return (double) findKth(nums1, 0, m - 1, nums2, 0, n - 1, total / 2 + 1);// kth, but the index is k-1
+        } else {
+            double x = (double) findKth(nums1, 0, m - 1, nums2, 0, n - 1, total / 2);
+            double y = (double) findKth(nums1, 0, m - 1, nums2, 0, n - 1, total / 2 + 1);
+            return (double)(x + y) / 2;
+        }
+    }
+    public static int findKth(int[] nums1, int aStart, int aEnd, int[] nums2, int bStart, int bEnd, int k) {
+            
+            int m = aEnd - aStart + 1;
+            int n = bEnd - bStart + 1;
+            
+            if (m > n) {
+                return findKth(nums2, bStart, bEnd, nums1, aStart, aEnd, k);
+            }
+            
+            if (m == 0) {
+                return nums2[k - 1];
+            }
+        
+            if (k == 1) {
+                return Math.min(nums1[aStart], nums2[bStart]);
+            }
+            
+            //----------------------------------------
+            
+            int partA = Math.min(k/2,m); // half length of total length
+            int partB = k - partA; // 
+            
+            // Recursion to 
+            if (nums1[aStart + partA - 1] < nums2[bStart + partB - 1]) {
+                return findKth(nums1, aStart+partA, aEnd, nums2, bStart, bEnd, k - partA);
+            } else if (nums1[aStart + partA - 1] > nums2[bStart + partB - 1]) {
+                return findKth(nums1, aStart, aEnd, nums2, bStart + partB, bEnd, k - partB);
+            } else {
+                return nums1[aStart + partA - 1];
+            }
+        }
+}
+```
+
+O（m + n）解法
+
+```java
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        /**
+        * 找到两个数组中的中位数，然后
+        */
+        int index1 = 0; // nums1中的索引
+        int index2 = 0; // nums2中的索引
+        int med1 = 0;
+        int med2 = 0;
+        for (int i = 0; i <= (nums1.length+nums2.length) / 2; i++) {
+            med1 = med2;
+            if (index1 == nums1.length) { // nums1中元素遍历完
+                med2 = nums2[index2];
+                index2++;
+            } else if (index2 == nums2.length) { // nums2中元素遍历完
+                med2 = nums1[index1];
+                index1++;
+            } else if (nums1[index1] < nums2[index2] ) {
+                med2 = nums1[index1];
+                index1++;
+            }  else {
+                med2 = nums2[index2];
+                index2++;
+            }
+        }
+
+        // the median is the average of two numbers，判断一下奇偶
+        if ((nums1.length + nums2.length) % 2 == 0) {
+            return (double)(med1 + med2) / 2;
+        }
+
+        return (double)med2;
     }
 }
 ```
