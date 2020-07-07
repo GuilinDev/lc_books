@@ -595,7 +595,7 @@ dp\[i, j\] = 1                                               if i == j为回文�
 
            = s\[i\] == s\[j\] && dp\[i + 1\]\[j - 1\]    if j &gt; i + 1     
 
-3）O\(n\)的马拉车算法Manacher's Algorithm，线型时间，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍，这个看情况掌握。
+3）O\(n\)的马拉车算法Manacher's Algorithm，O\(n\)时间，[这里](http://www.cnblogs.com/grandyang/p/4475985.html)有详细介绍，这个看情况掌握。
 
 ### 代码
 
@@ -610,9 +610,9 @@ class Solution {
         if (len < 2)
             return s;
 
-        for (int i = 0; i < len-1; i++) {
+        for (int i = 0; i < len - 1; i++) {
             extendPalindrome(s, i, i);  //assume odd length, try to extend Palindrome as possible
-            extendPalindrome(s, i, i+1); //assume even length.
+            extendPalindrome(s, i, i + 1); //assume even length.
         }
         return s.substring(lo, lo + maxLen);
     }
@@ -631,31 +631,32 @@ class Solution {
 }
 ```
 
-DP
+DP，也是O\(n ^ 2\)
 
 ```java
 class Solution {
     public String longestPalindrome(String s) {
-        if (s == null || s.length() == 0) {
-            return "";
-        }
+        int len = s.length();
+        int maxLen = 0;
+        boolean[][] memo = new boolean[len][len];
+        String result = "";
         
-        int n = s.length();
-        String res = null;
-
-        boolean[][] dp = new boolean[n][n];
-
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i; j < n; j++) {
-                dp[i][j] = s.charAt(i) == s.charAt(j) && (j - i < 3 || dp[i + 1][j - 1]);
-
-                if (dp[i][j] && (res == null || j - i + 1 > res.length())) {
-                    res = s.substring(i, j + 1);
+        for (int left = len - 1; left >= 0; left--) { // left,right为区间[left, right]最长回文
+            for (int right = left; right < len; right++) {// right必须大于等于left，所以left从右到左，right从左到右比较好写
+                if (s.charAt(left) == s.charAt(right)) { // 两个字符相等
+                    if (right - left <= 2) { // left和right重合或者相邻，或者中间隔一个字符
+                        memo[left][right] = true;
+                    } else {
+                        memo[left][right] = memo[left + 1][right - 1]; // left和right对应字符相等的情况下，取决与上一个状态
+                    }
+                }
+                if (memo[left][right] && maxLen < right - left + 1) { // 计算当前dp对应的最长字符串
+                    maxLen = right - left + 1;
+                    result = s.substring(left, left + maxLen);
                 }
             }
         }
-
-        return res;
+        return result;
     }
 }
 ```
