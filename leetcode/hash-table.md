@@ -1647,3 +1647,186 @@ class Solution {
 }
 ```
 
+## 645 Set Mismatch
+
+### 题目
+
+The set `S` originally contains numbers from 1 to `n`. But unfortunately, due to the data error, one of the numbers in the set got duplicated to **another** number in the set, which results in repetition of one number and loss of another number.
+
+Given an array `nums` representing the data status of this set after the error. Your task is to firstly find the number occurs twice and then find the number that is missing. Return them in the form of an array.
+
+**Example 1:**  
+
+
+```text
+Input: nums = [1,2,2,4]
+Output: [2,3]
+```
+
+**Note:**  
+
+
+1. The given array size will in the range \[2, 10000\].
+2. The given array's numbers won't have any order.
+
+### 分析
+
+题意就是\[1, n\]之间有个数是重复的，另外有个数是缺失的，找出这两个数返回。直观解法就是借助Hashmap来统计出现次数，时间复杂度O\(n\)，空间复杂度O\(n\)，或者折衷下，先排序然后比较数字，时间复杂度O\(nlogn\)，空间复杂度O\(1\)。
+
+有没有更好方法呢，其实可以对原数组进行标记，将元素变成负数，如果遇到的元素是小于0的，说明已经对该元素变过一次负数，也就是说该元素重复了，最后在遍历一次数组，如果遇到大于0的数，表明在该位置缺少一个元素。
+
+寻找重复数
+
+![](../.gitbook/assets/image%20%2849%29.png)
+
+寻找缺失数
+
+![](../.gitbook/assets/image%20%2850%29.png)
+
+
+
+另外用位操作也可以， 因为  
+`(1 ^ 2 ^ 3 ^ .. ^ n) ^ (1 ^ 2 ^ 3 ^ .. ^ n) = 0`  
+假如 'a' to 'b'分别为缺失数和重复数，那么除了a和b外每个数都被异或两次。 现在结果就是  
+`0 ^ a ^ b ^ b ^ b = a ^ b`  
+让 `c = a ^ b`, 如果我们可以找到出现两次的数b, 那么'a' 也可以很容易找到`a = c ^ b`.
+
+### 代码
+
+1. 额外数据结构来存储状态
+
+```java
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        int res[] = new int[2];
+        //boolean类型默认初始化为false
+        boolean[] map=new boolean[nums.length + 1];
+        for(int i = 0; i < nums.length; i++)
+            if(map[nums[i]] == false)
+                map[nums[i]] = true;
+            else // 出现两次
+                res[0] = nums[i];
+        
+        for(int i = 1; i < (nums.length + 1); i++) // 没出现的没有改变，仍是false
+            if(map[i] == false){
+                res[1] = i;
+                break;
+            }
+        return res;
+    }
+}
+```
+
+2. 先排序的解法
+
+```java
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        /**
+        特殊情况，如果缺失的数字是1或者n，通过nums[i + 1] - nums[i]与0,2的比较就找不到缺失值了，但总是可以找到重复值，因为必须出现两遍才是重复值。
+        所以在遍历完原数组之后，要判断缺失值是否已经找到（找到的标志就是result[1] != 0），如果没有，就去判断缺失了1还是n。
+        */
+        int[] result = new int[2];
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (nums[i + 1] - nums[i] == 0) {
+                result[0] = nums[i];
+            }
+            if (nums[i + 1] - nums[i] == 2) {
+                result[1] = nums[i] + 1;
+            }
+        }
+        if (result[1] == 0) { // 没有找到缺失值，这时候1或者n是备选
+            if (nums[0] != 1) {
+                result[1] = 1;
+            } else {
+                result[1] = nums.length;
+            }
+        }
+        return result;
+    }
+}
+```
+
+3. 优化O\(n\) + O\(1\)
+
+```java
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        int[] result = new int[2];
+        for (int num : nums) {
+            if (nums[Math.abs(num) - 1] < 0) {
+                // 已经转过一次负数的数，表明重复
+                result[0] = Math.abs(num);
+            } else {
+                // 将所有元素转为负数
+                nums[Math.abs(num)-1] *= -1;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            // 剩下那个没有被转成负数的数
+            if (nums[i] > 0) {
+                result[1] = i + 1;
+            }
+        }
+        return result;
+    }
+}
+```
+
+可以只遍历一次
+
+```java
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        int dup = -1;
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[Math.abs(nums[i]) - 1] < 0)
+                dup = Math.abs(nums[i]);
+            else
+                nums[Math.abs(nums[i]) - 1] *= -1;
+
+            sum += i + 1 - Math.abs(nums[i]);
+        }
+        return new int[]{dup, dup + sum};
+    }
+}
+```
+
+4. 位操作
+
+```java
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        int[] result = new int[2];
+        for(int i = 0; i < nums.length; i++) {
+            int val = Math.abs(nums[i]);
+            result[1] ^= (i + 1) ^ val; // 与[1, n]异或
+            if (nums[val - 1] < 0) { //最终，异或三次的是重复数，不会变为正数
+                result[0] = val;
+            }
+            else {
+                nums[val - 1] = -nums[val - 1]; //正常数改变两次变为正数
+            }
+        }
+        result[1] ^= result[0];
+        return result;
+    }
+}
+```
+
+5. 函数式编程
+
+```java
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        Set<Integer> numSet = Arrays.stream(nums).boxed().collect(Collectors.toSet());
+        int setSum = numSet.stream().reduce(0, Integer::sum);
+        int actualSum = IntStream.of(nums).sum();
+        int targetSum =  IntStream.range(1, nums.length+1).sum();
+        return new int[]{actualSum - setSum,  targetSum - setSum};
+    }
+}
+```
+

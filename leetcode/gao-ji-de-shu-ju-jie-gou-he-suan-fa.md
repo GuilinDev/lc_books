@@ -40,113 +40,159 @@ cache.get(4);       // returns 4
 
 ```java
 class LRUCache {
+        
+    /**
+     * 1. 创建一个内部类Node，封装需要的key-value键值对的对象
+     */
+    class Node {
+        private int key, value;
+        private Node prev, next;
+        public Node (int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+}
 
-    class DLinkedNode {
-        int key;
-        int value;
-        DLinkedNode next;
-        DLinkedNode pre;
+    /**
+     * 2. 依靠创建的 Node 类型构建一个双链表内部类，实现几个需要的 API（这些操作的时间复杂度均为 O(1))
+     */
+    class DoubleList {
+        private Node head, tail;
+        private int size;
+
+        public DoubleList() {
+            // 创建双链表的头尾，头尾不计入双链表的size中
+            head = new Node(0, 0);
+            tail = new Node(0, 0);
+            head.next = tail; // 双链表的head指向tail
+            tail.prev = head; // 双链表的tail指向head
+            size = 0;
+        }
+
+        // 在链表头部添加节点 x，时间 O(1)
+        public void addFirst(Node x) {
+            // 在head和第一个node之间插入
+            x.next = head.next;
+            x.prev = head;
+            head.next.prev = x; // 插入前的第一个node
+            head.next = x; // 插入前的第一个node
+            size++;
+        }
+
+        // 删除链表中的 x 节点（x 一定存在），由于是双链表且给的是目标 Node 节点，时间 O(1)
+        public void remove(Node x){
+            x.prev.next = x.next;
+            x.next.prev = x.prev;
+            size--;
+        }
+
+        // 删除链表中最后一个节点，并返回该节点，时间 O(1)
+        public Node removeLast(){
+            if (tail.prev == head) { // 双链表目前木有元素
+                return null;
+            }
+            Node last = tail.prev;
+            remove(last); // 直接实现的调用remove方法移除最后一个元素
+            return last;
+        }
+
+        // 返回链表长度，时间 O(1)
+        public int size(){
+            return size;
+        }
     }
 
     /**
-     * Always add the new node right after head
+     * 3. 创建一个上面创建好的双链表，结合一个新建的HashMap，实现LinkedHashMap的功能
      */
-    private void addNode(DLinkedNode node) {
-        node.pre = head;
-        node.next = head.next;
-        head.next.pre = node;
-        head.next = node;
-    }
-
-    /**
-     * Removing an existing node from the doulble linked list
-     */
-    private void removeNode(DLinkedNode node) {
-        DLinkedNode pre = node.pre;
-        DLinkedNode next = node.next;
-
-        pre.next = next;
-        next.pre = pre;
-    }
-
-    /**
-     * Move certain node in between to the head.
-     */
-    private void moveToHead(DLinkedNode node){
-        this.removeNode(node);
-        this.addNode(node);
-    }
-
-    /**
-     * Removing the tail node
-     */
-    private DLinkedNode removeTailNode() {
-        DLinkedNode node = tail.pre;
-        this.removeNode(node);
-        return node;
-    }
-
-    /**
-     * 定义需要的变量
-     */
-    //线程安全用HashTable
-    private HashMap<Integer, DLinkedNode> cache = new HashMap<Integer, DLinkedNode>();
-    private int count;
-    private int capacity;
-    private DLinkedNode head, tail;
+    // key -> Node(key, val)
+    private HashMap<Integer, Node> map;
+    // Node(k1, v1) <-> Node(k2, v2)...
+    private DoubleList cache;
+    // 最大容量
+    private int cap;
 
     public LRUCache(int capacity) {
-        this.count = 0;
-        this.capacity = capacity;
-
-        head = new DLinkedNode();
-        head.pre = null;
-
-        tail = new DLinkedNode();
-        tail.next = null;
-
-        head.next = tail;
-        tail.pre = head;
+        this.cap = capacity;
+        map = new HashMap<>();
+        cache = new DoubleList();
     }
 
     public int get(int key) {
-        DLinkedNode node = cache.get(key);
-        if (node == null) {//cache中不存在该key，返回-1
+        // 如果key不存在，直接返回-1
+        if (!map.containsKey(key)) {
             return -1;
         }
-
-        this.moveToHead(node);
-
-        return node.value;
+        // 否则将数据(key, value)提到开头
+        int value = map.get(key).value;
+        put(key, value);
+        return value;
     }
 
-    public void put(int key, int value) {
-        DLinkedNode node = cache.get(key);
-        if (node == null) {//插入的时候没有该键值对，新插入
+    public synchronized void put(int key, int value) {
+        // 先把新节点做出来
+        Node x = new Node(key, value);
 
-            DLinkedNode newNode = new DLinkedNode();
-            newNode.key = key;
-            newNode.value = value;
-
-            this.cache.put(key, newNode);
-            this.addNode(newNode);
-
-            count++;
-
-            if (count > capacity) {//这时候需要删除tail的值
-                DLinkedNode tail = this.removeTailNode();
-                this.cache.remove(tail.key);
-                count--;
+        if (map.containsKey(key)) { // 如果key已存在，把旧的数据删除，把新的数据x插入到开头
+            // 删除旧的节点，新的插到头部
+            cache.remove(map.get(key));
+            cache.addFirst(x);
+            // 更新map中的数据
+            map.put(key, x);
+        } else {
+            if (cap == cache.size()) { // 如果cache已满
+                // 删除链表最后一个数据，腾位置
+                Node last = cache.removeLast();
+                map.remove(last.key);
             }
-        } else {//还有空位就直接插入
-            node.value = value;
-            this.moveToHead(node);
+            // 把新节点添加到头部，map 中新建 key 对新节点 x 的映射
+            cache.addFirst(x);
+            map.put(key, x);
         }
     }
-
 }
 
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
+```
 
+如果用Java内置的LinkedHashMap，这个是对HashMap + Double LinkedList进行了封装，不需要自己实现数据结构了，就会简单很多，而且官方API经过各种优化比自己实现的数据结构的速度一般要快，但有时候面试不让用LinkedHashMap。
+
+```java
+class LRUCache {
+    
+    private volatile Map<Integer, Integer> map;
+    private int cacheSize;
+
+    public LRUCache(int initSize) {
+        this.cacheSize = initSize;
+        this.map = new LinkedHashMap<Integer, Integer>(initSize, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry eldest) {
+                return size() > LRUCache.this.cacheSize;
+            }
+        };
+    }
+    
+    public int get(int inKey) {
+        if (!map.containsKey(inKey)) {
+            return -1;
+        }
+        int val = map.get(inKey);
+        // 利用put方法将数据提前
+        put(inKey, val);
+        return val;
+    }
+    
+    public synchronized void put(int key, int value) {
+        // 直接利用Java中LinkedHashMap实现的put方法
+        map.put(key, value);
+    }
+}
 
 /**
  * Your LRUCache object will be instantiated and called as such:
