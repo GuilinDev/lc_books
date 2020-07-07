@@ -225,7 +225,7 @@ Output: 6
 
 ![](../.gitbook/assets/image%20%2853%29.png)
 
-2\) 在暴力方法中，我们仅仅为了找到最大值每次都要向左和向右扫描一次。但是我们可以提前存储这个值。
+2\) 在暴力方法中，我们仅仅为了找到最大值每次都要向左和向右扫描一次，在暴力法的基础上，实现找到每个元素的左右最大值，然后两个最大值，取较小值进行计算，这就是DP的办法。
 
 ![](../.gitbook/assets/image%20%2852%29.png)
 
@@ -256,19 +256,24 @@ Output: 6
 ```java
 class Solution {
     public int trap(int[] height) {
-        int result = 0, max = 0, n = height.length;
-        int[] dp = new int[n];
-        //i位置左边的最大值
+        int result = 0;
+        int left_max = 0;
+        int right_max = 0;
+        int n = height.length;
+        
+        int[] dp = new int[n]; //
+        
+        //缓存i位置左边的最大值
         for (int i = 0; i < n; i++) {
-            dp[i] = max;
-            max = Math.max(max, height[i]);
+            dp[i] = left_max;
+            left_max = Math.max(left_max, height[i]);
         }
-        max = 0;
+        
         //找到右边的最大值并和左边的最大值比较
         for (int i = n - 1; i >= 0; i--) {
-            dp[i] = Math.min(dp[i], max);//dp[i]取较小值，水才不会溢出
-            max = Math.max(max, height[i]);
-            if (dp[i] - height[i] > 0) {
+            dp[i] = Math.min(dp[i], right_max);//dp[i]取左右两边的较小值，水才不会溢出
+            right_max = Math.max(right_max, height[i]); // 缓存i元素右边的最大值
+            if (dp[i] - height[i] > 0) { // 当前元素柱子顶上可以存储的水
                 result += dp[i] - height[i];
             }
         }
