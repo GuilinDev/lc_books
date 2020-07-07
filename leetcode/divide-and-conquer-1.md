@@ -424,3 +424,147 @@ class Solution {
 }
 ```
 
+## 973 K Closest Points from Origin
+
+### 原题
+
+We have a list of `points` on the plane.  Find the `K` closest points to the origin `(0, 0)`.
+
+\(Here, the distance between two points on a plane is the Euclidean distance.\)
+
+You may return the answer in any order.  The answer is guaranteed to be unique \(except for the order that it is in.\)
+
+**Example 1:**
+
+```text
+Input: points = [[1,3],[-2,2]], K = 1
+Output: [[-2,2]]
+Explanation: 
+The distance between (1, 3) and the origin is sqrt(10).
+The distance between (-2, 2) and the origin is sqrt(8).
+Since sqrt(8) < sqrt(10), (-2, 2) is closer to the origin.
+We only want the closest K = 1 points from the origin, so the answer is just [[-2,2]].
+```
+
+**Example 2:**
+
+```text
+Input: points = [[3,3],[5,-1],[-2,4]], K = 2
+Output: [[3,3],[-2,4]]
+(The answer [[-2,4],[3,3]] would also be accepted.)
+```
+
+**Note:**
+
+1. `1 <= K <= points.length <= 10000`
+2. `-10000 < points[i][0] < 10000`
+3. `-10000 < points[i][1] < 10000`
+
+### 分析
+
+计算哪个点离原点最近，可以利用众所周知的距离公式来计算，但是大可不必用外面的那一层根号，因为仅仅内部平方和就可以用来判断了。
+
+实则是可以转化成了topK问题，所以topK问题的解法都可以用，
+
+1）全排序， time: **O\(n\) = N log\(N\)**，space: **O\(N\)**。
+
+2）堆排序，用maxHeap，大顶堆堆顶元素最大，因为我们要找的是smallest one，我们需要不断判断堆顶的元素与新元素的大小关系。 先加入k个元素（计算后的）到maxheap中。 进行逻辑判断，堆顶和新元素，实施必要的替换，保证heap的size。 简单循环，取出heap中的值到array中，输出。 time: **O\(n\) = Nlog\(k\)**，space: **O\(k\)**。
+
+3）BFPRT算法，快排的思想，time: **O\(n\) = N**，space: **O\(N\)**。
+
+### 代码
+
+全排序
+
+```java
+class Solution {
+    public int[][] kClosest(int[][] points, int K) {
+        int[][] ans=new int[K][2];
+        Arrays.sort(points,(int[] o1,int[] o2)->(o1[0]*o1[0]+o1[1]*o1[1]-o2[0]*o2[0]-o2[1]*o2[1]));
+        System.arraycopy(points,0,ans,0,K);
+        return ans;
+    }
+}
+```
+
+堆排序
+
+```java
+class Solution {
+    public int[][] kClosest(int[][] points, int K) {
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> (cal(b) - cal(a))); // 倒序排列
+        // Queue<int[]> priorityQueue = new PriorityQueue<>(K, (o1, o2) -> o1[0] * o1[0] + o1[1] * o1[1] - (o2[0] * o2[0] + o2[1] * o2[1]));
+
+        int[][] result = new int[K][2];
+        for (int i = 0; i < K; i++) { // 先加入K个元素
+            maxHeap.offer(points[i]);
+        }
+        for (int i = K; i < points.length; i++) {
+            if (cal(maxHeap.peek()) > cal(points[i])) { // 堆顶最大距离要比新来的点大，移出
+                maxHeap.poll();
+                maxHeap.offer(points[i]);
+            }
+        }
+        
+        for (int i = 0; i < K; i++) {
+            result[i] = maxHeap.poll();
+        }
+        return result;
+    }
+    
+    private int cal(int[] a) { // 函数编程计算坐标距离
+        return a[0] * a[0] + a[1] * a[1];
+    }
+}
+```
+
+快排
+
+```java
+class Solution {
+     public int[][] kClosest(int[][] points, int K) {
+        int start = 0;
+        int end = points.length - 1;
+        while (start < end) {
+            // 计算欧几里得距离
+            int index = patition(points, start, end);
+            if (index == K) {
+                break;
+            } else if (index < K) {
+                start = index + 1;
+            } else {
+                end = index - 1;
+            }
+        }
+
+        return Arrays.copyOf(points, K);
+    }
+
+    private int patition(int[][] points, int start, int end) {
+        int i = start;
+        int j = end + 1;
+        int mid = distance(points[i][0], points[i][1]);
+        while (true) {
+            while (distance(points[++i][0], points[i][1]) < mid && i < end);
+            while (distance(points[--j][0], points[j][1]) > mid && j > start);
+            if (i >= j) {
+                break;
+            }
+            swap(points, i, j);
+        }
+        swap(points, start, j);
+        return j;
+    }
+
+    private int distance(int a, int b) {
+        return a * a + b * b;
+    }
+
+    private void swap(int[][] points, int a, int b) {
+        int[] temp = points[a];
+        points[a] = points[b];
+        points[b] = temp;
+    }
+}
+```
+
