@@ -34,23 +34,18 @@ Explanation: 342 + 465 = 807.
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
-        } else if (l2 == null) {
-            return l1;
+        if (l1 == null || l2 == null) {
+            return l1 == null ? l2 : l1;
         }
-        
         ListNode dummy = new ListNode(-1);
         ListNode current = dummy;
         int carry = 0;
-        while (l1 != null || l2 != null) { // 把两个链表遍历到最后
+        while (l1 != null || l2 != null) {
             int sum = carry;
             if (l1 != null) {
                 sum += l1.val;
@@ -60,16 +55,13 @@ class Solution {
                 sum += l2.val;
                 l2 = l2.next;
             }
-            current.next = new ListNode(sum % 10); // 新建一个加后的node
+            current.next = new ListNode(sum % 10);
             current = current.next;
             carry = sum / 10;
         }
-        
-        // 两个数加完后还要检查一下carry是否有剩
-        if (carry != 0) {
+        if (carry != 0) {//循环结束后最后判断下是否还有进位
             current.next = new ListNode(carry);
         }
-        
         return dummy.next;
     }
 }
@@ -100,9 +92,8 @@ Output: 7 -> 8 -> 0 -> 7
 ### 代码
 
 ```java
-/**
  * Definition for singly-linked list.
- * public class ListNode {
+         * public class ListNode {
  *     int val;
  *     ListNode next;
  *     ListNode(int x) { val = x; }
@@ -125,7 +116,7 @@ class Solution {
             l2 = l2.next;
         }
 
-        ListNode current = new ListNode(-1);
+        ListNode list = new ListNode(-1);
         int carry = 0;
         while (!stack1.isEmpty() || !stack2.isEmpty()) {
             int sum = carry;
@@ -135,73 +126,17 @@ class Solution {
             if (!stack2.isEmpty()) {
                 sum += stack2.pop();
             }
-            current.val = sum % 10;//当前结点的val
+            list.val = sum % 10;//当前结点的val
             carry = sum / 10;
-            ListNode newHead = new ListNode(carry);//每次new一个head结点，将newHead的next指向已经创建好的list的头部
-            newHead.next = current;
-            current = newHead;//将当前结点的更新为前面一个结点
+            ListNode head = new ListNode(carry);//new一个head结点，注意这里的val值需要是carry，两个stack都加完循环跳出后，有进位的话需要返回有正确的val的第一个结点
+            head.next = list;//将上一步new出来的head结点插入到当前结点的前面
+            list = head;//将当前结点的更新为前面一个结点
 
         }
-        if (carry != 0) {//每次的newHead是用carry创建的
-            return current;
+        if (carry != 0) {//两个stack中的数都加完了，如果还有进位的话就返回当前结点
+            return list;
         }
-        return current.next;//没有进位的话，之前创建的newHead里面的值为0，直接丢掉
-    }
-}
-```
-
-用递归来模拟stack的过程
-
-```java
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */
-class Solution {
-     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        int len1 = getLength(l1);
-        int len2 = getLength(l2);
-        ListNode current = new ListNode(1);
-         
-        // Make sure l1.length >= l2.length
-        current.next = len1 < len2 ? helper(l2, l1, len2 - len1) : helper(l1, l2, len1 - len2);
-         
-        // Handle the first digit，优化
-        if (current.next.val > 9) {
-            current.next.val = current.next.val % 10;
-            return current;
-        }
-        return current.next;
-    }
-    
-    // get length of the linked list
-    public int getLength(ListNode l) {
-        int count = 0;
-        while(l != null) {
-            l = l.next;
-            count++;
-        }
-        return count;
-    }
-    
-    // offset is the difference of length between l1 and l2
-    public ListNode helper(ListNode l1, ListNode l2, int offset) {
-        if (l1 == null) return null;
-        // check whether l1 becomes the same length as l2
-        ListNode newHead = (offset == 0) ? new ListNode(l1.val + l2.val) : new ListNode(l1.val);
-        ListNode post = (offset == 0) ? helper(l1.next, l2.next, 0) : helper(l1.next, l2, offset - 1);
-        // handle carry 
-        if (post != null && post.val > 9) {
-            newHead.val += 1;
-            post.val = post.val % 10;
-        }
-        // combine nodes
-        newHead.next = post;
-        return newHead;
+        return list.next;//没有进位的话，当前结点list的val为上一轮的carry==0，这时候返回list.next
     }
 }
 ```

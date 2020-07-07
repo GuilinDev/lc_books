@@ -107,25 +107,25 @@ The median is (2 + 3)/2 = 2.5
 
 ![](http://windliang.oss-cn-beijing.aliyuncs.com/mid1.jpg)
 
-我们比较两个数组的第 k / 2 个数字，如果 k 是奇数，向下取整。也就是比较第 3 个数字，上边数组中的 8 和下边数组中的 3 ，如果哪个小，就表明该数组的前 k / 2 个数字都不是第 k 小数字，所以可以去掉。也就是 1，2，3 这三个数字不可能是第 7 小的数字，我们可以把它排除掉。将 1389 和 45678910 两个数组作为新的数组进行比较。
+我们比较两个数组的第 k / 2 个数字\(如果 k 是奇数，向下取整，方便排除\)，也就是比较第 3 个数字，上边数组中的 4 和下边数组中的 3 ，如果哪个小，就表明该数组的前 k / 2 个数字都不是第 k 小数字（两个数组一个出一半，较小数和其左边的数肯定不会是二者共同考虑的中位数），所以较小数和其在数组中左边的数都“太小了”，可以去掉。也就是 1，2，3 这三个数字不可能是第 7 小的数字，我们可以把它排除掉。将 1349 和 45678910 两个数组作为新的数组进行比较。
 
-总结下就是 A \[ 1 \]，A \[ 2 \]，A \[ 3 \]，A \[ k / 2\] … ，B\[ 1 \]，B \[ 2 \]，B \[ 3 \]，B\[ k / 2\] … ，如果 A \[ k / 2 \] &lt; B \[ k / 2 \] ，那么 A \[ 1 \]，A \[ 2 \]，A \[ 3 \]，A \[ k / 2\] 都不可能是第 k 小的数字。
+总结， A \[ 1 \]，A \[ 2 \]，A \[ 3 \]，A \[ k / 2\] … ，B\[ 1 \]，B \[ 2 \]，B \[ 3 \]，B\[ k / 2\] … ，如果 A \[ k / 2 \] &lt; B \[ k / 2 \] ，那么 A \[ 1 \]，A \[ 2 \]，A \[ 3 \]，A \[ k / 2\] 都不可能是第 k 小的数字。
 
-A 数组中比 A \[ k / 2 \] 小的数有 k / 2 - 1 个，B 数组中，B \[ k / 2 \] 比 A \[ k / 2 \] 小，假设 B \[ k / 2 \] 前边的数字都比 A \[ k / 2 \] 小，也只有 k / 2 - 1 个，所以比 A \[ k / 2 \] 小的数字最多有 k / 2 - 1 + k / 2 - 1 = k - 2 个，所以 A \[ k / 2 \] 最多是第 k - 1 小的数。而比 A \[ k / 2 \] 小的数更不可能是第 k 小的数了，所以可以把它们排除。
+证明，现在A 数组中比 A \[ k / 2 \] 小的数有 k / 2 - 1 个，而在B 数组中，如果B \[ k / 2 \]这个数字 比 A \[ k / 2 \] 大，那么 就算B \[ k / 2 \] 前边的所有数字都比 A \[ k / 2 \] 小，也只有 k / 2 - 1 个，所以比 A \[ k / 2 \] 小的数字最多有 k / 2 - 1 + k / 2 - 1 = k - 2 个（索引从0开始），所以 A \[ k / 2 \] 最多是第 k - 1 小的数，而左边的比 A \[ k / 2 \] 小的数那就更不可能是第 k 小的数了，所以可以把从A\[k / 2\]开始向左边的所有数排除。
 
-橙色的部分表示已经去掉的数字。
+下图橙色的部分表示已经可以去掉的数字，
 
 ![](http://windliang.oss-cn-beijing.aliyuncs.com/mid2.jpg)
 
-由于我们已经排除掉了 3 个数字，就是这 3 个数字一定在最前边，所以在两个新数组中，我们只需要找第 7 - 3 = 4 小的数字就可以了，也就是 k = 4 。此时两个数组，比较第 2 个数字，3 &lt; 5，所以我们可以把小的那个数组中的 1 ，3 排除掉了。
+由于我们已经排除掉了 3 个数字，就是这 3 个数字一定在最前边，所以在两个新数组中，我们只需要找第 7 - 3 = 4 小的数字就可以了，也就是 k = 4 。此时两个数组，比较第k / 2 = 2 个数字，3 &lt; 5，所以我们可以把小的那个数组中的 1 ，3 排除掉了。
 
 ![](http://windliang.oss-cn-beijing.aliyuncs.com/mid3.jpg)
 
-我们又排除掉 2 个数字，所以现在找第 4 - 2 = 2 小的数字就可以了。此时比较两个数组中的第 k / 2 = 1 个数，4 = 4 ，怎么办呢？由于两个数相等，所以我们无论去掉哪个数组中的都行，因为去掉 1 个总会保留 1 个的，所以没有影响。为了统一，我们就假设 4 &gt; 4 吧，所以此时将下边的 4 去掉。
+我们又排除掉 2 个数字，所以现在找第 \(4 - 2\) / 2 = 1 小的数字就可以了。此时比较两个数组中的第 k / 2 = 1 个数，4 = 4 ，怎么办呢？由于两个数相等，所以我们无论去掉哪个数组中的都行，因为去掉 1 个总会保留 1 个的，所以没有影响。为了统一，我们就假设 4 &gt; 4 吧，所以此时将下边的 4 去掉。
 
 ![](http://windliang.oss-cn-beijing.aliyuncs.com/mid4.jpg)
 
-由于又去掉 1 个数字，此时我们要找第 1 小的数字，所以只需判断两个数组中第一个数字哪个小就可以了，也就是 4 。
+由于又去掉 1 个数字，1 / 2 = 0，此时我们要找第 0 小的数字，就是找到的比较小的数本身，所以只需判断两个数组中第一个数字哪个小就可以了，这里也就是 4 。
 
 所以第 7 小的数字是 4 。
 
@@ -137,7 +137,7 @@ A 数组中比 A \[ k / 2 \] 小的数有 k / 2 - 1 个，B 数组中，B \[ k /
 
 ![](http://windliang.oss-cn-beijing.aliyuncs.com/mid6.jpg)
 
-由于 2 个元素被排除，所以此时 k = 5 ，又由于上边的数组已经空了，我们只需要返回下边的数组的第 5 个数字就可以了。
+由于 2 个元素被排除，所以此时 k = 5 ，又由于上边的数组已经空了，我们只需要返回下边的数组的第 5 个数字就可以了，如果上面的数组的数字较大也是同样的道理，总之第k大的数字不会出现在较短的数组里面。
 
 从上边可以看到，无论是找第奇数个还是第偶数个数字，对我们的算法并没有影响，而且在算法进行中，k 的值都有可能从奇数变为偶数，最终都会变为 1 或者由于一个数组空了，直接返回结果。
 
@@ -2201,6 +2201,104 @@ class Solution {
         }
 
         return isFirst && isSecond && (index2 < len - 1); //len - 1 表示最后一部分需要有值
+    }
+}
+```
+
+## 769 Max Chunks to Make Sorted
+
+### 题目
+
+Given an array `arr` that is a permutation of `[0, 1, ..., arr.length - 1]`, we split the array into some number of "chunks" \(partitions\), and individually sort each chunk.  After concatenating them, the result equals the sorted array.
+
+What is the most number of chunks we could have made?
+
+**Example 1:**
+
+```text
+Input: arr = [4,3,2,1,0]
+Output: 1
+Explanation:
+Splitting into two or more chunks will not return the required result.
+For example, splitting into [4, 3], [2, 1, 0] will result in [3, 4, 0, 1, 2], which isn't sorted.
+```
+
+**Example 2:**
+
+```text
+Input: arr = [1,0,2,3,4]
+Output: 4
+Explanation:
+We can split into two chunks, such as [1, 0], [2, 3, 4].
+However, splitting into [1, 0], [2], [3], [4] is the highest number of chunks possible.
+```
+
+**Note:**
+
+* `arr` will have length in range `[1, 10]`.
+* `arr[i]` will be a permutation of `[0, 1, ..., arr.length - 1]`.
+
+### 解释
+
+对于这个问题，要我们做的是找到一些分裂线，每个分裂线之间的数字排序后，连在一起整个数组是有序的，求出最大分裂线分出的子数组的数目。
+
+做法是让每条分裂线左边的数字都小于这条线右边的数字。这个想法与快速排序非常相似。用一个额外的max数组来记录达到当前位置时最大的数字，将max\[i\]与当前的索引i比较，如果相等，结果+1。
+
+遍历整个array，每一次左边的元素小于等于右边的元素，都会产生一个新的chunck，证明：
+
+```text
+原始数组:   0, 2, 1, 4, 3, 5, 7, 6
+max数组:   0, 2, 2, 4, 4, 5, 7, 7
+sorted后:  0, 1, 2, 3, 4, 5, 6, 7
+索引:      0, 1, 2, 3, 4, 5, 6, 7
+```
+
+### 代码
+
+O\(n\)和O\(n\)
+
+```java
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int len = arr.length;
+        int[] max = new int[len];
+        int result = 0;
+        max[0] = arr[0];
+        
+        for (int i = 1; i < len; i++) {
+            max[i] = Math.max(max[i - 1], arr[i]);
+        }
+        
+        for (int i = 0; i < len; i++) {
+            if (max[i] == i) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
+```
+
+优化空间，O\(n\)和O\(1\)
+
+```java
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int result = 0;
+        int max = 0; // 跟索引比较，所以不用Integer.MIN_VALUE
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+            if (max == i) {
+                result++;
+            }
+        }
+        return result;
     }
 }
 ```
