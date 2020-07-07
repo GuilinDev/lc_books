@@ -495,17 +495,15 @@ HashMap
 ```java
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        if (s.length() == 0) {
-            return 0;
-        }
-        HashMap<Character, Integer> map = new HashMap<>();
+        HashMap<Character, Integer> map = new HashMap<>(); // k-v: 字符-最新位置
         int result = 0;
-        for (int i = 0, j = 0; i < s.length(); i++) {//右边索引遍历字符串,左边记录窗口左边
-            if (map.containsKey(s.charAt(i))) {//如果滑动窗口出现重复的字符
-                j = Math.max(j, map.get(s.charAt(i)) + 1);
+        
+        for (int left = 0, right = 0; right < s.length(); right++) {
+            if (map.containsKey(s.charAt(right))) {
+                left = Math.max(left, map.get(s.charAt(right)) + 1); // 更新一下把left的位置+1
             }
-            map.put(s.charAt(i), i);//不管是否移动左边的索引，都将当前的字符存入hashmap
-            result = Math.max(result, i - j + 1);
+            map.put(s.charAt(right), right); //不管是否移动左边的索引，都将当前的字符存入hashmap
+            result = Math.max(result, right - left + 1);
         }
         return result;
     }
