@@ -43,42 +43,41 @@ Output: 3
 
 ### 题意和分析
 
-
+DFS典型题，找到'1'后，累加一下结果，然后上下左右四个方向DFS修改'1'成别的值，以免重复计算。
 
 ### 代码
 
 ```java
 class Solution {
     public int numIslands(char[][] grid) {
-        int result =0;
-        if (grid == null || grid.length == 0 || grid[0] == null || grid[0].length == 0) {
+        int result = 0;
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
             return result;
         }
-        int m = grid.length;
-        int n = grid[0].length;
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 if (grid[i][j] == '1') {
-                    dfs(grid, i, j, m, n);
                     result++;
+                    dfs(grid, i, j, rows, cols);
                 }
             }
         }
         return result;
     }
-
-    private void dfs (char[][] grid, int i, int j, int m, int n) {
-        if (i < 0 || j < 0 || i >= m || j >= n || grid[i][j] != '1') {
+    private void dfs(char[][] grid, int i, int j, int rows, int cols) {
+        if (i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] != '1') {
             return;
         }
-        grid[i][j] = '0';//每次找到一块陆地就变为‘0’。以防重复查找
-        dfs(grid, i + 1, j, m, n); //找右边
-        dfs(grid, i - 1, j, m, n); //找左边
-        dfs(grid, i, j + 1, m, n); //找下边
-        dfs(grid, i, j - 1, m, n); // 找上边
+        grid[i][j] = '0'; //每次找到一块陆地就变为‘0’。以防重复查找
+        dfs(grid, i + 1, j, rows, cols);
+        dfs(grid, i - 1, j, rows, cols);
+        dfs(grid, i, j + 1, rows, cols);
+        dfs(grid, i, j - 1, rows, cols);
     }
 }
+
 ```
 
 ## 695 Max Area of Islands
