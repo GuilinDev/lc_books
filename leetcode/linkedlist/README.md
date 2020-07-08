@@ -596,7 +596,9 @@ _归并操作的过程如下：_
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode(int x) { val = x; }
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
 class Solution {
@@ -606,47 +608,48 @@ class Solution {
         }
         return divideAndConquer(lists, 0, lists.length - 1);
     }
+    
+    // 分治
+    private ListNode divideAndConquer(ListNode[] lists, int left, int right) {
+        if (left >= right) { // 需要包含等于（大于条件不会达到），表示自己和自己不用merge，直接返回当前链表
+            return lists[left];
+        }
+        int mid = left + (right - left) / 2;
+        ListNode leftList = divideAndConquer(lists, left, mid);
+        ListNode rightList = divideAndConquer(lists, mid + 1, right);
 
-    private ListNode divideAndConquer(ListNode[] lists, int left, int right) {//分治算法
-        if (left == right) {//两个指针相遇了，就停止
-            return lists[left];//在lists一半的位置,return lists[right]
-        }
-        if (left < right) {
-            int mid = left + (right - left) / 2;
-            ListNode list1 = divideAndConquer(lists, left, mid);
-            ListNode list2 = divideAndConquer(lists, mid + 1, right);//这里记得是mid+1
-            return mergeTwoSortedLists(list1, list2);//在递归的过程中从底到上传入两个lists进行合并
-        } else {
-            return null;
-        }
+        return mergeTwoSortedLists(leftList, rightList); //在递归栈中从底到上lists进行两两合并
+        
     }
-
-    private ListNode mergeTwoSortedLists(ListNode list1, ListNode list2) {//用迭代的办法合并两个有序链表，返回一个合并后的链表
-        if (list1 == null || list2 == null) {
-            return list1 == null ? list2 : list1;
+    
+    // "治"，合并两个有序链表
+    private ListNode mergeTwoSortedLists(ListNode list0, ListNode list1) {
+        if (list0 == null) {
+            return list1;
         }
-
+        if (list1 == null) {
+            return list0;
+        }
         ListNode dummy = new ListNode(-1);
         ListNode current = dummy;
-
-        while (list1 != null && list2 != null) {
-            if (list1.val <= list2.val) {
+        while (list0 != null && list1 != null) {
+            if (list0.val <= list1.val) {
+                current.next = list0;
+                list0 = list0.next;
+            } else {
                 current.next = list1;
                 list1 = list1.next;
-            } else {
-                current.next = list2;
-                list2 = list2.next;
             }
             current = current.next;
         }
-        current.next = list1 == null ? list2 : list1;
-
+        current.next = (list0 == null) ? list1 : list0;
+        
         return dummy.next;
     }
 }
 ```
 
-堆的办法
+堆的办法，用优先队列实现
 
 ```java
 /**
@@ -654,7 +657,9 @@ class Solution {
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode(int x) { val = x; }
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
 class Solution {
@@ -662,36 +667,27 @@ class Solution {
         if (lists == null || lists.length == 0) {
             return null;
         }
-
-        //
-        PriorityQueue<ListNode> priorityQueue = new PriorityQueue<ListNode>(lists.length, new Comparator<ListNode>() {//把lists里面所有的第一个结点排好序
-            @Override
-            public int compare(ListNode l1, ListNode l2) {
-                if (l1.val < l2.val) {
-                    return -1;
-                } else if (l1.val == l2.val) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            }
-        });
-
+        
+        // default升序，size为lists的大小
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>(lists.length, Comparator.comparingInt(list -> list.val));
+        
+        // 类似合并两个有序链表的非递归办法，需要创建dummy（递归解法不用创建）
         ListNode dummy = new ListNode(-1);
         ListNode current = dummy;
-
-        for (ListNode node : lists) {//遍历所有链表的第一结点，并加入到优先队列，维护好
-            if (node != null) {
-                priorityQueue.add(node);
+        
+        // 首先遍历一次所有list的头节点，加入到最小堆中
+        for (ListNode node : lists) {
+            if (node != null) { // 这个条件很重要，排除空链表
+                minHeap.offer(node);
             }
         }
-
-        while (!priorityQueue.isEmpty()) {//堆里面还有元素就继续
-            current.next = priorityQueue.poll();//获取并移除此队列的头（最小值），放入到结果链表的next，poll方法如果队列为空，则返回 null。
-            current = current.next;//结果链表加入后往后移动一位
-
-            if (current.next != null) {//只要还有链表没有遍历完，current.next肯定还不是null
-                priorityQueue.add(current.next);
+        
+        while (!minHeap.isEmpty()) {
+            current.next = minHeap.poll();
+            current = current.next; // 赶紧顺杆往上爬，在有当前最小值的链表上往后检查一步
+            
+            if (current.next != null) { // 非空才加入进行自平衡
+                minHeap.offer(current.next);
             }
         }
         return dummy.next;
