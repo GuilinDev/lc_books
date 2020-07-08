@@ -73,21 +73,23 @@ class Solution {
 }
 ```
 
-DP的做法
+DP的做法，其实上面的做法也是DP优化空间后的做法，下面是DP原生用数组来存储中间状态
 
 ```java
 class Solution {
     public int maxSubArray(int[] nums) {
-        int n = nums.length;
-        int[] dp = new int[n];//dp[i]的意思就是以num[i]结尾的最大子序列
-        dp[0] = nums[0];
-        int max = dp[0];
-
-        for (int i = 1; i < n; i++) {
-            dp[i] = nums[i] + (dp[i - 1] > 0 ? dp[i - 1] : 0);
-            max = Math.max(max, dp[i]);
+        if (nums == null || nums.length == 0) {
+            return 0;
         }
-        return max;
+        int len = nums.length;
+        long[] dp = new long[len]; //dp[i]就是以num[i]结尾的最大子序列
+        dp[0] = nums[0];
+        long result = dp[0]; // 一个元素的情况
+        for (int i = 1; i < len; i++) {
+            dp[i] = Math.max(nums[i], dp[i - 1] + nums[i]);
+            result = Math.max(result, dp[i]);
+        }
+        return (int)result;
     }
 }
 ```
