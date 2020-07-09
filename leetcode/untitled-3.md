@@ -111,49 +111,34 @@ class Solution {
 }
 ```
 
-DFS，我们知道如何使用stack检查括号中的字符串是否有效，或更简单的使用counter。 counter在遇到"\("时将增加，在遇到“\)"时将减少。每当计数器为负数时，前缀中的'）'就会大于"\("。
-
-为了使prefix有效，我们需要删除“\)”。问题是删除哪个？答案是prefix中的任何一个。但是，如果删除任何一个，将生成重复的结果，例如：s =\(\)\)，我们可以删除s \[1\]或s \[2\]，但结果是相同的"\(\)"。因此，我们限制只删除一系列连续的）中的第一个"\)"。
-
-删除第一个"\)"后，prefix变得valid。然后，我们递归调用该函数以解决字符串的其余部分。但是，我们需要保留其他信息："\)"上一个移除位置。如果没有这个信息，我们通过上面步骤（仅以不同的顺序）删除两个“\)”，就会产生重复项。 为此，我们会跟踪上一个移除"\)"的位置，然后移除现在需移除的“\)”。
-
-那"\("该怎么处理呢呢？如果s ="\(\(\)\(\(\(\)\)"，我们需要删除'\('呢？ 答案是：从右到左遍历做同样的事情，当然也可以reverse字符串然后重用上面的代码。
+DFS
 
 ```java
 class Solution {
-    public static List<String> removeInvalidParentheses(String s) {
+    public List<String> removeInvalidParentheses(String s) {
         List<String> result = new ArrayList<>();
-        char[] check = new char[]{'(', ')'};
-        dfs(s, result, check, 0, 0);
+        remove(s, result, 0, 0, new char[]{'(', ')'});
         return result;
     }
 
-    public static void dfs(String s, List<String> result, char[] check, int last_i, int last_j) {
-        int count = 0; // 从左到右记录左括号
-        int i = last_i;
-        while (i < s.length() && count >= 0) {
-
-            if (s.charAt(i) == check[0]) count++; // 左括号，累加
-            if (s.charAt(i) == check[1]) count--; // 右括号，累减
-            i++;
-        }
-
-        if (count >= 0)  { // 到这里没有额外的')'，现在通过翻转字符串开始检查有没有额外的'('  - 翻转过来复用代码
-            String reversed = new StringBuffer(s).reverse().toString();
-            if (check[0] == '(') {
-                dfs(reversed, result, new char[]{')', '('}, 0, 0);
-            } else {
-                result.add(reversed);
-            } 
-
-        } else {  // 有额外的 ')'，进行处理
-            i -= 1; // 'i-1'是多出来的')' 让count < 0的地方
-            for (int j = last_j; j<= i; j++) {
-                if (s.charAt(j) == check[1] && (j == last_j || s.charAt(j-1) != check[1])) {
-                    dfs(s.substring(0, j) + s.substring(j + 1, s.length()), result, check, i, j);
+    public void remove(String s, List<String> result, int last_i, int last_j,  char[] par) {
+        for (int stack = 0, i = last_i; i < s.length(); ++i) {
+            if (s.charAt(i) == par[0]) stack++;
+            if (s.charAt(i) == par[1]) stack--;
+            if (stack >= 0) continue;
+            for (int j = last_j; j <= i; ++j)
+                if (s.charAt(j) == par[1] && (j == last_j || s.charAt(j - 1) != par[1])) {
+                    remove(s.substring(0, j) + s.substring(j + 1, s.length()), result, i, j, par);
                 }
-            }
+            return;
         }
+        String reversed = new StringBuilder(s).reverse().toString();
+        if (par[0] == '('){// finished left to right
+            remove(reversed, result, 0, 0, new char[]{')', '('});
+        } else {// finished right to left
+            result.add(reversed);
+        }
+
     }
 }
 ```

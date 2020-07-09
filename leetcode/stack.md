@@ -63,7 +63,7 @@ class Solution {
             if (ch == '(' || ch == '[' || ch == '{' ) {
                 stack.push(ch);
             } else {
-                if (stack.empty()) {
+                if (stack.empty()) { // 不然pop空的stack会是EmptyStackException
                     return false;
                 }
                 if (ch == ')' && stack.pop() != '(') return false;
@@ -72,6 +72,39 @@ class Solution {
             }
         }
         return stack.empty();//如果最后是empty，返回true；如果还有元素，返回false
+    }
+}
+```
+
+不用的办法，用一个arr来记录对应位置“应该出现的”括号
+
+```java
+class Solution {
+    public boolean isValid(String s) {
+        char[] arr = new char[s.length()];
+        int counter = 0;
+
+
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) == '(')  {
+                arr[counter] = ')';
+                counter++;
+            } else if(s.charAt(i) == '{'){
+                arr[counter] = '}';
+                counter++;
+            } else if(s.charAt(i) == '['){
+                arr[counter] = ']';
+                counter++;
+            } else{                   
+                if(counter == 0 || s.charAt(i) != arr[counter - 1]) {
+                    return false;
+                } else {
+                    counter--;
+                }
+            }
+        }
+
+        return counter == 0; 
     }
 }
 ```
