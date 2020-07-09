@@ -301,44 +301,38 @@ Output: -1
 
 （3）如果nums\[mid\] &gt;= nums\[right\]，那么说明mid到right收到了rotate的影响，而从left到mid一定是有序的，这时候同样判断target在哪个范围，然后相应的移动边缘即可。
 
-所以先根据nums\[mid\]的值跟nums\[left\]或者nums\[right\]比较，可以先知道mid左右两边哪边是有序的，然后再先判断target是否在有序的部分，so on and so forth，每次都可以去掉一半的数据，Time是O\(logn\)，Space是O\(1\)。
+根据这个方法，每次都可以去掉一半的数据，所以Time是O\(logn\)，Space是O\(1\)。
 
 ### 代码
 
 ```java
 class Solution {
     public int search(int[] nums, int target) {
-        if (nums == null | nums.length == 0) {
+        if (nums == null || nums.length == 0) {
             return -1;
         }
-        int left = 0;
-        int right = nums.length - 1;
-        
+        int left = 0, right = nums.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
             if (nums[mid] == target) {
                 return mid;
-            } else if (nums[mid] > nums[right]) { // 这里和nums[right]比较，左半边有序，如题目中例子
-                // 先检查target是否在左半边有序的部分
-                if (target >= nums[left] && target < nums[mid]) { // 需要两个条件确定（仅是target < nums[mid]可能在右边乱序部分）
-                    right = mid - 1;                  
-                } else { // 继续去右边乱序部分找
+            } else if (nums[mid] < nums[right]) {//left到mid顺序乱了，mid到right的部分没有受到rotate影响，这时候先检查mid到right的有序的这部分
+                if (target > nums[mid] && target <= nums[right]) {//target在mid到right有序的这部分，需要两个条件加起来才确定是在这个部分
                     left = mid + 1;
-                }
-                
-            } else { // 右半边有序
-                // 先检查target是否在右半边有序的部分
-                if (target > nums[mid] && target <= nums[right]) { // 同样两个条件
-                    left = mid + 1;
-                } else { // 继续去左边乱序部分找
+                } else {//target在left到mid乱序的这部分
                     right = mid - 1;
+                }
+            } else {//nums[mid] > nums[right]，mid到right的顺序乱了，而从left到mid是有顺序的，这时候先检查left到mid有序的这部分
+                if (target >= nums[left] && target < nums[mid]) {//target在left到mid之间有序的这部分，需要两个条件加起来才确定是在这个部分
+                    right = mid - 1;
+                } else {//target在mid到right之间乱序的部分
+                    left = mid + 1;
                 }
             }
         }
         return -1;
     }
 }
-   
 ```
 
 ## 81 - Search in Rotated Sorted Array II
