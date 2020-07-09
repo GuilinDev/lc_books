@@ -63,7 +63,7 @@ class Solution {
             if (ch == '(' || ch == '[' || ch == '{' ) {
                 stack.push(ch);
             } else {
-                if (stack.empty()) {
+                if (stack.empty()) { // 不然pop空的stack会是EmptyStackException
                     return false;
                 }
                 if (ch == ')' && stack.pop() != '(') return false;
