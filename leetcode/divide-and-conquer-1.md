@@ -518,31 +518,6 @@ class Solution {
 }
 ```
 
-同样堆排序，略微不同的实现
-
-```java
-class Solution {
-    public int[][] kClosest(int[][] points, int K) {
-        if(points.length == 0 || points[0].length == 0) return points;
-        
-        PriorityQueue<int[]> pq = new PriorityQueue<>(
-            (a, b) -> ((a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1])));
-        
-        for (int i = 0; i < points.length; i++) { // 先加入所有点
-            pq.add(points[i]);
-        }
-        
-        int[][] res = new int[K][2];
-        for (int i = 0; i < K; i++) { // 然后取出K个点
-            int[] temp = pq.poll();
-            res[i][0] = temp[0];
-            res[i][1] = temp[1];
-        }
-        return res;
-    }
-}
-```
-
 快排
 
 ```java

@@ -101,7 +101,39 @@ class Solution {
 }
 ```
 
-也可以一个PriorityQueue，把所有intervals放入到pq中（排好序），然后每次取两个interval出来，比较头尾，如果合并，就创建一个新的interval然后offer到pq中；如果不合并，就将第一个interval加入result中，第2个interval则继续放回pq中，等待下一轮再比较。最后pq中低于两个intervals的时候跳出循环，如果pq中还有interval最后再加一次。
+也可以一个PriorityQueue，先把所有intervals放入到pq中（排好序），然后每次从pq和结果数组各取一个interval出来，一个是当前，一个是之前，二者比较头尾，如果合并，就把结果数组中的之前的数组删除，合并二者创建一个新的interval然后放入到结果数组中；如果不合并，就直接把pq中弹出来的interval加入result中，直到pq中不再有区间为止。
+
+```java
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        List<int[]> result = new ArrayList<>();
+        if (intervals == null || intervals.length == 0) {
+            return intervals;
+        }
+
+        PriorityQueue<int[]> queue = new PriorityQueue<>((o1, o2) -> o1[0] - o2[0]);   // ascending order of start times
+        
+        for (int[] interval : intervals) { // 所有数据加入pq中
+            queue.add(interval);
+        }
+
+        result.add(queue.poll()); // 初始数据
+        
+        while (queue.size() != 0) {
+            int[] current = queue.poll();
+            int[] prev = result.get(result.size() - 1);
+
+            if (prev[1] >= current[0]) {    // this means merge current and prev interval
+                result.remove(result.get(result.size() - 1));
+                result.add(new int[]{prev[0], Math.max(prev[1], current[1])});
+            } else {
+                result.add(new int[]{current[0], current[1]});   // put the current interval as it is
+            }
+        }
+        return result.toArray(new int[result.size()][]);
+    }
+}
+```
 
 ## **242 Valid Anagram**
 
