@@ -2787,6 +2787,96 @@ public class Codec {
 // codec.deserialize(codec.serialize(root));
 ```
 
+## 449 Serialize and Deserialize BST
+
+### 题目
+
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a **binary search tree**. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary search tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+**The encoded string should be as compact as possible.**
+
+**Note:** Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
+
+### 分析
+
+297是普通二叉树，这道题是BST，对于二叉搜索树而言，左子节点 &lt; 根节点 &lt; 右子节点；根据这个性质，用先序遍历序列（根左右）就可以进行重建了，并且不需要存储空指针。 如果是一个普通二叉树，需要前序和中序一起，或者后序和中序两个序列，才能确定唯一的二叉树结构，而对于BST，由于各元素之间有左子节点小于父节点再小于右子节点的性质，因此用一个前序遍历就可以确定出唯一结构，所以要简单些。
+
+当然，也可以用297的一个层序遍历来确定。 
+
+### 代码
+
+Preorder
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.toString();
+    }
+    
+    private void serialize(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            return;
+        }
+        // 先序遍历拼接当前节点
+        sb.append(root.val).append(","); // 使用分隔符来区别树节点
+        serialize(root.left, sb);
+        serialize(root.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        String[] arr = data.split(",");
+        return deserialize(arr, 0, arr.length - 1); //去掉分隔符后的数组来重构BST    
+    }
+    
+    private TreeNode deserialize(String[] arr, int low, int high) {
+        if (low > high) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(arr[low])); // 建立父节点
+        int index = high + 1; // 初始化，右子树为空的情况
+        for (int i = low + 1; i <= high; i++) {
+            if (Integer.parseInt(arr[i]) > root.val) {
+                index = i;
+                break;
+            }
+        }
+        // 递归构建子树，二分查找优化
+        root.left = deserialize(arr, low + 1, index - 1);
+        root.right = deserialize(arr, index, high);
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+```
+
+Level Traversal
+
+```java
+
+```
+
 ## 99 Recover Binary Search Tree
 
 ### 原题概述
