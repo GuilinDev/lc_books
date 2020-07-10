@@ -646,19 +646,56 @@ Output: true
 ### 代码
 
 ```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
 class Solution {
-    public boolean canAttendMeetings(int[][] intervals) {
+    public boolean canAttendMeetings(Interval[] intervals) {
         if (intervals == null || intervals.length == 0) {//没有会议，返回true，可以参加
             return true;
         }
-        
-        // 函数式编程，推荐
-        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
-        // Lambda
-        // Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        Arrays.sort(intervals, new Comparator<Interval>(){
+            public int compare(Interval a, Interval b) {
+                return a.start - b.start;
+            }
+        });
+        for (int i = 1; i < intervals.length; i++) {//因为需要跟前面的interval比较，所以从index 1开始
+            if (intervals[i].start < intervals[i - 1].end) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+Java8 Lamda的写法，将函数体作为参数，进行排序
+
+```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public boolean canAttendMeetings(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {//没有会议，返回true，可以参加
+            return true;
+        }
+        Arrays.sort(intervals, (a, b) -> a.start - b.start);
         
         for (int i = 1; i < intervals.length; i++) {//因为需要跟前面的interval比较，所以从index 1开始
-            if (intervals[i][0] < intervals[i - 1][1]) {
+            if (intervals[i].start < intervals[i - 1].end) {
                 return false;
             }
         }
@@ -743,61 +780,45 @@ class Solution {
 }
 ```
 
-新的输入参数变了，是一个二维数组
-
-```java
-class Solution {
-    public int minMeetingRooms(int[][] intervals) {
-        if (intervals == null || intervals.length == 0) {
-            return 0;
-        }
-        
-        int len = intervals.length;
-        int[] starts = new int[len];
-        int[] ends = new int[len];
-        int result = 0;
-        
-        for (int i = 0; i < len; i++) { //头尾分别存上
-            starts[i] = intervals[i][0];
-            ends[i] = intervals[i][1];
-        }
-        
-        Arrays.sort(starts);
-        Arrays.sort(ends);
-        
-        // starts和ends分别一个索引
-        for (int i = 0, j = 0, count = 0; i < len; ) {
-            if (starts[i] < ends[j]) {
-                count++;
-                result = Math.max(result, count);
-                i++;
-            } else {
-                count--;
-                j++;
-            }
-        }
-        return result;
-    }
-}
-```
-
 TreeMap解法
 
 ```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
 class Solution {
-    public int minMeetingRooms(int[][] intervals) {
-        TreeMap<Integer,Integer> rooms = new TreeMap<>();
-        for(int[] interval:intervals){
-            rooms.put(interval[0],rooms.getOrDefault(interval[0],0)+1);
-            rooms.put(interval[1],rooms.getOrDefault(interval[1],0)-1);
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
         }
-        int maxRooms=0;
-        int totalRooms=0;
-        for(int room:rooms.values()){
-            totalRooms+=room;
-            maxRooms = Math.max(maxRooms,totalRooms);
+        Map<Integer, Integer> map = new TreeMap<Integer, Integer>();//TreeMap会自动升序sort keys
+        int rooms = 0;
+        int curRoom = 0;
+
+        for (Interval interval : intervals) {
+            if (map.containsKey(interval.start)) {
+                map.put(interval.start, map.get(interval.start) + 1);
+            } else {
+                map.put(interval.start, 1);
+            }
+
+            if (map.containsKey(interval.end)) {
+                map.put(interval.end, map.get(interval.end) - 1);
+            } else {
+                map.put(interval.end, -1);
+            }
         }
-        return maxRooms;
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            rooms = Math.max(rooms, curRoom += entry.getValue());
+        }
+        return rooms;
     }
 }
 ```
@@ -805,24 +826,33 @@ class Solution {
 最小堆MinHeap
 
 ```java
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
 class Solution {
-    public int minMeetingRooms(int[][] intervals) {
-        Arrays.sort(intervals, Comparator.comparingInt(i -> i[0]));
-        
-        //priority queue is ordered by end schedules
-        PriorityQueue<int[]> pq = new PriorityQueue<>((q1, q2) -> q1[1] - q2[1]);
-        
-        int size = intervals.length;
-        
-        for(int i = 0; i < size; i++) {
-            //if new input's start is later than priority queue's first end, 
-            //priority queue could poll() !!!
-            if(!pq.isEmpty() && intervals[i][0] >= pq.peek()[1]) {
-                pq.poll();
-            }
-            pq.add(intervals[i]);
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
         }
-        return pq.size();
+        int rooms = 0;
+        Arrays.sort(intervals, (Interval a, Interval b) -> (a.start - b.start));
+
+        PriorityQueue<Integer> heap = new PriorityQueue();
+        for (int i = 0; i < intervals.length; i++) {
+            while (!heap.isEmpty() && intervals[i].start >= heap.peek()) {//有些meeting开始前另外一些meeting已经结束了
+                heap.poll();
+            }
+            heap.add(intervals[i].end);
+            rooms = Math.max(rooms, heap.size());
+        }
+
+        return rooms;
     }
 }
 ```
