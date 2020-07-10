@@ -39,7 +39,13 @@ Output: [""]
 
 1）BFS，参考[这里](https://leetcode.com/problems/remove-invalid-parentheses/discuss/75032/Share-my-Java-BFS-solution)，对于字符串s，通过移除一个括号产生所有的状态，检查移除后是否还valid，如果检查到了valid，那就把该状态加入到结果集中，完成；否则把状态加入到queue中并移除两个再检查，以此类推。这样BFS的好处是被移除的括号总是最少的，并且没有递归调用。时间复杂度O\(n\)，空间复杂度O\(n^2\)；
 
-2）DFS，参考[这里](https://leetcode.com/problems/remove-invalid-parentheses/discuss/75027/Easy-Short-Concise-and-Fast-Java-DFS-3-ms-solution)，几个重点，一次就产生独一的符合要求的状态，而不是像BFS那样用visited的Set来判断，并且无需预处理；检查括号字符串是否valid可以用stack或者count（遇到左括号+1，遇到右括号-1，在遇到右括号的同时检查count是否==0，以此判断该右括号之前是否有左括号）。移除任意一个左括号"\("，同时为了防止重复（比如两个左括号在一起的情况下移除第一个和第二个是没有区别的），在接下来的情况下移除第一个右括号"\)"，如果这时候prefix是有效的，递归调用直到查找所有的结果。
+2）DFS，我们知道如何使用stack检查括号中的字符串是否有效，或更简单的使用counter。 counter在遇到"\("时将增加，在遇到“\)"时将减少。每当计数器为负数时，前缀中的'）'就会大于"\("。
+
+为了使prefix有效，我们需要删除“\)”。问题是删除哪个？答案是prefix中的任何一个。但是，如果删除任何一个，将生成重复的结果，例如：s =\(\)\)，我们可以删除s \[1\]或s \[2\]，但结果是相同的"\(\)"。因此，我们限制只删除一系列连续的）中的第一个"\)"。
+
+删除第一个"\)"后，prefix变得valid。然后，我们递归调用该函数以解决字符串的其余部分。但是，我们需要保留其他信息："\)"上一个移除位置。如果没有这个信息，我们通过上面步骤（仅以不同的顺序）删除两个“\)”，就会产生重复项。 为此，我们会跟踪上一个移除"\)"的位置，然后移除现在需移除的“\)”。
+
+那"\("该怎么处理呢呢？如果s ="\(\(\)\(\(\(\)\)"，我们需要删除'\('呢？ 答案是：从右到左遍历做同样的事情，当然也可以reverse字符串然后重用上面的代码。
 
 ### 代码
 
@@ -115,30 +121,39 @@ DFS
 
 ```java
 class Solution {
-    public List<String> removeInvalidParentheses(String s) {
+    public static List<String> removeInvalidParentheses(String s) {
         List<String> result = new ArrayList<>();
-        remove(s, result, 0, 0, new char[]{'(', ')'});
+        char[] check = new char[]{'(', ')'};
+        dfs(s, result, check, 0, 0);
         return result;
     }
 
-    public void remove(String s, List<String> result, int last_i, int last_j,  char[] par) {
-        for (int stack = 0, i = last_i; i < s.length(); ++i) {
-            if (s.charAt(i) == par[0]) stack++;
-            if (s.charAt(i) == par[1]) stack--;
-            if (stack >= 0) continue;
-            for (int j = last_j; j <= i; ++j)
-                if (s.charAt(j) == par[1] && (j == last_j || s.charAt(j - 1) != par[1])) {
-                    remove(s.substring(0, j) + s.substring(j + 1, s.length()), result, i, j, par);
-                }
-            return;
-        }
-        String reversed = new StringBuilder(s).reverse().toString();
-        if (par[0] == '('){// finished left to right
-            remove(reversed, result, 0, 0, new char[]{')', '('});
-        } else {// finished right to left
-            result.add(reversed);
+    public static void dfs(String s, List<String> result, char[] check, int last_i, int last_j) {
+        int count = 0; // 从左到右记录左括号
+        int i = last_i;
+        while (i < s.length() && count >= 0) {
+
+            if (s.charAt(i) == check[0]) count++; // 左括号，累加
+            if (s.charAt(i) == check[1]) count--; // 右括号，累减
+            i++;
         }
 
+        if (count >= 0)  { // 到这里没有额外的')'，现在通过翻转字符串开始检查有没有额外的'('  - 翻转过来复用代码
+            String reversed = new StringBuffer(s).reverse().toString();
+            if (check[0] == '(') {
+                dfs(reversed, result, new char[]{')', '('}, 0, 0);
+            } else {
+                result.add(reversed);
+            } 
+
+        } else {  // 有额外的 ')'，进行处理
+            i -= 1; // 'i-1'是多出来的')' 让count < 0的地方
+            for (int j = last_j; j<= i; j++) {
+                if (s.charAt(j) == check[1] && (j == last_j || s.charAt(j-1) != check[1])) {
+                    dfs(s.substring(0, j) + s.substring(j + 1, s.length()), result, check, i, j);
+                }
+            }
+        }
     }
 }
 ```

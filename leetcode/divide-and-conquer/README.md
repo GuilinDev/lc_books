@@ -1281,3 +1281,115 @@ class Solution {
 
 
 
+## 322 Coin Change
+
+### 原题
+
+You are given coins of different denominations and a total amount of money amount. Write a function to compute the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return `-1`.
+
+**Example 1:**
+
+```text
+Input: coins = [1, 2, 5], amount = 11
+Output: 3 
+Explanation: 11 = 5 + 5 + 1
+```
+
+**Example 2:**
+
+```text
+Input: coins = [2], amount = 3
+Output: -1
+```
+
+**Note**:  
+You may assume that you have an infinite number of each kind of coin.
+
+### 分析
+
+一维DP，top down和bottom up两种方法，需要特别掌握bottom up递推方法和相应的空间优化。
+
+DP方程和递归树
+
+
+
+![](../../.gitbook/assets/image%20%2856%29.png)
+
+![](../../.gitbook/assets/image%20%2857%29.png)
+
+### 由此得到的DP方程
+
+```text
+dp[i]= min(dp[i], dp[i − coins[j]] + 1)
+```
+
+### 代码
+
+topdown
+
+```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] memo = new int[amount + 1]; // memo[i]表示记录凑齐i块钱需要的coin数目
+        Arrays.fill(memo, -100); // 随便来个负数做初始化，-1是找不到硬币组合需要返回的值，所以这里用-1之外任何负数代表初始化没有组合
+        memo[0] = 0; // 0块钱需要0个硬币
+
+        return coinChange(coins, amount, memo);
+    }
+    private int coinChange(int[] coins, int amount, int[] memo) {
+        if (amount < 0) { // not valid
+            return -1;
+        }
+        if (amount == 0) { // 已完成
+            return 0;
+        }
+        if (memo[amount] != -100) { //剪枝，之前已经计算过
+            return memo[amount];
+        }
+        
+        for (int coin : coins) {// 对比选择当前硬币coins[i]或者不选择
+            if (coin > amount) {
+                continue;
+            }
+            int option = coinChange(coins, amount - coin, memo);
+            if (option == -1) { // 递归返回的是not valid，直接跳过本次组合
+                continue;
+            }
+            
+            if (memo[amount] == -100 || option + 1 < memo[amount]) {
+                memo[amount] = option + 1;
+            }
+        }
+        if (memo[amount] == -100) {
+            memo[amount] = -1;
+        }
+        return memo[amount];
+    }
+}
+```
+
+bottom up
+
+```java
+class Solution {
+   public int coinChange(int[] coins, int amount) {
+       int[] dp = new int[amount + 1];
+       for (int i = 1; i <= amount; i++) {
+            dp[i] = amount + 1;
+        }
+       // 直接套方程
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (coin <= i) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1); // 选择当前coin或者不选择
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+}
+```
+
+
+
