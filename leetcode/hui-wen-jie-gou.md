@@ -646,56 +646,19 @@ Output: true
 ### 代码
 
 ```java
-/**
- * Definition for an interval.
- * public class Interval {
- *     int start;
- *     int end;
- *     Interval() { start = 0; end = 0; }
- *     Interval(int s, int e) { start = s; end = e; }
- * }
- */
 class Solution {
-    public boolean canAttendMeetings(Interval[] intervals) {
+    public boolean canAttendMeetings(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {//没有会议，返回true，可以参加
             return true;
         }
-        Arrays.sort(intervals, new Comparator<Interval>(){
-            public int compare(Interval a, Interval b) {
-                return a.start - b.start;
-            }
-        });
-        for (int i = 1; i < intervals.length; i++) {//因为需要跟前面的interval比较，所以从index 1开始
-            if (intervals[i].start < intervals[i - 1].end) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-```
-
-Java8 Lamda的写法，将函数体作为参数，进行排序
-
-```java
-/**
- * Definition for an interval.
- * public class Interval {
- *     int start;
- *     int end;
- *     Interval() { start = 0; end = 0; }
- *     Interval(int s, int e) { start = s; end = e; }
- * }
- */
-class Solution {
-    public boolean canAttendMeetings(Interval[] intervals) {
-        if (intervals == null || intervals.length == 0) {//没有会议，返回true，可以参加
-            return true;
-        }
-        Arrays.sort(intervals, (a, b) -> a.start - b.start);
+        
+        // 函数式编程，推荐
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        // Lambda
+        // Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
         
         for (int i = 1; i < intervals.length; i++) {//因为需要跟前面的interval比较，所以从index 1开始
-            if (intervals[i].start < intervals[i - 1].end) {
+            if (intervals[i][0] < intervals[i - 1][1]) {
                 return false;
             }
         }
@@ -728,11 +691,11 @@ Output: 1
 
 这道题是252的扩展，问最少需要多少个房间，如果同一时间有时间冲突，那就得安排不同的会议室。 这道题有以下解法
 
-1）排序，用两个一维数组来分别保存起始时间和结束时间，各自排序，我们定义结果变量result和结束时间指针endIndex，然后我们开始遍历，如果当前起始时间小于结束时间指针的时间，则结果自增1，反之endIndex自增1，这样我们可以找出重叠的时间段，从而安排新的会议室；
+1）排序，把区间变成2个数组：start时间数组和end时间数组，各自排序，定义结果变量result和**结束时间指针**，然后开始遍历，如果**当前起始时间小于结束时间指针的时间**，则结果自增1，反之**结束时间指针**自增1（去往下一个结束时间指针，因为后面的起始时间不会再早于当前结束时间了），这样我们可以找出重叠的时间段，从而安排新的会议室；
 
-2）TreeMap， 遍历intervals，对于起始时间，映射值自增1，对于结束时间，映射值自减1，然后我们定义结果变量curRoom，和房间数rooms，遍历TreeMap，时间从小到大，房间数每次加上映射值，然后更新结果res，遇到起始时间，映射是正数，则房间数会增加，如果一个时间是一个会议的结束时间，也是另一个会议的开始时间，则映射值先减后加仍为0，并不用分配新的房间，而结束时间的映射值为负数更不会增加房间数；
+2）TreeMap， 遍历intervals，对于起始时间，映射值自增1，对于结束时间，映射值自减1，然后定义结果变量curRoom，和房间数rooms，遍历TreeMap，时间从小到大，房间数每次加上映射值，然后更新结果，遇到起始时间，映射是正数，则房间数会增加，如果一个时间是一个会议的结束时间，也是另一个会议的开始时间，则映射值先减后加仍为0，并不用分配新的房间，而结束时间的映射值为负数更不会增加房间数；
 
-3）最小堆Min Heap， 这种方法先把所有的时间区间按照起始时间排序，然后新建一个最小堆，开始遍历时间区间，如果堆不为空，且首元素小于等于当前区间的起始时间，去掉堆中的首元素，把当前区间的结束时间压入堆，由于最小堆是小的在前面，那么假如首元素小于等于起始时间，说明上一个会议已经结束，可以用该会议室开始下一个会议了，所以不用分配新的会议室，遍历完成后堆中元素的个数即为需要的会议室的个数。
+3）最小堆minHeap，先按start排序，然后建立一个minHeap，堆顶元素是会议结束时间最早的区间，也就是**end最小**。开始遍历时间区间，如果堆不为空，且每次比较top元素的end时间和当前元素的start时间，如果 start &gt;= end，说明该room可以释放出来并接下来被当前会议区间使用，这时候就poll堆中的首元素，再把当前区间压入堆，遍历完成后堆中元素的个数即为需要的会议室的个数，其实minHead就是按结束时间排序的最小堆，里面存需要多少个房间。
 
 ### 代码
 
@@ -780,45 +743,59 @@ class Solution {
 }
 ```
 
-TreeMap解法
+新的输入参数变了，是一个二维数组
 
 ```java
-/**
- * Definition for an interval.
- * public class Interval {
- *     int start;
- *     int end;
- *     Interval() { start = 0; end = 0; }
- *     Interval(int s, int e) { start = s; end = e; }
- * }
- */
 class Solution {
-    public int minMeetingRooms(Interval[] intervals) {
+    public int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) {
             return 0;
         }
-        Map<Integer, Integer> map = new TreeMap<Integer, Integer>();//TreeMap会自动升序sort keys
-        int rooms = 0;
-        int curRoom = 0;
-
-        for (Interval interval : intervals) {
-            if (map.containsKey(interval.start)) {
-                map.put(interval.start, map.get(interval.start) + 1);
-            } else {
-                map.put(interval.start, 1);
-            }
-
-            if (map.containsKey(interval.end)) {
-                map.put(interval.end, map.get(interval.end) - 1);
-            } else {
-                map.put(interval.end, -1);
+        
+        int len = intervals.length;
+        int[] starts = new int[len];
+        int[] ends = new int[len];
+        int result = 0;
+        int endIndex = 0;
+        
+        for (int i = 0; i < len; i++) { //头尾分别存上
+            starts[i] = intervals[i][0];
+            ends[i] = intervals[i][1];
+        }
+        
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+        
+        for (int i = 0; i < len; i++) {
+            if (starts[i] < ends[endIndex]) { // 当前起始时间早于当前结束时间，安排房间+1
+                result++;
+            } else { // 去往下一个结束时间指针，因为排序后后面的起始时间不会再早于当前结束时间了
+                endIndex++;
             }
         }
+        return result;
+    }
+}
 
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            rooms = Math.max(rooms, curRoom += entry.getValue());
+```
+
+TreeMap解法
+
+```java
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        TreeMap<Integer,Integer> rooms = new TreeMap<>();
+        for(int[] interval:intervals){
+            rooms.put(interval[0],rooms.getOrDefault(interval[0],0)+1);
+            rooms.put(interval[1],rooms.getOrDefault(interval[1],0)-1);
         }
-        return rooms;
+        int maxRooms=0;
+        int totalRooms=0;
+        for(int room:rooms.values()){
+            totalRooms+=room;
+            maxRooms = Math.max(maxRooms,totalRooms);
+        }
+        return maxRooms;
     }
 }
 ```
@@ -826,33 +803,24 @@ class Solution {
 最小堆MinHeap
 
 ```java
-/**
- * Definition for an interval.
- * public class Interval {
- *     int start;
- *     int end;
- *     Interval() { start = 0; end = 0; }
- *     Interval(int s, int e) { start = s; end = e; }
- * }
- */
 class Solution {
-    public int minMeetingRooms(Interval[] intervals) {
-        if (intervals == null || intervals.length == 0) {
-            return 0;
-        }
-        int rooms = 0;
-        Arrays.sort(intervals, (Interval a, Interval b) -> (a.start - b.start));
-
-        PriorityQueue<Integer> heap = new PriorityQueue();
-        for (int i = 0; i < intervals.length; i++) {
-            while (!heap.isEmpty() && intervals[i].start >= heap.peek()) {//有些meeting开始前另外一些meeting已经结束了
-                heap.poll();
+    public int minMeetingRooms(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(i -> i[0]));
+        
+        //priority queue is ordered by end schedules
+        PriorityQueue<int[]> pq = new PriorityQueue<>((q1, q2) -> q1[1] - q2[1]);
+        
+        int size = intervals.length;
+        
+        for(int i = 0; i < size; i++) {
+            //if new input's start is later than priority queue's first end, 
+            //priority queue could poll() !!!
+            if(!pq.isEmpty() && intervals[i][0] >= pq.peek()[1]) {
+                pq.poll();
             }
-            heap.add(intervals[i].end);
-            rooms = Math.max(rooms, heap.size());
+            pq.add(intervals[i]);
         }
-
-        return rooms;
+        return pq.size();
     }
 }
 ```
