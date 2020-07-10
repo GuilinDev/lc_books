@@ -1317,7 +1317,7 @@ DP方程和递归树
 
 ![](../../.gitbook/assets/image%20%2857%29.png)
 
-### 由此得到的DP方程
+由此得到的DP方程
 
 ```text
 dp[i]= min(dp[i], dp[i − coins[j]] + 1)
