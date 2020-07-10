@@ -1385,7 +1385,10 @@ class Solution {
                 }
             }
         }
-        return dp[amount] > amount ? -1 : dp[amount];
+        if (dp[amount] > amount) { // 当前amount没有组合的硬币
+            return -1;
+        }
+       return dp[amount];
     }
 
 }
