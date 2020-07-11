@@ -2661,7 +2661,7 @@ as "[1,2,3,null,null,4,5]"
 
 ### 题意和分析
 
-将一个数据结构或者对象（比如这道题的一个二叉树）转换为位序列，为序列化；同时还可以转换回来，为反序列化。位序列可以存储在内存，文件或者网络连接中。 这题有两种解法，分别为先序遍历的递归解法\([参考这里](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/74253/Easy-to-understand-Java-Solution)\)和层序遍历的非递归解法\([参考这里](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/74264/Short-and-straight-forward-BFS-Java-code-with-a-queue)\)。
+将一个数据结构或者对象（比如这道题的一个二叉树）转换为位序列，为序列化；同时还可以转换回来，为反序列化。位序列可以存储在内存，文件或者网络连接中。 注意不让用全局变量，成员变量和类变量，以此保持无状态。这题可以有两种解法，分别为DFS递归解法（先序+中序，或者中序+后序）和BFS非递归解法（层序）。
 
 ### 代码
 
@@ -2678,43 +2678,42 @@ as "[1,2,3,null,null,4,5]"
  * }
  */
 public class Codec {
-    private static final String spliter = ",";//将node进行split的分割符
-    private static final String NN = "X";//表示null node
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
-        buildString(root, sb);
+        serialize(root, sb);
         return sb.toString();
     }
-
-    private void buildString(TreeNode node, StringBuilder sb) {
-        if (node == null) {
-            sb.append(NN).append(spliter);
+    
+    private void serialize(TreeNode root, StringBuilder sb) {
+        // 先序遍历序列化，如果遇到空值，填充#，在deserialize的时候根据#判断左右孩子为空的情况
+        if (root == null) {
+            sb.append("#").append(",");
         } else {
-            sb.append(node.val).append(spliter);
-            buildString(node.left, sb);
-            buildString(node.right, sb);
+            sb.append(root.val).append(",");
+            serialize(root.left, sb);
+            serialize(root.right, sb);
         }
     }
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        Deque<String> nodes = new LinkedList<>();
-        nodes.addAll(Arrays.asList(data.split(spliter)));
-        return buildTree(nodes);
+        Queue<String> queue = new LinkedList<>(Arrays.asList(data.split(",")));
+        return deserialize(queue);
     }
-
-    private TreeNode buildTree(Deque<String> nodes) {
-        String val = nodes.remove();
-        if (val.equals(NN)) {
+    
+    private TreeNode deserialize(Queue<String> queue) {
+        String nodeStr = queue.poll();
+        if (nodeStr.equals("#")) {
             return null;
-        } else {
-            TreeNode node = new TreeNode(Integer.valueOf(val));
-            node.left = buildTree(nodes);
-            node.right = buildTree(nodes);
-            return node;
         }
+        //按照serialize先序根左右的顺序挨个从队列中取出来即可
+        TreeNode root = new TreeNode(Integer.parseInt(nodeStr));
+        root.left = deserialize(queue);
+        root.right = deserialize(queue);
+        
+        return root;
     }
 }
 
@@ -2803,7 +2802,7 @@ Design an algorithm to serialize and deserialize a **binary search tree**. There
 
 297是普通二叉树，这道题是BST，对于二叉搜索树而言，左子节点 &lt; 根节点 &lt; 右子节点；根据这个性质，用先序遍历序列（根左右）就可以进行重建了，并且不需要存储空指针。 如果是一个普通二叉树，需要前序和中序一起，或者后序和中序两个序列，才能确定唯一的二叉树结构，而对于BST，由于各元素之间有左子节点小于父节点再小于右子节点的性质，因此用一个前序遍历就可以确定出唯一结构，所以要简单些。
 
-当然，也可以用297的一个层序遍历来确定。 
+当然，也可以用297的一个层序遍历来确定，同297，只是不用用BST的特性来优化了。
 
 ### 代码
 
@@ -2843,6 +2842,7 @@ public class Codec {
         if (data.isEmpty()) {
             return null;
         }
+        // 用数组来做二分查找，比用297中用的queue要方便一些
         String[] arr = data.split(",");
         return deserialize(arr, 0, arr.length - 1); //去掉分隔符后的数组来重构BST    
     }
@@ -2869,12 +2869,6 @@ public class Codec {
 // Your Codec object will be instantiated and called as such:
 // Codec codec = new Codec();
 // codec.deserialize(codec.serialize(root));
-```
-
-Level Traversal
-
-```java
-
 ```
 
 ## 99 Recover Binary Search Tree
