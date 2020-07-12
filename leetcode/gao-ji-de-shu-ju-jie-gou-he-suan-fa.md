@@ -54,7 +54,9 @@ class LRUCache {
 }
 
     /**
-     * 2. 依靠创建的 Node 类型构建一个双链表内部类，实现几个需要的 API（这些操作的时间复杂度均为 O(1))
+     * 2. 依靠创建的 Node 类型构建一个双链表内部类，实现几个需要的 API
+     *    这些操作的时间复杂度均为 O(1)，
+     *    其中，如同单链表，head和tail分别是链表的头节点和尾节点，不在数据内
      */
     class DoubleList {
         private Node head, tail;
@@ -105,7 +107,7 @@ class LRUCache {
     /**
      * 3. 创建一个上面创建好的双链表，结合一个新建的HashMap，实现LinkedHashMap的功能
      */
-    // key -> Node(key, val)
+    // k-v: key -> Node(key, val)
     private HashMap<Integer, Node> map;
     // Node(k1, v1) <-> Node(k2, v2)...
     private DoubleList cache;
@@ -123,7 +125,7 @@ class LRUCache {
         if (!map.containsKey(key)) {
             return -1;
         }
-        // 否则将数据(key, value)提到开头
+        // 否则用put将数据(key, value)提到开头，并返回相应的值
         int value = map.get(key).value;
         put(key, value);
         return value;
@@ -133,16 +135,18 @@ class LRUCache {
         // 先把新节点做出来
         Node x = new Node(key, value);
 
-        if (map.containsKey(key)) { // 如果key已存在，把旧的数据删除，把新的数据x插入到开头
+        // 如果key已存在，把旧的数据删除，把新的数据x插入到开头
+        if (map.containsKey(key)) { 
             // 删除旧的节点，新的插到头部
             cache.remove(map.get(key));
             cache.addFirst(x);
             // 更新map中的数据
             map.put(key, x);
         } else {
-            if (cap == cache.size()) { // 如果cache已满
+            // key不存在，先检查是否有空间
+            if (cap == cache.size()) {
                 // 删除链表最后一个数据，腾位置
-                Node last = cache.removeLast();
+                Node last = cache.removeLast(); //设计的removeLast()返回节点
                 map.remove(last.key);
             }
             // 把新节点添加到头部，map 中新建 key 对新节点 x 的映射
@@ -170,6 +174,7 @@ class LRUCache {
 
     public LRUCache(int initSize) {
         this.cacheSize = initSize;
+        // 重写removeEldestEntry()方法，只要没有位置就移除最后一个entry
         this.map = new LinkedHashMap<Integer, Integer>(initSize, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry eldest) {
@@ -183,7 +188,7 @@ class LRUCache {
             return -1;
         }
         int val = map.get(inKey);
-        // 利用put方法将数据提前
+        // 同样利用put方法将数据提前
         put(inKey, val);
         return val;
     }
