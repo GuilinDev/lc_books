@@ -250,7 +250,7 @@ class Solution {
 }
 ```
 
-2. 使用二分搜索的办法，寻找nums1 nums2两个数组的划分，nums1中左半边的最右边的数 &lt;= nums2中右半边的最左边的数 + nums2中左半边的最右边的数 &lt;= nums1中右半边的最左边的数。
+2. 使用二分搜索的办法，推荐这个办法，寻找nums1 nums2两个数组的划分，同时满足nums1中左半边的最右边的数 &lt;= nums2中右半边的最左边的数 + nums2中左半边的最右边的数 &lt;= nums1中右半边的最左边的数。
 
 ```java
 class Solution {
@@ -258,7 +258,8 @@ class Solution {
     * 二分搜索，log(min(m, n))
     */
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        //if nums1 length is greater than switch them so that nums1 is smaller than nums2.
+        //if nums1 length is greater than switch them so that 
+        // nums1 is always smaller than nums2, 方便复用代码
         if (nums1.length > nums2.length) {
             return findMedianSortedArrays(nums2, nums1);
         }
@@ -268,8 +269,9 @@ class Solution {
         int low = 0;
         int high = x;
         while (low <= high) {
-            int partitionX = (low + high)/2;
-            int partitionY = (x + y + 1)/2 - partitionX;
+            // 把两个数组分别划分
+            int partitionX = (low + high) / 2; // nums1的中间
+            int partitionY = (x + y + 1) / 2 - partitionX; // nums2的中间
 
             //if partitionX is 0 it means nothing is there on left side. Use -INF for maxLeftX
             //if partitionX is length of input then there is nothing on right side. Use +INF for minRightX
