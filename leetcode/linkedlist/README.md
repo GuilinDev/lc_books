@@ -48,7 +48,7 @@ class Solution {
         }
         
         ListNode dummy = new ListNode(-1);
-        ListNode current = dummy;
+        ListNode current = dummy; // 用一个索引决定遍历哪个链表
         int carry = 0;
         while (l1 != null || l2 != null) { // 把两个链表遍历到最后
             int sum = carry;
@@ -145,7 +145,8 @@ class Solution {
         if (carry != 0) {//每次的newHead是用carry创建的
             return current;
         }
-        return current.next;//没有进位的话，之前创建的newHead里面的值为0，直接丢掉
+        //current最后在head位置，没有进位的话，之前创建的newHead里面的值为0，直接丢掉
+        return current.next;
     }
 }
 ```
