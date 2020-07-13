@@ -336,11 +336,11 @@ class Solution {
         if (oneList.size() == nums.length) {
             result.add(new ArrayList<>(oneList));
         } else {
-            for (int i = 0; i < nums.length; i++) {
-                if (!oneList.contains(nums[i])) {//有重复元素则跳过此次循环
-                    oneList.add(nums[i]);
-                    backtrack(result, nums, oneList);
-                    oneList.remove(oneList.size() - 1);
+            for (int num : nums) {
+                if (!oneResult.contains(num)) { //有重复元素则跳过此当前元素
+                    oneResult.add(num);
+                    backtracking(nums, oneResult, results);
+                    oneResult.remove(oneResult.size() - 1); // 是递归树的最下面一个元素
                 }
             }
         }
