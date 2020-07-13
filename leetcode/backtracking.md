@@ -340,7 +340,7 @@ class Solution {
                 if (!oneResult.contains(num)) { //有重复元素则跳过此当前元素
                     oneResult.add(num);
                     backtracking(nums, oneResult, results);
-                    oneResult.remove(oneResult.size() - 1); // 是递归树的最下面一个元素
+                    oneResult.remove(oneResult.size() - 1); // 移除递归树的最下面一个元素
                 }
             }
         }
