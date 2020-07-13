@@ -49,11 +49,12 @@ class Solution {
         }
         int m = board.length, n = board[0].length;
         boolean[][] visited = new boolean[m][n];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                visited[i][j] = false;
-            }
+        
+        // optional
+        for (int i = 0; i < rows; i++) {
+            Arrays.fill(visited[i], false);
         }
+        
         int index = 0;//字符串的索引
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -80,7 +81,7 @@ class Solution {
                 || dfs(board, word, index + 1, i + 1, j, visited)//右
                 || dfs(board, word, index + 1, i, j - 1, visited)//上
                 || dfs(board, word, index + 1, i, j + 1, visited));//下
-        visited[i][j] = false;//让“当前的”位置归为初始值，为别的路径的查找准备
+        visited[i][j] = false;//这步不要忘记，让“当前的”位置归为初始值，为别的路径的查找准备
         return result;
     }
 }
@@ -115,13 +116,13 @@ class Solution {
                 || board[i][j] != word.charAt(index)) {//两个字符不相等
             return false;
         }
-        char temp = board[i][j];//临时存一下当前的字符
+        char temp = board[i][j];//临时存一下当前的字符,在当前DFS递归树的路径上
         board[i][j] = '#';
         boolean result = (dfs(board, word, index + 1, i - 1, j)//左
                 || dfs(board, word, index + 1, i + 1, j)//右
                 || dfs(board, word, index + 1, i, j - 1)//上
                 || dfs(board, word, index + 1, i, j + 1));//下
-        board[i][j] = temp;//修改回来
+        board[i][j] = temp;//这步不要忘记，让“当前的”位置归为初始值，为别的路径的查找准备
         return result;
     }
 }
