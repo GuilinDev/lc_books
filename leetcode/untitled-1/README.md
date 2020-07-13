@@ -771,6 +771,220 @@ class Solution {
 }
 ```
 
+## 103 Binary Tree Zigzag Level Order Traversal
+
+### 原题
+
+Given a binary tree, return the zigzag level order traversal of its nodes' values. \(ie, from left to right, then right to left for the next level and alternate between\).
+
+For example:  
+Given binary tree `[3,9,20,null,null,15,7]`,  
+
+
+```text
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+return its zigzag level order traversal as:  
+
+
+```text
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+```
+
+### 分析
+
+1\) BFS，可以用102普通层序遍历的办法，做个标记flag，第一层从左到右向遍历，第二层从右到左遍历，第三层从左到右遍历，so on and so forth，不过普通层序遍历是用一个queue来实现，这里可以用两个queue或者两个stack实现方向的转换，Java的API则直接使用一个双端队列。
+
+![](../../.gitbook/assets/image%20%2861%29.png)
+
+实现 BFS 的两个方法：
+
+* 使用两层嵌套循环。外层循环迭代树的层级，内层循环迭代每层上的节点，这是上面102/107的做法，也是标准的BFS做法。
+* 也可以使用一层循环实现 BFS。将要访问的节点添加到队列中，使用 分隔符（例如：空节点）把不同层的节点分隔开。分隔符表示一层结束和新一层开始。
+
+在其中第二种方法的基础上，可以借助双端队列实现锯齿形顺序。在每一层，使用一个空的双端队列保存该层所有的节点。根据每一层的访问顺序，即从左到右或从右到左，决定从双端队列的哪一端插入节点。
+
+时间和空间复杂度均为O\(n\)，n为节点个数。
+
+![](../../.gitbook/assets/image%20%2859%29.png)
+
+2\) DFS，利用递归栈保存层数的信息，时间复杂度为O\(n\)，空间O\(H\)，n为节点个数，H为二叉树的高度。
+
+![](../../.gitbook/assets/image%20%2860%29.png)
+
+### 代码
+
+BFS
+
+标准BFS
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        boolean odd = true; // 用来标记flag，以此决定从哪个方向遍历该层，或者用个int整数判断奇偶也行
+        
+        while (!queue.isEmpty()) {
+            List<Integer> oneLevel = new LinkedList<>();
+            int count = queue.size();
+            for (int i = 0; i < count; i++) {
+                TreeNode node = queue.poll();
+                if (odd) {// 判断奇偶数的行
+                    oneLevel.add(node.val);
+                } else {
+                    oneLevel.add(0, node.val); // 偶数行插入到头部
+                }
+                
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+            result.add(oneLevel);
+            odd = !odd;
+        }
+        return result;
+    }
+}
+```
+
+一层循环的BFS，并且用linkedlist来实现
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        // add the root element with a delimiter to kick off the BFS loop
+        LinkedList<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.addLast(root);
+        queue.addLast(null); // 每个节点末尾加一个分隔符
+
+        LinkedList<Integer> oneLevel = new LinkedList<Integer>();
+        boolean odd = true;
+
+        while (queue.size() > 0) {
+            TreeNode node = queue.pollFirst();
+            if (node != null) { // 节点后面跟的分隔符就是null
+                if (odd) {
+                    oneLevel.addLast(node.val);
+                } else {
+                    oneLevel.addFirst(node.val);
+                }
+
+                if (node.left != null) {
+                    queue.addLast(node.left);
+                }
+                if (node.right != null) {
+                    queue.addLast(node.right);
+                }
+
+            } else {
+                // we finish the scan of one level
+                result.add(oneLevel);
+                oneLevel = new LinkedList<Integer>();
+                // prepare for the next level
+                if (queue.size() > 0)
+                    queue.addLast(null);
+                odd = !odd;
+            }
+        }
+        return result;
+    }
+}
+```
+
+DFS
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        dfs(result, root, 0);
+        return result;
+    }
+
+    private void dfs(List<List<Integer>> result, TreeNode root, int depth) {
+        if (root == null) { // corner case
+            return;
+        }
+        if (result.size() == depth) { // 该层已经遍历完，从0开始
+            result.add(new LinkedList<>());
+        } 
+        if (depth % 2 == 0) { // 奇数层加到尾部
+            result.get(depth).add(root.val);
+        } else { // 偶数层加到头部
+            result.get(depth).add(0, root.val);
+        }
+        dfs(result, root.left, depth + 1);
+        dfs(result, root.right, depth + 1);
+    }
+}
+```
+
 ## 111 Minimum Depth of Binary Tree
 
 ### 原题概述
@@ -888,11 +1102,11 @@ class Solution {
             return root;
         }
         TreeNode left = invertTree(root.left);
-	    TreeNode right = invertTree(root.right);
+	      TreeNode right = invertTree(root.right);
         
         //递归调用后的最后一步
         root.left = right;
-		root.right = left;
+		    root.right = left;
 
         return root;
     }
