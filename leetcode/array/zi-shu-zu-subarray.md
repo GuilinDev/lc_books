@@ -215,68 +215,82 @@ Output: 2
 
 ### 题意和分析
 
-这道题是找到所有的子序列的个数，这些子序列的元素的和等于给定的一个target。暴力解法就是两层循环，所有的子序列都计算一遍，找到所有sum\[i, j\] = k的子序列，O\(n^2\)。
+1\) 这道题是找到所有的子序列的个数，这些子序列的元素的和等于给定的一个target。暴力解法子数组左右两个边界遍历O\(n^2\)，嵌套加上求子数组的和O\(n\)，总共O\(n^3\)，不行。
 
-我们需要找到sum\[i, j\]，如果我们知道sum\[0, i-1\]和sum\[0, j\]，这样一减就知道sum\[i, j\]是否等于k，换句话说，sum\[j\] - sum\[i\]的话，nums\[i, j\]之间数字的和就是k，比如sum\[j\]跟sum\[i\]一样，那么nums\[i, j\]这段加起来就是0。result += map.get\(sum - k\)这句比较难懂，这个意思是如果sum - k多次等于一个值，那么前面每一个nums\[i\]位置到这里的subarray都算是一个可计入记过的subarray，相当于是需要记得之前有多少个相同的值。
+2\) 如果使用前缀和，可以先计算所有前缀的sum，可以降到两层循环，前缀和就是相当于固定了左边界，枚举右边界，或者固定右边界，枚举左边界，降了一维，O\(n^2\)。
 
-做法就是遍历这个数组，计算current的sum并且把所有的sum都存到一个HashMap里面。举例说明：
+3\) **前缀和+哈希表优化做法**：题目只关心子数组的个数，不关心具体的子数组长什么样子。定义preSum\[i\]为\[0, i\]之间元素的和，preSum\[i\]可以由preSum\[i - 1\]得到，即，preSum\[i\] = preSum\[i - 1\] + nums\[i\]：
+
+![](../../.gitbook/assets/image%20%2858%29.png)
+
+preSum\[i\] - preSum\[j\] = nums\[j + 1\] + nums\[j + 2\] + ...+ nums\[i - 1\] + nums\[i\] ?= k，简单移项转换成：
+
+preSum\[j\] == preSum\[i\] - k
+
+所以，统计有多少个preSum\[i\] - k等于preSum\[j\]这个条件的个数是我们需要的，于是把preSum\[i\] - k作为key，把前面计算的preSum\[j\]前面本身出现的次数作为value，如果再次出现\(preSum\[j\] == preSum\[i\] - k\)，说明等式成立，\[i, j\]这个区间出现了和为k的子数组，结果+1。 
+
+对于一开始的情况，下标 0 之前没有元素，可以认为前缀和为 0，个数为 1 个，因此 `preSumFreq.put(0, 1);`，这一点是必要且合理的。举例说明：
 
 Array = {3,4,7,2,-3,1,4,2}，k= 7，如果遇到二者相减（sum - k）等于7，或者sum本身等于7或者7的倍数，subarray的count均+1，（注意黑体字）
 
-* 循环初始map - {{0,1}}， sum - 0， result - 0；
-* 第一此循环遇到3，map - {{0, 1}, {3, 1}}；sum - 3；result - 0；sum - k = -4；
-* 第二次循环遇到4，map - {{0,1}, {3,1}, {**7,1**}}；sum - 7；result - 1；sum - k = 0；
-* 第三次循环遇到7，map - {{0,1}, {3,1}, {**7, 1**}, {**14, 1**}}；sum - 14；result - 2；sum - k = 7；
-* 第四次循环遇到2，map - {{0,1}, {3,1}, {7,1}, {14,1}, {16,1}}；sum - 16；result - 2；sum - k = 9；
-* 第五次循环遇到-3，map - {{0,1}, {3,1}, {7,1}, {14,1}, {16,1}, {13,1}}；sum - 13；result - 2；sum - k = 6；
-* 第六次循环遇到1，map - {{0,1}, {3,1}, {7,1}, {14,**2**}, {16,1}, {13,1}}；sum - 14；result - 3；sum - k = 7；
-* 第七次循环遇到4，map - {{0,1}, {3,1}, {7,1}, {14,2}, {16,1}, {13,1}, {18,1}}；sum - 18；result - 3； sum - k = 11；
-* 第八次循环遇到2，map - {{0,1}, {3,1}, {7,1}, {14,2}, {16,1}, **{13,1}**, {18,1}, {**20,1**}}，sum - 20；result - 4；sum - k = 13；
+* 循环初始map 为 {{0,1}}， preSum = 0， result = 0；{0,1}为初始，preSum为0开始
+* 循环第一个遇到3，map 为 {{0, 1}, {3, 1}}；preSum = 3；preSum - k = -4；result = 0；
+* 循环第二个遇到4，map 为 {{0,1}, {3,1}, {**7,1**}}；preSum = 7；preSum - k = 0，0作为key之前出现过， 结果+1，result = 1；
+* 循环第三个遇到7，map 为 {{0,1}, {3,1}, {**7, 1**}, {**14, 1**}}；preSum = 14；preSum - k = 7，7作为key之前出现过，结果+1， result = 2；
+* 循环第四个遇到2，map 为 {{0,1}, {3,1}, {7,1}, {14,1}, {16,1}}；preSum = 16；preSum - k = 9，result = 2；
+* 循环第五个遇到-3，map 为 {{0,1}, {3,1}, {7,1}, {14,1}, {16,1}, {13,1}}；preSum = 13；preSum - k = 6， result = 2；
+* 循环第六个遇到1，map 为 {{0,1}, {3,1}, {7,1}, {14,**2**}, {16,1}, {13,1}}；preSum = 14；preSum - k = 7，7作为key之前出现过，结果+1， result = 3；
+* 循环第七个遇到4，map 为 {{0,1}, {3,1}, {7,1}, {14,2}, {16,1}, {13,1}, {18,1}}；preSum = 18； preSum - k = 11；result = 3；
+* 循环第八个遇到2，map - {{0,1}, {3,1}, {7,1}, {14,2}, {16,1}, **{13,1}**, {18,1}, {**20,1**}}，preSum = 20；preSum - k = 13，13作为key之前出现过，结果+1，result = 4；
 * 循环结束
 
-  
-
-Time：O\(n\)；Space：O\(n\)。
+如此，通过preSum\[j\] - preSum\[i\] = k的数目，计算出结果。Time：O\(n\)；Space：O\(n\)。
 
 ### 代码
 
-暴力解法O\(n^2\)
+只用前缀和，O\(n^2\)
 
 ```java
 class Solution {
     public int subarraySum(int[] nums, int k) {
-        int count = 0;
-        int[] sum = new int[nums.length + 1];
-        sum[0] = 0;
-        for (int i = 1; i <= nums.length; i++) {
-            sum[i] = sum[i - 1] + nums[i - 1];
+        if (nums == null || nums.length == 0) {
+            return 0;
         }
-        for (int start = 0; start < nums.length; start++) {
-            for (int end = start + 1; end <= nums.length; end++) {
-                if (sum[end] - sum[start] == k)
-                    count++;
+        int len = nums.length;
+        int result = 0;
+        for (int right = 0; right < len; right++) {
+            int preSum = 0; // 每次遍历每个sum记录以固定右边界的前缀和
+            for (int left = right; left >= 0; left--) {
+                preSum += nums[left];
+                if (preSum == k) {
+                    result++;
+                }
             }
         }
-        return count;
+        return result;
     }
 }
 ```
 
-优化成O\(n\)的解法
+前缀和 + HashMap优化，O\(n\)的解法
 
 ```java
 class Solution {
     public int subarraySum(int[] nums, int k) {
-        int sum = 0, result = 0;
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(0, 1);//把以0为key的pair放进去，从sum为0开始
-
-        for (int i = 0; i < nums.length; i++) {
-            sum += nums[i];//在之前sum的基础上，遇到当前的元素就更新sum，然后检查hashmap看之前出现过没有
-            if (map.containsKey(sum - k)) {
-                result += map.get(sum - k);//记得之前有几个这样的值
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int preSum = 0;
+        int result = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1); // 初始化
+        
+        for (int num : nums) {
+            preSum += num;
+            if (map.containsKey(preSum - k)) {
+                result += map.get(preSum - k);
             }
-            map.put(sum, map.getOrDefault(sum, 0) + 1);
+            map.put(preSum, map.getOrDefault(preSum, 0) + 1);
         }
         return result;
     }
