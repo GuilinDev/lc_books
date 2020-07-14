@@ -1378,7 +1378,7 @@ Here are some examples. Inputs are in the left-hand column and its corresponding
 排列Arrangement是从N个不同元素中取出M个元素，当N == M时，就是全排列Permutation。如果能够知道下一个排列Next Permutation是什么，也就知道了全排列是什么。全排列的问题在算法上没有特别的，但是要理清思路，还得刻意练习才行。
 
 假如排列是{2,3,6,5,4,1}，求下一个排列的基本步骤是这样：  
-1\) 先从后往前看，找到第一个不是依次增长的数，记录下位置p。比如现在的例子就应该是3，对应的位置是p==1；现在在p位置的数字跟从后向前的数字进行比较_，_找到第一个比p位置的数大的数，然后两个调换位置，比如例子中的4。把3和4调换位置后得到{2,4,6,5,3,1}。最后把p之后的所有数字倒序，得到{2,4,1,3,5,6}，即是要求的下一个排列；  
+1\) 先从后往前看，找到第一个不是依次增长的数，记录下位置p。比如现在的例子就应该是3，对应的位置是p==1；现在在p位置的数字跟从后向前的数字进行比较_，_找到第一个比p位置的数大的数，位置为q，然后p，q两个调换位置，比如例子中q位置的4。把3和4调换位置后得到{2,4,6,5,3,1}。最后把p位置之后的所有数字倒序，得到{2,4,1,3,5,6}，即是要求的下一个排列；  
 2\) 如果从后向前看的时候，上面的数字都是依次增长的，那么说明这是最后一个排列，下一个就是第一个，把所有数字翻转过来即可\(比如{6,5,4,3,2,1}下一个是{1,2,3,4,5,6}\)；
 
 最坏情况需要扫描数组三次，所以时间复杂度是O\(3\*n\)=O\(n\)，空间复杂度是O\(1\)。
@@ -1387,33 +1387,39 @@ Here are some examples. Inputs are in the left-hand column and its corresponding
 
 ```java
 class Solution {
-   public void nextPermutation(int[] nums) {
-      if (nums == null || nums.length == 0) return;
-
-      int n = nums.length, i = n - 2, j = n - 1;
-      while (i >= 0 && nums[i] >= nums[i + 1]) {//从后向前找到一个非增长的元素，位置为i
-         i--;
-      }
-      if (i >= 0) {//全逆序的数组不会进入这个循环，i的位置为-1
-         while (nums[j] <= nums[i]) {//从后向前找到第一个比i位置元素大的元素，肯定有这个数字
-            j--;
-         }
-         swap(nums, i, j);
-      }
-      reverse(nums, i + 1, n - 1);//i位置后面的数组元素进行翻转
-   }
-   private void swap(int[] nums, int i, int j) {
-      int temp = nums[i];
-      nums[i] = nums[j];
-      nums[j] = temp;
-   }
-   private void reverse(int[] nums, int i, int j) {
-      while (i < j) {
-         swap (nums, i, j);
-         i++;
-         j--;
-      }
-   }
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+        int len = nums.length, p = len - 2, q = len - 1;
+        
+        // 1. 从后向前找到一个非增长的元素，等于的话也继续向前
+        while (p >= 0 && nums[p] >= nums[p + 1]) {
+            p--;
+        }
+        //全逆序的数组不会进入这个判断，全逆序p的位置为-1
+        // 2. 从后向前找到第一个比p位置元素大的元素，注意这个数字肯定有，等于的话继续向前
+        if (p >= 0) {
+            while (nums[q] <= nums[p]) {
+                q--;
+            }
+            swap(nums, p, q);
+        }
+        // 3. p位置后面的数组元素进行翻转
+        reverse(nums, p + 1, len - 1);
+    }
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    private void reverse(int[] nums, int left, int right) {
+        while (left < right) {
+            swap(nums, left, right);
+            left++;
+            right--;
+        }
+    }
 }
 ```
 

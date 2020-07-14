@@ -1294,13 +1294,13 @@ Output:
 
 ### 代码
 
-HashMap + 排序的办法，时间复杂度O\(NKlogK\)，空间复杂度O\(NK\)
+排序的办法
 
 ```java
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) {
-            return new ArrayList<>();
+            return new ArrayList<List<String>>();
         }
 
         HashMap<String, List<String>> map = new HashMap<>();
@@ -1309,57 +1309,22 @@ class Solution {
             Arrays.sort(cha);//对字符串转换的字符数组进行排序
             String keyStr = String.valueOf(cha);//字符数组转换成字符串的key
             if (!map.containsKey(keyStr)) {//第一次出现就新增一个key
-                map.put(keyStr, new ArrayList<>());
+                map.put(keyStr, new ArrayList<String>());
             }
             map.get(keyStr).add(s);
         }
-        return new ArrayList<>(map.values());//map.values()获得HashMap的所有的值
+        return new ArrayList<List<String>>(map.values());//map.values()获得HashMap的所有的值
     }
 }
 ```
 
-在上面HashMap方法的基础上，不直接Arrays.sort\(\)的结果当作key，而是自己生成key，时间复杂度O\(NK\)，空间复杂度O\(NK\)
-
-```java
-class Solution {
-    /**
-    将HashMap的key用特殊的值来代替，把KlogK优化到K
-    */
-    public List<List<String>> groupAnagrams(String[] strs) {
-        if (strs.length == 0) {
-            return new ArrayList<>();
-        }
-        Map<String, List> map = new HashMap<>();
-        int[] count = new int[26]; // 都是小写字母
-        for (String str : strs) {
-            Arrays.fill(count, 0); // 每个str重新default
-            for (char c : str.toCharArray()) {
-                count[c - 'a']++;
-            }
-
-            StringBuilder sb = new StringBuilder("");
-            for (int i = 0; i < 26; i++) {// 生成特殊的key
-                sb.append('#');
-                sb.append(count[i]);
-            }
-            String key = sb.toString(); // 拿到unique的字符串key了
-            if (!map.containsKey(key)) {
-                map.put(key, new ArrayList<>());
-            }
-            map.get(key).add(str);
-        }
-        return new ArrayList(map.values());
-    }
-}
-```
-
-HashMap + 质数做乘积找key，时间复杂度O\(NK\)，空间复杂度O\(NK\)
+利用质数做乘积找key
 
 ```java
 class Solution {
     public static List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) {
-            return new ArrayList<>();
+            return new ArrayList<List<String>>();
         }
 
         // 用质数作为每个字母的唯一标识key，然后做乘法，异构体所的一定相同，最多10609个
@@ -1373,11 +1338,11 @@ class Solution {
             }
 
             if (!map.containsKey(key)) {
-                map.put(key, new ArrayList<>());
+                map.put(key, new ArrayList<String>());
             }
             map.get(key).add(s);
         }
-        return new ArrayList<>(map.values());
+        return new ArrayList<List<String>>(map.values());
     }
 }
 ```
