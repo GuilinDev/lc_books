@@ -330,8 +330,6 @@ int RS(arr, low, high, k){
 
 如果再进行一次partition，就能得到所有TopK的结果。
 
-BFPRT可以对时间进一步优化，但空间复杂度高。
-
 ### 代码
 
 利用冒泡排序，进行局部排序
@@ -358,18 +356,18 @@ class Solution {
 ```java
 class Solution {
     public int findKthLargest(int[] nums, int k) {
-        //建立一个k个元素的最小堆，最后的堆顶就是第k大
-        PriorityQueue<Integer> heap = new PriorityQueue<>(k);
+        //建立一个k个元素的最小堆，来存储
+        PriorityQueue<Integer> heap = new PriorityQueue<Integer>(k);
 
         //先把前k个元素存入，作为初始值
         for (int i = 0; i < k; i++) {
-            heap.offer(nums[i]);
+            heap.add(nums[i]);
         }
 
         for (int i = k; i < nums.length; i++) {
             if (nums[i] > heap.peek()) {//如果新来的元素大于堆顶的元素
-                heap.poll();//移除刚才较小的头部
-                heap.offer(nums[i]); // 添加较大的元素
+                heap.add(nums[i]);
+                heap.poll();//移除并返回队列的头部
             }
         }
         return heap.peek();//返回队列头部
@@ -419,7 +417,6 @@ class Solution {
     }
 
     private void swap (int[] nums, int i, int j) {
-        // 这里用三次异或不行
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
