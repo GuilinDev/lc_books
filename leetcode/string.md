@@ -930,13 +930,41 @@ Output: false
 
 ### 题意和分析
 
-求两个字符串是否能完全cover。跟44-Wildcard Matching类似，\*的意思略有不同，这道题\*表示0个，1个或者多个，因此a\*b可以表示b，aaab，即任意个a。
+求两个字符串是否能完全cover。跟44-Wildcard Matching类似，\*的意思略有不同，这道题\*表示0个，1个或者多个，因此a\*b可以表示b，ab或aaab，即任意个a。
 
-递归的办法
+1）递归的办法，递归过程中的三种情况：
 
-如果p为空，s也为空，返回true，否则返回false；p的第二个字符为\*，因为\*之前的字符可以任意，也可以为0，先用递归调用为0的情况，也就是直接把这两个字符去掉再比较；或者当s不为空的时候，并且第一个字符和p的第一个字符相同，把s去掉首字符再与p调用递归（p不能去掉首字符，因为\*前的字符可以无限个）；如果p的第二个字符不为\*，那就比较第一个字符，然后对后面的字符串调用递归。
+I - 如果p为空，s也为空，返回true，否则返回false，此为基线条件；
+
+II - p和s不为空，且p的第二个字符为\*，因为\*之前的字符可以0个或任意正整数个，所以首先用递归调用\*代表0的情况，也就是直接把\*和它之前的这两个字符去掉再和s比较；而如果当s的第一个字符和p的第一个字符相同，或者p第一个字符等于‘.’（仅代表任意1个字符，可以认为.==s.charAt\(0\)），把s去掉首字符并递归检查。
+
+III - p和s不为空，且递归过程中p的第二个字符不为\*，那就如同正常字符串一样比较第一个字符，然后对后面的字符串调用递归。
+
+2） DP的方法
+
+如果能写成递归，基本就能改成动态规划，因为是两个字符串，这里需要声明一个二维数组布尔数组dp\[i\]\[j\]
+
+dp\[i\]\[j\]：**表示字符串中s中的前i个字符与字符串p中的前j个字符是否能够匹配**。如果能匹配则为true，反之为false。
+
+**假如**已经算出了前i-1个字符与前j-1个字符的匹配情况了，那如何计算dp\[i\]\[j\]dp\[i\]\[j\]呢？
+
+* 如果s\[i\] == p\[j\]，说明dp\[i\]\[j\]取决于dp\[i-1\]\[j-1\] 
+* 如果s\[i\] != p\[j\]，说明两个字符串不匹配 
+
+_对于 '.' 和 '\*'的处理_ 
+
+由于'.' 和 '\*'都是在p中，所以
+
+* 当p\[j\] == '.'的时候，说明这个字符什么都可以当，和之前s\[i\] == p\[j\]是一样的，故dp\[i\]\[j\] == dp\[i - 1\]\[j - 1\].
+* 当p\[j\] == '\*' 的时候这要分两种情况：
+  * 如果前面的字符p\[j - 1\]能与s当前的字符s\[i\]匹配上的话，那就dp\[i\]\[j\]的状态就去取决于dp\[ i- 1\]\[j\]\[j\]，也是就相当于看前面的状态。
+  * 如果前面的字符p\[j - 1\]不能与s当前的字符s\[i\]匹配上的话，是不是就代表匹配失败了呢？不一定，因为这毕竟是一个 \* 号而不是真正的要匹配的字符，说白了大不了不用它来匹配了，也就是使用0次，那就dp\[i\]\[j\]的状态就去取决于dp\[i\]\[j - 2\]。上面这两种状态只要能满足其中一种就可以了，即：
+
+![](../.gitbook/assets/image%20%2862%29.png)
 
 ### 代码
+
+递归
 
 ```java
 class Solution {
@@ -953,51 +981,36 @@ class Solution {
 }
 ```
 
-DP的方法，
-
-1, If p.charAt\(j\) == s.charAt\(i\) : dp\[i\]\[j\] = dp\[i-1\]\[j-1\]; 
-
-2, If p.charAt\(j\) == '.' : dp\[i\]\[j\] = dp\[i-1\]\[j-1\]; 
-
-3, If p.charAt\(j\) == '_':_ 
-
-_here are two sub conditions:_ 
-
-_1 if p.charAt\(j-1\) != s.charAt\(i\) : dp\[i\]\[j\] = dp\[i\]\[j-2\] //in this case, a_ only counts as empty 
-
-2 if p.charAt\(i-1\) == s.charAt\(i\) or p.charAt\(i-1\) == '.': dp\[i\]\[j\] = dp\[i-1\]\[j\] //in this case, a _counts as multiple a or dp\[i\]\[j\] = dp\[i\]\[j-1\] // in this case, a_ counts as single a or dp\[i\]\[j\] = dp\[i\]\[j-2\] // in this case, a\* counts as empty
+DP
 
 ```java
 class Solution {
     public boolean isMatch(String s, String p) {
-        if (s == null || p == null) {
+        int m = s.length();
+        int n = p.length();
+        
+        boolean[][] dp = new boolean[m + 1][n + 1];
+        dp[0][0] = true; // 表示s总前0个字符和p中前0个字符是匹配的
+        for (int i = 0; i <= m; i++) {
+            for (int j = 1; j <= n; j++) { // p应该至少一个字符，代表前面的状态
+                if (p.charAt(j - 1) != '*') {
+                    dp[i][j] = match(s, p, i, j) ? dp[i - 1][j - 1] : false; // 如果当前字符match，取决于上一个状态
+                } else { // 上一个是*号
+                    dp[i][j] = match(s, p, i, j - 1) ? (dp[i][j - 2] || dp[i - 1][j]) : dp[i][j - 2];
+                }
+            }
+        }
+        return dp[m][n];
+    }
+    
+    private boolean match(String s, String p, int i, int j) {
+        if (i == 0) {
             return false;
         }
-        boolean[][] dp = new boolean[s.length()+1][p.length()+1];
-        dp[0][0] = true;
-        for (int i = 0; i < p.length(); i++) {
-            if (p.charAt(i) == '*' && dp[0][i-1]) {
-                dp[0][i+1] = true;
-            }
+        if (p.charAt(j - 1) == '.') { // .可以和任何字符匹配，直接发挥true
+            return true;
         }
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = 0; j < p.length(); j++) {
-                if (p.charAt(j) == '.') {
-                    dp[i+1][j+1] = dp[i][j];
-                }
-                if (p.charAt(j) == s.charAt(i)) {
-                    dp[i+1][j+1] = dp[i][j];
-                }
-                if (p.charAt(j) == '*') {
-                    if (p.charAt(j-1) != s.charAt(i) && p.charAt(j-1) != '.') {
-                        dp[i+1][j+1] = dp[i+1][j-1];
-                    } else {
-                        dp[i+1][j+1] = (dp[i+1][j] || dp[i][j+1] || dp[i+1][j-1]);
-                    }
-                }
-            }
-        }
-        return dp[s.length()][p.length()];
+        return s.charAt(i - 1) == p.charAt(j - 1);
     }
 }
 ```
@@ -1294,13 +1307,13 @@ Output:
 
 ### 代码
 
-排序的办法
+HashMap + 排序的办法，时间复杂度O\(NKlogK\)，空间复杂度O\(NK\)
 
 ```java
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) {
-            return new ArrayList<List<String>>();
+            return new ArrayList<>();
         }
 
         HashMap<String, List<String>> map = new HashMap<>();
@@ -1309,22 +1322,57 @@ class Solution {
             Arrays.sort(cha);//对字符串转换的字符数组进行排序
             String keyStr = String.valueOf(cha);//字符数组转换成字符串的key
             if (!map.containsKey(keyStr)) {//第一次出现就新增一个key
-                map.put(keyStr, new ArrayList<String>());
+                map.put(keyStr, new ArrayList<>());
             }
             map.get(keyStr).add(s);
         }
-        return new ArrayList<List<String>>(map.values());//map.values()获得HashMap的所有的值
+        return new ArrayList<>(map.values());//map.values()获得HashMap的所有的值
     }
 }
 ```
 
-利用质数做乘积找key
+在上面HashMap方法的基础上，不直接Arrays.sort\(\)的结果当作key，而是自己生成key，时间复杂度O\(NK\)，空间复杂度O\(NK\)
+
+```java
+class Solution {
+    /**
+    将HashMap的key用特殊的值来代替，把KlogK优化到K
+    */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        if (strs.length == 0) {
+            return new ArrayList<>();
+        }
+        Map<String, List> map = new HashMap<>();
+        int[] count = new int[26]; // 都是小写字母
+        for (String str : strs) {
+            Arrays.fill(count, 0); // 每个str重新default
+            for (char c : str.toCharArray()) {
+                count[c - 'a']++;
+            }
+
+            StringBuilder sb = new StringBuilder("");
+            for (int i = 0; i < 26; i++) {// 生成特殊的key
+                sb.append('#');
+                sb.append(count[i]);
+            }
+            String key = sb.toString(); // 拿到unique的字符串key了
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+            map.get(key).add(str);
+        }
+        return new ArrayList(map.values());
+    }
+}
+```
+
+HashMap + 质数做乘积找key，时间复杂度O\(NK\)，空间复杂度O\(NK\)
 
 ```java
 class Solution {
     public static List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) {
-            return new ArrayList<List<String>>();
+            return new ArrayList<>();
         }
 
         // 用质数作为每个字母的唯一标识key，然后做乘法，异构体所的一定相同，最多10609个
@@ -1338,11 +1386,11 @@ class Solution {
             }
 
             if (!map.containsKey(key)) {
-                map.put(key, new ArrayList<String>());
+                map.put(key, new ArrayList<>());
             }
             map.get(key).add(s);
         }
-        return new ArrayList<List<String>>(map.values());
+        return new ArrayList<>(map.values());
     }
 }
 ```
