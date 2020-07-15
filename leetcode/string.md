@@ -1007,7 +1007,7 @@ class Solution {
         if (i == 0) {
             return false;
         }
-        if (p.charAt(j - 1) == '.') { // .可以和任何字符匹配，直接发挥true
+        if (p.charAt(j - 1) == '.') { // .可以和任何字符匹配，直接返回true
             return true;
         }
         return s.charAt(i - 1) == p.charAt(j - 1);
