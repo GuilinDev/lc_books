@@ -1153,64 +1153,161 @@ Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
 
 ### 题意和分析
 
-这道题用DP来做，是对DP的一种直接实现，空间复杂度可以是O\(n\)或者O\(1\)，两种方法都要掌握。
+这道题要掌握DP，是对DP的一种直接实现，空间复杂度可以是O\(n\)或者O\(1\)，两种方法都要掌握。
+
+此题问题可转化为长度n的字符串s一共有多少种解码方法。那么其子问题是长度为n - 1的字符串s1有多少种解码方法。一直到长度为1的字符串有多少种解码方法（长度为1时是边界情况，只要首字符不为0，就算一种方法）。从左到右和从右到左都可以。
+
+ 定义：**dp\[i\]：从索引0向右到i（或从len - 1向左到i）的字符串s的子串所能够解码的总数**。
 
 ### 代码
 
-时间O\(n\)，空间O\(n\)
+普通递归的方式，只考虑当前这一个字符，或者考虑当前字符和后一个字符（两个字符）的情况，存在着很多重复计算，时间O\(2^n\)，空间O\(n\)
 
 ```java
 class Solution {
     public int numDecodings(String s) {
-        if (s == null || s.length() == 0) {
+        if (s.isEmpty()) { 
             return 0;
         }
-        int len = s.length();
-        int[] dp = new int[len + 1];//空的时候返回为0
-        dp[0] = 1;//至少有一种
-        dp[1] = s.charAt(0) != '0' ? 1 : 0;//判断头字母是否为0，不等于0就为1
-
-        for (int i = 2; i <= len; i++) {
-            //可能是一个数或者两个数
-            int first = Integer.valueOf(s.substring(i - 1, i));
-            int second = Integer.valueOf(s.substring(i - 2, i));
-            if (first >= 1 && first <= 9) {//取一个数，只要不是0，那肯定可以组成一个字符
-                dp[i] += dp[i - 1];
-            }
-            if (second >= 10 && second <= 26) {//取两个数
-                dp[i] += dp[i - 2];
-            }
+        char[] chs = s.toCharArray();
+        return decode(chs, 0);
+    }
+    private int decode(char[] chs, int index) {
+        int len = chs.length;
+        if (index >= len) { // 已经处理到了最后一个字符，只有一种解法
+            return 1;
         }
-        return dp[len];
+        if (chs[index] == '0') { // leading zero和单独一个zero都不能解码
+            return 0;
+        }
+        
+        /**
+        只考虑当前一个字符的情况，直接利用后面的解法
+        比如考虑226，假设26的解法有m种，在前面多加一个2后，相当于在解码的前面再多加一个字符'B'
+        解码结果只是长得不一样，解码的结果依然是m种
+        */
+        int count = decode(chs, index + 1); 
+        
+        /**
+        考虑两个字符的情况，第一个字符如果是‘1’或‘2’，需要<=26
+        当前解法m种，index + 2的解法为k种，所以总共m + k种，需要累加        
+        */
+        if (index < len -1 && (chs[index] == '1' || (chs[index] == '2' && chs[index + 1] <= '6'))) {
+            count += decode(chs, index + 2);
+        }
+        
+        return count;
+    }
+}
+
+```
+
+在上面递归的解法上，每次计算出值准备return的时候，做一个缓存，进行记忆化搜索，剪枝后的效率不错，时间O\(n\)，空间O\(n\)
+
+```java
+class Solution {
+    public int numDecodings(String s) {
+        if (s.isEmpty()) {
+            return 0;
+        }
+        char[] chs = s.toCharArray();
+        int[] cache = new int[chs.length];
+        Arrays.fill(cache, -1);
+        return decode(chs, 0, cache);
+    }
+    private int decode(char[] chs, int index, int[] cache) { 
+        int len = chs.length;
+        if (index >= len) { //这里超界不用缓存
+            return 1;
+        }
+        
+        if (cache[index] != -1) {
+            // 0. cache，已经算过，剪枝
+            return cache[index];
+        }
+        
+        if (chs[index] == '0') {
+            // 缓存处1
+            cache[index] = 0;
+            return 0;
+        }
+
+        
+        int count = decode(chs, index + 1, cache);
+
+        if (index < len -1 && (chs[index] == '1' || (chs[index] == '2' && chs[index + 1] <= '6'))) {
+            count += decode(chs, index + 2, cache);
+        }
+
+        // 缓存处2
+        cache[index] = count;
+
+        return count;
     }
 }
 ```
 
-时间O\(n\)，空间O\(1\)，只需保存上一种方法的dp\[i - 1\]和dp\[i - 2\]两个数即可，因此只用两个变量就行了。
+DP解法，时间O\(n\)，空间O\(n\)，为了和上面递归解法一致，就从右到左解法，DP其实就是迭代版的记忆化
 
 ```java
 class Solution {
     public int numDecodings(String s) {
-        if (s == null || s.length() == 0 || s.charAt(0) == '0') {
+        if (s.isEmpty()) {
             return 0;
         }
-
-        int c1 = 1;
-        int c2 = 1;
-        for (int i = 1; i < s.length(); i++) {
+        int len = s.length();
+        int[] dp = new int[len + 1];
+        
+        dp[len] = 1; // 从右到左比较好迭代，最后一个字符一种解码法
+        for (int i = len - 1; i >= 0; i--) {
             if (s.charAt(i) == '0') {
-                c1 = 0;
-            }
-            if (s.charAt(i - 1) == '1' || (s.charAt(i - 1) == '2' && s.charAt(i) <= '6')) {//如果第一位是2，那第二位自然不能大于6
-                c1 = c1 + c2;
-                c2 = c1 - c2;
+                dp[i] = 0;
             } else {
-                c2 = c1;
+                // 只考虑一个字符
+                dp[i] = dp[i + 1]; 
+                
+                // 考虑两个字符
+                if (i < len - 1 && (s.charAt(i) == '1' ||(s.charAt(i) == '2' && s.charAt(i + 1) <= '6'))) {
+                    dp[i] += dp[i + 2];
+                }
             }
         }
-        return c1;
+        return dp[0];
     }
 }
+```
+
+DP + 状态压缩，时间O\(n\)，空间O\(1\)，只需保存上一种方法的dp\[i - 1\]和dp\[i - 2\]两个数即可，状态压缩，只用两个变量就行。
+
+```java
+class Solution {
+    public int numDecodings(String s) {
+        if (s.isEmpty()) {
+            return 0;
+        }
+        int len = s.length();
+        
+        //用两个变量来替代普通DP解法的dp[i]和dp[i + 1]
+        int iValue = 1, iValue1 = 0;
+        
+        for (int i = len - 1; i >= 0; i--) {
+            int curr;
+            if (s.charAt(i) == '0') { // 一个字符
+                curr  = 0;
+            } else { // 两个字符
+                curr = iValue;
+                if (i < len - 1 && (s.charAt(i) == '1' ||(s.charAt(i) == '2' && s.charAt(i + 1) <= '6'))) {
+                    curr += iValue1;
+                }
+            }
+            // 滚动更新
+            iValue1 = iValue;
+            iValue = curr;
+        }
+        return iValue; 
+    }
+}
+
 ```
 
 ## 300 Longest Increasing Subsequence
