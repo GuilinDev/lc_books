@@ -424,6 +424,8 @@ class Solution {
 
 ## 139 - Word Break
 
+### 题目
+
 Given a **non-empty** string _s_ and a dictionary _wordDict_ containing a list of **non-empty** words, determine if _s_ can be segmented into a space-separated sequence of one or more dictionary words.
 
 **Note:**
@@ -455,79 +457,181 @@ Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
 Output: false
 ```
 
-### 题意和分析
+### 分析
 
-{% embed url="https://blog.csdn.net/linhuanmars/article/details/22358863" %}
+1\) DP
 
-> 动态规划题目的基本思路：首先我们要决定要存储什么历史信息以及用什么数据结构来存储信息，然后是最重要的递推式，就是如何从存储的历史信息中得到当前步的结果，最后我们需要考虑的就是起始条件的值。
+再次复习一下动态规划的思考和思路，其实DP源自于一个很自然的想法，就拿这道题来说，假如需要判断"onetwothreefour"这一个字符串能不能满足条件，很自然的想法就是： 如果"onetwothree"这一段可以拆分，再加上four如果也可以，那就行了； 或者 如果"onetwothre"这一段可以拆分，再加上efour如果也可以，那也行了； 这其实已经抓住了动态规划的最核心的东西了，换成式子来表达，就是
 
 ```java
-class Solution {
-    public boolean wordBreak(String s, List<String> wordDict) {
-        if (s.isEmpty()) {
-            return true;
-        }
-        int len = s.length();
-        boolean[] results = new boolean[len + 1];
-        results[0] = true;
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = 0; j <= i; j++) {
-                String str = s.substring(j, i + 1);
-                if (results[j] && wordDict.contains(str)) {
-                    results[i + 1] = true;
-                    break;//
-                }
-            }
-        }
-        return results[len];
-    }
-}
+dp["onetwothreefour"] = dp["onetwothree"这一段] && 判断一下"four"
+dp["onetwothreefour"] = dp["onetwothre"这一段] && 判断一下"efour"
 ```
 
-代码
+这道题就搞定了。
+
+动态规划的基本操作： 
+
+1. 定义dp数组 - dp\[i\] 表示 s 前 i 个字符组成的字符串 s\[0..i-1\] 是否能被拆分成若干个字典中出现的单词
+2. 初始化 - dp\[0\]=true 表示空串且合法
+3. 转化公式 - **dp\[i\]=dp\[j\] && check\(s\[j..i−1\]\)**，其中check\(s\[j..i−1\]\) 表示子串 s\[j..i-1\]是否出现在字典中
+4. 搞定！ 
+
+DP的思路雷同，但每道题的实现有差别，比如这道题的遍历顺序稍微有点窍门，就是：对于检查一个字符串是否出现在给定的字符串列表里一般可以考虑哈希表（hashmap或hashset）来快速判断，同时也可以做一些简单的剪枝，正着枚举和倒着枚举都可以。
+
+2\) Trie
+
+### 代码
+
+DP不剪枝，好理解，时间O\(n^2\)，空间O\(n\)
 
 ```java
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
-        if (s == null || s.length() == 0) {
-            return true;
-        }
-        boolean[] res = new boolean[s.length() + 1];
-        res[0] = true;//初始条件
-        for (int i = 0; i < s.length(); i++) {
-            StringBuilder sb = new StringBuilder(s.substring(0, i + 1));//取0到i的子字符串
-            for (int j = 0; j <= i; j++) {
-                if (res[j] && wordDict.contains(sb.toString())) {
-                    res[i+1] = true;
+        Set<String> wordSet = new HashSet<>(wordDict); // set的contains方法效率比list的contains方法效率高        
+        int len = s.length();
+        boolean[] dp = new boolean[len + 1]; // 多一个0个字符的字符串情况
+        dp[0] = true; // 初始化
+        
+        for (int i = 1; i <= len; i++) {
+            for (int j = i; j >= 0; j--) { //这里从0开始也可以，但反着查比较符合自然想法
+                if (dp[j] && wordSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
                     break;
                 }
-                sb.deleteCharAt(0);//？
             }
         }
-        return res[s.length()];
+        return dp[len];
     }
 }
+
 ```
+
+DP + 剪枝，当超过字典中最大字符串的长度时，就不再检查是否存在了，复杂度一样
 
 ```java
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
-        if (s.isEmpty()) {
-            return true;
-        }
+        Set<String> wordSet = new HashSet<>(wordDict); // set的contains方法效率比list的contains方法效率高        
         int len = s.length();
-        boolean[] results = new boolean[len + 1];
-        results[0] = true;
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = 0; j <= i; j++) {
-                String str = s.substring(j, i + 1);
-                if (results[j] && wordDict.contains(str)) {
-                    results[i + 1] = true;
-                    break;//
+        boolean[] dp = new boolean[len + 1]; // 多一个0个字符的字符串情况
+        dp[0] = true; // 初始化
+        
+        // 找到wordDict中最大长度的单词
+        int maxWordLen = 0;
+        for (String word : wordDict) {
+            maxWordLen = Math.max(maxWordLen, word.length());
+        }
+        
+        for (int i = 1; i <= len; i++) {
+            /**
+            第二个循环，这里j在i左边，从i位置开始，这里需要计算的是[i - maxlength, i]这个区间里有没有满足dp[j] && wordSet.contains(s.substring(j,i)条件的情况,
+            这里j不能从0开始往右直到i，否则计算的是[0, i - maxlength]这个区间，和要求的是反着的。
+            仔细思考一下：相当于j + maxWordLen >= i，所有从i开始向左比较好枚举
+            */
+            for (int j = i; j >= 0 && j >= i - maxWordLen; j--) { 
+                if (dp[j] && wordSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
                 }
             }
         }
-        return results[len];
+        return dp[len];
+    }
+}
+```
+
+Trie + 记忆化，需要构建Trie，较麻烦，不要求
+
+```java
+class Solution {
+    class Trie {
+        class Node {
+            boolean present;
+            HashMap<Character, Node> next;
+
+            Node() {
+                next = new HashMap<>();
+            }
+        }
+
+        private Node root;
+
+        Trie() {
+            root = new Node();
+        }
+
+        public void insert(String word) {
+            Node p = root;
+            for (int i = 0; i < word.length(); i++) {
+                char c = word.charAt(i);
+                if (!p.next.containsKey(c)) {
+                    p.next.put(c, new Node());
+                }
+                p = p.next.get(c);
+                if (i == word.length()-1) {
+                    p.present = true;
+                }
+            }
+        }
+
+        public boolean contains(String word) {
+            Node p = root;
+            for (int i = 0; i < word.length(); i++) {
+                char c = word.charAt(i);
+                if (!p.next.containsKey(c)) return false;
+                p = p.next.get(c);
+                if (i == word.length()-1) {
+                    if (p.present) return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean startsWith(String prefix) {
+            Node p = root;
+            for (int i = 0; i < prefix.length(); i++) {
+                char c = prefix.charAt(i);
+                if (!p.next.containsKey(c)) return false;
+                p = p.next.get(c);
+            }
+            return true;
+        }
+    }
+
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Trie trie = new Trie();
+        for (String word : wordDict) {
+            trie.insert(word);
+        }
+        HashMap<String, Boolean> memo = new HashMap<>();
+        return canBreak(s, trie, memo);
+    }
+
+    private boolean canBreak(String s, Trie trie, HashMap<String, Boolean> memo) {
+        if (memo.containsKey(s)) return memo.get(s);
+        for (int i = 1; i <= s.length(); i++) {
+            if (trie.startsWith(s.substring(0, i))) {
+                if (trie.contains(s.substring(0, i))) {
+                    if (canBreak(s.substring(i, s.length()), trie, memo)) {
+                        memo.put(s, true);
+                        return true;
+                    }
+                }
+                if (i == s.length()) {
+                    if (!trie.contains(s)) {
+                        memo.put(s, false);
+                        return false;
+                    }
+                }
+            }
+            else {
+                memo.put(s, false);
+                return false;
+            }
+        }
+        memo.put(s, true);
+        return true;
     }
 }
 ```
