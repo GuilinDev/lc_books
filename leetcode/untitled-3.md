@@ -268,3 +268,204 @@ class Solution {
 }
 ```
 
+## 127 Word Ladder
+
+### 原题
+
+Given two words \(_beginWord_ and _endWord_\), and a dictionary's word list, find the length of shortest transformation sequence from _beginWord_ to _endWord_, such that:
+
+1. Only one letter can be changed at a time.
+2. Each transformed word must exist in the word list.
+
+**Note:**
+
+* Return 0 if there is no such transformation sequence.
+* All words have the same length.
+* All words contain only lowercase alphabetic characters.
+* You may assume no duplicates in the word list.
+* You may assume _beginWord_ and _endWord_ are non-empty and are not the same.
+
+**Example 1:**
+
+```text
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output: 5
+
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+```
+
+**Example 2:**
+
+```text
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: 0
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+```
+
+### 分析
+
+[无向图的BFS](https://leetcode-cn.com/problems/word-ladder/solution/yan-du-you-xian-bian-li-shuang-xiang-yan-du-you-2/)，前置知识：
+
+* 无向图中两个顶点之间的最短路径的长度，可以通过广度优先遍历得到； 
+* 为什么 BFS 得到的路径最短？可以把起点和终点所在的路径拉直来看，两点之间线段最短； 
+* 已知目标顶点的情况下，可以分别从起点和目标顶点（终点）执行广度优先遍历，直到遍历的部分有交集，这是双向广度优先遍历的思想。
+
+一种BFS做法是将起始单词跟单词字典（加上终点单词）以此做比较，看是否相差一个字符（因为一次只能变动一个字符），找到相差一个字符的新单词后，再用新单词跟剩余单词字典中单词和终点单词作比较，以此类推，直到找到终点单词，时间复杂度O\(N \* wordLen\)；
+
+![](../.gitbook/assets/image%20%2862%29.png)
+
+上面做法一个优化的地方在于，题目中说了所有单词都是小写字母构成，所以不用每次和单词字典比较，而是从开始单词起，将从左到右每一个字符从a~z都替换以此，检查替换的新单词是否存在与单词字典中（hashset检查为常数时间），比如上图，检查hit，从ait,bit...zit，然后hat,hbt,hct...一直检查到hot（hot后面的hpt...hzt,hia...hiz依然会检查），发现存在，标记访问过，再用hot去检查，以此类推下去，BFS可以保证找到的路径是最短的。
+
+还可以继续优化的地方是，因为知道结束字符串，可以从开始字符串和结束字符串两边同时BFS，如下图，双向BFS检查的字符串数目（蓝色面积）更少，这个知道即可，acm会用到，面试不会考。
+
+![](../.gitbook/assets/image%20%2864%29.png)
+
+### 代码
+
+单向BFS，掌握这个
+
+```java
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // 首先将所有字符串放入到set中，方便判断中间和目标字符串是否在字典中
+        Set<String> wordDict = new HashSet<>(wordList);
+        
+        if (wordDict.size() == 0 || !wordDict.contains(endWord)) {
+            return 0;
+        }
+        wordDict.remove(beginWord);
+        
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        
+        // 用一个hashset来判断BFS过程中某个字符串是否访问过
+        Set<String> visited = new HashSet<>();
+        visited.add(beginWord);
+        
+        int steps = 1; //包含自己
+        
+        while (!queue.isEmpty()) {
+            // 需要先计算每层BFS起始时候的size，不能放入循环中，因为计算过程总queue的size会发生变化
+            int currentSize = queue.size(); 
+            
+            for (int i = 0; i < currentSize; i++) { // 第一层循环：每层BFS的每个单词
+                String word = queue.poll();
+                char[] wordArray = word.toCharArray(); // 字符数组方便替换
+                for (int j = 0; j < wordArray.length; j++) { // 第二层循环：每个单词的每个字符
+                    char originalChar = wordArray[j];
+                    for (char k = 'a'; k <= 'z'; k++) { // 第三层循环：每个字符都用a~z替换一遍
+                        if (k == originalChar) { // 自己和自己不用判断
+                            continue;
+                        }
+                        wordArray[j] = k; // 替换字符
+                        
+                        String newWord = String.valueOf(wordArray);
+                        if (wordDict.contains(newWord)) {
+                            if (newWord.equals(endWord)) { // 找到
+                                return steps + 1;
+                            } 
+                            
+                            if (!visited.contains(newWord)) {
+                                queue.offer(newWord);
+                                // 注意：BFS过程中的单词添加到队列以后，必须马上标记为已经访问
+                                visited.add(newWord);
+                            }
+                        }
+                    }
+                    wordArray[j] = originalChar; // 恢复之前改变的字符
+                }
+            }
+            steps++; // 每层BFS结束后+1
+        }
+        return 0; // 没找到
+    }
+}
+```
+
+双向BFS，只了解
+
+```java
+class Solution {
+
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // 先将 wordList 放到哈希表里，便于判断某个单词是否在 wordList 里
+        Set<String> wordSet = new HashSet<>(wordList);
+        if (wordSet.size() == 0 || !wordSet.contains(endWord)) {
+            return 0;
+        }
+
+        // 标准写法，总的 visited 数组
+        Set<String> visited = new HashSet<>();
+
+        // 分别用左边和右边扩散的哈希表代替单向 BFS 里的队列
+        Set<String> beginVisited = new HashSet<>();
+        beginVisited.add(beginWord);
+
+        Set<String> endVisited = new HashSet<>();
+        endVisited.add(endWord);
+
+        int len = beginWord.length();
+        int step = 1;
+        while (!beginVisited.isEmpty() && !endVisited.isEmpty()) {
+            // 打开以方便调试
+            // System.out.println("beginVisited => " + beginVisited);
+            // System.out.println("  endVisited => " + endVisited + "\n");
+
+            // 优先选择小的哈希表进行扩散，考虑到的情况更少
+            if (beginVisited.size() > endVisited.size()) {
+                Set<String> temp = beginVisited;
+                beginVisited = endVisited;
+                endVisited = temp;
+            }
+
+            // 逻辑到这里，保证 beginVisited 是相对较小的集合
+            // nextLevelVisited 在扩散完成以后，会成为新的 beginVisited
+            Set<String> nextLevelVisited = new HashSet<>();
+            for (String word : beginVisited) {
+                char[] charArray = word.toCharArray();
+                for (int i = 0; i < len; i++) {
+                    char originChar = charArray[i];
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        if (originChar == c) {
+                            continue;
+                        }
+                        charArray[i] = c;
+                        String nextWord = String.valueOf(charArray);
+                        if (wordSet.contains(nextWord)) {
+                            if (endVisited.contains(nextWord)) {
+                                return step + 1;
+                            }
+                            if (!visited.contains(nextWord)) {
+                                nextLevelVisited.add(nextWord);
+                                visited.add(nextWord);
+                            }
+                        }
+                    }
+                    // 恢复，下次再用
+                    charArray[i] = originChar;
+                }
+            }
+
+            // 这一行代表表示从 begin 这一侧向外扩散了一层
+            beginVisited = nextLevelVisited;
+            step++;
+        }
+        return 0;
+    }
+}
+```
+
+
+
+
+
