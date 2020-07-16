@@ -1,8 +1,8 @@
 # Queue
 
-### 621 - Task Scheduler
+## 621 - Task Scheduler
 
-#### 题目
+### 题目
 
 You are given a char array representing tasks CPU need to do. It contains capital letters A to Z where each letter represents a different task. Tasks could be done without the original order of the array. Each task is done in one unit of time. For each unit of time, the CPU could complete either one task or just be idle.
 
@@ -48,13 +48,13 @@ A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> idle -> idle -> A -> idle -> i
 * The number of tasks is in the range `[1, 10000]`.
 * The integer `n` is in the range `[0, 100]`.
 
-#### 分析
+### 分析
 
 安排CPU的任务，简单模拟CPU上下文切换时任务调度器的工作过程，规定在两个相同任务之间至少隔给定的n个时间点，求完成时间总长。
 
 思路比较多，看下面各种方法的代码和解释。
 
-#### 代码
+### 代码
 
 1）Greedy，由于题目中规定了两个相同任务之间至少隔n个时间点，那们首先应该处理的出现次数最多的那个任务，先确定好这些高频任务，然后再来安排那些低频任务。如果任务X的出现频率最高，为k次，那么用n个空位将每两个X分隔开，然后按顺序加入其他低频的任务。
 
