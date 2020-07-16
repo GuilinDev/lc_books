@@ -578,7 +578,7 @@ class Solution {
 }
 ```
 
-DFS，用两个stack，一个用来记录Tree的结点，另一个用来记录最大深度。
+DFS，用两个stack，一个用来记录Tree的结点，另一个用来记录最大深度，了解下即可。
 
 ```java
 /**
@@ -622,14 +622,19 @@ class Solution {
 BFS，用Queue来实现
 
 ```java
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
@@ -638,12 +643,15 @@ class Solution {
             return 0;
         }
         Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);//add()
-        int count = 0;
+        queue.offer(root);
+        
+        int depth = 0;
+        
         while (!queue.isEmpty()) {
-            int size = queue.size();
-            while (size-- > 0) {
-                TreeNode node = queue.poll();
+            int currentSize = queue.size();
+            for (int i = 0; i < currentSize; i++) {
+                TreeNode node = queue.poll();//node本身不用做任何检查
+                
                 if (node.left != null) {
                     queue.offer(node.left);
                 }
@@ -651,9 +659,9 @@ class Solution {
                     queue.offer(node.right);
                 }
             }
-            count++;
+            depth++;
         }
-        return count;
+        return depth;
     }
 }
 ```
