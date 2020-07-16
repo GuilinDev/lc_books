@@ -1401,7 +1401,13 @@ class Solution {
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
@@ -1412,23 +1418,30 @@ class Solution {
         if (p == null || q == null) {
             return false;
         }
+        
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(p);
         queue.offer(q);
-
+        
         while (!queue.isEmpty()) {
-            TreeNode node1 = queue.poll();
-            TreeNode node2 = queue.poll();
-
-            if (node1 == null && node2 == null) {//一直检查到最后为null
-                continue;
-            } else if (node1 == null || node2 == null || node1.val != node2.val) {
-                return false;
+            int currentSize = queue.size();
+            for (int i = 0; i < currentSize; i++) {
+                TreeNode nodeP = queue.poll();
+                TreeNode nodeQ = queue.poll();
+                
+                if (nodeP == null && nodeQ == null) {
+                    continue;
+                }
+                
+                if (nodeP == null || nodeQ == null || nodeP.val != nodeQ.val) {
+                    return false;
+                }
+                
+                queue.offer(nodeP.left);
+                queue.offer(nodeQ.left);
+                queue.offer(nodeP.right);
+                queue.offer(nodeQ.right);
             }
-            queue.offer(node1.left);
-            queue.offer(node2.left);
-            queue.offer(node1.right);
-            queue.offer(node2.right);
         }
         return true;
     }
