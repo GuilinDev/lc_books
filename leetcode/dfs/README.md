@@ -276,3 +276,223 @@ class Solution {
 }
 ```
 
+## 98 Validate Binary Search Tree
+
+### 题目
+
+Given a binary tree, determine if it is a valid binary search tree \(BST\).
+
+Assume a BST is defined as follows:
+
+* The left subtree of a node contains only nodes with keys **less than** the node's key.
+* The right subtree of a node contains only nodes with keys **greater than** the node's key.
+* Both the left and right subtrees must also be binary search trees.
+
+**Example 1:**
+
+```text
+    2
+   / \
+  1   3
+
+Input: [2,1,3]
+Output: true
+```
+
+**Example 2:**
+
+```text
+    5
+   / \
+  1   4
+     / \
+    3   6
+
+Input: [5,1,4,null,null,3,6]
+Output: false
+Explanation: The root node's value is 5 but its right child's value is 4.
+```
+
+### 分析
+
+一棵BST定义为：
+
+* 节点的左子树中的值要严格小于该节点的值。
+* 节点的右子树中的值要严格大于该节点的值。
+* 左右子树也必须是二叉查找树。
+* 一个节点的树也是二叉查找树。
+
+如果该二叉树的左子树不为空，则左子树上所有节点的值均小于它的根节点的值； 若它的右子树不空，则右子树上所有节点的值均大于它的根节点的值；它的左右子树也为二叉搜索树。
+
+### 代码
+
+递归前序遍历，每次限定传送参数的范围
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if (root == null || (root.left == null && root.right == null)) {
+            return true;
+        }
+        return dfs(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+    private boolean dfs (TreeNode node, long min, long max) {
+        if (node == null) {
+            return true;
+        }
+        if (node.val <= min || node.val >= max) { // 严格大于或小于
+            return false;
+        }
+        return dfs(node.left, min, node.val) && dfs(node.right, node.val, max); // int -> long autobox
+    }
+}
+```
+
+递归中序遍历，仔细想想为什么中序遍历只需判断节点的值一次
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    long pre = Long.MIN_VALUE;
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        
+        // 按照中序遍历，访问左子树到底
+        if (!isValidBST(root.left)) {
+            return false;
+        }
+        
+        if (root.val <= pre) { // 递归中“归”的部分进行判断
+            return false;
+        }
+        
+        pre = root.val;
+        
+        // 访问右子树
+        return isValidBST(root.right);
+    }
+}
+```
+
+Iterative
+
+1\) Queue的BFS
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    Queue<TreeNode> queue = new LinkedList<>();
+    Queue<Long> upperList = new LinkedList<>(), lowerList = new LinkedList<>();
+        
+    public boolean isValidBST(TreeNode root) {
+        long lower = Long.MIN_VALUE, upper = Long.MAX_VALUE, val;
+        
+        update(root, lower, upper);
+        
+        while (!queue.isEmpty()) {
+            // 这个不用size分层了，只需把node往队列里面加就行
+            TreeNode node = queue.poll();
+            lower = lowerList.poll();
+            upper = upperList.poll();
+            if (node == null) {
+                continue;
+                }
+            val = node.val;
+            if (val <= lower) {
+                return false;
+                }
+            if (val >= upper) {
+                return false;
+                }
+            update(node.left, lower, val);
+            update(node.right, val, upper);
+        }
+        return true;
+    }
+
+    void update(TreeNode node, long lower, long upper) {
+        queue.offer(node);
+        lowerList.offer(lower);
+        upperList.offer(upper);
+    }
+}
+```
+
+2\) Stack迭代实现前序遍历
+
+```java
+class Solution {
+    Stack<TreeNode> st = new Stack<>();
+    Stack<Long> upperList = new Stack<>(), 
+        lowerList = new Stack<>();
+        
+    public boolean isValidBST(TreeNode root) {
+        long lower = Long.MIN_VALUE, upper = Long.MAX_VALUE, val;
+        update(root, lower, upper);
+        while (!st.empty()) {
+            root = st.pop();
+            lower = lowerList.pop();
+            upper = upperList.pop();
+            if (root == null) continue;
+            val = (long)root.val;
+            if (val <= lower) return false;
+            if (val >= upper) return false;
+            update(root.right, val, upper);
+            update(root.left, lower, val);
+        }
+        return true;
+    }
+
+    void update(TreeNode node, long lower, long upper) {
+        st.push(node);
+        lowerList.push(lower);
+        upperList.push(upper);
+    }
+}
+```
+
