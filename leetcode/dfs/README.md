@@ -366,21 +366,6 @@ class Solution {
 递归中序遍历，仔细想想为什么中序遍历只需判断节点的值一次
 
 ```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
     long pre = Long.MIN_VALUE;
     public boolean isValidBST(TreeNode root) {
@@ -410,21 +395,6 @@ Iterative
 1\) Queue的BFS
 
 ```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
     Queue<TreeNode> queue = new LinkedList<>();
     Queue<Long> upperList = new LinkedList<>(), lowerList = new LinkedList<>();
