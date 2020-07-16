@@ -1022,26 +1022,80 @@ return its minimum depth = 2.
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.left == null && root.right == null) {
+            return 1;
+        }
+        if (root.left == null) {
+            return minDepth(root.right) + 1;
+        }
+        if (root.right == null) {
+            return minDepth(root.left) + 1;
+        }
+        return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+    }
+}
+```
 
-   public int minDepth(TreeNode root) {
-      if (root == null) {
-         return 0;
-      }
-      return getMin(root);
-   }
-   private int getMin(TreeNode root) {//分成两个方法，防止少递归一次，比如[1,2]这样的二叉树
-      if (root == null) {
-         return Integer.MAX_VALUE;
-      }
-      if (root.left == null && root.right == null) {//判断是否是叶子结点
-         return 1;
-      }
-      return Math.min(getMin(root.left), getMin(root.right)) + 1;
-   }
+BFS迭代解法锻炼思维
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int depth = 1;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            int currentSize = queue.size();
+            
+            for (int i = 0; i < currentSize; i++) {
+                TreeNode node = queue.poll();
+                if (node.left == null && node.right == null) {
+                    return depth; // 遇到第一个叶子节点立即返回，确保最小深度
+                }
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+            depth++;
+        }
+        return depth;
+    }
 }
 ```
 
