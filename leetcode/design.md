@@ -59,5 +59,170 @@ Now, the user wants to input a new sentence. The following function will provide
 
 ### 分析
 
+大体意思就是设计一个搜索的自动补全系统，它需要包含如下两个方法：
+
+* AutocompleteSystem\(String\[\] sentences, int\[\] times\): 输入句子sentences，及其出现次数times
+* Listinput\(char c\): 输入字符c可以是26个小写英文字母，也可以是空格，以’\#’结尾。返回输入字符前缀对应频率最高的至多3个句子，频率相等时按字典序排列。
+
+1\) 暴力解法的思路（TLE）：
+
+![](../.gitbook/assets/image%20%2869%29.png)
+
+2\) Trie
+
+前缀树包含节点和边，可以像树一样存储字符串。每个节点最多有多个子节点和边（根据存储的字符范围，比如全小写26个，全字符128或256个），边用于连接父节点和子节点，每条边对应 1 个存储的字符。
+
+根据字符串中每个位置出现的字符，从上到下存储字符串。第一层存储字符串中出现的所有首字母，第二层存储字符串中第二个位置出现的所有字母。
+
+前缀树常用于存储字典中的所有单词。数的每一个层表示字符串对应位置上的字符。从词根开始到一个叶节点，就是一个单词。
+
+这道题需要修改普通前缀树的结构，给每个单词增加访问次数标记 times，它存储在对应单词的叶节点。
+
+在方法 AutoComplete 中，将 sentences 数组中所有句子插入到单词查找树中，并在叶节点上添加每个句子出现的次数 times。
+
+下图句子 "A","to", "tea", "ted", "ten", "i", "in"，每个句子出现次数为 15, 7, 3, 4, 12, 11, 5, 9 的Trie。
+
+![](../.gitbook/assets/image%20%2868%29.png)
+
 ### 代码
+
+* AutocompleteSystem\(\) 方法的时间复杂度为 O\(k\*l\)，遍历 i 条长度为 k 的句子，并将它们插入到Trie中。
+* input\(\) 方法的时间复杂度为O\(p+q+mlog\(m\)\)，其中 p 表示当前已输入句子cursent 的长度，q表示单词查找树中的节点数量，最后对长度为 m 的 list 排序需要时间O\(mlog\(m\)\)。
+
+```java
+/**
+ 将整个句子都视作单词加入字典树。前缀匹配回溯较多，修改字典树结点结构，使得每个结点维护其后计数最大的三个字符串，加速匹配。
+ */
+class AutocompleteSystem {
+    // 构建Trie
+    class Trie {
+        // 确定路径上的某个字符是否是某个单词（句子）的结尾字符
+        boolean isEnding;
+
+        int count;
+        String s;
+
+        Trie[] children = new Trie[27]; // 26个字符加‘ ’
+
+        // 小顶堆保存最大的k个
+        int k;
+        PriorityQueue<Trie> queue;
+
+        Trie(int k) {
+            this.k = k;
+            // min Heap
+            this.queue = new PriorityQueue<>((a, b) -> a.count == b.count ? b.s.compareTo(a.s) : a.count - b.count);
+            // 字典树的一条路径的最后一位存空格
+            this.children = new Trie[27];
+
+        }
+
+        private void insert(String word, int val) {
+            if (word.isEmpty()) {
+                return;
+            }
+
+            Trie temp = this;
+            // 记录路径上的节点
+            List<Trie> path = new LinkedList<>();
+            for (char c : word.toCharArray()) {
+                int index = (c == ' ') ? 26 : (c - 'a');
+                if (temp.children[index] == null) {
+                    temp.children[index] = new Trie(k);
+                }
+
+                temp = temp.children[index];
+                path.add(temp);
+            }
+
+            // 结尾的字符特殊标记，并进行整个路径的计数更新
+            temp.isEnding = true;
+            temp.count += val;
+            temp.s = word;
+
+            // 关联终止节点到路径上的每个节点
+            for (Trie cur : path) {
+                // remove old value
+                if (cur.queue.contains(temp)) {
+                    cur.queue.remove(temp);
+                }
+                // update new value
+                cur.queue.add(temp);
+                // 大于k个，将最小的弹出
+                while (cur.queue.size() > k) {
+                    cur.queue.poll();
+                }
+            }
+        }
+
+        private void search(List<String> results) {
+            List<Trie> temp = new ArrayList<>();
+            // 加入堆中元素
+            while (!queue.isEmpty()) {
+                Trie trie = queue.poll();
+                temp.add(trie);
+                results.add(trie.s);
+            }
+            queue.addAll(temp);
+            Collections.reverse(results);
+        }
+    }
+
+    // 字典树
+    private final Trie root;
+    // 记录前一个节点
+    private Trie pre;
+    //记录历史字符串
+    private StringBuilder sb;
+
+    public AutocompleteSystem(String[] sentences, int[] times) {
+        this.root = new Trie(3); // 每条路径最多三个单词
+        this.pre = root;
+        sb = new StringBuilder();
+
+        for (int i = 0; i < sentences.length; i++) {
+            root.insert(sentences[i], times[i]);
+        }
+    }
+    
+    public List<String> input(char c) {
+        List<String> results = new LinkedList<>();
+        // 遇到‘#’终止
+        if (c == '#') {
+            // 更新历史记录
+            saveHistory(sb.toString());
+            // 清空状态
+            pre = root;
+            sb = new StringBuilder();
+            return results;
+        }
+
+        // 尚未终止
+        // 记录历史
+        sb.append(c);
+
+        // 更新节点
+        if (pre != null) {
+            pre = (c == ' ') ? pre.children[26] : pre.children[c - 'a'];
+        }
+        // 搜索其后的所有值
+        if (pre != null) {
+            pre.search(results);
+        }
+        return results;
+    }
+
+    private void saveHistory(String s) {
+        root.insert(s, 1);
+    }
+
+    
+}
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem obj = new AutocompleteSystem(sentences, times);
+ * List<String> param_1 = obj.input(c);
+ */
+```
 
