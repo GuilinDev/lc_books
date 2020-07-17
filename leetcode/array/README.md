@@ -586,13 +586,16 @@ Output: [1,3,12,0,0]
 ```java
 class Solution {
     public void moveZeroes(int[] nums) {
-        for (int left = 0, right = 0; right < nums.length; right++) {
-            if (nums[right] != 0) {//把非0的元素全部换到前面来
-                int temp = nums[right];
-                nums[right] = nums[left];
-                nums[left] = temp;
-                left++;//挪动指针从非0元素到下一位
-            }
+        int zeroIndex = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                if (i != zeroIndex) { // 优化下，相同元素不用交换
+                    nums[i] = nums[i] ^ nums[zeroIndex];
+                    nums[zeroIndex] = nums[i] ^ nums[zeroIndex];
+                    nums[i] = nums[i] ^ nums[zeroIndex];
+                }
+                zeroIndex++;
+            } 
         }
     }
 }
