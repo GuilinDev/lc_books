@@ -275,7 +275,7 @@ Output: 10
 
 对于每一个位置，都这样操作，得到一个矩形面积，然后取所有值中最大的那个，时间O\(n^2\)，空间O\(1\)。
 
-![](../../.gitbook/assets/image%20%2884%29.png)
+![](../../.gitbook/assets/image%20%2887%29.png)
 
 2）优化解法
 
@@ -287,43 +287,43 @@ Output: 10
 
  1、一开始看到的柱形高度为 `2` ，这个时候以这个 `2` 为高度的最大面积的矩形还不能确定，我们需要继续向右遍历，如下图
 
-![](../../.gitbook/assets/image%20%2887%29.png)
+![](../../.gitbook/assets/image%20%2891%29.png)
 
 2、然后看到到高度为 1 的柱形，这个时候以这个柱形为高度的矩形的最大面积还是不知道的。但是它之前的以 2 为高度的最大面积的矩形是可以确定的，这是因为这个 1 比 2 小 ，因为这个 1 卡在了这里 2 不能再向右边扩展了，如下图。
 
-![](../../.gitbook/assets/image%20%2878%29.png)
+![](../../.gitbook/assets/image%20%2881%29.png)
 
 计算一下以 2 为高度的最大矩形的面积是 2。如果已经确定了一个柱形的高度，接下来的计算这个矩形可以不管了，将它以虚框表示，如下图。
 
-![](../../.gitbook/assets/image%20%2883%29.png)
+![](../../.gitbook/assets/image%20%2886%29.png)
 
 3、遍历到高度为 5 的柱形，同样的以当前看到柱形为高度的矩形的最大面积也是不知道的，因为还要看右边高度的情况。那么它的左右有没有可以确定的柱形呢？没有，这是因为 5 比 1 大，我们看后面马上就出现了 6，不管是 1 这个柱形还是 5 这个柱形，都还可以向右边扩展。
 
-![](../../.gitbook/assets/image%20%2881%29.png)
+![](../../.gitbook/assets/image%20%2884%29.png)
 
  4、接下来，遍历到高度为 `6` 的柱形，同样的，以柱形 `1`、`5`、`6` 为高度的最大矩形面积还是不能确定下来；
 
-![](../../.gitbook/assets/image%20%2877%29.png)
+![](../../.gitbook/assets/image%20%2879%29.png)
 
  5、再接下来，遍历到高度为 `2` 的柱形。
 
-![](../../.gitbook/assets/image%20%2872%29.png)
+![](../../.gitbook/assets/image%20%2873%29.png)
 
 发现了一件很神奇的事情，高度为 6 的柱形对应的最大矩形的面积的宽度可以确定下来，它就是夹在高度为 5 的柱形和高度为 2 的柱形之间的距离，它的高度是 6，宽度是 1。
 
-![](../../.gitbook/assets/image%20%2873%29.png)
+![](../../.gitbook/assets/image%20%2875%29.png)
 
 将可以确定的柱形设置为虚线
 
-![](../../.gitbook/assets/image%20%2890%29.png)
+![](../../.gitbook/assets/image%20%2894%29.png)
 
  接下来柱形 `5` 对应的最大面积的矩形的宽度也可以确定下来，它是夹在高度为 `1` 和高度为 `2` 的两个柱形之间的距离；
 
-![](../../.gitbook/assets/image%20%2888%29.png)
+![](../../.gitbook/assets/image%20%2892%29.png)
 
 标成虚线
 
-![](../../.gitbook/assets/image%20%2889%29.png)
+![](../../.gitbook/assets/image%20%2893%29.png)
 
 > 我们发现了，只要是遇到了当前柱形的高度比它上一个柱形的高度严格小的时候，一定可以确定它之前的**某些**柱形的最大宽度，并且确定的柱形宽度的顺序是从右边向左边。 这个现象告诉我们，在遍历的时候需要记录的信息就是遍历到的柱形的下标，它一左一右的两个柱形的下标的差就是这个面积最大的矩形对应的最大宽度。
 
@@ -337,35 +337,35 @@ Output: 10
 
 6、最后遍历到最后一个柱形，即高度为 3 的柱形。
 
-![](../../.gitbook/assets/image%20%2880%29.png)
+![](../../.gitbook/assets/image%20%2883%29.png)
 
 （一次遍历完成以后。接下来考虑栈里的元素全部出栈。）
 
 接下来就要依次考虑还在栈里的柱形的高度。和刚才的方法一样，只不过这个时候右边没有比它高度还小的柱形了，这个时候计算宽度应该假设最右边还有一个下标为 len （这里index等于 6） 的高度为 0 （或者 0.5，只要比 1 小）的柱形，作为哨兵柱子。
 
-![](../../.gitbook/assets/image%20%2879%29.png)
+![](../../.gitbook/assets/image%20%2882%29.png)
 
-![](../../.gitbook/assets/image%20%2876%29.png)
+![](../../.gitbook/assets/image%20%2878%29.png)
 
 7、下标为 5 ，即高度为 3 的柱形，左边的下标是 4 ，右边的下标是 6 ，因此宽度是 6 - 4 - 1 = 1（两边都不算，只算中间的距离，所以减 1）；算完以后，将它标为虚线。
 
-![](../../.gitbook/assets/image%20%2871%29.png)
+![](../../.gitbook/assets/image%20%2872%29.png)
 
 8、下标为 4 ，高度为 2 的柱形，左边的下标是 1 ，右边的下标是 6 ，因此宽度是 6 - 1 - 1 = 4；算完以后，将它标为虚线。
 
-![](../../.gitbook/assets/image%20%2891%29.png)
+![](../../.gitbook/assets/image%20%2895%29.png)
 
 9、最后看下标为 1，高度为 1 的矩形，它的左边和右边其实都没有元素了，它就是整个柱形数组里高度最低的柱形，没有谁能挡住它，所以计算它的宽度，就是整个柱形数组的长度。
 
-![](../../.gitbook/assets/image%20%2874%29.png)
+![](../../.gitbook/assets/image%20%2876%29.png)
 
-![](../../.gitbook/assets/image%20%2875%29.png)
+![](../../.gitbook/assets/image%20%2877%29.png)
 
 到此为止，所有的柱形高度对应的最大矩形的面积就都计算出来了。
 
     
 
-![](../../.gitbook/assets/image%20%2886%29.png)
+![](../../.gitbook/assets/image%20%2890%29.png)
 
 
 
@@ -487,6 +487,12 @@ Output: 6
 
 ### 题意和分析
 
+1\) 84 题栈的解法，注意观察橙色部分，就是按照层数遍历，然后求出最大矩形的面积
+
+![](../../.gitbook/assets/image%20%2889%29.png)
+
+2\) DP解法，参考这里\([https://leetcode.com/problems/maximal-rectangle/discuss/29054/Share-my-DP-solution](https://leetcode.com/problems/maximal-rectangle/discuss/29054/Share-my-DP-solution)\) 
+
 The DP solution proceeds row by row, starting from the first row. Let the maximal rectangle area at row i and column j be computed by \[right\(i,j\) - left\(i,j\)\]\*height\(i,j\).
 
 All the 3 variables left, right, and height can be determined by the information from previous row, and also information from the current row. So it can be regarded as a DP solution. The transition equations are:
@@ -499,41 +505,139 @@ All the 3 variables left, right, and height can be determined by the information
 
 > height\(i,j\) = 0, if matrix\[i\]\[j\]=='0'
 
+比较难理解，需要结合84题和上面的解法来看，上面的解法我们更新一次 heights，就利用84题的算法来找一次当前柱子左右两边的非递增柱子，并更新最大面积，但实际上，通过寻找左右两边的最近的非递增柱子的这个过程，可以通过上一次的左右两边非递增的柱子的结果来找。
+
+定义一下leftLessMin \[ \] 和 rightLessMin \[ \] 的含义， leftLessMin \[ i \] 代表左边第一个比当前柱子矮的下标，如下图橙色柱子时当前遍历的柱子。rightLessMin \[ \] 是右边第一个比当前矮的柱子下标。
+
+![](../../.gitbook/assets/image%20%2874%29.png)
+
+下面以寻找左边刚好比当前小的柱子为例，如果当前新增的层全部是 1，则leftLessMin \[ \]无需改变
+
+![](../../.gitbook/assets/image%20%2871%29.png)
+
+如果当前新增的层含有0，如下图
+
+![](../../.gitbook/assets/image%20%2880%29.png)
+
+考虑最后一个柱子的更新。上一层的 leftLessMin = 1，也就是蓝色 0 的位置是第一个比它低的柱子。但是在当前层，由于中间出现了 0。所以不再是上一轮的 leftLessMin ，而是和上次出现 0 的位置进行比较（因为 0 一定比当前柱子小），谁的下标大，更接近当前柱子，就选择谁。上图中出现 0 的位置是 2，之前的 leftLessMin 是 1，选一个较大的，那就是 2 了。
+
 ### 代码
+
+用栈求最大矩形面积的做法，时间复杂度：O\(mn\)，空间复杂度：O\(n\)。
 
 ```java
 class Solution {
     public int maximalRectangle(char[][] matrix) {
-        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) return 0;
-        int m = matrix.length, n = matrix[0].length, maxArea = 0;
-        int[] left = new int[n];
-        int[] right = new int[n];
-        int[] height = new int[n];
-        Arrays.fill(right, n - 1);
-        for (int i = 0; i < m; i++) {
-            int rB = n - 1;
-            for (int j = n - 1; j >= 0; j--) {
-                if (matrix[i][j] == '1') {
-                    right[j] = Math.min(right[j], rB);
+        if (matrix.length == 0) {
+            return 0;
+        }
+        int[] heights = new int[matrix[0].length];
+        int maxArea = 0;
+        for (int row = 0; row < matrix.length; row++) {
+            //遍历每一列，更新高度
+            for (int col = 0; col < matrix[0].length; col++) {
+                if (matrix[row][col] == '1') {
+                    heights[col] += 1;
                 } else {
-                    right[j] = n - 1;
-                    rB = j - 1;
+                    heights[col] = 0;
                 }
             }
-            int lB = 0;
-            for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == '1') {
-                    left[j] = Math.max(left[j], lB);
-                    height[j]++;
-                    maxArea = Math.max(maxArea, height[j] * (right[j] - left[j] + 1));
-                } else {
-                    height[j] = 0;
-                    left[j] = 0;
-                    lB = j + 1;
-                }
-            }
+            //调用84题的解法，更新函数
+            maxArea = Math.max(maxArea, largestRectangleArea(heights));
         }
         return maxArea;
+    }
+
+    // 84题的解法直接拷过来
+    public int largestRectangleArea(int[] heights) {
+        if (heights == null || heights.length == 0) {
+            return 0;
+        }
+        int len = heights.length;
+        Stack<Integer> stack = new Stack<>();
+        
+        int result = 0;
+        
+        for (int i = 0; i <= len; i++) { // 末尾会多一个哨兵节点
+            int height = (i == len) ? 0 : heights[i];
+            
+            if (stack.isEmpty() || height >= heights[stack.peek()]) { // 单调递增，入栈
+                stack.push(i);
+            } else { // 当前柱子比前面的柱子矮了
+                int preIndex = stack.pop();
+                int currArea = 0;
+                if (stack.isEmpty()) { // pop出哨兵节点了，计算最矮的柱子乘以所有柱子数目的面积
+                    currArea = heights[preIndex] * i;
+                } else { // 正常计算
+                    currArea = heights[preIndex] * (i - 1 - stack.peek());
+                }
+                
+                result = Math.max(result, currArea);
+                i--; // 继续退回前面高的柱子，计算面积
+            }
+        }
+        return result;
+    }
+}
+```
+
+DP，时间复杂度：O\(mn\)，空间复杂度：O\(n\)。
+
+```java
+class Solution {
+   public int maximalRectangle(char[][] matrix) {
+        if (matrix.length == 0) {
+            return 0;
+        }
+        int maxArea = 0;
+        int cols = matrix[0].length;
+        int[] leftLessMin = new int[cols];
+        int[] rightLessMin = new int[cols];
+        Arrays.fill(leftLessMin, -1); //初始化为 -1，也就是最左边
+        Arrays.fill(rightLessMin, cols); //初始化为 cols，也就是最右边
+        int[] heights = new int[cols];
+        for (int row = 0; row < matrix.length; row++) {
+            //更新所有高度
+            for (int col = 0; col < cols; col++) {
+                if (matrix[row][col] == '1') {
+                    heights[col] += 1;
+                } else {
+                    heights[col] = 0;
+                }
+            }
+            //更新所有leftLessMin
+            int boundary = -1; //记录上次出现 0 的位置
+            for (int col = 0; col < cols; col++) {
+                if (matrix[row][col] == '1') {
+                    //和上次出现 0 的位置比较
+                    leftLessMin[col] = Math.max(leftLessMin[col], boundary);
+                } else {
+                    //当前是 0 代表当前高度是 0，所以初始化为 -1，防止对下次循环的影响
+                    leftLessMin[col] = -1; 
+                    //更新 0 的位置
+                    boundary = col;
+                }
+            }
+            //右边同理
+            boundary = cols;
+            for (int col = cols - 1; col >= 0; col--) {
+                if (matrix[row][col] == '1') {
+                    rightLessMin[col] = Math.min(rightLessMin[col], boundary);
+                } else {
+                    rightLessMin[col] = cols;
+                    boundary = col;
+                }
+            }
+
+            //更新所有面积
+            for (int col = cols - 1; col >= 0; col--) {
+                int area = (rightLessMin[col] - leftLessMin[col] - 1) * heights[col];
+                maxArea = Math.max(area, maxArea);
+            }
+
+        }
+        return maxArea;
+
     }
 }
 ```
