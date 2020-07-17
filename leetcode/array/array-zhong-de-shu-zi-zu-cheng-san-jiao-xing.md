@@ -245,7 +245,7 @@ class Solution {
 
 ## 84 - Largest Rectangle in Histogram
 
-### 原题概述
+### 题目
 
 Given _n_ non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
 
@@ -262,7 +262,7 @@ Input: [2,1,5,6,2,3]
 Output: 10
 ```
 
-### 题意和分析
+### 分析
 
 给一个直方图，用一系列非负数字表示，每个bar的宽度一样都为1，找到直方图中最大的矩形区域。
 
