@@ -274,10 +274,11 @@ class Solution {
         }
         List<Integer> oneRecord = new ArrayList<>();
         Arrays.sort(candidates);
-        backtrack(candidates, target, 0, oneRecord, result);
+        backtrack(candidates, target, 0, oneRecord, result); 
         return result;
     }
 
+    // index的作用是标记排序后的数组在某层递归树中应该从哪里开始取数字
     private void backtrack(int[] candidates, int remian, int index, List<Integer> oneRecord, List<List<Integer>> result) {
         if (remian < 0 ) {//组合不合适
             return;
