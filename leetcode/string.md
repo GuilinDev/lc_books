@@ -2086,11 +2086,11 @@ Output: 5
 
 设计一个计算器，输入一个有效的字符串表达式，加减乘除后输出一个整数，除法是地板除法，表达式里的数字都是正整数。eval\(\)是脚本语言中的方法，Java并没有。
 
-相对于I中只有加减，这道题多了乘除，并且没有括号，所以简化了。使用stack来存储计算的中间结果，每次遇到加减法就直接压入；遇到乘除法就先计算一下再压入。
+相对于Basic Calculate I中只有加减，这道题多了乘除，因为没有括号，所以简化了。使用stack来存储计算的中间结果，每次遇到加减法就直接压入；遇到乘除法就先计算一下再压入。
 
 时间上一遍扫过去O\(n\)，空间上开了一个stack，O\(n\)。
 
-当然这道题不用stack也可以，可以把string先转换成char array，然后从左到右运算，维持一个result负责最终结果和一个pre负责遇到乘法除法的时候重算一下先做乘除。复杂度一样。
+当然这道题不用stack也可以（不如stack直观），可以把string先转换成char array，然后从左到右运算，维持一个result负责最终结果和一个pre负责遇到乘法除法的时候重算一下先做乘除。复杂度同stack。
 
 ### 代码
 
@@ -2106,7 +2106,7 @@ class Solution {
         Stack<Integer> stack = new Stack<>();
         int num = 0;//转换数字所用，初始为0
         char sign = '+'; //记录本次数据之前的运算符号，初始值为'+'
-        for (int i = 0; i <s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) {
             if (Character.isDigit(s.charAt(i))) {//如果是数字，连续出现就会每次乘以10，比如8+123*5
                 num = num * 10 + s.charAt(i) - '0';
             }
@@ -2118,7 +2118,7 @@ class Solution {
                 if (sign == '+') {
                     stack.push(num);
                 }
-                if (sign == '-') {//待会加一个负数即可
+                if (sign == '-') {//压入负数，待会加一个负数即可
                     stack.push(-num);
                 }
 
