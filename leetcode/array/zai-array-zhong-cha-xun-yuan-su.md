@@ -427,7 +427,7 @@ class Solution {
 }
 ```
 
-## ??34 - Search for a Range
+## 34 - Find First and Last Position of Element in Sorted Array \(Search for a Range\)
 
 ### 原题概述
 
@@ -463,67 +463,56 @@ Output: [-1,-1]
 
 ### 代码
 
-```text
+```java
 class Solution {
-    /** time O(logn) space O(1) 方法：二分
-     * 思路： 做 2次 二分 分别 找左边界 和 右边界
-     唯一 需要注意的是 mid 和target相等的情况
-     * */
     public int[] searchRange(int[] nums, int target) {
+        int[] result = {-1, -1};
         if (nums == null || nums.length == 0) {
-            return new int[] {-1, -1};
+            return result;
         }
-
-        return new int[]{leftEdge(nums, target), rightEdge(nums, target)};
-    }
-    private int leftEdge(int[] nums, int target) {
-        int left  = 0;
+        
+        int left = 0;
         int right = nums.length - 1;
-
-        while (left + 1 < right) {//防止过界
+        int startPoint = -1;
+        int endPoint = -1;
+        
+        while (left <= right) {// 第一次binary search找左边界
             int mid = left + (right - left) / 2;
-
-            if (nums[mid] >= target) {//这个是找左边界，先判断如果nums[mid]大于等于target，移动右下标right
-                right = mid;
+            if (nums[mid] >= target) {
+                right = mid - 1;
             } else {
-                left = mid;
+                left = mid + 1;
             }
         }
-        if (nums[left] == target) {
-            return left;
-        } else if (nums[right] == target) {
-            return right;
-        } else {
-            return -1;
+        
+        if (left <= nums.length - 1 && nums[left] == target) {
+            startPoint = left;
+        } 
+        if (startPoint == -1) { // 左边界没有该值，直接返回[-1,-1]
+            return result;
         }
-    }
-    private int rightEdge(int[] nums, int target){
-        int left  = 0;
-        int right = nums.length - 1;
-
-        while (left + 1 < right) {//防止过界
+        
+        left = 0;
+        right = nums.length - 1;
+        while (left <= right) {// 第二次binary search找右边界
             int mid = left + (right - left) / 2;
-
-            if (nums[mid] <= target) { //这个是找右边界，先判断如果nums[mid]小于等于target，移动右下标left
-                left = mid;
+            if (nums[mid] <= target) {
+                left = mid + 1;
             } else {
-                right = mid;
+                right = mid - 1;
             }
         }
-        if (nums[right] == target) {
-            return right;
-        } else if (nums[left] == target) {
-            return left;
-        } else {
-            return -1;
-        }
+        if (right >= 0 && nums[right] == target) {
+            endPoint = right;
+        } 
+        
+        result[0] = startPoint;
+        result[1] = endPoint;
+        
+        return result;
     }
 }
 ```
-
-上面这个方法比较好理解，但是两个方法比较类似，合并成一个写法：
-
-ToDo：
 
 
 

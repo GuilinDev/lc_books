@@ -1830,3 +1830,96 @@ class Solution {
 }
 ```
 
+## 525 Contiguous Array
+
+### 原题
+
+Given a binary array, find the maximum length of a contiguous subarray with equal number of 0 and 1.
+
+**Example 1:**  
+
+
+```text
+Input: [0,1]
+Output: 2
+Explanation: [0, 1] is the longest contiguous subarray with equal number of 0 and 1.
+```
+
+**Example 2:**  
+
+
+```text
+Input: [0,1,0]
+Output: 2
+Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+```
+
+**Note:** The length of the given binary array will not exceed 50,000.
+
+### 分析
+
+暴力解法，遍历每个子字符串O\(n^2\)，并计算每个子字符串里面的0和1的个数，总共O\(n^3\)；改进一点是用两个变量记录0和1的个数，如果相等就计算最大长度，共O\(n^2\)； 
+
+如果需要线性时间（题目列表长度最长为50000，应是线性时间），依然是时间换空间的思路，先用一个变量sum，遍历数组，遇到0就减一，遇到1就加一，sum作为hashmap的key，得到该sum的索引位置为hashmap的value，如果在遍历的过程中发现sum再次出现，说明从sum第一次的位置到当前位置有共同的前缀和，该区间相减为0（相同数量的0和1，一个-1一个+1），这时候相减计算最大的长度。时间复杂度O\(n\)，空间复杂度O\(n\)。
+
+### 代码
+
+暴力解法
+
+```java
+// Very Brute force
+// // TC = O(n^3)
+// for(int i = 0; i < nums.length - 1; i++) {
+//     for(int j = i + 1; j++) {
+//         for(int k = i; k < j; k++) {
+//             // check the count zero and ones 
+//             // maxLen = Math.max(maxLen, j - i);
+//         }
+//     }
+// }
+
+// // Brute force
+// // TC = O(n^2)
+// int zero = 0;
+// int one = 0;
+// for(int i = 0; i < nums.length - 1; i++) {
+//     for(int j = i + 1; j++) {
+//         if(nums[i] == 0) zero++;
+//         if(nums[i] == 1) one++;
+//         if(zero == one) maxLen = Math.max(maxLen, j - i);
+//     }
+// }
+```
+
+HashMap
+
+```java
+class Solution {
+    public int findMaxLength(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int maxLength = 0;
+        int sum = 0;
+        
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1); // 初始化，还没开始的时候，sum为0，index为-1
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                sum--;
+            } else {
+                sum++;
+            }
+            
+            if (map.containsKey(sum)) { // 找到前缀和相同的子字符串
+                maxLength = Math.max(maxLength, i - map.get(sum));
+            } else {
+                map.put(sum, i);
+            }
+        }
+        return maxLength;
+    }
+}
+```
+
