@@ -720,10 +720,11 @@ By calling next repeatedly until hasNext returns false, the order of elements re
  * }
  */
 public class NestedIterator implements Iterator<Integer> {
-
+    
     Stack<NestedInteger> stack = new Stack<>();
 
     public NestedIterator(List<NestedInteger> nestedList) {
+        //构造器先把所有NestedIterator的对象从后向前加入到栈中
         for (int i = nestedList.size() - 1; i >= 0; i--) {
             stack.push(nestedList.get(i));
         }
@@ -731,18 +732,20 @@ public class NestedIterator implements Iterator<Integer> {
 
     @Override
     public Integer next() {
-        NestedInteger t = stack.pop();
-        return t.getInteger();
+        // 返回stack顶部元素的整数
+        return stack.pop().getInteger();
     }
 
     @Override
     public boolean hasNext() {
         while (!stack.isEmpty()) {
-            NestedInteger t = stack.peek();
-            if (t.isInteger()) return true;
-            stack.pop();
-            for (int i = t.getList().size() - 1; i >= 0; i--) {
-                stack.push(t.getList().get(i));
+            NestedInteger ni = stack.peek();
+            if (ni.isInteger()) { // 如果时数字，返回
+                return true;
+            }
+            stack.pop(); // 否则是数组，嵌套从尾到头压入栈
+            for (int i = ni.getList().size() - 1; i >= 0; i--) {
+                stack.push(ni.getList().get(i));
             }
         }
         return false;
