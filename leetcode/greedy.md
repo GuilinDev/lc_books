@@ -199,6 +199,9 @@ DP
 ```java
 class Solution {
     public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return true;
+        }
         int len = nums.length;
         int [] dp = new int[len];
         Arrays.fill(dp, 0);
@@ -209,7 +212,32 @@ class Solution {
                 return false;
             }
         }
-        return dp[len - 1] >= 0;
+        return dp[len - 1] >= 0; //等于是刚好到最后一个index
+    }
+}
+```
+
+考虑状态压缩
+
+```java
+class Solution {
+    // dp[i] = max(dp[i - 1], nums[i - 1]) - 1
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return true;
+        }
+        int len = nums.length;
+        int prev = 0, curr = 0;
+        
+        for (int i = 1; i < len; i++) {
+            curr = Math.max(prev, nums[i - 1]) - 1;
+            
+            if (curr < 0) {
+                return false;
+            }
+            prev = curr;
+        }
+        return curr >= 0;
     }
 }
 ```
@@ -257,9 +285,45 @@ You can assume that you can always reach the last index.
 
 ### **题意和分析** <a id="ti-yi-he-fen-xi-30"></a>
 
-上一道题55 Jump Game是判断能否到达最后，这一道题是找出步数最少的走法，[参考这里](https://www.cnblogs.com/lichen782/p/leetcode_Jump_Game_II.html)；遍历数组，把上一道题的全局最优变化成第step步最优和第step-1步最优，step表示走了多少步，当走到超过第step-1步所能达到最远距离的时候，说明step-1不能到达当前步，这时候更新步数step-1。
+上一道题55 Jump Game是判断能否到达最后，这一道题是找出步数最少的走法；
+
+LC的讨论里面，大部分都是贪婪算法的思路，每次在可跳范围内选择可以使得跳的更远的位置。
+
+如下图，开始的位置是 2，可跳的范围是橙色的。然后因为 3 可以跳的更远，所以选择跳到 3 的位置。
+
+![](../.gitbook/assets/image%20%28100%29.png)
+
+然后现在的位置就是 3 了，能跳的范围是橙色的，然后因为 4 可以跳的更远，所以选择下次跳到 4 的位置。
+
+![](../.gitbook/assets/image%20%2899%29.png)
+
+So on and so forth，写代码时用curFarthest 表示当前能跳的最远边界，对于上边的的例子，第一个图就是橙色 1，第二个图中就是橙色的 4，遍历数组的时候，遇到了边界，就重新更新新的边界直到最后。
 
 ### **代码** <a id="dai-ma-30"></a>
+
+Greedy，时间O\(n\)，空间O\(1\)
+
+```java
+class Solution {
+    public int jump(int[] nums) {
+        int currEnd = 0;
+        int steps = 0;
+        int currFarthest = 0;
+        for (int i = 0; i < nums.length - 1; i++) { // 检查到倒数第二个元素，这样才有“下一个”元素
+            // 每遇到一个新数就，就判断一下最远可以跳到的距离
+            // 每次找局部最优，最后达到全局最优
+            currFarthest = Math.max(currFarthest, nums[i] + i);
+            if (i == currEnd) {//遇到边界，就更新边界，并且步数加一
+                currEnd = currFarthest;
+                steps++;
+            }
+        }
+        return steps;
+    }
+}
+```
+
+另一个写法
 
 ```java
 class Solution {
@@ -278,6 +342,8 @@ class Solution {
     }
 }
 ```
+
+
 
 ## 135 Candy
 
