@@ -84,7 +84,7 @@ class Solution {
 
 ```
 
-BFS，这里用了额外的一个2D数组来存储是否已经访问过，如果改变原数组的值，则可以不要visited数组。
+BFS，这里用了额外的一个2D数组来存储是否已经访问过，如果可以改变原数组的值，则可以不要visited数组。
 
 ```java
 class Solution {
@@ -248,9 +248,11 @@ Given the above grid, return `0`.
 
 ### 题意和分析
 
-找二维数组中最大的岛的面积，岛为1，这个几乎就是上一道题的翻版，也即是典型DFS的实现。
+找二维数组中最大的岛的面积，岛为1，这个几乎就是上一道题的翻版，同样也是DFS，BFS，Union Find的做法。
 
 ### 代码
+
+DFS
 
 ```java
 class Solution {
@@ -259,6 +261,7 @@ class Solution {
       for (int i = 0; i < grid.length; i++) {
          for (int j = 0; j < grid[0].length; j++) {
             if (grid[i][j] == 1) {
+               // 每个点扩散后取最大
                maxArea = Math.max(maxArea, dfs(grid, i, j));
             }
          }
@@ -273,6 +276,136 @@ class Solution {
       }
       return 0;//当前元素为0，不是island，直接返回
    }
+}
+```
+
+BFS
+
+```java
+class Solution {
+    private static int[][] DIRECTIONS = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    // BFS
+    public int maxAreaOfIsland(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        int M = grid.length;
+        int N = grid[0].length;
+        boolean[][] visited = new boolean[M][N];
+        int res = 0;
+        for (int i=0; i<M; i++) {
+            for (int j=0; j<N; j++) {
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    res = Math.max(res, bfs(grid, visited, i, j));
+                }
+            }
+        }
+        return res;
+    }
+
+    private int bfs(int[][] grid, boolean[][] visited, int i, int j) {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{i, j});
+        visited[i][j] = true;
+        int res = 0;
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            res++;
+            for (int[] dir: DIRECTIONS) {
+                int x = curr[0] + dir[0];
+                int y = curr[1] + dir[1];
+                if (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length || visited[x][y] || grid[x][y] != 1) continue;
+                q.add(new int[]{x, y});
+                visited[x][y] = true;
+            }
+        }
+        return res;
+    }
+}
+```
+
+Union Find
+
+```java
+class Solution {
+    
+    private static int[][] DIRECTIONS = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    public int maxAreaOfIsland(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        int M = grid.length;
+        int N = grid[0].length;
+        int res = 0;
+        UinionFind uf = new UinionFind(grid);
+        for (int i=0; i<M; i++) {
+            for (int j=0; j<N; j++) {
+                if (grid[i][j] == 1) {
+                    res = Math.max(res, link(grid, i, j, uf, M, N));
+                }
+            }
+        }
+        return res;
+    }
+
+    
+    private int link(int[][] grid, int i, int j, UinionFind uf, int M, int N) {
+        int pre = i * N + j;
+        int res = uf.getSize(pre);
+        for (int[] dir: DIRECTIONS) {
+            int x = i + dir[0];
+            int y = j + dir[1];
+            if (x < 0 || y < 0 || x >= M || y >= N || grid[x][y] != 1) continue;
+            res = Math.max(res, uf.union(pre, x * N + y));
+        }
+        return res;
+    }
+
+    class UinionFind {
+        int[] parent;
+        int[] size;
+        int[] rank;
+
+        UinionFind(int[][] grid) {
+            int M = grid.length;
+            int N = grid[0].length;
+            this.parent = new int[M * N];
+            for (int i=0; i<M*N; i++) this.parent[i] = i;
+            this.rank = new int[M * N];
+            this.size = new int[M * N];
+            Arrays.fill(this.size, 1);
+        }
+
+        int find(int x) {
+            if (this.parent[x] != x) {
+                this.parent[x] = find(this.parent[x]);
+            }
+            return this.parent[x];
+        }
+
+        int union(int x, int y) {
+            int px = find(x);
+            int py = find(y);
+
+            if (px == py) return this.size[px];
+            if (this.rank[px] > this.rank[py]) {
+                this.parent[py] = px;
+                this.size[px] = this.size[px] + this.size[py];
+                return this.size[px];
+            } else if (this.rank[px] < this.rank[py]) {
+                this.parent[px] = py;
+                this.size[py] = this.size[px] + this.size[py];
+                return this.size[py];
+            } else {
+                this.parent[px] = py;
+                this.rank[py]++;
+                this.size[py] = this.size[px] + this.size[py];
+                return this.size[py];
+            }
+        }
+
+        int getSize(int x) {
+            return this.size[find(x)];
+        }
+    }
 }
 ```
 
