@@ -1443,7 +1443,7 @@ Explanation: The longest increasing subsequence is [2,3,7,101], therefore the le
 
 #### 1\) DP
 
-![](../../.gitbook/assets/image%20%28101%29.png)
+![](../../.gitbook/assets/image%20%28103%29.png)
 
 1. **定义状态** 由于一个子序列一定会以一个数结尾，于是将状态定义成：dp\[i\] 表示以 nums\[i\] 结尾的「上升子序列」的长度。注意：这个定义中 nums\[i\] 必须被选取，且必须是这个子序列的最后一个元素。
 2. **考虑状态转移方程** 
