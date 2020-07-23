@@ -27,7 +27,7 @@ Output: ["eat","oath"]
 
 这道题意思就是从二维数组中某个字符出发，可以向左向右向上向下移动，走过的路径构成一个字符串，判断是否能走出给定字符串的 word ，走过的字符不能够再走第二次。比如 eat，从第二行最后一列的 e 出发，向左移动，再向左移动，就走出了 eat。题目中给一个 word 列表，要求找出里面哪些单词可以由 board 生成。
 
-第79 题Word Search是判断某个单词能否在 board 中生成，所以暴力解法可以是遍历这道题给出的words的所有单词，每个单词都用79题的DFS的办法来看能不能被生成
+[第79 题Word Search](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#79-word-search)是判断某个单词能否在 board 中生成，所以暴力解法可以是遍历这道题给出的words的所有单词，每个单词都用79题的DFS的办法来看能不能被生成
 
 ### 代码
 
