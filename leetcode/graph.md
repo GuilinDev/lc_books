@@ -343,6 +343,210 @@ class Solution {
 } 
 ```
 
+## 210 Course Schedule II
+
+### 题目
+
+There are a total of _n_ courses you have to take, labeled from `0` to `n-1`.
+
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: `[0,1]`
+
+Given the total number of courses and a list of prerequisite **pairs**, return the ordering of courses you should take to finish all courses.
+
+There may be multiple correct orders, you just need to return one of them. If it is impossible to finish all courses, return an empty array.
+
+**Example 1:**
+
+```text
+Input: 2, [[1,0]] 
+Output: [0,1]
+Explanation: There are a total of 2 courses to take. To take course 1 you should have finished   
+             course 0. So the correct course order is [0,1] .
+```
+
+**Example 2:**
+
+```text
+Input: 4, [[1,0],[2,0],[3,1],[3,2]]
+Output: [0,1,2,3] or [0,2,1,3]
+Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both     
+             courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0. 
+             So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3] .
+```
+
+**Note:**
+
+1. The input prerequisites is a graph represented by **a list of edges**, not adjacency matrices. Read more about [how a graph is represented](https://www.khanacademy.org/computing/computer-science/algorithms/graph-representation/a/representing-graphs).
+2. You may assume that there are no duplicate edges in the input prerequisites.
+
+### 分析
+
+与207相同，只是这道题要求打印出完成课程的顺序，不仅仅是判断是否可以完成。《算法4》中第4.2.4.2小节《寻找有向环》和《拓扑排序》详细解释了做法。
+
+![](../.gitbook/assets/image%20%28105%29.png)
+
+![](../.gitbook/assets/image%20%28104%29.png)
+
+做法依然时BFS（记录入度表）和DFS，可以邻接表或者邻接矩阵，上一道题用的邻接表，这次用邻接矩阵。
+
+### 代码
+
+BFS
+
+```java
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if (numCourses == 0) {
+            return new int[0];
+        }
+        int[] inDegrees = new int[numCourses];
+        
+        //BFS
+        Queue<Integer> queue = new LinkedList<>();
+        
+        // 建立入度表
+        for (int[] pre : prerequisites) {
+            inDegrees[pre[0]]++;
+        }
+        
+        // 入度为0的节点的队列
+        for (int i = 0; i < inDegrees.length; i++) {
+            if (inDegrees[i] == 0) {
+                queue.offer(i); // 入度索引
+            }
+        }
+        
+        int count = 0; // 可以学完的课程的数量
+        int[] result = new int[numCourses];//可以学完的课程
+        
+        // 根据提供的先修课列表，删除入度为 0 的节点
+        while (!queue.isEmpty()){
+            int curr = queue.poll();
+            
+            result[count] = curr;   // 将可以学完的课程加入结果当中
+            count++;
+            
+            for (int[] pre : prerequisites) {
+                if (pre[1] == curr){
+                    inDegrees[pre[0]]--;
+                    if (inDegrees[pre[0]] == 0) {
+                        queue.offer(pre[0]);
+                    }
+                }
+            }
+        }
+        if (count == numCourses) { // 可以全部学完
+            return result;
+        }
+        return new int[0];        
+    }
+}
+```
+
+DFS
+
+数组作为邻接矩阵
+
+```java
+class Solution {
+        // 邻接矩阵 + DFS   由于用的数组，每次都要遍历，效率比较低
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if (numCourses == 0) {
+            return new int[0];
+        }
+        
+        // 建立邻接矩阵
+        int[][] graph = new int[numCourses][numCourses];
+        for (int[] p : prerequisites) {
+            graph[p[1]][p[0]] = 1;
+        }
+        
+        // 记录访问状态的数组，访问过了标记 -1，正在访问标记 1，还未访问标记 0
+        int[] status = new int[numCourses];
+        Stack<Integer> stack = new Stack<>();  // 用栈保存访问序列
+        for (int i = 0; i < numCourses; i++) {
+            if (!dfs(graph, status, i, stack)) return new int[0]; // 只要存在环就返回
+        }
+        
+        int[] result = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            result[i] = stack.pop();
+        }
+        return result;
+    }
+
+    private boolean dfs(int[][] graph, int[] status, int i, Stack<Integer> stack) {
+        if (status[i] == 1) { // 当前节点在此次 dfs 中正在访问，说明存在环
+            return false;
+        }
+        if (status[i] == -1) {
+            return true;
+        }
+
+        status[i] = 1;
+        for (int j = 0; j < graph.length; j++) {
+            // dfs 访问当前课程的后续课程，看是否存在环
+            if (graph[i][j] == 1 && !dfs(graph, status, j, stack)) return false;
+        }
+        status[i] = -1;  // 标记为已访问
+        stack.push(i);
+        return true;
+    }
+}
+```
+
+hashset作为邻接矩阵，推荐
+
+```java
+class Solution {
+        // 方法 2 升级版：用 HashSet 作为邻接矩阵，加速查找速度
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if (numCourses == 0) {
+            return new int[0];
+        }
+        
+        // HashSet 作为邻接矩阵
+        HashSet<Integer>[] graph = new HashSet[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new HashSet<>();
+        }
+        for (int[] p : prerequisites) {
+            graph[p[1]].add(p[0]);
+        }
+        
+        int[] mark = new int[numCourses]; // 标记数组
+        Stack<Integer> stack = new Stack<>(); // 结果栈
+        for (int i = 0; i < numCourses; i++) {
+            if(!isCycle(graph, mark, i, stack)) return new int[0];
+        }
+        int[] res = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            res[i] = stack.pop();
+        }
+        return res;
+    }
+
+    private boolean isCycle(HashSet<Integer>[] graph, int[] mark, int i, Stack<Integer> stack) {
+        if (mark[i] == -1) {
+            return true;
+        }
+        if (mark[i] == 1) {
+            return false;
+        }
+
+        mark[i] = 1;
+        for (int neighbor : graph[i]) {
+            if (!isCycle(graph, mark, neighbor, stack)) {
+                return false;
+            }
+        }
+        mark[i] = -1;
+        stack.push(i);
+        return true;
+    }
+}
+```
+
 ## 269 Alien Dictionary
 
 ### 原题概述
