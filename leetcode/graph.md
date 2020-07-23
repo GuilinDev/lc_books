@@ -393,13 +393,6 @@ Explanation: There are a total of 4 courses to take. To take course 3 you should
 
 BFS
 
-1. 建立入度表，入度为 0 的节点先入队 
-2. 当队列不为空，节点出队，标记学完课程数量的变量加 1，并记录该课程 
-3. 将课程的邻居入度减 1 
-4. 若邻居课程入度为 0，加入队列 
-
-用一个变量记录学完的课程数量，一个数组记录最终结果，简洁好理解。
-
 ```java
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
@@ -452,10 +445,7 @@ class Solution {
 
 DFS
 
-1. 建立邻接矩阵
-2. DFS 访问每一个课程，若存在环直接返回
-
-1\) 数组作为邻接矩阵，status 保存课程的访问状态，同一个栈保存课程的访问序列。
+数组作为邻接矩阵
 
 ```java
 class Solution {
@@ -505,7 +495,7 @@ class Solution {
 }
 ```
 
-2\) hashset作为邻接矩阵，推荐
+hashset作为邻接矩阵，推荐
 
 ```java
 class Solution {
