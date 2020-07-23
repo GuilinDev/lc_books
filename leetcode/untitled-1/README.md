@@ -1460,143 +1460,96 @@ Calling `next()` will return the next smallest number in the BST.
 
 ### 题意和分析
 
-这道题是对二叉搜索树的遍历，要求next\(\)返回下一个最小的val，next\(\)和hasNext\(\)的时间复杂度为O\(1\)，空间为O\(h\)，其中h为高度。BST的建树规则是left-root-right，这个跟中序遍历一样。
+这道题是对二叉搜索树的遍历，要求next\(\)返回下一个最小的val，next\(\)和hasNext\(\)的时间复杂度为O\(1\)，空间复杂度要求为O\(h\)，其中h为高度。BST的建树规则是left-root-right，这个跟中序遍历一样。
 
 > 每个节点的val值大于左子节点，小于右子节点。注意它不一定是完全的二叉树。所有结点的val值是唯一的。数组的搜索比较方便，可以直接使用下标，但删除或者插入就比较麻烦了，而链表与之相反，删除和插入都比较简单，但是查找很慢，这自然也与这两种数据结构的存储方式有关，数组是取一段相连的空间，而链表是每创建一个节点便取一个节点所需的空间，只是使用指针进行连接，空间上并不是连续的。而二叉树就既有链表的好处，又有数组的优点。
 
 ![&#x4E2D;&#x5E8F;&#x904D;&#x5386;&#x7684;&#x987A;&#x5E8F;&#x662F;GDHBEAKCIJF](../../.gitbook/assets/image.png)
 
-下面的思路来自于[https://blog.csdn.net/smile\_watermelon/article/details/47280679](https://blog.csdn.net/smile_watermelon/article/details/47280679)并做了修改
+使用自定义的栈来模拟中序遍历。也就是说，我们将采用迭代的方式来模拟中序遍历，而不是采用递归的方法；这样做的过程中，能够轻松的实现这两个函数的调用，而不是用其他额外的空间。
 
-一个非常简单的解决办法是遍历这棵二叉树，把二叉树的元素以从大到小的方式放到一个栈里，这样next\(\)从栈顶获取元素，hasNext\(\)调用栈不为空的判定方法。这种方法能满足题目中的时间复杂度要求，但是O\(n\)的空间复杂度无法满足题目中O\(h\)空间复杂度要求。
+然而，就这两个函数的复杂性而言，会有点复杂，我们需要花一些时间来理解这种方法是否符合问题所说的渐近复杂性的要求。具体算法：
 
-我们维护一个栈，栈中存放的是结点指针，**向栈中添加元素**发生在两种情况下：1.初始化迭代器时；2.调用next\(\)从栈中弹出一个元素时。
-
-我们结合下面的实例来描述这个栈中元素的添加和删除过程。对于hasNext\(\)方法，调用栈的empty\(\)方法即可，不做具体分析，仅分析next\(\)方法以及迭代器的数据结构。
-
-> 假设二叉查找树的结构如下：
-
-```text
-         6
-       /   \
-      5     8
-     /     / \
-    1     7   9
-     \      
-      3  
-     / \
-    2   4
-12345678910
-```
-
-> （1）栈的初始化，我们把root一直到最左下角的结点都放到stack中，即把如下三个结点放在stack中。
-
-```text
-        6    |   |
-       /     |   |
-      5      | 1 |
-     /       | 5 |
-    1        |_6_|  <---栈内情况
-     注意：上图中栈中存放的应该是指针而不是1,5,6等元素，此处仅用作示意，不代表实际情况，勿生疑。
-1234567
-```
-
-> （2）第一次调用next\(\)，此时弹出指向元素1的指针tmp，这时候栈内只剩下5,6，如果我们不对栈进行维护的话，我们再调用一次next\(\)将会弹出5，这显然是不对的，因为二叉查找树中还有比5小比2大的元素。因此这时候，我们应当将二叉查找树，或者更准确的说，应该把元素1的右子树上的部分结点添加到栈中。
-
-```text
-             |   |
-             |   |
-             |   |
-             | 5 |
-             |_6_|  <---栈内情况
-123456
-```
-
-> （3）那么我们将1（tmp）的右子树上所有结点都放到栈内吗？不，此时添加结点的逻辑与初始化迭代器时类似， 我们只把从tmp-&gt;right为根一直到其最坐下角的结点都放到stack中，即，把3,2两个元素放到栈中。
-
-```text
-             |   |
-             | 2 |
-             | 3 |
-             | 5 |
-             |_6_|  <---栈内情况
-123456
-```
-
-> （4）再次调用next\(\)时，返回的将是正确的答案2，然后2并没有右结点，则无须添加新的指针到栈中。
-
-```text
-             |   |
-             |   |
-             | 3 |
-             | 5 |
-             |_6_|  <---栈内情况
-123456
-```
-
-> （5）之后的过程与此类似，在此把每次调用next\(\)之后的栈的存储情况列举如下：
-
-```text
-             |   |       |   |       |   |       |   |       |   |       |   |       |   |
-             |   |       |   |       |   |       |   |       |   |       |   |       |   |
-             | 4 |  -->  |   |  -->  |   |  -->  |   |  -->  |   |  -->  |   |  -->  |   |
-             | 5 |       | 5 |       |   |       | 7 |       |   |       |   |       |   |
-             |_6_|       |_6_|       |_6_|       |_8_|       |_8_|       |_9_|       |___|
-123456
-```
-
-综上所述，我们在栈中存储的是一部分极小值，且栈顶一定是当前树中未访问过的结点中的最小结点。在调用next\(\)弹出最小结点时，需要把被弹出结点的右子树添加到栈中，也就是把比当前最小结点大但是比次小结点小的那些结点中的一部分（不是全部，只是左孩子分支上的一部分）添加到栈中。
-
-然后，我们的这个数据结构是否满足题目要求。我们可以看到每一个结点一定要进入栈中，且该操作是在构造过程和next\(\)中执行的，其中构造过程只执行一次，而next\(\)执行多次。但是进栈的操作存在差异性，有时候调用next\(\)不会往栈中添加任何元素，有时候会添加多个，但是至多不超过h个，其中h是树的高度，因为添加时只顺着树的左分支往下添加。我们一共要调用n次next\(\)，在这n次调用中，每个结点都进栈/出栈，共n次入栈操作，n次出栈操作，平均起来，**每次next\(\)只有`一次入栈操作+一次出栈操作`**，因此**满足平均时间复杂度O\(1\)**的要求。再看空间复杂度，刚才我们已经说过，在往栈中添加元素时**只顺着树的左分支往下添加**，因此**至多添加h个结点**，其中h就是树的高度，因此**满足空间复杂度O\(h\)**的要求。
+1. 初始化一个空栈 S，用于模拟二叉搜索树的中序遍历。中序遍历采用与递归相同的方法，只是现在使用的是自己的栈而不是系统的堆栈。由于使用自定义的数据结构，因此可以随时暂停和恢复递归。 
+2. 还要实现一个帮助函数\_leftmostInorder，在实现中将一次又一次的调用它。这个函数将给定节点中的所有左子节点添加到栈中，直到节点没有左子节点为止。
+3. 第一次调用 next\(\) 函数时，必须返回二叉搜索树的最小元素，然后模拟递归必须向前移动一步，即移动到二叉搜索树的下一个最小元素上。栈的顶部始终包含 next\(\) 函数返回的元素。hasNext\(\) 很容易实现，因为只需要调用stack的方法直接检查栈是否为空。 
+4. 首先，给定二叉搜索树的根节点，我们调用函数 \_leftmostInorder，这确保了栈顶部始终包含了 next\(\) 函数返回的元素。
+5.  假设调用 `next()`，我们需要返回二叉搜索树中的下一个最小元素，即栈的顶部元素。有两种可能性：
+   * 一个是栈顶部的节点是一个叶节点。这是最好的情况，因为我们什么都不用做，只需将节点从栈中弹出并返回其值。所以这是个常数时间的操作。
+   * 另一个情况是栈顶部的节点拥有右节点。我们不需要检查左节点，因为左节点已经添加到栈中了。栈顶元素要么没有左节点，要么左节点已经被处理了。如果栈顶部拥有右节点，那么我们需要对右节点上调用帮助函数。该时间复杂度取决于树的结构。
+6.  `next()` 函数调用中，获取下一个最小的元素不需要花太多时间，但是要保证栈顶元素是 `next()` 函数返回的元素方面花费了一些时间。
 
 ### 代码
 
+* 时间复杂度：
+  *  hasNext\(\)：若栈中还有元素，则返回 true，反之返回 false。所以这是一个 O\(1\) 的操作。 
+  * next\(\)：包含了两个主要步骤。一个是从栈中弹出一个元素，它是下一个最小的元素。这是一个 O\(1\) 的操作。然而，随后我们要调用帮助函数 \_leftmostInorder，它需要递归的，将左节点添加到栈上，是线性时间的操作，最坏的情况下为 O\(N\)。但是只对含有右节点的节点进行调用，它也不会总是处理 N 个节点。只有当有一个非常不平衡的树，才会有 N 个节点。因此该操作的平均时间复杂度仍然是 O\(1\)，符合问题中所要求的。 
+* 空间复杂度：O\(h\)O\(h\)，使用了一个栈来模拟递归。
+
+
+
 ```java
 /**
- * Definition for binary tree
+ * Definition for a binary tree node.
  * public class TreeNode {
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
-
-public class BSTIterator {
+class BSTIterator {
+    
+    Stack<TreeNode> stack;
 
     public BSTIterator(TreeNode root) {
-        while (root != null) {//left - root - right,从最left开始
-            stack.push(root);
-            root = root.left;
+        stack = new Stack<>();
+        
+        this._leftmostInorder(root);
+    }
+    
+    private void _leftmostInorder(TreeNode node) {
+        while (node != null) {
+            // 将给定的node的所有左孩子节点放入到stack中
+            this.stack.push(node);
+            node = node.left;
         }
     }
-
+    
+    /** @return the next smallest number */
+    public int next() {
+        if (hasNext()) {
+            TreeNode topmost = this.stack.pop();
+            
+            // 根据BST的特征，如果当前节点需要返回，需要把当前节点的右儿子的所有左子树push到stack中
+            // 这时候当前节点的左子树已经pop完，仔细想想为什么
+            if (topmost.right != null) {
+                this._leftmostInorder(topmost.right);
+            }
+            
+            return topmost.val;
+        }
+        return new Integer(null); // 为空了
+    }
+    
     /** @return whether we have a next smallest number */
     public boolean hasNext() {
-        return !stack.isEmpty();
+        // 直接调用原生方法进行判断是否还有元素
+        return this.stack.size() > 0;
     }
-
-    /** @return the next smallest number */
-    public int next() {//
-        TreeNode node = stack.pop();
-        int result = node.val;
-        if (node.right != null) {
-            node = node.right;
-            while (node != null) {
-                stack.push(node);
-                node = node.left;
-            }
-        }
-        return result;
-    }
-
-    private Stack<TreeNode> stack = new Stack<>();
 }
 
 /**
- * Your BSTIterator will be called like this:
- * BSTIterator i = new BSTIterator(root);
- * while (i.hasNext()) v[f()] = i.next();
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * int param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
  */
 ```
 
