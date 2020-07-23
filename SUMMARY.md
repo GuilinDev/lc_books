@@ -21,6 +21,7 @@
     * [Tree的面试知识](leetcode/untitled-1/tree-de-zhi-shi-dian.md)
     * [树的代码模板总结](leetcode/untitled-1/shu-de-dai-ma-mo-ban-zong-jie.md)
   * [Graph](leetcode/graph.md)
+  * [Trie前缀树](leetcode/trie-qian-zhui-shu.md)
   * [滑动窗口](leetcode/hua-dong-chuang-kou.md)
   * [Divide and Conquer](leetcode/divide-and-conquer-1.md)
   * [Two Pointers](leetcode/untitled-2.md)
