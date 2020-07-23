@@ -1,168 +1,5 @@
 # Tree
 
-## 133 Clone Graph
-
-### 题目
-
-Given a reference of a node in a [**connected**](https://en.wikipedia.org/wiki/Connectivity_%28graph_theory%29#Connected_graph) undirected graph.
-
-Return a [**deep copy**](https://en.wikipedia.org/wiki/Object_copying#Deep_copy) \(clone\) of the graph.
-
-Each node in the graph contains a val \(`int`\) and a list \(`List[Node]`\) of its neighbors.
-
-```text
-class Node {
-    public int val;
-    public List<Node> neighbors;
-}
-```
-
-**Test case format:**
-
-For simplicity sake, each node's value is the same as the node's index \(1-indexed\). For example, the first node with `val = 1`, the second node with `val = 2`, and so on. The graph is represented in the test case using an adjacency list.
-
-**Adjacency list** is a collection of unordered **lists** used to represent a finite graph. Each list describes the set of neighbors of a node in the graph.
-
-The given node will always be the first node with `val = 1`. You must return the **copy of the given node** as a reference to the cloned graph.
-
-**Example 1:**![](https://assets.leetcode.com/uploads/2019/11/04/133_clone_graph_question.png)
-
-```text
-Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
-Output: [[2,4],[1,3],[2,4],[1,3]]
-Explanation: There are 4 nodes in the graph.
-1st node (val = 1)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
-2nd node (val = 2)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
-3rd node (val = 3)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
-4th node (val = 4)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
-```
-
-**Example 2:**![](https://assets.leetcode.com/uploads/2020/01/07/graph.png)
-
-```text
-Input: adjList = [[]]
-Output: [[]]
-Explanation: Note that the input contains one empty list. The graph consists of only one node with val = 1 and it does not have any neighbors.
-```
-
-**Example 3:**
-
-```text
-Input: adjList = []
-Output: []
-Explanation: This an empty graph, it does not have any nodes.
-```
-
-**Example 4:**![](https://assets.leetcode.com/uploads/2020/01/07/graph-1.png)
-
-```text
-Input: adjList = [[2],[1]]
-Output: [[2],[1]]
-```
-
-**Constraints:**
-
-* `1 <= Node.val <= 100`
-* `Node.val` is unique for each node.
-* Number of Nodes will not exceed 100.
-* There is no repeated edges and no self-loops in the graph.
-* The Graph is connected and all nodes can be visited starting from the given node.
-
-### 分析
-
-思路简单，就是遍历一个无向图，也就是DFS和BFS，要重点掌握。
-
-### 代码
-
-DFS，用一个额外数据结构HashMap来存储已访问和复制的节点，HashMap 中的 key 是原始图中的节点，value 是克隆图中的对应节点（如果原始图中的节点还没访问则不创建）。如果某个节点已经被访问过，则返回其克隆图中的对应节点。递归调用原始图中每个节点的邻接点直到所有节点都被访问到。
-
-时间复杂度：O\(N\)；空间复杂度：O\(N\)
-
-```java
-/*
-// Definition for a Node.
-class Node {
-    public int val;
-    public List<Node> neighbors;
-    
-    public Node() {
-        val = 0;
-        neighbors = new ArrayList<Node>();
-    }
-    
-    public Node(int _val) {
-        val = _val;
-        neighbors = new ArrayList<Node>();
-    }
-    
-    public Node(int _val, ArrayList<Node> _neighbors) {
-        val = _val;
-        neighbors = _neighbors;
-    }
-}
-*/
-
-class Solution {
-    public Node cloneGraph(Node node) {
-        HashMap<Node, Node> visited = new HashMap<>();
-        return dfs(node, visited);
-    }
-    private Node dfs(Node node, HashMap<Node, Node> visited) {
-        if (node == null) {
-            return null;
-        }
-        if (visited.containsKey(node)) {
-            return visited.get(node);
-        }
-        Node clone = new Node(node.val, new ArrayList<>()); //复制的节点和其neighbors
-        visited.put(node, clone); // 需要在下面dfs之前添加已被访问和复制
-        for (Node neighbor : node.neighbors) {// 递归添加neighbors到复制节点上
-            clone.neighbors.add(dfs(neighbor, visited));
-        }
-        
-        return clone;
-    }
-}
-```
-
-BFS，
-
-时间复杂度：O\(N\)；空间复杂度：O\(N\)
-
-```java
-class Solution {
-    public Node cloneGraph(Node node) {
-        if (node == null) {
-            return null;
-        }
-        HashMap<Node, Node> visited = new HashMap<>(); // 保存访问信息和复制信息
-        
-        Queue<Node> queue = new LinkedList<>();
-        queue.add(node);
-        
-        visited.put(node, new Node(node.val, new ArrayList<>())); // 先把第一个node标记访问和复制
-        
-        while (!queue.isEmpty()) {
-            Node curNode = queue.poll();
-            
-            // 遍历当前节点的所有neighbors
-            for (Node neighbor : curNode.neighbors) {
-                if (!visited.containsKey(neighbor)) {
-                    // 把neighbor节点加入到visited中
-                    visited.put(neighbor, new Node(neighbor.val, new ArrayList<>()));
-                    // 把新节点加入到队列中
-                    queue.offer(neighbor);
-                }
-                
-                // 添加当前节点的复制节点的neighbors信息
-                visited.get(curNode).neighbors.add(visited.get(neighbor));
-            }
-        }
-        return visited.get(node);
-    }
-}
-```
-
 ## 144 Binary Tree Preorder Traversal
 
 ### 原题概述
@@ -4318,6 +4155,80 @@ class Solution {
       inOrder(node.right);
     }
   }
+}
+```
+
+## 563 Binary Tree Tilt
+
+### 题目
+
+Given a binary tree, return the tilt of the **whole tree**.
+
+The tilt of a **tree node** is defined as the **absolute difference** between the sum of all left subtree node values and the sum of all right subtree node values. Null node has tilt 0.
+
+The tilt of the **whole tree** is defined as the sum of all nodes' tilt.
+
+**Example:**  
+
+
+```text
+Input: 
+         1
+       /   \
+      2     3
+Output: 1
+Explanation: 
+Tilt of node 2 : 0
+Tilt of node 3 : 0
+Tilt of node 1 : |2-3| = 1
+Tilt of binary tree : 0 + 0 + 1 = 1
+```
+
+**Note:**
+
+1. The sum of node values in any subtree won't exceed the range of 32-bit integer.
+2. All the tilt values won't exceed the range of 32-bit integer.
+
+### 分析
+
+从问题的描述，需要在给定树的每个结点处找到其坡度，并将所有的坡度相加以获得最终结果。要找出任意结点的坡度，我们需要求出该结点的左子树上所有结点和以及其右子树上全部结点和的差值。
+
+因此，为了找出解决方案，使用递归函数，**在任何结点调用该函数**，都会返回当前结点下面（包括其自身）的结点和。借助于任何结点的左右子结点的这一和值，可以直接获得该结点所对应的坡度。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int tilt = 0;
+    public int findTilt(TreeNode root) {
+        traverse(root);
+        return tilt;
+    }
+    private int traverse(TreeNode node) {
+        // 后序，直接按照题目给的例子的顺序来写
+        if (node == null) {
+            return 0;
+        }
+        int left = traverse(node.left);
+        int right = traverse(node.right);
+        tilt += Math.abs(left - right); // 每一轮更新坡度
+        return left + right + node.val;
+    }
 }
 ```
 
