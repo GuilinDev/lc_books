@@ -2606,34 +2606,7 @@ Return the following binary tree:
 
 ### 题意和分析
 
-这道题用先序和中序来建立二叉树，先序的顺序第一个肯定是root，所以二叉树的根结点可以确定，由于题目中说了没有相同的元素，所以利用先序的根我们可以找到这个根在中序的位置，并且在中序的数组中根结点为中心拆分成左右两部分，然后又用我们熟悉的递归调用就可以重建二叉树了。
-
-步骤
-
-```text
-preorder = [3,9,20,15,7]
-inorder = [9,3,15,20,7]
-首先根据 preorder 找到根节点是 3
-    
-然后根据根节点将 inorder 分成左子树和右子树
-左子树
-inorder [9]
-
-右子树
-inorder [15,20,7]
-
-把相应的前序遍历的数组也加进来
-左子树
-preorder[9] 
-inorder [9]
-
-右子树
-preorder[20 15 7] 
-inorder [15,20,7]
-
-现在我们只需要构造左子树和右子树即可，成功把大问题化成了小问题
-然后重复上边的步骤继续划分，直到 preorder 和 inorder 都为空，返回 null 即可
-```
+这道题用先序和中序来建立二叉树，先序的顺序第一个肯定是root，所以二叉树的根结点可以确定，由于题目中说了没有相同的元素，所以利用先序的根我们可以找到这个根在中序的位置，并且在中序的数组中根结点为中心拆分成左右两部分，然后又用我们熟悉的递归调用就可以重建二叉树了
 
 ### 代码
 
@@ -2644,46 +2617,30 @@ inorder [15,20,7]
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
+ *     TreeNode(int x) { val = x; }
  * }
  */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (preorder == null || preorder.length == 0 || inorder == null || inorder.length == 0) {
-            return null;
-        }
         return buildTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
     }
+
     private TreeNode buildTree(int[] preorder, int pLeft, int pRight, int[] inorder, int iLeft, int iRight) {
-        if (pLeft > pRight || iLeft > iRight) { // base case 已超过叶子节点
+        if (pLeft > pRight || iLeft > iRight) {
             return null;
         }
-        
-        int index = 0; // 先序遍历的第一个元素总是根节点，同时寻找inorder对应根节点的位置，好分成左右两部分
-        for (index = iLeft; index <= iRight; index++) {
-            if (preorder[pLeft] == inorder[index]) {
+        int i = 0;
+        for (i = iLeft; i <= iRight; i++) {
+            if (preorder[pLeft] == inorder[i]) {
                 break;
             }
         }
-        
-        TreeNode currNode = new TreeNode(inorder[index]); // 当前递归轮的根节点
-        
-        // 递归构建当前节点的左右子树
-        
-        // preorder左边界少一个上一轮的root，右边界则是左边界往右index - iLeft的offset，其中index - iLeft表示中序数组中左子树的数目
-        // inorder的左边界在左子树的递归中不变，右边界
-        currNode.left = buildTree(preorder, pLeft + 1, pLeft + index - iLeft, inorder, iLeft, index - 1); 
-        //preorder左边界，index - iLeft + 1的offset
-        //inorder
-        currNode.right = buildTree(preorder, pLeft + index - iLeft + 1, pRight, inorder, index + 1, iRight);
-        
-        return currNode;
+
+        TreeNode cur = new TreeNode(preorder[pLeft]);
+        cur.left = buildTree(preorder, pLeft + 1, pLeft + i - iLeft, inorder, iLeft, i - 1);
+        cur.right = buildTree(preorder, pLeft + i - iLeft +1, pRight, inorder, i + 1, iRight);
+
+        return cur;
     }
 }
 ```
@@ -2691,6 +2648,15 @@ class Solution {
 优化一下在中序数组中查找root位置的代码使用Hashmap来空间换时间
 
 ```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
 class Solution {
     HashMap<Integer, Integer> map;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -2724,42 +2690,6 @@ class Solution {
         current.right = buildTree(preorder, pLeft + index - iLeft + 1, pRight, inorder, index + 1, iRight);
 
         return current;
-    }
-}
-```
-
-迭代办法
-
-* 我们用一个栈和一个指针辅助进行二叉树的构造。初始时栈中存放了根节点（前序遍历的第一个节点），指针指向中序遍历的第一个节点；
-* 我们依次枚举前序遍历中除了第一个节点以外的每个节点。如果 index 恰好指向栈顶节点，那么我们不断地弹出栈顶节点并向右移动 index，并将当前节点作为最后一个弹出的节点的右儿子；如果 index 和栈顶节点不同，我们将当前节点作为栈顶节点的左儿子；
-* 无论是哪一种情况，我们最后都将当前的节点入栈。
-
-```java
-class Solution {
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (preorder == null || preorder.length == 0) {
-            return null;
-        }
-        TreeNode root = new TreeNode(preorder[0]);
-        Stack<TreeNode> stack = new Stack<TreeNode>();
-        stack.push(root);
-        int inorderIndex = 0;
-        for (int i = 1; i < preorder.length; i++) {
-            int preorderVal = preorder[i];
-            TreeNode node = stack.peek();
-            if (node.val != inorder[inorderIndex]) {
-                node.left = new TreeNode(preorderVal);
-                stack.push(node.left);
-            } else {
-                while (!stack.isEmpty() && stack.peek().val == inorder[inorderIndex]) {
-                    node = stack.pop();
-                    inorderIndex++;
-                }
-                node.right = new TreeNode(preorderVal);
-                stack.push(node.right);
-            }
-        }
-        return root;
     }
 }
 ```
