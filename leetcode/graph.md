@@ -393,13 +393,6 @@ Explanation: There are a total of 4 courses to take. To take course 3 you should
 
 BFS
 
-1. 建立入度表，入度为 0 的节点先入队 
-2. 当队列不为空，节点出队，标记学完课程数量的变量加 1，并记录该课程 
-3. 将课程的邻居入度减 1 
-4. 若邻居课程入度为 0，加入队列 
-
-用一个变量记录学完的课程数量，一个数组记录最终结果，简洁好理解。
-
 ```java
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
@@ -452,10 +445,7 @@ class Solution {
 
 DFS
 
-1. 建立邻接矩阵
-2. DFS 访问每一个课程，若存在环直接返回
-
-1\) 数组作为邻接矩阵，status 保存课程的访问状态，同一个栈保存课程的访问序列。
+数组作为邻接矩阵
 
 ```java
 class Solution {
@@ -505,7 +495,7 @@ class Solution {
 }
 ```
 
-2\) hashset作为邻接矩阵，推荐
+hashset作为邻接矩阵，推荐
 
 ```java
 class Solution {
@@ -852,127 +842,5 @@ class Solution {
 }
 ```
 
-## 277 Find the Celebrity
-
-### 题目
-
-Suppose you are at a party with `n` people \(labeled from `0` to `n - 1`\) and among them, there may exist one celebrity. The definition of a celebrity is that all the other `n - 1` people know him/her but he/she does not know any of them.
-
-Now you want to find out who the celebrity is or verify that there is not one. The only thing you are allowed to do is to ask questions like: "Hi, A. Do you know B?" to get information of whether A knows B. You need to find out the celebrity \(or verify there is not one\) by asking as few questions as possible \(in the asymptotic sense\).
-
-You are given a helper function `bool knows(a, b)` which tells you whether A knows B. Implement a function `int findCelebrity(n)`. There will be exactly one celebrity if he/she is in the party. Return the celebrity's label if there is a celebrity in the party. If there is no celebrity, return `-1`.
-
-**Example 1:** ![](https://assets.leetcode.com/uploads/2019/02/02/277_example_1_bold.PNG)
-
-```text
-Input: graph = [
-  [1,1,0],
-  [0,1,0],
-  [1,1,1]
-]
-Output: 1
-Explanation: There are three persons labeled with 0, 1 and 2. graph[i][j] = 1 means person i knows person j, otherwise graph[i][j] = 0 means person i does not know person j. The celebrity is the person labeled as 1 because both 0 and 2 know him but 1 does not know anybody.
-```
-
-**Example 2:** ![](https://assets.leetcode.com/uploads/2019/02/02/277_example_2.PNG)
-
-```text
-Input: graph = [
-  [1,0,1],
-  [1,1,0],
-  [0,1,1]
-]
-Output: -1
-Explanation: There is no celebrity.
-```
-
-**Note:**
-
-1. The directed graph is represented as an adjacency matrix, which is an `n x n` matrix where `a[i][j] = 1` means person `i` knows person `j` while `a[i][j] = 0` means the contrary.
-2. Remember that you won't have direct access to the adjacency matrix.
-
-### 分析
-
-在n个人中\[0, n - 1\]中有个名人，大家都认识他，但他不认识任何别人，找出这个名人，要是没有就返回-1。
-
-判断出度是否为0
-
-先设待定名人candidate为0， 遍历每一个人，如果candidate认识另一个人i，说明他不是名人，把i变成candidate。 最后再判断是不是所有人都认识新的candidate，并且他不认识所有人。
-
-为什么这个能找到可能的名人（出度为0）证明： 反证法： 假如找到candidate的不是名人，说明出度不为0。 但若该candidate出度不为0，则轮到candidate的时候一定会转移，矛盾。 那有没有可能漏掉名人呢？答案是否定的，因为名人一定不认识其他人，并且其他人都是认识他，迭代了n次之后，最后会收敛到一定是名人。
-
-### 代码
-
-用两个数组，一个数组记录认识别人的人数，一个数组记录认识自己的人数，O\(n^2\)
-
-```java
-public int findCelebrity(int n) {
-    int[] knowOther = new int[n];
-    int[] otherKnow = new int[n];
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (knows(i, j)) {
-                otherKnow[j]++; // 别人认识他的人数
-                knowOther[i]++; // 他认识别人的人数
-            }
-        }
-    }
-    for (int i = 0; i < otherKnow.length; i++) {
-        // 别人认识他有n-1个（加上他共n个），他只认识他自己
-        if (otherKnow[i] == n && knowOther[i] == 1) {
-            return i;
-        }
-    }
-    return -1;
-}
-```
-
-计算出度，O\(n\)
-
-```java
-/* The knows API is defined in the parent class Relation.
-      boolean knows(int a, int b); */
-
-public class Solution extends Relation {
-    /**
-    第一个for循环是用来找候选名人的，因为每次调用knows(i,j）至少可以排除一个人，
-    假设i认识j，那么i肯定不是名人; 若i不认识j，j肯定不是（如果是名人，那么i肯定会认识他），
-    第一次for循环总共调用了n-1次，很明显，每次排除的人都不一样，
-    因为j是增加的，当排除一个候选的i或者j后，下次肯定不会再次排除这个人，故总共排除了n-1个人，
-    剩下最后一个满足条件的可以作为候选，然后利用这个候选判断其是否符合名人的特性（他不认识其他人，但其他人都认识他）
-    */
-    public int findCelebrity(int n) {
-        if (n < 0) {
-            return -1;
-        } 
-        
-        // 找到出度为0的人，作为候选，也就是不认识任何别人的人
-        int candidate = 0;
-        for (int i = 0; i < n; i++) {
-            if (knows(candidate, i)) {
-                candidate = i;
-            }
-        }
-        
-        // 看看是不是所有人都认识他 和 是否他不认识所有人
-        for (int i = 0; i < n; i++) {
-            if (i != candidate) { // 自己不和自己比较
-                if (!knows(i, candidate)) { // 有人不认识他
-                    return -1;
-                }
-                if (knows(candidate, i)) {// 他认识某人
-                    return -1;
-                }
-            }
-        }
-        return candidate;
-    }
-}
-```
-
-Follow up: what to do if the call is really expensive? 
-
-We can cache the result in a hashmap.
-
-
+## 
 
