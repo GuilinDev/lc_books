@@ -1711,5 +1711,180 @@ class Solution {
 }
 ```
 
+## 329 Longest Increasing Path in a Matrix
+
+### 题目
+
+Given an integer matrix, find the length of the longest increasing path.
+
+From each cell, you can either move to four directions: left, right, up or down. You may NOT move diagonally or move outside of the boundary \(i.e. wrap-around is not allowed\).
+
+**Example 1:**
+
+```text
+Input: nums = 
+[
+  [9,9,4],
+  [6,6,8],
+  [2,1,1]
+] 
+Output: 4 
+Explanation: The longest increasing path is [1, 2, 6, 9].
+```
+
+**Example 2:**
+
+```text
+Input: nums = 
+[
+  [3,4,5],
+  [3,2,6],
+  [2,2,1]
+] 
+Output: 4 
+Explanation: The longest increasing path is [3, 4, 5, 6]. Moving diagonally is not allowed.
+```
+
+### 分析
+
+从任何单元格开始的最长递增路径，可以对全部单元格进行深度优先搜索。每个单元格可以看作图 G 中的一个定点：
+
+> 寻找有向图 G 中的最长路径。
+
+暴力解法：对每一个定点进行DFS搜索，看哪个最长，其实是斐波那契数列朴素递归的高级版本，时间复杂度 ：O\(2^m+n \) - 其中m和n分别是矩阵的长宽。
+
+所以有两个优化方向，自顶向下的递归和自底向上的递推，递归就是DFS的基础上进行剪枝，利用记忆化搜索的方式；递推就是动态规划。
+
+1）自顶向下，用一个集合来避免一次深度优先搜索中的重复访问。在搜索过程中，如果未计算过单元格的结果，再计算计算并将其缓存；否则，直接从缓存中获取。
+
+**时间复杂度** : O\(mn\)。 每个顶点/单元格均计算一次，且只被计算一次。每条边也均计算一次并只计算一次。总时间复杂度是 O\(V+E\)。V是顶点总数，E 是边总数。本问题中，O\(V\) = O\(mn\)，O\(E\) = O\(4V\) = O\(mn\)。
+
+**空间复杂度** : O\(mn\)。缓存决定了空间复杂度。
+
+2）自底向上，定义从单元格 \(i, j\) 开始的最长递增路径为函数f\(i,j\)，那么状态转移方程：
+
+`f(i,j) = max{f(x,y)∣(x,y) is a neighbor of(i,j) and matrix[x][y]>matrix[i][j]}+1`
+
+现在还需要初始化，也就是想要让动态规划有效，如果问题 B 依赖于问题 A 的结果，就必须确保问题 A 比问题 B先计算。比如斐波那契数列，F\(0\)=1,F\(1\)=1,F\(n\)=F\(n−1\)+F\(n−2\)，自然顺序就是正确的计算顺序，被依赖者总会先被计算。这种依赖顺序的术语是“拓扑顺序”或“拓扑排序”：
+
+> 对有向无环图的拓扑排序是顶点的一个线性排序，使得对于任何有向边 \(u, v\)\(u,v\)，顶点 uu 都在 顶点 vv 的前面。
+
+对于当前问题中，拓扑顺序并不简单自然。没有类似背包问题中矩阵的值，无法知道两个邻居 A 和 B 的依赖关系。作为预处理，必须显式执行拓扑排序。之后，可以按照存储的拓扑顺序使用状态转移函数动态地解决问题。
+
+有多种实现拓扑排序的方法。这里使用的是一种被称为“剥洋葱”的方法。其思路是在一个有向无环图中，会有一些不依赖于其他顶点的顶点\(入度为0\)，称为“叶子”。我们将这些叶子放在一个列表中（它们之间的内部排序不重要），然后将它们从图中移除。移除之后，会产生新的“叶子”。重复以上过程，就像一层一层一层地拨开洋葱的心。最后，列表中就会存储有效的拓扑排序。
+
+在本问题中，因为想要求出在整个图中最长的路径，也就是“洋葱”的层总数。因此，我们可以在“剥离”的期间计算层数，在不调用动态规划的情况下返回计数。
+
+**时间复杂度** : O\(mn\)。拓扑排序的时间复杂度为 O\(V+E\) = O\(mn\)。V 是顶点总数，E 是边总数。本问题中，O\(V\) = O\(mn\)，O\(E\) = O\(4V\) = O\(mn\)。
+
+**空间复杂度** : O\(mn\)。我们需要存储出度和每层的叶子。
+
+### 代码
+
+记忆化搜索
+
+```java
+class Solution {
+    private static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // 四个方向
+    private int m, n;
+
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix.length == 0) {
+            return 0;
+        }
+        m = matrix.length; 
+        n = matrix[0].length;
+        int[][] cache = new int[m][n];
+        int result = 0;
+        
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                result = Math.max(result, dfs(matrix, i, j, cache));
+            }
+        }
+        
+        return result;
+    }
+
+    private int dfs(int[][] matrix, int i, int j, int[][] cache) {
+        if (cache[i][j] != 0) { // 剪枝
+            return cache[i][j];
+        }
+        for (int[] d : dirs) {
+            int x = i + d[0], y = j + d[1];
+            if (0 <= x && x < m && 0 <= y && y < n && matrix[x][y] > matrix[i][j]) {
+                cache[i][j] = Math.max(cache[i][j], dfs(matrix, x, y, cache));
+            }
+        }
+        cache[i][j]++; //需要加上本身
+        return cache[i][j]; 
+    }
+}
+```
+
+基于拓扑排序的DP
+
+```java
+class Solution {
+    private static final int[][] dir = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    private int m, n;
+    public int longestIncreasingPath(int[][] grid) {
+        int m = grid.length;
+        if (m == 0) {
+            return 0;
+        }
+        int n = grid[0].length;
+        
+        // padding the matrix with zero as boundaries
+        // assuming all positive integer, otherwise use INT_MIN as boundaries
+        int[][] matrix = new int[m + 2][n + 2];
+        
+        for (int i = 0; i < m; ++i)
+            System.arraycopy(grid[i], 0, matrix[i + 1], 1, n);
+
+        // 计算出度
+        int[][] outdegree = new int[m + 2][n + 2];
+        for (int i = 1; i <= m; ++i)
+            for (int j = 1; j <= n; ++j)
+                for (int[] d: dir)
+                    if (matrix[i][j] < matrix[i + d[0]][j + d[1]])
+                        outdegree[i][j]++;
+
+        // 找到出度为0的“叶子”节点
+        n += 2;
+        m += 2;
+        List<int[]> leaves = new ArrayList<>();
+        for (int i = 1; i < m - 1; ++i) {
+            for (int j = 1; j < n - 1; ++j) {
+                if (outdegree[i][j] == 0) {
+                    leaves.add(new int[]{i, j});
+                }
+            }
+        }
+
+        // remove leaves level by level in topological order
+        int height = 0;
+        while (!leaves.isEmpty()) {
+            height++;
+            List<int[]> newLeaves = new ArrayList<>();
+            for (int[] node : leaves) {
+                for (int[] d:dir) {
+                    int x = node[0] + d[0];
+                    int y = node[1] + d[1];
+                    if (matrix[node[0]][node[1]] > matrix[x][y]) {
+                        if (--outdegree[x][y] == 0) {
+                            newLeaves.add(new int[]{x, y});
+                        }
+                    }
+                }
+            }
+            leaves = newLeaves;
+        }
+        return height;
+    }
+}
+
+```
+
 
 
