@@ -2287,9 +2287,11 @@ class Solution {
         int left = Math.max(0, dfs(node.left));
         int right = Math.max(0, dfs(node.right));
         
-        result = Math.max(result, node.val + left + right); // 更新遍历到当前节点时的总和
+        // 更新遍历在当前节点时的最大路径和
+        result = Math.max(result, node.val + left + right); 
         
-        return node.val + Math.max(left, right); // 选择以当前节点为根的含有最大值的路劲，左或右
+        // 选择以当前节点为根的含有最大值的路劲，左或右；返回给上一层递归的父节点作为路径
+        return node.val + Math.max(left, right); 
     }
 }
 ```
