@@ -283,7 +283,8 @@ class Solution {
         Stack<TreeNode> stack = new Stack<>();
 
         TreeNode current = root;
-
+        
+        // 由于遍历顺序，不能像后序遍历那样先把root加入stack中，注意whle退出条件
         while (current != null || !stack.isEmpty()) {
             while (current != null) {
                 stack.add(current);
