@@ -1886,5 +1886,111 @@ class Solution {
 
 ```
 
+## 198 House Robber
+
+### 题目
+
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and **it will automatically contact the police if two adjacent houses were broken into on the same night**.
+
+Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight **without alerting the police**.
+
+**Example 1:**
+
+```text
+Input: nums = [1,2,3,1]
+Output: 4
+Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
+             Total amount you can rob = 1 + 3 = 4.
+```
+
+**Example 2:**
+
+```text
+Input: nums = [2,7,9,3,1]
+Output: 12
+Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
+             Total amount you can rob = 2 + 9 + 1 = 12.
+```
+
+**Constraints:**
+
+* `0 <= nums.length <= 100`
+* `0 <= nums[i] <= 400`
+
+### 分析
+
+牢记DP四个步骤：
+
+1\) 状态定义 - dp\[i\]表示第i个元素的最大值（从1开始），也就是有多少个房子时候的最大值 
+
+2\) 初始化 - dp\[0\] 没有房子，dp\[1\] 一个房子 
+
+3\) 递推式，在普通的动态规划题目中，99% 的情况我们都不需要用到备忘录方法，所以我们最好坚持用自底向上的 dp 数组。写出递推方程 dp\[i\] = max\(dp\[i - 1\], dp\[i - 2\] + nums\[i - 1\]\) - i - 1是当前元素 
+
+4） 考虑状态压缩
+
+### 代码
+
+DP
+
+```java
+class Solution {
+    /** 1. 定义：dp[i] - 到当前元素时候的最大数量，从1开始，dp[0]表示没有元素
+        2. 初始化：当 k=0 时，没有房子，所以 f(0) = 0。当 k=1 时，只有一个房子，偷这个房子即可，所以 f(1) = nums[0]
+        3. 递推方程：dp[i] = max(dp[i - 1], dp[i - 2] + nums[i])，dp[i - 1]表示当前元素不选，dp[i - 2] + nums[i]表示当前元素可选
+        比如[10, 1 , 1, 5]，就是 选(不选0 vs 选10)-不选(不选10 vs 选1)-选(不选10 vs 选11)-选(不选11 vs 选15)
+    */
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length < 2) {
+            return nums[0];
+        }
+        int len = nums.length;
+        int[] dp = new int[len + 1];
+        dp[0] = 0;
+        dp[1] = nums[0];
+        
+        for (int i = 2; i <= len; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]); // i - 1是当前元素，从0个房子开始的
+        }
+        
+        return dp[len];
+    }
+}
+```
+
+状态压缩
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length < 2) {
+            return nums[0];
+        }
+        int len = nums.length;
+        
+        int prevPrev = 0;
+        int prev = nums[0];
+        int curr = 0;
+        
+        for (int i = 2; i <= len; i++) {
+            curr = Math.max(prev, prevPrev + nums[i - 1]);
+            
+            // 为下一轮更新
+            int temp = prev;
+            prev = curr;
+            prevPrev = temp;
+        }
+        
+        return curr;
+    }
+}
+```
+
 
 
