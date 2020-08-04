@@ -599,3 +599,205 @@ class Solution {
 }
 ```
 
+## 545 Boundary of Binary Tree
+
+### 题目
+
+Given a binary tree, return the values of its boundary in **anti-clockwise** direction starting from root. Boundary includes left boundary, leaves, and right boundary in order without duplicate **nodes**.  \(The values of the nodes may still be duplicates.\)
+
+**Left boundary** is defined as the path from root to the **left-most** node. **Right boundary** is defined as the path from root to the **right-most** node. If the root doesn't have left subtree or right subtree, then the root itself is left boundary or right boundary. Note this definition only applies to the input binary tree, and not applies to any subtrees.
+
+The **left-most** node is defined as a **leaf** node you could reach when you always firstly travel to the left subtree if exists. If not, travel to the right subtree. Repeat until you reach a leaf node.
+
+The **right-most** node is also defined by the same way with left and right exchanged.
+
+**Example 1**
+
+```text
+Input:
+  1
+   \
+    2
+   / \
+  3   4
+
+Ouput:
+[1, 3, 4, 2]
+
+Explanation:
+The root doesn't have left subtree, so the root itself is left boundary.
+The leaves are node 3 and 4.
+The right boundary are node 1,2,4. Note the anti-clockwise direction means you should output reversed right boundary.
+So order them in anti-clockwise without duplicates and we have [1,3,4,2].
+```
+
+**Example 2**
+
+```text
+Input:
+    ____1_____
+   /          \
+  2            3
+ / \          / 
+4   5        6   
+   / \      / \
+  7   8    9  10  
+       
+Ouput:
+[1,2,4,7,8,9,10,6,3]
+
+Explanation:
+The left boundary are node 1,2,4. (4 is the left-most node according to definition)
+The leaves are node 4,7,8,9,10.
+The right boundary are node 1,3,6,10. (10 is the right-most node).
+So order them in anti-clockwise without duplicate nodes we have [1,2,4,7,8,9,10,6,3].
+```
+
+### 分析
+
+1\) 方法1，将问题划分成三个子问题：左边界、叶子节点和右边界。
+
+    \* 左边界：沿左边遍历这棵树，不断向 结果数组中添加节点，并保证当前节点不是叶子节点。判断左边界的标准是如果某个节点，发现不存在左孩子，但存在右孩子，我们就将右孩子放入 结果数组中中并重复过程。
+
+    \* 叶子节点：调用递归程序 addLeaves\(res, root\)，每次调用改变根节点。如果当前节点是叶子节点，就会加入 结果数组；否则，递归调用左孩子作为新根节点进行递归，左孩子调用完然后是右孩子。
+
+    \* 和处理左边界同样的步骤。但此时沿着右边遍历。如果不存在右孩子，就向左孩子移动。同时，因为右边界是从下到上的，所以递归处理的顺序需要改变一下，（也可以用一个栈，先把右边界遍历到的节点加入到栈中，在完成遍历之后从栈中弹出元素并加入到结果数组中）。
+
+**时间复杂度**： O\(N\)，一次完整的叶子节点遍历，和左右两次深度的遍历，依然是O\(N\)。
+
+**空间复杂度**： O\(N\)，结果数组和递归栈开销。
+
+2\) 方法2，先序遍历，根左右先序遍历的顺序如下图：
+
+![](../../.gitbook/assets/image%20%28107%29.png)
+
+用一个leftbound和一个rightbound在先序的过程中判断左子树和右子树，叶子节点判断也是没有左右孩子。
+
+### 代码
+
+分成三个边的问题
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> result = new LinkedList<>();
+        if (root == null) {
+            return result;
+        }
+        
+        if (!isLeaf(root)) {
+            result.add(root.val);
+        }
+        
+        // 先左边界，再叶子节点，最后右边界
+        leftTrunk(root.left, result); // 从root的左孩子开始判断左边界
+        addLeaves(root, result); // 从root开始判断叶子节点
+        rightTrunk(root.right, result); // 从root的右孩子开始判断右边界
+
+        return result;
+    }
+
+    // 左边界，没有左孩子，需要有右孩子，等同于不是叶子节点的情况下，没有左孩子
+    private void leftTrunk(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        if (!isLeaf(root)) {
+            result.add(root.val);
+        }
+        if (root.left != null) {
+            leftTrunk(root.left, result);
+        } else {
+            leftTrunk(root.right, result);
+        }
+    }
+
+    // 右边界，没有右孩子，需要有左孩子，等同于不是叶子节点的情况下，没有右孩子
+    private void rightTrunk(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        if (root.right != null) {
+            rightTrunk(root.right, result);
+        } else {
+            rightTrunk(root.left, result);
+        }
+        if (!isLeaf(root)) {
+            result.add(root.val);
+        }
+    }
+
+    // 叶子节点，左右孩子都没有
+    private void addLeaves(TreeNode node, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+        if (isLeaf(node)) {
+            result.add(node.val);
+        } else {
+            addLeaves(node.left, result);
+            addLeaves(node.right, result);
+        }
+    }
+
+    private boolean isLeaf(TreeNode node) {
+        return node.left == null && node.right == null;
+    }
+}
+```
+
+按照先序的顺序标记
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        dfs(root, true, true, result);
+        return result;
+    }
+
+    private void dfs(TreeNode node, boolean leftBound, boolean rightBound, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+        if (leftBound) { // 先判断是否是左孩子
+            result.add(node.val);
+        } else if (node.left == null && node.right == null) { // 判断叶子节点
+            result.add(node.val);
+            return;
+        }
+        dfs(node.left, leftBound, !leftBound && rightBound && node.right == null, result);
+        dfs(node.right, !rightBound && leftBound && node.left == null, rightBound, result);
+        
+        if (!leftBound && rightBound) {
+            result.add(node.val);
+        }
+    }
+}
+```
+

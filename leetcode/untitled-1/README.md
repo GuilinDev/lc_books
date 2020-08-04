@@ -4302,3 +4302,115 @@ class Solution {
 }
 ```
 
+
+
+## 450 Delete Node in a BST
+
+### 题目
+
+Given a root node reference of a BST and a key, delete the node with the given key in the BST. Return the root node reference \(possibly updated\) of the BST.
+
+Basically, the deletion can be divided into two stages:
+
+1. Search for a node to remove.
+2. If the node is found, delete the node.
+
+**Note:** Time complexity should be O\(height of tree\).
+
+**Example:**
+
+```text
+root = [5,3,6,2,4,null,7]
+key = 3
+
+    5
+   / \
+  3   6
+ / \   \
+2   4   7
+
+Given key to delete is 3. So we find the node with value 3 and delete it.
+
+One valid answer is [5,4,6,2,null,null,7], shown in the following BST.
+
+    5
+   / \
+  4   6
+ /     \
+2       7
+
+Another valid answer is [5,2,6,null,4,null,7].
+
+    5
+   / \
+  2   6
+   \   \
+    4   7
+```
+
+### 分析
+
+从当前根节点开始递归查找待删除节点，找到后处理根据待删除节点的情况来进行处理，见下面代码的说明，按照题目要求，时间复杂度O\(h\)，h是树的高度。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode deleteNode(TreeNode root, int key) {
+        return findKeyAndDelete(root, key);
+    }
+    private TreeNode findKeyAndDelete(TreeNode node, int key) {
+        if (node == null) { // 基线条件，递归到node为null的时候没找到key，返回null
+            return null;
+        }
+        
+        if (key < node.val) { // 递归查找并更新node左子树
+            node.left = findKeyAndDelete(node.left, key);
+        } else if (key > node.val) {// 递归查找并更新node右子树
+            node.right = findKeyAndDelete(node.right, key);
+        } else { // 已找到待删除的节点
+            /**
+            处理四种情况：
+            1. 待删除节点没有left和right，返回null，表示直接就删除了
+            2. 待删除节点只有left没有right，返回left，表示直接接上left
+            3. 待删除节点没有left只有right，返回right，表示直接接上right
+            4. 待删除节点既有left又有right，返回right中的最小节点，根据BST特征这个最小节点应该是替代被删除的节点
+            */
+            if (node.left == null) {// 情况1,2
+                return node.right;
+            } else if (node.right == null) {// 情况3
+                return node.left;
+            }
+            
+            // 情况4，当前节点有左右子树，删除的操作是将当前待删除节点替换成右子树中的最小值，然后删除右子树中的最小值
+            TreeNode minNode = findMin(node.right);
+            node.val = minNode.val;
+            node.right = findKeyAndDelete(node.right, minNode.val);
+        }
+        return node;
+    }
+    
+    private TreeNode findMin(TreeNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+}
+```
+
