@@ -440,6 +440,8 @@ class Solution {
             return 0;
         }
         int len = heights.length;
+        
+        // 栈中存储柱子的index
         Stack<Integer> stack = new Stack<>();
         
         int result = 0;
@@ -452,14 +454,14 @@ class Solution {
             } else { // 当前柱子比前面的柱子矮了
                 int preIndex = stack.pop();
                 int currArea = 0;
-                if (stack.isEmpty()) { // pop出哨兵节点了，计算最矮的柱子乘以所有柱子数目的面积
+                if (stack.isEmpty()) { // pop到哨兵节点位置了，计算最矮的柱子乘以所有柱子数目的面积
                     currArea = heights[preIndex] * i;
                 } else { // 正常计算
                     currArea = heights[preIndex] * (i - 1 - stack.peek());
                 }
                 
                 result = Math.max(result, currArea);
-                i--; // 继续退回前面高的柱子，计算面积
+                i--; // 继续退回前面高的柱子，看要不要pop然后计算面积
             }
         }
         return result;
