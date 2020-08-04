@@ -1028,13 +1028,9 @@ Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefor
 
 2\) 没有空间复杂度的要求，于是可以额外用一个HashSet，把数组里面所有的元素放入到set里面，然后遍历数组，对每个元素都进行移除操作，同时用两个指针prev和next求出当前元素的构成连续数列的前面和后面一个数，继续检查prev和next是否在set中存在，如果存在就继续移除，最后用next - prev - 1（因为两个指针指向的元素在set中不存在的时候才停止移除，所以有-1），对每个元素都进行这样的操作后求出连续序列最大的。
 
- 也可以采用HashMap来做，刚开始map为空，然后遍历所有数组中的元素，如果该数字不在map中，那么分别检查前后两个数字是否在map中，如果在，则返回其哈希表中映射值，若不在，则返回0，将prev+next+1作为当前数字的映射，并更新result结果，然后更新num-left和num-right的映射值。
+ 3\) 也可以采用HashMap来做，刚开始map为空，然后遍历所有数组中的元素，如果该数字不在map中，那么分别检查前后两个数字是否在map中，如果在，则返回其哈希表中映射值，若不在，则返回0，将prev+next+1作为当前数字的映射，并更新result结果，然后更新num-left和num-right的映射值。
 
-时间复杂度O\(n\)。
-
-3\) DP
-
-第一步状态定义：
+这其实是动态规划的思想，时间复杂度O\(n\)。
 
 4\) Union Find
 
@@ -1075,7 +1071,7 @@ class Solution {
 }
 ```
 
-HashMap
+HashMap动态规划
 
 ```java
 class Solution {
@@ -1105,9 +1101,33 @@ class Solution {
 }
 ```
 
-DP
+备忘录法，dfs形成的递归树中有重复子结构。 比如\[100, 4, 200, 1, 3, 2\] ，遍历4时，已经将dfs\(3\),dfs\(2\),dfs\(1\)的情况给遍历过了，因此，再往后递归的时候，我们应该剪枝。 于是添加备忘录Map。
 
 ```java
+class Solution {
+    Set<Integer> checkInNums = new HashSet<>(); //初始化Set用来判断数字是否在nums中
+    Map<Integer, Integer> m = new HashMap<>();  //备忘录
+    public int longestConsecutive(int[] nums) {
+        if(nums.length == 0)
+            return 0;
+        for(int i = 0; i < nums.length; i++)
+            checkInNums.add(nums[i]);
+        int res = 0;
+        for(int i = 0; i < nums.length; i++)
+            res = Math.max(res, dfs(nums[i]));
+        return res;
+    }
+    //返回小于等于当前数的最大连续序列的长度
+    public int dfs(int cur) {
+        if(m.containsKey(cur))
+            return m.get(cur);
+        int len = 1;    //当前长度为1
+        if(checkInNums.contains(cur-1))
+            len += dfs(cur-1);
+        m.put(cur, len);
+        return len;
+    }
+}
 
 ```
 
