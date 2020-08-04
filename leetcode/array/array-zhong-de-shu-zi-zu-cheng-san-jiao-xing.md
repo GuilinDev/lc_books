@@ -281,7 +281,7 @@ Output: 10
 
 时间换空间，暴力解法是每个柱子都两边扩散去找大于等于自己的柱子，有没有可能把柱子高度的信息先存储下来，直接用O\(1\)的方式来找呢？先思考一个问题：
 
-> 对于i左边的两根柱子 j0以及 j1，如果索引 j0 在 j1右侧，并且 heights\[j0\]≥heights\[j1\]，那么对于任意的在j0和j1之后出现的柱子 i \(j1 &lt; i\)，j0一定不会是位于 i 左侧的最近的小于其高度的柱子。
+> 对于i左边的两根柱子 j0以及 j1，如果索引 j0 在 j1右侧，并且 heights\[j0\] ≥ heights\[j1\]，那么对于任意的在j0和j1之后出现的柱子 i \(j1 &lt; i\)，j0一定不会是位于 i 左侧的最近的小于其高度的柱子。
 
 以题目中的\[2,1,5,6,2,3\]为例：
 
@@ -405,29 +405,30 @@ class Solution {
         if (heights == null || heights.length == 0) {
             return 0;
         }
-        int len = heights.length;
+        int len = heights.length;        
         int result = 0;
         
         for (int i = 0; i < len; i++) {
             int curHeight = heights[i];
             
             // 找左边最后 1 个大于等于 heights[i] 的索引
-            int left = i;
-            while (left > 0 && heights[left - 1] >= curHeight) {
+            int left = i - 1;
+            while (left >= 0 && heights[left] >= curHeight) {
                 left--;
             }
             
             // 找右边最后 1 个大于等于 heights[i] 的索引
-            int right = i;
-            while (right < len - 1 && heights[right + 1] >= curHeight) {
+            int right = i + 1;
+            while (right < len && heights[right] >= curHeight) {
                 right++;
             }
             
-            result = Math.max(result, (right - left + 1) * curHeight);
+            result = Math.max(result, (right - left - 1) * curHeight);
         }
         return result;
     }
 }
+
 ```
 
 Stack + 哨兵解法
@@ -444,7 +445,7 @@ class Solution {
         int result = 0;
         
         for (int i = 0; i <= len; i++) { // 末尾会多一个哨兵节点
-            int height = (i == len) ? 0 : heights[i];
+            int height = (i == len) ? 0 : heights[i]; //判断一下哨兵节点
             
             if (stack.isEmpty() || height >= heights[stack.peek()]) { // 单调递增，入栈
                 stack.push(i);
