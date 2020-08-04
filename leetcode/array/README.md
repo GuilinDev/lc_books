@@ -1022,9 +1022,29 @@ Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefor
 
 ### **题意和分析**
 
-没有排序的数组里面寻找最长的子序列，要求时间复杂度是O\(n\)，没有空间复杂度的要求，于是可以用一个HashSet，把数组里面所有的元素放入到set里面，然后遍历数组，对每个元素都进行移除操作，同时用两个指针prev和next求出当前元素的构成连续数列的前面和后面一个数，继续检查prev和next是否在set中存在，如果存在就继续移除，最后用next - prev - 1（因为两个指针指向的元素在set中不存在的时候才停止移除，所以有-1），对每个元素都进行这样的操作后求出连续序列最大的。
+没有排序的数组里面寻找最长的子序列，要求时间复杂度是O\(n\)。
+
+1\) 排序后，检查当前元素是否比上一个元素大1，找到最大连续的长度，O\(nlogn\)，不行；
+
+2\) 没有空间复杂度的要求，于是可以额外用一个HashSet，把数组里面所有的元素放入到set里面，然后遍历数组，对每个元素都进行移除操作，同时用两个指针prev和next求出当前元素的构成连续数列的前面和后面一个数，继续检查prev和next是否在set中存在，如果存在就继续移除，最后用next - prev - 1（因为两个指针指向的元素在set中不存在的时候才停止移除，所以有-1），对每个元素都进行这样的操作后求出连续序列最大的。
 
  也可以采用HashMap来做，刚开始map为空，然后遍历所有数组中的元素，如果该数字不在map中，那么分别检查前后两个数字是否在map中，如果在，则返回其哈希表中映射值，若不在，则返回0，将prev+next+1作为当前数字的映射，并更新result结果，然后更新num-left和num-right的映射值。
+
+时间复杂度O\(n\)。
+
+3\) DP
+
+第一步状态定义：
+
+4\) Union Find
+
+* 初始：所有元素各自为战 
+* 首次遍历：所有元素 x 向各自邻居 x + 1，发起结盟，并「以大者为领队」 
+  * 若有邻居，才结盟成功 
+  * 领队，即 区间右边界 
+  * 不只是元素 x 与邻居 x + 1 结盟，而是整个 x 所在队伍与整个 x + 1 所在队伍结盟 
+    * 如 \[1, 2, 3\] 与 \[4, 5\] 两个队伍结盟 
+* 二次遍历：记录所有人与其领队距离 距离，即 区间右边界 - 当前元素 + 1
 
 ### **代码**
 
@@ -1082,6 +1102,83 @@ class Solution {
 
       return result;
    }
+}
+```
+
+DP
+
+```java
+
+```
+
+Union Find
+
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if (nums.length == 0) return 0;
+
+        // 首次遍历，与邻居结盟
+        UnionFind uf = new UnionFind(nums);
+        for (int v : nums)
+            uf.union(v, v + 1); // uf.union() 结盟
+
+        // 二次遍历，记录领队距离
+        int max = 1;
+        for (int v : nums) {
+            max = Math.max(max, uf.find(v) - v + 1); // uf.find() 查找领队
+        }
+        return max;
+    }
+    
+    // Union Find类代码
+    class UnionFind {
+        private int count;
+        private Map<Integer, Integer> parent; // (curr, leader)
+
+        UnionFind(int[] arr) {
+            count = arr.length;
+            parent = new HashMap<>();
+            for (int v : arr)
+                parent.put(v, v); // 初始时，各自为战，自己是自己的领队
+        }
+
+        // 结盟
+        void union(int p, int q) {
+            // 不只是 p 与 q 结盟，而是整个 p 所在队伍 与 q 所在队伍结盟
+            // 结盟需各领队出面，而不是小弟出面
+            Integer rootP = find(p), rootQ = find(q);
+            if (rootP == rootQ) return;
+            if (rootP == null || rootQ == null) return;
+
+            // 结盟
+            parent.put(rootP, rootQ); // 谁大听谁
+            // 应取 max，而本题已明确 p < q 才可这么写
+            // 当前写法有损封装性，算法题可不纠结
+
+            count--;
+        }
+
+        // 查找领队
+        Integer find(int p) {
+            if (!parent.containsKey(p))
+                return null;
+
+            // 递归向上找领队
+            int root = p;
+            while (root != parent.get(root))
+                root = parent.get(root);
+
+            // 路径压缩：扁平化管理，避免日后找领队层级过深
+            while (p != parent.get(p)) {
+                int curr = p;
+                p = parent.get(p);
+                parent.put(curr, root);
+            }
+
+            return root;
+        }
+    }
 }
 ```
 
