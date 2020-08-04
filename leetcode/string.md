@@ -2558,6 +2558,143 @@ class Solution {
 }
 ```
 
+## 165 Compare Version Number
+
+### 题目
+
+Compare two version numbers _version1_ and _version2_.  
+If _`version1`_ `>` _`version2`_ return `1;` if _`version1`_ `<` _`version2`_ return `-1;`otherwise return `0`.
+
+You may assume that the version strings are non-empty and contain only digits and the `.` character.
+
+The `.` character does not represent a decimal point and is used to separate number sequences.
+
+For instance, `2.5` is not "two and a half" or "half way to version three", it is the fifth second-level revision of the second first-level revision.
+
+You may assume the default revision number for each level of a version number to be `0`. For example, version number `3.4` has a revision number of `3` and `4` for its first and second level revision number. Its third and fourth level revision number are both `0`.
+
+**Example 1:**
+
+```text
+Input: version1 = "0.1", version2 = "1.1"
+Output: -1
+```
+
+**Example 2:**
+
+```text
+Input: version1 = "1.0.1", version2 = "1"
+Output: 1
+```
+
+**Example 3:**
+
+```text
+Input: version1 = "7.5.2.4", version2 = "7.5.3"
+Output: -1
+```
+
+**Example 4:**
+
+```text
+Input: version1 = "1.01", version2 = "1.001"
+Output: 0
+Explanation: Ignoring leading zeroes, both “01” and “001" represent the same number “1”
+```
+
+**Example 5:**
+
+```text
+Input: version1 = "1.0", version2 = "1.0.0"
+Output: 0
+Explanation: The first version number does not have a third level revision number, which means its third level revision number is default to "0"
+```
+
+**Note:**
+
+1. Version strings are composed of numeric strings separated by dots `.` and this numeric strings **may** have leading zeroes.
+2. Version strings do not start or end with dots, and they will not be two consecutive dots.
+
+### 分析
+
+思路简单，就是需要把用“.”隔开的版本号从左到右逐个比较，每个隔开的小版本号可能会有leading zeros，不管几个leading zeros，都是一样的，比如1.01和1.001是一样的，可以用split分开成字符串数组，然后挨个比较；或者每次判断是不是“.”，从左到右将每个小版本号转换成整数进行比较。
+
+### 代码
+
+split\(\)
+
+```java
+class Solution {
+    public int compareVersion(String version1, String version2) {
+        if (version1.isEmpty() || version2.isEmpty()) {
+            throw new IllegalArgumentException("Versions can not be Null.");
+        }
+        
+        // regex中 "\."代表真正的dot，而"."代表任何字符
+        String[] arr1 = version1.split("\\.");
+        String[] arr2 = version2.split("\\.");
+        
+        int idx = 0;
+        
+        int len = Math.max(arr1.length, arr2.length);
+        
+        for (int i = 0; i < len; i++) { // 数组中比较短的那个版本号后面用0代替
+            
+            // 分别计算两个版本当前的小版本号，Integer才有后面的parseInt和compareTo方法
+            Integer v1 = (idx < arr1.length) ? Integer.parseInt(arr1[idx]) : 0;
+            Integer v2 = (idx < arr2.length) ? Integer.parseInt(arr2[idx]) : 0;
+            idx++;
+            
+            int compare = v1.compareTo(v2);
+            if (compare != 0) {
+                return compare;
+            }
+        }
+        return 0; //相同
+    }
+}
+```
+
+另一种写法，省空间一点
+
+```java
+class Solution {
+    public int compareVersion(String version1, String version2) {
+        if (version1.isEmpty() || version2.isEmpty()) {
+            throw new IllegalArgumentException("Versions can not be Null.");
+        }
+        
+        int v1 = 0, v2 = 0;        
+        int idx1 = 0, idx2 = 0;
+        
+        while (idx1 < version1.length() || idx2 < version2.length()) {
+            v1 = 0;
+            v2 = 0;
+            
+            // 分别计算两个版本的小版本号
+            while (idx1 < version1.length() && version1.charAt(idx1) != '.') {
+                v1 = v1 * 10 + version1.charAt(idx1) - '0';
+                idx1++;
+            }
+            while (idx2 < version2.length() && version2.charAt(idx2) != '.') {
+                v2 = v2 * 10 + version2.charAt(idx2) - '0';
+                idx2++;
+            }
+            
+            if (v1 < v2) {
+                return -1;
+            } else if (v1 > v2) {
+                return 1;
+            } else { //当前小版本相等还得继续检查，直到最长的版本检查完
+                idx1++;
+                idx2++;
+            }
+        }
+        return 0; // 查到最后完全相等
+    }
+}
+```
+
 ## 1371 Find the Longest Substring Containing Vowels in Even Counts
 
 ### 题目

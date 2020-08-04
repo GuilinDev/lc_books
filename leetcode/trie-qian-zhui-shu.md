@@ -1,99 +1,5 @@
 # Trie前缀树
 
-## 208 Implement Trie \(Prefix Tree\)
-
-### 题目
-
-Implement a trie with `insert`, `search`, and `startsWith` methods.
-
-**Example:**
-
-```text
-Trie trie = new Trie();
-
-trie.insert("apple");
-trie.search("apple");   // returns true
-trie.search("app");     // returns false
-trie.startsWith("app"); // returns true
-trie.insert("app");   
-trie.search("app");     // returns true
-```
-
-**Note:**
-
-* You may assume that all inputs are consist of lowercase letters `a-z`.
-* All inputs are guaranteed to be non-empty strings.
-
-### 分析
-
-因为只有小写字符，所以用一个大小为26的Trie\[\]数组来存储所有字符，并用一个标记来记录某个单词是否在前缀树中。
-
-设计前缀树里面的三个方法比较类似，都是将传进来的字符串参数转换成字符数组（不转用charAt\(\)也可以），然后对每个字符进行操作，如果Trie中没有该字符的节点做相应处理，最后移动root索引一步，直至将传进来的字符串中的字符全部处理。
-
-### 代码
-
-```java
-class Trie {
-    
-    private boolean is_string;
-    private Trie[] next;
-
-    /** Initialize your data structure here. */
-    public Trie() {
-        is_string = false;
-        next = new Trie[26];
-    }
-    
-    /** Inserts a word into the trie. */
-    public void insert(String word) {
-        Trie root = this;
-        char[] w = word.toCharArray();
-        for (char x : w) {
-            if (root.next[x - 'a'] == null) { // 当前节点的下一个节点不存在，说明是新来的，新建一个
-                root.next[x - 'a'] = new Trie();
-            }
-            // 移动索引到当前节点
-            root = root.next[x - 'a'];
-        }
-        root.is_string = true;
-    }
-    
-    /** Returns if the word is in the trie. */
-    public boolean search(String word) {
-        Trie root = this;
-        char[] w = word.toCharArray();
-        for (char x : w) { // 挨个节点查找
-            if (root.next[x - 'a'] == null) { // 没找到
-                return false;
-            }
-            root = root.next[x - 'a']; // 移动索引并准备检查下一个节点
-        }
-        return root.is_string;
-    }
-    
-    /** Returns if there is any word in the trie that starts with the given prefix. */
-    public boolean startsWith(String prefix) {
-        Trie root = this;
-        char[] p = prefix.toCharArray();
-        for (char x : p) {
-            if (root.next[x - 'a'] == null) { // 没找到
-                return false;
-            }
-            root = root.next[x - 'a'];
-        }
-        return true;
-    }
-}
-
-/**
- * Your Trie object will be instantiated and called as such:
- * Trie obj = new Trie();
- * obj.insert(word);
- * boolean param_2 = obj.search(word);
- * boolean param_3 = obj.startsWith(prefix);
- */
-```
-
 ## 212 Word Search II
 
 ### 题目
@@ -204,57 +110,47 @@ Trie解法，具体步骤：
 class Solution {
     //------构建前缀树的类，需要掌握，208 - Implement Trie (Prefix Tree)
     class Trie {
-    
-        private boolean is_string;
-        private Trie[] next;
-    
-        /** Initialize your data structure here. */
+        private boolean is_string = false;
+        private Trie next[] = new Trie[26];
+
         public Trie() {
-            is_string = false;
-            next = new Trie[26];
         }
-        
-        /** Inserts a word into the trie. */
-        public void insert(String word) {
+
+        public void insert(String word) {//插入单词
             Trie root = this;
-            char[] w = word.toCharArray();
-            for (char x : w) {
-                if (root.next[x - 'a'] == null) { // 当前节点的下一个节点不存在，说明是新来的，新建一个
-                    root.next[x - 'a'] = new Trie();
+            char w[] = word.toCharArray();
+            for (int i = 0; i < w.length; i++) {
+                if (root.next[w[i] - 'a'] == null) {
+                    root.next[w[i] - 'a'] = new Trie();
                 }
-                // 移动索引到当前节点
-                root = root.next[x - 'a'];
+                root = root.next[w[i] - 'a'];
             }
             root.is_string = true;
         }
-        
-        /** Returns if the word is in the trie. */
-        public boolean search(String word) {
+
+        public boolean search(String word) {//查找单词
             Trie root = this;
-            char[] w = word.toCharArray();
-            for (char x : w) { // 挨个节点查找
-                if (root.next[x - 'a'] == null) { // 没找到
-                    return false;
-                }
-                root = root.next[x - 'a']; // 移动索引并准备检查下一个节点
+            char w[] = word.toCharArray();
+            for (int i = 0; i < w.length; ++i) {
+                if (root.next[w[i] - 'a'] == null) return false;
+                root = root.next[w[i] - 'a'];
             }
             return root.is_string;
         }
-        
-        /** Returns if there is any word in the trie that starts with the given prefix. */
-        public boolean startsWith(String prefix) {
+
+        public boolean startsWith(String prefix) {//查找前缀
             Trie root = this;
-            char[] p = prefix.toCharArray();
-            for (char x : p) {
-                if (root.next[x - 'a'] == null) { // 没找到
+            char p[] = prefix.toCharArray();
+            for (char c : p) {
+                if (root.next[c - 'a'] == null) {
                     return false;
                 }
-                root = root.next[x - 'a'];
+                root = root.next[c - 'a'];
             }
             return true;
         }
     }
-    //------上面是208题构建前缀树的类
+    //------上面是构建前缀树的类
 
     char[][] _board = null;
     ArrayList<String> _result = new ArrayList<>();
