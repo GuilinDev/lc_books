@@ -266,26 +266,29 @@ DFS
 
 ```java
 class Solution {
-   public int findCircleNum(int[][] M) {
-      int[] visited = new int[M.length];
-      int result = 0;
-      for (int i =0; i < M.length; i++) {
-         if (visited[i] == 0) {
-            dfs(M, visited, i);
-            result++;
-         }
-      }
-      return result;
-   }
-
-   private void dfs(int[][] M, int[] visited, int i) {
-      for (int j = 0; j < M[i].length; j++) {
-         if (M[i][j] == 1 && visited[j] == 0) {
-            visited[j] = 1;
-            dfs(M, visited, j);
-         }
-      }
-   }
+    public int findCircleNum(int[][] M) {
+        int result = 0;
+        if (M == null || M.length == 0 || M[0].length == 0) {
+            return result;
+        }
+        int[] visited = new int[M.length];
+        for (int i = 0; i < M.length; i++) {// 按照行来检查，每一行是一个人
+            if (visited[i] == 0) { // visited对应的为0，表示未在之前的DFS中未被访问到，自己形成一个新圈子
+                dfs(M, visited, i);
+                result++;
+            }
+        }
+        return result;
+    }
+    
+    private void dfs(int[][] M, int[] visited, int i) {
+        for (int j = 0; j < M[i].length; j++) { // 将当前人物M[i]的朋友通过dfs找出来，并标记
+            if (M[i][j] == 1 && visited[j] == 0) {// 是朋友，且没有被访问过
+                visited[j] = 1;
+                dfs(M, visited, j); // 再根据朋友的朋友继续深搜
+            }
+        }
+    }
 }
 ```
 
@@ -293,33 +296,39 @@ BFS
 
 ```java
 class Solution {
-   public int findCircleNum(int[][] M) {
-      int result = 0;
-      for (int i=0; i < M.length; i++) {
-         if (M[i][i] == 1) {
-            result++; BFS(i, M);
-         }
-      }
-
-      return result;
-   }
-
-   public void BFS(int student, int[][] M) {
-      Queue<Integer> queue = new LinkedList<>();
-      queue.add(student);
-      while (queue.size() > 0) {
-         int queueSize = queue.size();
-         for (int i=0;i<queueSize;i++) {
-            int j = queue.poll();
-            M[j][j] = 2; // marks as visited
-            for (int k = 0; k < M[0].length; k++) {
-               if (M[j][k] == 1 && M[k][k] == 1) {
-                  queue.add(k);
-               }
+    public int findCircleNum(int[][] M) {
+        int result = 0;
+        if (M == null || M.length == 0 || M[0].length == 0) {
+            return result;
+        }
+        for (int i = 0; i < M.length; i++) { // 依然按行检查
+            if (M[i][i] == 1) { // BFS的过程中尚未被加入到之前的圈子中，这时候”自成一圈“
+                bfs(M, i);
+                result++;
             }
-         }
-      }
-   }
+        }
+        return result;
+    }
+    
+    private void bfs(int[][] M, int oneGuy) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(oneGuy);
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size(); //当前的bfs圈
+            for (int i = 0; i < size; i++) {
+                int anotherGuy = queue.poll();
+                M[anotherGuy][anotherGuy] = 2; // 先把找出来的在当前朋友圈中的人标记一下
+                
+                // 把找出来的人的朋友加入到队列中，以后分析
+                for (int x = 0; x < M[anotherGuy].length; x++) {
+                    if (M[anotherGuy][x] == 1 && M[x][x] != 2) { //是朋友，并且没有被标记过
+                        queue.offer(x);
+                    }
+                }
+            }
+        }
+    }
 }
 ```
 
