@@ -490,7 +490,9 @@ Output: 6
 
 ### 题意和分析
 
-1\) 84 题栈的解法，注意观察橙色部分，就是按照层数遍历，然后求出最大矩形的面积
+1\) 84 题栈的解法，注意观察橙色部分，就是从上到下按照层数遍历，对每一行建立类似84题的柱状图，然后求出最大矩形的面积。
+
+
 
 ![](../../.gitbook/assets/image%20%2889%29.png)
 
@@ -537,7 +539,7 @@ class Solution {
         int[] heights = new int[matrix[0].length];
         int maxArea = 0;
         for (int row = 0; row < matrix.length; row++) {
-            //遍历每一列，更新高度
+            //遍历某行中的每一列，当前行从左到右构建高度数组作为参数
             for (int col = 0; col < matrix[0].length; col++) {
                 if (matrix[row][col] == '1') {
                     heights[col] += 1;
