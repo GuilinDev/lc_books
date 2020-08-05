@@ -371,7 +371,7 @@ class Solution {
       if (k == 0) {
         return current.val;
       }
-      current = current.right;
+      current = current.right; // here no need to push to stack
     }
     throw new IllegalArgumentException("There is no kth smallest element.");
   }
@@ -391,26 +391,27 @@ class Solution {
  * }
  */
 class Solution {
-  private static int count = 0;
-  private static int result = 0;
-  public int kthSmallest(TreeNode root, int k) {
-    count = k;
-    kthSmallestHelper(root);
-    return result;
-  }
-  private void kthSmallestHelper(TreeNode current) {
-    if (current.left != null) {
-      kthSmallestHelper(current.left);
+    int result = 0;
+    int count = 0;
+    public int kthSmallest(TreeNode root, int k) {
+        count = k;
+        inOrder(root);
+        return result;
     }
-    count--;
-    if (count == 0) {
-      result = current.val;
-      return;
+    private void inOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        
+        inOrder(node.left); //中序先traverse先到leftmost
+        
+        count--;
+        if (count == 0) {
+            result = node.val;
+            return;
+        }
+        inOrder(node.right);// 不夠再traverse右sub tree
     }
-    if (current.right != null) {
-      kthSmallestHelper(current.right);
-    }
-  }
 }
 ```
 
