@@ -1887,15 +1887,15 @@ class Solution {
 
         //回溯时层层传递
         int leftHeight = dfsHeight(root.left);
-        if (leftHeight == -1) {
+        if (leftHeight == -1) { // 提前返回
             return -1;
         }
         int rightHeight = dfsHeight(root.right);
-        if (rightHeight == -1) {
+        if (rightHeight == -1) { // 提前返回
             return -1;
         }
 
-        if (Math.abs(leftHeight - rightHeight) > 1) {
+        if (Math.abs(leftHeight - rightHeight) > 1) { // 提前返回
             return -1;
         }
 
