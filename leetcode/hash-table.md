@@ -616,26 +616,38 @@ class Solution {
         if (board == null || board.length == 0 || board[0].length == 0) {
             return false;
         }
-        int m = board.length, n = board[0].length;
+        
+        int m = board.length;
+        int n = board[0].length;
+        
         for (int i = 0; i < m; i++) {
-            Set<Character> row = new HashSet<>();
-            Set<Character> col = new HashSet<>();
-            Set<Character> cube = new HashSet<>();
+            HashSet<Character> rows = new HashSet<>();
+            HashSet<Character> cols = new HashSet<>();
+            HashSet<Character> cube = new HashSet<>();
+            
             for (int j = 0; j < n; j++) {
-                //判断数字是否不在1～9范围之内
-                if (board[i][j] != '.' && (board[i][j] < '1' || board[i][j] > '9')) {
+                
+                char chRow = board[i][j];
+                //判断current字符是否不在1～9范围之内
+                if (chRow != '.' && (chRow < '1' || chRow > '9')) {
                     return false;
                 }
                 //check row
-                if (board[i][j] != '.' && !row.add(board[i][j])) {
+                if (chRow != '.' && !rows.add(chRow)) {
                     return false;
                 }
+                
                 //check col
-                if (board[j][i] != '.' && !col.add(board[j][i])) {
+                char chCol = board[j][i];
+                if (chCol != '.' && !cols.add(chCol)) {
                     return false;
                 }
-                //check the cube;
-                if (board[3*(i/3) + j/3][3*(i%3) + j%3] != '.' && !cube.add(board[3*(i/3) + j/3][3*(i%3) + j%3])) {
+                
+                // 得到cube中的坐標
+                int cubeIndexX = 3 * (i / 3) + j / 3;
+                int cubeIndexY = 3 * (i % 3) + j % 3;
+                //check the cube
+                if (board[cubeIndexX][cubeIndexY] != '.' && !cube.add(board[cubeIndexX][cubeIndexY])) {
                     return false;
                 }
             }
