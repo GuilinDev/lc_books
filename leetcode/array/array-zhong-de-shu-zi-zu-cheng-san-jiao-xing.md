@@ -223,26 +223,21 @@ Time：Arrays.sort\(\)的O\(nlogn\) + 后面的循环O\(n^2\) = O\(n^2\)；Space
 class Solution {
     public int triangleNumber(int[] nums) {
         int result = 0;
-        if (nums == null || nums.length < 3) {
+        if (nums.length < 3) {
             return result;
         }
-        
         Arrays.sort(nums);
-        int len = nums.length;
-        
-        for (int third = nums.length - 1; third >= 2; third--) { //左边留两个位置
-            int first = 0, second = third - 1;
-            while (first < second) {
-                if (nums[first] + nums[second] > nums[third]) {
-                    result += second - first;//因为排过序了，所以second到first中间的数字都可以和first组成三角形
-                    second--; // 往左移变小一点,成为新的second继续找组合
-                } else {
-                    //两个较小的数加起来小于或等于第三个数，所以前面两条边应该增大，左边的指针右移
-                    first++;
+        for (int i = nums.length - 1; i >= 2; i--) {//i>=2，左边至少得留两个数
+            int left = 0, right = i - 1;
+            while (left < right) {
+                if (nums[left] + nums[right] > nums[i]) {
+                    result += right - left;//因为排过序了，所以left到right中间的数字都可以和nums[i]组成三角形
+                    right--;//从右向左，让数变小看是否继续符合条件
+                } else {//两个数加起来小于或等于，所以应该增大
+                    left++;
                 }
             }
         }
-        
         return result;
     }
 }
