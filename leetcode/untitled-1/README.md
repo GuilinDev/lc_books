@@ -371,7 +371,7 @@ class Solution {
       if (k == 0) {
         return current.val;
       }
-      current = current.right;
+      current = current.right; // here no need to push to stack
     }
     throw new IllegalArgumentException("There is no kth smallest element.");
   }
@@ -391,26 +391,27 @@ class Solution {
  * }
  */
 class Solution {
-  private static int count = 0;
-  private static int result = 0;
-  public int kthSmallest(TreeNode root, int k) {
-    count = k;
-    kthSmallestHelper(root);
-    return result;
-  }
-  private void kthSmallestHelper(TreeNode current) {
-    if (current.left != null) {
-      kthSmallestHelper(current.left);
+    int result = 0;
+    int count = 0;
+    public int kthSmallest(TreeNode root, int k) {
+        count = k;
+        inOrder(root);
+        return result;
     }
-    count--;
-    if (count == 0) {
-      result = current.val;
-      return;
+    private void inOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        
+        inOrder(node.left); //中序先traverse先到leftmost
+        
+        count--;
+        if (count == 0) {
+            result = node.val;
+            return;
+        }
+        inOrder(node.right);// 不夠再traverse右sub tree
     }
-    if (current.right != null) {
-      kthSmallestHelper(current.right);
-    }
-  }
 }
 ```
 
@@ -1887,15 +1888,15 @@ class Solution {
 
         //回溯时层层传递
         int leftHeight = dfsHeight(root.left);
-        if (leftHeight == -1) {
+        if (leftHeight == -1) { // 提前返回
             return -1;
         }
         int rightHeight = dfsHeight(root.right);
-        if (rightHeight == -1) {
+        if (rightHeight == -1) { // 提前返回
             return -1;
         }
 
-        if (Math.abs(leftHeight - rightHeight) > 1) {
+        if (Math.abs(leftHeight - rightHeight) > 1) { // 提前返回
             return -1;
         }
 
@@ -4413,4 +4414,87 @@ class Solution {
     }
 }
 ```
+
+## 272 Closest Binary Search Tree Value II
+
+### 题目
+
+Given a non-empty binary search tree and a target value, find k values in the BST that are closest to the target.
+
+**Note:**
+
+* Given target value is a floating point.
+* You may assume k is always valid, that is: k ≤ total nodes.
+* You are guaranteed to have only one unique set of k values in the BST that are closest to the target.
+
+**Example:**
+
+```text
+Input: root = [4,2,5,1,3], target = 3.714286, and k = 2
+
+    4
+   / \
+  2   5
+ / \
+1   3
+
+Output: [4,3]
+```
+
+**Follow up:**  
+ Assume that the BST is balanced, could you solve it in less than O\(n\) runtime \(where n = total nodes\)?
+
+### 分析
+
+中序遍历，维护一个LinkedList，从最左端开始遍历，达到k个后，新来的元素跟最早加入的元素对比看哪个更近，如果新来的元素更近就剔出最早的元素，这一点很重要，为什么是跟最早的元素比较？设想如果target离最早的元素很近，那么新来的元素只会比最后加入的元素离target更远，更不会比最早的元素近；如果target离最早的元素很远（往右子树方向走），那么这时候就应该剔出最早的元素。所以新来的元素跟最早进入linkedlist的元素对比是正确的，所以如果新来的元素不比最早的元素近，那么直接返回当前的k个，因为BST后面的元素只会更远了。 
+
+这道题不用LinkedList，可以用List或者PriorityQueue，但试了下感觉麻烦一些
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    LinkedList<Integer> results; // 这里需要用到LinkedList实现而不是List接口，才能使用下面的一些API
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        results = new LinkedList<>();
+        inOrder(root, target, k);
+        return results;
+    }
+    private void inOrder(TreeNode node, double target, int k) {
+        if (node == null) {
+            return;
+        }
+        //先中序遍历到最左边
+        inOrder(node.left, target, k);
+
+        if (k > results.size()) { // 还未到kk个
+            results.add(node.val);
+        } else { // 已有k个candidates，开始检查
+            if (Math.abs(node.val - target) < Math.abs(results.peekFirst() - target)) {
+                // 剔除最先加入的元素，仔细想想，如果新来的元素比最先加入的元素离target更近，那么最先加入的元素一定是最远的一个
+                results.pollFirst();
+                results.add(node.val);
+            } else {// 如果新来的元素不比最先加入的元素近，根据BST的特征，后面（右子树）的元素不用继续查了
+                return; 
+            }
+        }
+
+        // 不够k个再遍历右子树
+        inOrder(node.right, target, k);
+    }
+}
+```
+
+Follow up是如果给定的二叉树是平衡的，可不可以将时间复杂度降到O\(logn\)，利用两个栈来保存target的前驱和后继, 而且两个栈顶的元素保存的是当前距离target最近的前驱和后继, 这样就可以每次取到距离target最近的值. 这种时间复杂度可以达到O\(logn\).
+
+
 
