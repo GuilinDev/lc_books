@@ -383,6 +383,110 @@ class Solution {
 }
 ```
 
+## 407 Trapping Rain Water II
+
+### 题目
+
+Given an `m x n` matrix of positive integers representing the height of each unit cell in a 2D elevation map, compute the volume of water it is able to trap after raining.
+
+**Example:**
+
+```text
+Given the following 3x6 height map:
+[
+  [1,4,3,1,3,2],
+  [3,2,1,3,2,4],
+  [2,3,3,2,3,1]
+]
+
+Return 4.
+```
+
+![](https://assets.leetcode.com/uploads/2018/10/13/rainwater_empty.png)
+
+The above image represents the elevation map `[[1,4,3,1,3,2],[3,2,1,3,2,4],[2,3,3,2,3,1]]` before the rain.
+
+![](https://assets.leetcode.com/uploads/2018/10/13/rainwater_fill.png)
+
+After the rain, water is trapped between the blocks. The total volume of water trapped is 4.
+
+**Constraints:**
+
+* `1 <= m, n <= 110`
+* `0 <= heightMap[i][j] <= 20000`
+
+### 分析
+
+第42题是1-D的接雨水问题，其中的DP解法是从左右两边的边界往中间进行收缩，收缩的过程中，对每个坐标（一维坐标）头顶上能接的雨水进行累加。
+
+这道题是2-D的接雨水的问题，这个边界不再是线段的两个端点，而是矩形的一周，所以用优先队列维护所有边界点，收缩时，也不仅仅只有左右两个方向，而是上下左右四个方向，分别计算柱子头顶对比四周可以存储的雨水，同时维护一个visit的数组，记录哪些坐标已经被访问过，不然会造成重复求解。因此，这是个PQ+BFS的解法。
+
+### 代码
+
+```java
+class Solution {
+    /**
+    维护一个Cell类来hold一根柱子的横纵坐标和高度
+    */
+    class Cell {
+        private int row;
+        private int col;
+        private int height;
+        
+        public Cell(int row, int col, int height) {
+            this.row = row;
+            this.col = col;
+            this.height = height;
+        }
+    }
+    
+    public int trapRainWater(int[][] heightMap) {
+        int result = 0;
+        if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) {
+            return result;
+        }
+        int m = heightMap.length;
+        int n = heightMap[0].length;
+        
+        PriorityQueue<Cell> pq = new PriorityQueue<>(Comparator.comparingInt((Cell cell) -> cell.height)); // 优先队列的顺序从最高的柱子开始检查
+        
+        boolean[][] visited = new boolean[m][n];
+        
+        // 首先把二维数组的四个边加入到pq中，准备往中间计算
+        for (int k = 0; k < m; k++) {
+            visited[k][0] = true;
+            pq.offer(new Cell(k, 0, heightMap[k][0]));
+            visited[k][n - 1] = true;
+            pq.offer(new Cell(k, n - 1, heightMap[k][n - 1]));
+        }
+        for (int k = 1; k < n - 1; k++) { // 左上和右下两个点已经处理
+            visited[0][k] = true;
+            pq.offer(new Cell(0, k, heightMap[0][k]));
+            visited[m - 1][k] = true;
+            pq.offer(new Cell(m - 1, k, heightMap[m - 1][k]));
+        }
+        
+        int[][] dirs = {{1, 0},{-1, 0},{0, 1},{0, -1}};
+        
+        while (!pq.isEmpty()) {
+            // 与BFS的标准写法不同的一点是，这个BFS不用计算扩散中每一层有多少个元素
+            Cell oneCell = pq.poll();
+            for (int[] dir : dirs) {//当前柱子的四个方向
+                int newX = oneCell.row + dir[0];
+                int newY = oneCell.col + dir[1];
+                
+                if (newX >= 0 && newX < m && newY >= 0 && newY < n && !visited[newX][newY]) {
+                    result += Math.max(0, oneCell.height - heightMap[newX][newY]); // 当前柱子与周边四个柱子比较，水往低处流
+                    pq.offer(new Cell(newX, newY, Math.max(oneCell.height, heightMap[newX][newY]))); //选择height的时候需要选较高的柱子，水流不过去
+                    visited[newX][newY] = true;
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
 ## 150 - Evaluate Reverse Polish Notation
 
 ### 原题概述
