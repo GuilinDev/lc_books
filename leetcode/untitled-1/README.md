@@ -4619,3 +4619,239 @@ class Solution {
 }
 ```
 
+## 114 Flatten Binary Tree to Linked List
+
+### 题目
+
+Given a binary tree, flatten it to a linked list in-place.
+
+For example, given the following tree:
+
+```text
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+```
+
+The flattened tree should look like:
+
+```text
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+```
+
+### 分析
+
+1\)解法1，直观想象，可以发现展开的顺序其实就是二叉树的先序遍历。算法和 94 题中序遍历的 Morris 算法有些神似，我们需要两步完成这道题。
+
+1. 将左子树插入到右子树的地方 
+2. 将原来的右子树接到左子树的最右边节点 
+3. 考虑新的右子树的根节点，一直重复上边的过程，直到新的右子树为 null
+
+如图：
+
+```text
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+
+//将 1 的左子树插入到右子树的地方
+    1
+     \
+      2         5
+     / \         \
+    3   4         6     
+       
+//将原来的右子树接到左子树的最右边节点
+    1
+     \
+      2          
+     / \          
+    3   4  
+         \
+          5
+           \
+            6
+            
+ //将 2 的左子树插入到右子树的地方
+    1
+     \
+      2          
+       \          
+        3       4  
+                 \
+                  5
+                   \
+                    6   
+        
+ //将原来的右子树接到左子树的最右边节点
+    1
+     \
+      2          
+       \          
+        3      
+         \
+          4  
+           \
+            5
+             \
+              6         
+  
+  ......
+```
+
+2\) 上面1的步骤，因为如果直接用先序遍历，把当前节点的左子树插入到当前节点的右子树位置的话，会把当前位置的右子树的信息丢掉，因此也可以特殊处理一下，先将当前节点的右子树保存在一个stack中，等左子树接上后再弹出接到左孩子下面的位置。
+
+3\)上面2的解法用stack保存右子树，其实用后序遍历，先将最右下的右子树处理了再说，就不用额外数据结构了
+
+### 代码
+
+1\) 直观解法
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public void flatten(TreeNode root) {
+        TreeNode node = root;
+        while (node != null) {
+            if (node.left == null) { // 左子树为空，不用管直接去右子树
+                node = node.right;
+            } else {                
+                // 用一个节点记录先找到当前节点左子树的最右节点，让当前节点的右子树可以接入
+                TreeNode leftRight = node.left;
+                while (leftRight.right != null) {
+                    leftRight = leftRight.right;
+                }
+                
+                // 将当前结点的右子树接到左子树的
+                leftRight.right = node.right;
+                
+                // 将当前节点的左子树挪到当前节点的右子树位置
+                node.right = node.left;
+                
+                node.left = null; // 移除当前左子树
+                
+                // 移向下一个节点
+                node = node.right;
+            }
+        }
+    }
+}
+```
+
+2\) 
+
+```java
+class Solution {
+    public void flatten(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode pre = null; // 接入的位置
+        
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            
+            if (pre != null) { //当前节点(上一轮得到)接入stack里面弹出来的元素
+                pre.right = node;
+                pre.left = null;
+            }
+
+            if (node.right != null) { // 先压入右子树，待会后接入
+                stack.push(node.right);
+            }
+
+            if (node.left != null) { // 再压入左子树，待会先接入
+                stack.push(node.left);
+            }
+
+            pre = node;
+            
+        }
+    }
+}
+```
+
+3\) 后序遍历递归和迭代解法
+
+```java
+class Solution {
+    private TreeNode pre;
+    public void flatten(TreeNode root) {
+        pre = null;
+        postOrder(root);
+    }
+    private void postOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        postOrder(node.right);
+        postOrder(node.left);
+        
+        node.right = pre;
+        node.left = null;
+        
+        pre = node;
+    }
+}
+```
+
+```java
+class Solution {
+    public void flatten(TreeNode root) { 
+        Stack<TreeNode> toVisit = new Stack<>();
+        TreeNode cur = root;
+        TreeNode pre = null;
+
+        while (cur != null || !toVisit.isEmpty()) {
+            while (cur != null) {
+                toVisit.push(cur); // 添加根节点
+                cur = cur.right; // 递归添加右节点
+            }
+            cur = toVisit.peek(); // 已经访问到最右的节点了
+            // 在不存在左节点或者右节点已经访问过的情况下，访问根节点
+            if (cur.left == null || cur.left == pre) {
+                toVisit.pop(); 
+                /**************修改的地方***************/
+                cur.right = pre;
+                cur.left = null;
+                /*************************************/
+                pre = cur;
+                cur = null;
+            } else {
+                cur = cur.left; // 左节点还没有访问过就先访问左节点
+            }
+        } 
+    }
+}
+```
+
