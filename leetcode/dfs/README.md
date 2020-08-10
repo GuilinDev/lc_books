@@ -213,6 +213,69 @@ class Solution {
 }
 ```
 
+## 305 Number of Islands II
+
+### 题目
+
+A 2d grid map of m rows and n columns is initially filled with water. We may perform an addLand operation which turns the water at position \(row, col\) into a land. Given a list of positions to operate, count the number of islands after each addLand operation. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example:
+
+```java
+Input: m = 3, n = 3, positions = [[0,0], [0,1], [1,2], [2,1]] 
+Output: [1,1,2,3]
+```
+
+Explanation:
+
+Initially, the 2d grid grid is filled with water. \(Assume 0 represents water and 1 represents land\).
+
+```java
+0 0 0 
+0 0 0 
+0 0 0
+```
+
+Operation \#1: addLand\(0, 0\) turns the water at grid\[0\]\[0\] into a land.
+
+```java
+1 0 0 
+0 0 0 Number of islands = 1 
+0 0 0
+```
+
+Operation \#2: addLand\(0, 1\) turns the water at grid\[0\]\[1\] into a land.
+
+```java
+1 1 0 
+0 0 0 Number of islands = 1 
+0 0 0
+```
+
+peration \#3: addLand\(1, 2\) turns the water at grid\[1\]\[2\] into a land.
+
+```java
+1 1 0 
+0 0 1 Number of islands = 2 
+0 0 0
+```
+
+Operation \#4: addLand\(2, 1\) turns the water at grid\[2\]\[1\] into a land.
+
+```java
+1 1 0 
+0 0 1 Number of islands = 3 
+0 1 0
+```
+
+Follow up:
+
+Can you do it in time complexity O\(k log mn\), where k is the length of the positions?
+
+### 分析
+
+### 代码
+
 ## 695 Max Area of Islands
 
 ### 原题概述
@@ -797,6 +860,118 @@ class Solution {
         if (!leftBound && rightBound) {
             result.add(node.val);
         }
+    }
+}
+```
+
+## 339 Nested List Weight Sum
+
+### 原题
+
+Given a nested list of integers, return the sum of all integers in the list weighted by their depth.
+
+Each element is either an integer, or a list -- whose elements may also be integers or other lists.
+
+Example 1:
+
+```text
+Input: [[1,1],2,[1,1]] 
+Output: 10 Explanation: Four 1's at depth 2, one 2 at depth 1.
+```
+
+Example 2:
+
+```text
+Input: [1,[4,[6]]] Output: 27 
+Explanation: One 1 at depth 1, one 4 at depth 2, and one 6 at depth 3; 1 + 42 + 63 = 27.
+```
+
+### 分析
+
+看到嵌套，会想到用递归或者Stack或者Queue，这道题就是题目给的API需要读一下，面试中可能需要自己设计和封装这些API。
+
+### 代码
+
+递归DFS
+
+```java
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * public interface NestedInteger {
+ *     // Constructor initializes an empty nested list.
+ *     public NestedInteger();
+ *
+ *     // Constructor initializes a single integer.
+ *     public NestedInteger(int value);
+ *
+ *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     public boolean isInteger();
+ *
+ *     // @return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // Return null if this NestedInteger holds a nested list
+ *     public Integer getInteger();
+ *
+ *     // Set this NestedInteger to hold a single integer.
+ *     public void setInteger(int value);
+ *
+ *     // Set this NestedInteger to hold a nested list and adds a nested integer to it.
+ *     public void add(NestedInteger ni);
+ *
+ *     // @return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // Return null if this NestedInteger holds a single integer
+ *     public List<NestedInteger> getList();
+ * }
+ */
+class Solution {
+    int result;
+    public int depthSum(List<NestedInteger> nestedList) {
+        result = 0;
+        dfs(nestedList, 1);
+        return result;
+    }
+    private void dfs(List<NestedInteger> nestedList, int depth) {
+        for (NestedInteger ni : nestedList) {
+            if (ni.isInteger()) {
+                result += ni.getInteger() * depth;
+            } else {
+                dfs(ni.getList(), depth + 1);
+            }
+        }
+    }
+}
+```
+
+Queue BFS
+
+```java
+class Solution {
+    public int depthSum(List<NestedInteger> nestedList) {
+        if(nestedList == null || nestedList.size() == 0) {
+            return 0;
+        } 
+        Queue<NestedInteger> q = new LinkedList<>();
+        for(NestedInteger element : nestedList) {
+            q.offer(element);
+        }
+        int depth = 0, sum = 0;
+        // 标准BFS遍历
+        while(!q.isEmpty()) {
+            depth++;
+            int size = q.size();
+            for(int i = 0; i < size; i++) {
+                NestedInteger cur = q.poll();
+                if(cur.isInteger()) {
+                    sum += depth * cur.getInteger();
+                }else {
+                    List<NestedInteger> tmp = cur.getList();
+                    for(NestedInteger element : tmp) {
+                        q.offer(element);
+                    }
+                }
+            }
+        }
+        return sum;
     }
 }
 ```
