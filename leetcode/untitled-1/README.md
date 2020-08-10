@@ -371,7 +371,7 @@ class Solution {
       if (k == 0) {
         return current.val;
       }
-      current = current.right;
+      current = current.right; // here no need to push to stack
     }
     throw new IllegalArgumentException("There is no kth smallest element.");
   }
@@ -391,26 +391,27 @@ class Solution {
  * }
  */
 class Solution {
-  private static int count = 0;
-  private static int result = 0;
-  public int kthSmallest(TreeNode root, int k) {
-    count = k;
-    kthSmallestHelper(root);
-    return result;
-  }
-  private void kthSmallestHelper(TreeNode current) {
-    if (current.left != null) {
-      kthSmallestHelper(current.left);
+    int result = 0;
+    int count = 0;
+    public int kthSmallest(TreeNode root, int k) {
+        count = k;
+        inOrder(root);
+        return result;
     }
-    count--;
-    if (count == 0) {
-      result = current.val;
-      return;
+    private void inOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        
+        inOrder(node.left); //中序先traverse先到leftmost
+        
+        count--;
+        if (count == 0) {
+            result = node.val;
+            return;
+        }
+        inOrder(node.right);// 不夠再traverse右sub tree
     }
-    if (current.right != null) {
-      kthSmallestHelper(current.right);
-    }
-  }
 }
 ```
 
@@ -1887,15 +1888,15 @@ class Solution {
 
         //回溯时层层传递
         int leftHeight = dfsHeight(root.left);
-        if (leftHeight == -1) {
+        if (leftHeight == -1) { // 提前返回
             return -1;
         }
         int rightHeight = dfsHeight(root.right);
-        if (rightHeight == -1) {
+        if (rightHeight == -1) { // 提前返回
             return -1;
         }
 
-        if (Math.abs(leftHeight - rightHeight) > 1) {
+        if (Math.abs(leftHeight - rightHeight) > 1) { // 提前返回
             return -1;
         }
 
@@ -3752,69 +3753,94 @@ After calling your function, the tree should look like:
 
 ### 题意和分析
 
-这道题是层序遍历的应用，找到每一层右边的结点，遍历的递归和非递归的方法都需要掌握。
+这道题是层序遍历的应用，找到每一层右边的结点，当遍历到一个节点时，处理该节点的左子树和右子树，这个处理的过程可以是递归或者非递归，两个方法都需要掌握。
 
 ### 代码
 
 递归
 
 ```java
-/**
- * Definition for binary tree with next pointer.
- * public class TreeLinkNode {
- *     int val;
- *     TreeLinkNode left, right, next;
- *     TreeLinkNode(int x) { val = x; }
- * }
- */
-public class Solution {
-    public void connect(TreeLinkNode root) {
-        connectHelper(root);
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+
+    public Node() {}
+    
+    public Node(int _val) {
+        val = _val;
     }
-    private void connectHelper(TreeLinkNode current) {
-        if (current == null || current.left == null) {
-            return;
-        }
-        current.left.next = current.right;
-        if (current.next != null) {
-            current.right.next = current.next.left;
-        }
-        connectHelper(current.left);
-        connectHelper(current.right);
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
     }
-}
+};
+*/
+
+class Solution {
+    public Node connect(Node root) {
+        if (root == null) {
+            return null;
+        }
+        if (root.left == null) { //只有一个元素的情况
+            root.next = null;
+            return root;
+        }
+        return recursion(root);
+    }
+    private Node recursion(Node node) {
+        if (node == null || node.left == null) { // 该层的下层为空，该层已经处理过
+            return null;
+        }
+        node.left.next = node.right;
+        node.right.next = (node.next == null) ? null : node.next.left;
+        
+        recursion(node.left);
+        recursion(node.right);
+        
+        return node;
+    }
+}   
 ```
 
-非递归
+非递归BFS
 
 ```java
-/**
- * Definition for binary tree with next pointer.
- * public class TreeLinkNode {
- *     int val;
- *     TreeLinkNode left, right, next;
- *     TreeLinkNode(int x) { val = x; }
- * }
- */
-public class Solution {
-    public void connect(TreeLinkNode root) {
+class Solution {
+    public Node connect(Node root) {
         if (root == null) {
-            return;
+            return null;
         }
-        TreeLinkNode current = root;
-        TreeLinkNode nextLeftmost = null;
-
-        while (current.left != null) {
-            nextLeftmost = current.left;//记录下一层的起点
-            while (current != null) {
-                current.left.next = current.right;
-                current.right.next = (current.next == null ? null : current.next.left);
-                current = current.next;
-            }
-            current = nextLeftmost;//指向下一层
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            // daga
+            for (int i = 0; i < size; i++) {
+                Node node = queue.poll();
+                // 当前层节点
+                if (node.left != null) {
+                    queue.offer(node.left);
+                    node.left.next = node.right;
+                }                
+                
+                if (node.right != null) {
+                    queue.offer(node.right);
+                    // 完美二叉树也需要处理最右边的节点，指向null
+                    node.right.next = (node.next == null) ? null : node.next.left;
+                }
+            }            
         }
+        return root;
     }
-}
+
 ```
 
 ## 250 Count Univalue Subtrees
@@ -4409,6 +4435,185 @@ class Solution {
         while (node.left != null) {
             node = node.left;
         }
+        return node;
+    }
+}
+```
+
+## 272 Closest Binary Search Tree Value II
+
+### 题目
+
+Given a non-empty binary search tree and a target value, find k values in the BST that are closest to the target.
+
+**Note:**
+
+* Given target value is a floating point.
+* You may assume k is always valid, that is: k ≤ total nodes.
+* You are guaranteed to have only one unique set of k values in the BST that are closest to the target.
+
+**Example:**
+
+```text
+Input: root = [4,2,5,1,3], target = 3.714286, and k = 2
+
+    4
+   / \
+  2   5
+ / \
+1   3
+
+Output: [4,3]
+```
+
+**Follow up:**  
+ Assume that the BST is balanced, could you solve it in less than O\(n\) runtime \(where n = total nodes\)?
+
+### 分析
+
+中序遍历，维护一个LinkedList，从最左端开始遍历，达到k个后，新来的元素跟最早加入的元素对比看哪个更近，如果新来的元素更近就剔出最早的元素，这一点很重要，为什么是跟最早的元素比较？设想如果target离最早的元素很近，那么新来的元素只会比最后加入的元素离target更远，更不会比最早的元素近；如果target离最早的元素很远（往右子树方向走），那么这时候就应该剔出最早的元素。所以新来的元素跟最早进入linkedlist的元素对比是正确的，所以如果新来的元素不比最早的元素近，那么直接返回当前的k个，因为BST后面的元素只会更远了。 
+
+这道题不用LinkedList，可以用List或者PriorityQueue，但试了下感觉麻烦一些
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    LinkedList<Integer> results; // 这里需要用到LinkedList实现而不是List接口，才能使用下面的一些API
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        results = new LinkedList<>();
+        inOrder(root, target, k);
+        return results;
+    }
+    private void inOrder(TreeNode node, double target, int k) {
+        if (node == null) {
+            return;
+        }
+        //先中序遍历到最左边
+        inOrder(node.left, target, k);
+
+        if (k > results.size()) { // 还未到kk个
+            results.add(node.val);
+        } else { // 已有k个candidates，开始检查
+            if (Math.abs(node.val - target) < Math.abs(results.peekFirst() - target)) {
+                // 剔除最先加入的元素，仔细想想，如果新来的元素比最先加入的元素离target更近，那么最先加入的元素一定是最远的一个
+                results.pollFirst();
+                results.add(node.val);
+            } else {// 如果新来的元素不比最先加入的元素近，根据BST的特征，后面（右子树）的元素不用继续查了
+                return; 
+            }
+        }
+
+        // 不够k个再遍历右子树
+        inOrder(node.right, target, k);
+    }
+}
+```
+
+Follow up是如果给定的二叉树是平衡的，可不可以将时间复杂度降到O\(logn\)，利用两个栈来保存target的前驱和后继, 而且两个栈顶的元素保存的是当前距离target最近的前驱和后继, 这样就可以每次取到距离target最近的值. 这种时间复杂度可以达到O\(logn\).
+
+## 366 Find Leaves of Binary Tree
+
+### 题目
+
+Given a binary tree, collect a tree's nodes as if you were doing this: Collect and remove all leaves, repeat until the tree is empty.
+
+Example:
+
+Input: \[1,2,3,4,5\]
+
+```text
+      1
+     / \
+    2   3
+   / \     
+  4   5    
+```
+
+Output: \[\[4,5,3\],\[2\],\[1\]\]
+
+Explanation:
+
+1. Removing the leaves \[4,5,3\] would result in this tree:
+
+   ```text
+      1
+     / 
+    2          
+   ```
+
+2. Now removing the leaf \[2\] would result in this tree:
+
+   ```text
+      1          
+   ```
+
+3. Now removing the leaf \[1\] would result in the empty tree:
+
+   ```text
+      []         
+   ```
+
+\[\[3,5,4\],\[2\],\[1\]\], \[\[3,4,5\],\[2\],\[1\]\], etc, are also consider correct answers since per each level it doesn't matter the order on which elements are returned.
+
+### 分析
+
+使用dfs，递归时传入上一个节点，如果当前节点是叶子节点，则将值加入集合，使用上个节点将当前叶子节点删除。每递归一次就会修剪掉叶子节点，形成新树，循环修剪叶子节点，直至只剩下根节点，最后将根节点加入结果集。
+
+递归的思想不要一个元素一个元素或者一层一层的角度去想，而是把返回条件写好后，直接考虑左子树和右子树的关系即可，不要想太复杂。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        List<List<Integer>> results = new ArrayList<>();
+        while (root != null) {
+            List<Integer> oneLevel = new ArrayList<>();
+            // 每一层的更新让递归栈来保存 该层叶子节点和当前oneLevel数组的信息，每个oneLevel对应的叶子节点都是最外层
+            root = dfs(root, oneLevel); 
+            results.add(oneLevel);
+        }
+        return results;
+    }
+
+    private TreeNode dfs(TreeNode node, List<Integer> oneLevel) {
+        if (node == null) { // 寻找叶子节点过程中的base case，比如只有左子树或者只有右子树为空
+            return null;
+        }
+        if (node.left == null && node.right == null) { // 叶子节点
+            oneLevel.add(node.val);
+            return null; // 叶子节点加入list后，从该层返回
+        }
+
+        // 递归检查左右子树，它们有自己对应的oneLevel和递归参数在递归栈中
+        node.left = dfs(node.left, oneLevel);
+        node.right = dfs(node.right, oneLevel);
+
         return node;
     }
 }
