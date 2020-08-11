@@ -328,69 +328,21 @@ Explanation: The perimeter is the 16 yellow stripes in the image below:
 ```java
 class Solution {
     public int islandPerimeter(int[][] grid) {
-        if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return 0;
-        }
-        int lands = 0;
-        int neighbors = 0;
-        
+        int lands = 0, neighbors = 0;
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 if (grid[i][j] == 1) {
                     lands++;
-                    if (i < grid.length - 1 && grid[i + 1][j] == 1) {
+                    if (i < grid.length - 1 && grid[i+1][j] == 1) {//下方是陆地
                         neighbors++;
                     }
-                    if (j < grid[0].length - 1 && grid[i][j + 1] == 1) {
+                    if (j < grid[0].length - 1 && grid[i][j+1] == 1) {//右边是陆地
                         neighbors++;
                     }
                 }
             }
         }
-        // 每有一块陆地，周长增加4，每有一个邻居陆地，双方各自减少1的周长，所以乘以2
         return lands * 4 - neighbors * 2;
-    }
-}
-```
-
-强行写成DFS的作法
-
-```java
-class Solution {
-    public int islandPerimeter(int[][] grid) {
-        if (grid == null) return 0;
-        for (int i = 0 ; i < grid.length ; i++){
-            for (int j = 0 ; j < grid[0].length ; j++){
-                if (grid[i][j] == 1) {
-                    // 只有一个岛屿
-                    return getPerimeter(grid,i,j);
-                }
-            }
-        }
-        return 0;
-    }
-    
-    public int getPerimeter(int[][] grid, int i, int j){
-        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length) {
-            return 1;
-        }
-        if (grid[i][j] == 0) {
-            return 1;
-        }
-        if (grid[i][j] == -1) {
-            return 0;
-        }
-        
-        int count = 0;
-        grid[i][j] = -1; //标记访问过
-        
-        count += getPerimeter(grid, i - 1, j);
-        count += getPerimeter(grid, i, j - 1);
-        count += getPerimeter(grid, i, j + 1);
-        count += getPerimeter(grid, i + 1, j);
-        
-        return count;
-        
     }
 }
 ```
@@ -664,38 +616,26 @@ class Solution {
         if (board == null || board.length == 0 || board[0].length == 0) {
             return false;
         }
-        
-        int m = board.length;
-        int n = board[0].length;
-        
+        int m = board.length, n = board[0].length;
         for (int i = 0; i < m; i++) {
-            HashSet<Character> rows = new HashSet<>();
-            HashSet<Character> cols = new HashSet<>();
-            HashSet<Character> cube = new HashSet<>();
-            
+            Set<Character> row = new HashSet<>();
+            Set<Character> col = new HashSet<>();
+            Set<Character> cube = new HashSet<>();
             for (int j = 0; j < n; j++) {
-                
-                char chRow = board[i][j];
-                //判断current字符是否不在1～9范围之内
-                if (chRow != '.' && (chRow < '1' || chRow > '9')) {
+                //判断数字是否不在1～9范围之内
+                if (board[i][j] != '.' && (board[i][j] < '1' || board[i][j] > '9')) {
                     return false;
                 }
                 //check row
-                if (chRow != '.' && !rows.add(chRow)) {
+                if (board[i][j] != '.' && !row.add(board[i][j])) {
                     return false;
                 }
-                
                 //check col
-                char chCol = board[j][i];
-                if (chCol != '.' && !cols.add(chCol)) {
+                if (board[j][i] != '.' && !col.add(board[j][i])) {
                     return false;
                 }
-                
-                // 得到cube中的坐標
-                int cubeIndexX = 3 * (i / 3) + j / 3;
-                int cubeIndexY = 3 * (i % 3) + j % 3;
-                //check the cube
-                if (board[cubeIndexX][cubeIndexY] != '.' && !cube.add(board[cubeIndexX][cubeIndexY])) {
+                //check the cube;
+                if (board[3*(i/3) + j/3][3*(i%3) + j%3] != '.' && !cube.add(board[3*(i/3) + j/3][3*(i%3) + j%3])) {
                     return false;
                 }
             }
