@@ -438,20 +438,21 @@ Assume that the total area is never beyond the maximum possible value of **int**
 ```java
 class Solution {
     public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
-        int area1 = (C-A) * (D-B);
-        int area2 = (G-E) * (H-F);
-
-        int common = overlap(A, C, E, G) * overlap(B, D, F, H);
-
-        return area1 + area2 - common;
+        int area1 = Math.abs(A - C) * Math.abs(B - D);
+        int area2 = Math.abs(E - G) * Math.abs(F - H);
+        
+        //分别是横坐标相差和纵坐标，求出横纵坐标的相差，乘以得出重叠区
+        int common = overlap(A, C, E, G) * overlap(B, D, F, H); 
+        
+        return area1 + area2 - common; //两个矩形的面积相加，然后减去一个相交矩形的面积
     }
-
-    int overlap(int a, int b, int c, int d) {
-        if (c >= b || d <= a) return 0;
-
-        return Math.min(b,d) - Math.max(a,c);
+    private int overlap(int lowerLeft1, int upperRight1, int lowerLeft2, int upperRight2) {
+        if (lowerLeft1 >= upperRight2 || lowerLeft2 >= upperRight1) {//两个矩形不相交
+            return 0;
+        }
+        //两个lowerleft中的较大者在上面，两个upperRight中的较小者在下面，二者中间是重叠区域的长和宽
+        return Math.abs(Math.max(lowerLeft1, lowerLeft2) - Math.min(upperRight1, upperRight2));
     }
-
 }
 ```
 
