@@ -5227,15 +5227,18 @@ class Solution {
             return null;
         }
 
+        // 得到当前元素
         int val = preorderArr[idx];
-        // 按照BST的特性，如果当前元素不能够被放在当前位置
+        
+        // corner case，按照BST的特性，如果当前元素不能够被放在当前位置
         if (val < lower || val > upper) {
             return null;
         }
 
-        // 构建当前元素，并递归构建左右子树
+        // 构建当前元素
         idx++;
         TreeNode root = new TreeNode(val);
+        并递归构建左右子树
         root.left = helper(lower, val);
         root.right = helper(val, upper);
         return root;
