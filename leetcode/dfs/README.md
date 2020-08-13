@@ -274,7 +274,404 @@ Can you do it in time complexity O\(k log mn\), where k is the length of the pos
 
 ### 分析
 
+暴力法是复用第200题Number of Islands的DFS代码，每添加一次就去查一下有多少个岛屿，时间复杂度O\(L \* m \* n\)，其中L是添加岛屿的次数。
+
+这里要满足O\(k logmn\)的时间复杂度，依然用并查集的办法，每次添加岛屿后，求出连通图的个数，思路就是把2D数组当做一个无向图（以邻接矩阵的方式组织），横向或者纵向相邻的节点之间有一条值为 1 的边，那么问题就变成了每次 addLand 操作之后在图中寻找连通部分的问题。
+
 ### 代码
+
+```java
+class Solution {
+
+    private int[][] dir = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        UnionFind2D islands = new UnionFind2D(m, n);
+        List<Integer> results = new ArrayList<>();
+        
+        for (int[] position : positions) {
+            int x = position[0], y = position[1];        
+            int positionIndex = islands.getID(x, y);
+
+            if (positionIndex == 0) {    
+                int p = islands.add(x, y);
+                for (int[] d : dir) {
+                    int q = islands.getID(x + d[0], y + d[1]);
+                    if (q > 0 && !islands.find(p, q)) {
+                        islands.unite(p, q);
+                    }
+                }
+            }
+
+            results.add(islands.size());
+        }
+        return results;
+    }
+}
+
+// 以下是并查集的模板
+class UnionFind2D {
+    private int[] id;
+    private int[] sz;
+    private int m, n, count;
+
+    public UnionFind2D(int m, int n) {
+        this.count = 0;
+        this.n = n;
+        this.m = m;
+        this.id = new int[m * n + 1];
+        this.sz = new int[m * n + 1];
+    }
+
+    public int index(int x, int y) { return x * n + y + 1; }
+
+    public int size() { return this.count; }
+
+    public int getID(int x, int y) {
+        if (0 <= x && x < m && 0<= y && y < n)
+            return id[index(x, y)];
+        return 0;
+    }
+
+    public int add(int x, int y) {
+        int i = index(x, y);
+        id[i] = i; sz[i] = 1;
+        ++count;
+        return i;
+    }
+
+    public boolean find(int p, int q) {
+        return root(p) == root(q);
+    }
+
+    public void unite(int p, int q) {
+        int i = root(p), j = root(q);
+        if (sz[i] < sz[j]) { //weighted quick union
+            id[i] = j; sz[j] += sz[i];
+        } else {
+            id[j] = i; sz[i] += sz[j];
+        }
+        count--;
+    }
+
+    private int root(int i) {
+        for (;i != id[i]; i = id[i])
+            id[i] = id[id[i]]; //并查集的path compression
+        return i;
+    }
+}
+```
+
+## 130 Surrounded Regions
+
+### 题目
+
+Given a 2D board containing `'X'` and `'O'` \(**the letter O**\), capture all regions surrounded by `'X'`.
+
+A region is captured by flipping all `'O'`s into `'X'`s in that surrounded region.
+
+**Example:**
+
+```text
+X X X X
+X O O X
+X X O X
+X O X X
+```
+
+After running your function, the board should be:
+
+```text
+X X X X
+X X X X
+X X X X
+X O X X
+```
+
+**Explanation:**
+
+Surrounded regions shouldn’t be on the border, which means that any `'O'` on the border of the board are not flipped to `'X'`. Any `'O'` that is not on the border and it is not connected to an `'O'` on the border will be flipped to `'X'`. Two cells are connected if they are adjacent cells connected horizontally or vertically.
+
+### 分析
+
+题目中解释说被包围的区间不会存在于边界上，所以我们会想到边界上的 O 要特殊处理，只要把边界上的 O 特殊处理了，那么剩下的 O 替换成 X 就可以了。所以只需要记住从四条边出发。
+
+依然是DFS，BFS和Union Find。
+
+### 代码
+
+1\) DFS
+
+```java
+class Solution {
+    public void solve(char[][] board) {
+        if (board == null || board.length == 0) {
+            return;
+        }
+        int m = board.length;
+        int n = board[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // 从边缘o开始搜索
+                boolean isEdge = (i == 0 || j == 0 || i == m - 1 || j == n - 1);
+                if (isEdge && board[i][j] == 'O') {
+                    dfs(board, i, j);
+                }
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+                if (board[i][j] == '#') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    public void dfs(char[][] board, int i, int j) {
+        if (i < 0 || j < 0 || i >= board.length  || j >= board[0].length || board[i][j] == 'X' || board[i][j] == '#') {
+            // board[i][j] == '#' 说明已经搜索过了. 
+            return;
+        }
+        board[i][j] = '#'; // 原地修改，或者用一个额外的数组
+        
+        dfs(board, i - 1, j); // 上
+        dfs(board, i + 1, j); // 下
+        dfs(board, i, j - 1); // 左
+        dfs(board, i, j + 1); // 右
+    }
+}
+```
+
+DFS用stack锻炼下，不太推荐
+
+```java
+class Solution {
+    public class Pos{
+        int i;
+        int j;
+        Pos(int i, int j) {
+            this.i = i;
+            this.j = j;
+        }
+    }
+    public void solve(char[][] board) {
+        if (board == null || board.length == 0) return;
+        int m = board.length;
+        int n = board[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // 从边缘第一个是o的开始搜索
+                boolean isEdge = i == 0 || j == 0 || i == m - 1 || j == n - 1;
+                if (isEdge && board[i][j] == 'O') {
+                    dfs(board, i, j);
+                }
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+                if (board[i][j] == '#') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    public void dfs(char[][] board, int i, int j) {
+        Stack<Pos> stack = new Stack<>();
+        stack.push(new Pos(i, j));
+        board[i][j] = '#';
+        while (!stack.isEmpty()) {
+            // 取出当前stack 顶, 不弹出.
+            Pos current = stack.peek();
+            // 上
+            if (current.i - 1 >= 0 
+                && board[current.i - 1][current.j] == 'O') {
+                stack.push(new Pos(current.i - 1, current.j));
+                board[current.i - 1][current.j] = '#';
+              continue;
+            }
+            // 下
+            if (current.i + 1 <= board.length - 1 
+                && board[current.i + 1][current.j] == 'O') {
+                stack.push(new Pos(current.i + 1, current.j));
+                board[current.i + 1][current.j] = '#';      
+                continue;
+            }
+            // 左
+            if (current.j - 1 >= 0 
+                && board[current.i][current.j - 1] == 'O') {
+                stack.push(new Pos(current.i, current.j - 1));
+                board[current.i][current.j - 1] = '#';
+                continue;
+            }
+            // 右
+            if (current.j + 1 <= board[0].length - 1 
+                && board[current.i][current.j + 1] == 'O') {
+                stack.push(new Pos(current.i, current.j + 1));
+                board[current.i][current.j + 1] = '#';
+                continue;
+            }
+            // 如果上下左右都搜索不到,本次搜索结束，弹出stack
+            stack.pop();
+        }
+    }
+}
+```
+
+2\) BFS
+
+```java
+class Solution {
+    int m = 0;  // 行数
+    int n = 0;  // 列数
+    // 用作控制4个方向
+    int[] dx = {1, -1, 0, 0};
+    int[] dy = {0, 0, 1, -1};
+    public void solve(char[][] board) {
+        // java二维矩阵的行数和列数可能不同，并且每一行的列数可能都不一样
+        // 但是肯定是先后行再有列，而且根据题目要求，在这里每一行的列数都是相同的
+        m = board.length;       //  行数m
+        if (m == 0) {   // 行数为0，board为空
+            return;
+        }
+        n = board[0].length;    // 列数
+        Queue<int[]> queue = new LinkedList<int[]>();
+        // 搜索上下边界，先标记后入队
+        for (int i = 0; i < n; i++) {
+            if (board[0][i] == 'O') {   //  第一行
+                board[0][i] = 'M';
+                queue.offer(new int[]{0, i});
+            }
+            if (board[m - 1][i] == 'O') {      // 最后一行
+                board[m - 1][i] = 'M';
+                queue.offer(new int[]{m - 1, i});
+            }
+        }
+        // 搜索左右边界，先标记后入队
+        for (int i = 1; i < m - 1; i++) {
+            if (board[i][0] == 'O') {   // 第一列
+                board[i][0] = 'M';
+                queue.offer(new int[]{i, 0});
+            }
+            if (board[i][n - 1] == 'O') {   // 最后一列
+                board[i][n - 1] = 'M';
+                queue.offer(new int[]{i, n - 1});
+            }
+        }
+        // 广度优先搜索
+        while (!queue.isEmpty()) {
+            int[] temp = queue.poll();
+            int x = temp[0], y = temp[1];   // 获取行和列
+            for (int i = 0; i < 4; i++) {   // 搜索四个方向
+                int mx = x + dx[i], my = y + dy[i]; 
+                if (mx < 0 || mx >= m || my < 0 || my >= n) {     // 越界
+                    continue;
+                } else if (board[mx][my] == 'O') {  // 搜索到了'O'，标记后入队
+                    board[mx][my] = 'M';
+                    queue.offer(new int[]{mx, my});
+                }
+            }
+        }
+        // 标记完，再次遍历，现在矩阵中可能有3中字符，'X','M','O'
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'X') {
+                    continue;
+                } else if (board[i][j] == 'O'){ // 出现没被标记过的'O'，应该被填充
+                    board[i][j] = 'X';
+                } else if (board[i][j] == 'M'){ // 被标记过的，不应该被填充，恢复
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+}
+```
+
+3\) Union Find，dummy是一个虚拟节点，所有不需要覆盖的都和它相连，最后再遍历一遍，没有和dummy相连的就置为'X'。
+
+```java
+class Solution {
+    public void solve(char[][] board) {
+        int row = board.length;
+        if (row == 0) {
+            return;
+        }
+        int col = board[0].length;
+        int dummy = row * col;
+        int[][] dirs = new int[][]{{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+        UnionFind uf = new UnionFind(dummy);
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (board[i][j] == 'O') {
+                    if (i == 0 || i == row - 1 || j == 0 || j == col - 1) {
+                        uf.union(i * col + j, dummy);
+                    } else {
+                        for (int k = 0; k < 4; k++) {
+                            int x = i + dirs[k][0];
+                            int y = j + dirs[k][1];
+                            if (board[x][y] == 'O') {
+                                uf.union(x * col + y, i * col + j);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 1; i < row - 1; i++) {
+            for (int j = 1; j < col - 1; j++) {
+                if (!uf.connect(i * col + j, dummy)) {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+}
+
+// 以下是并查集的代码
+class UnionFind {
+    private int[] parent;
+
+    public UnionFind(int dummy) {
+        parent = new int[dummy + 1];
+        for (int i = 0; i <= dummy; i++) {
+            parent[i] = i;
+        }
+    }
+
+    public void union(int x, int y) {
+        int root_x = find(x);
+        int root_y = find(y);
+        if (root_x != root_y) {
+            parent[root_x] = root_y;
+        }
+    }
+
+    public int find(int x) {
+        while (x != parent[x]) {
+            parent[x] = parent[parent[x]];
+            x = parent[x];
+        }
+        return x;
+    }
+
+    public boolean connect(int x, int y) {
+        return find(x) == find(y);
+    }
+}
+```
+
+
 
 ## 695 Max Area of Islands
 

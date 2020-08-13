@@ -652,12 +652,13 @@ class Solution {
             return true;
         }
         
-        // 函数式编程，推荐
+        // 按照会议的开始时间排序
         Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
-        // Lambda
+        // 替代Lambda
         // Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
         
         for (int i = 1; i < intervals.length; i++) {//因为需要跟前面的interval比较，所以从index 1开始
+            // 排序后，检查后一个会议的开始时间是否早于前一个会议的结束时间
             if (intervals[i][0] < intervals[i - 1][1]) {
                 return false;
             }
@@ -786,13 +787,13 @@ class Solution {
     public int minMeetingRooms(int[][] intervals) {
         TreeMap<Integer,Integer> rooms = new TreeMap<>();
         for(int[] interval:intervals){
-            rooms.put(interval[0],rooms.getOrDefault(interval[0],0)+1);
-            rooms.put(interval[1],rooms.getOrDefault(interval[1],0)-1);
+            rooms.put(interval[0],rooms.getOrDefault(interval[0],0) + 1);
+            rooms.put(interval[1],rooms.getOrDefault(interval[1],0) - 1);
         }
-        int maxRooms=0;
-        int totalRooms=0;
-        for(int room:rooms.values()){
-            totalRooms+=room;
+        int maxRooms = 0;
+        int totalRooms = 0;
+        for(int room : rooms.values()){
+            totalRooms += room;
             maxRooms = Math.max(maxRooms,totalRooms);
         }
         return maxRooms;
@@ -806,19 +807,17 @@ class Solution {
 class Solution {
     public int minMeetingRooms(int[][] intervals) {
         Arrays.sort(intervals, Comparator.comparingInt(i -> i[0]));
-        
+
         //priority queue is ordered by end schedules
-        PriorityQueue<int[]> pq = new PriorityQueue<>((q1, q2) -> q1[1] - q2[1]);
-        
-        int size = intervals.length;
-        
-        for(int i = 0; i < size; i++) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(q -> q[1]));
+
+        for (int[] interval : intervals) {
             //if new input's start is later than priority queue's first end, 
             //priority queue could poll() !!!
-            if(!pq.isEmpty() && intervals[i][0] >= pq.peek()[1]) {
+            if (!pq.isEmpty() && interval[0] >= pq.peek()[1]) {
                 pq.poll();
             }
-            pq.add(intervals[i]);
+            pq.add(interval);
         }
         return pq.size();
     }

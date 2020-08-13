@@ -580,7 +580,7 @@ class Solution {
 }
 ```
 
-DFS，用两个stack，一个用来记录Tree的结点，另一个用来记录最大深度，了解下即可。
+DFS，用两个stack，一个用来记录Tree的结点，另一个用来记录最大深度，不推荐，了解下即可。
 
 ```java
 /**
@@ -621,7 +621,7 @@ class Solution {
 }
 ```
 
-BFS，用Queue来实现
+BFS，用Queue来实现，推荐的BFS方式
 
 ```java
 /**
@@ -5069,6 +5069,211 @@ class Solution {
         return result;
     }
 
+}
+```
+
+## 1008 Construct Binary Search Tree from Preorder Traversal
+
+### 题目
+
+Return the root node of a binary **search** tree that matches the given `preorder` traversal.
+
+_\(Recall that a binary search tree is a binary tree where for every node, any descendant of `node.left` has a value `<` `node.val`, and any descendant of `node.right` has a value `>` `node.val`.  Also recall that a preorder traversal displays the value of the `node` first, then traverses `node.left`, then traverses `node.right`.\)_
+
+It's guaranteed that for the given test cases there is always possible to find a binary search tree with the given requirements.
+
+**Example 1:**
+
+```text
+Input: [8,5,1,7,10,12]
+Output: [8,5,10,1,7,null,12]
+
+```
+
+**Constraints:**
+
+* `1 <= preorder.length <= 100`
+* `1 <= preorder[i] <= 10^8`
+* The values of `preorder` are distinct.
+
+### 分析
+
+给一个数组，是一个BST的先序遍历，构建返回对应的BST。
+
+1\) 方法1，类似105题-Construct Binary Tree from Preorder and Inorder Traversal的做法：在105题中，需要一个先序数组和一个中序数组，由于BST的中序遍历是递增的，可以根据先序遍历排序得到一个中序遍历的数组，随后使用分治的方法从先序遍历和中序遍历构造出二叉搜索树。
+
+具体的方法是，先获取先序遍历中的第一个元素，它对应了二叉树的根节点，它在中序遍历中的位置为 x，那么中序遍历中 x 左边的所有元素都在根节点的左子树中，x右边的所有元素都在根节点的右子树中，这样根节点的左子树和右子树中的节点个数就都确定了。再回到先序遍历数组中，由于根节点的左子树和右子树在先序遍历中一定都是连续的一段，并且它们的个数已经确定，且左子树的先序遍历出现在右子树之前，那么就得到了根节点左子树和右子树对应的先序遍历。有了子树的先序遍历和中序遍历，就可以递归地构造子树了。过程如下图：
+
+![](../../.gitbook/assets/image%20%28109%29.png)
+
+时间复杂度：对先序数组要排序O\(NlogN\)；
+
+空间复杂度：额外维护一个中序遍历数组，O\(N\)；
+
+2\) 方法2，在方法1中在将先序遍历的数组排序得到中序遍历时，花费了O\(Nlog⁡N\)时间复杂度，但却没有得到任何额外的信息。也就是说，可以直接跳过生成中序遍历的步骤，根据先序遍历直接构造出二叉树。需要注意的是，由于题目中的二叉树是BST，因此根据先序遍历构造出的二叉树才是唯一的。
+
+具体做法就是使用递归的方法，在扫描先序遍历数组的同时，构造出二叉树。递归时维护一个 \(lower, upper\)二元组，表示当前位置可以插入的节点的值的上下界。如果此时先序遍历位置的值处于上下界中，就将这个值作为新的节点插入到当前位置，并递归地处理当前位置的左右孩子的两个位置。否则回溯到当前位置的父节点。
+
+* 将 lower 和 upper 的初始值分别设置为负无穷和正无穷，因为根节点的值可以为任意值。
+* 从先序遍历的第一个元素 idx = 0 开始构造二叉树，构造使用的函数名为 helper\(lower, upper\)：
+  * 如果 idx = n，即先序遍历中的所有元素已经被添加到二叉树中，那么此时构造已经完成；
+  * 如果当前 idx 对应的先序遍历中的元素 val = preorder\[idx\] 的值不在 \[lower, upper\] 范围内，则进行回溯；
+  * 如果 idx 对应的先序遍历中的元素 val = preorder\[idx\] 的值在 \[lower, upper\] 范围内，则新建一个节点 root，并对其左孩子递归处理 helper\(lower, val\)，对其右孩子递归处理 helper\(val, upper\)。
+
+![](../../.gitbook/assets/image%20%28108%29.png)
+
+
+
+时间复杂度：O\(N\)，仅扫描前序遍历一次。
+
+空间复杂度：O\(N\)，用来存储二叉树。
+
+3\) 方法3，方法2中的递归过程用stack来模拟
+
+* 将先序遍历中的第一个元素作为二叉树的根节点，即 root = new TreeNode\(preorder\[0\]\)，并将其放入栈中。
+* 使用 for 循环迭代先序遍历中剩下的所有元素：
+
+  * 将栈顶的元素作为父节点，当前先序遍历中的元素作为子节点。如果栈顶的元素值小于子节点的元素值，则将栈顶的元素弹出并作为新的父节点，直到栈空或栈顶的元素值大于子节点的元素值。注意，这里作为父节点的是最后一个被弹出栈的元素，而不是此时栈顶的元素；
+  * 如果父节点的元素值小于子节点的元素值，则子节点为右孩子，否则为左孩子；
+  * 将子节点放入栈中。
+
+时间复杂度：O\(N\)，仅扫描前序遍历一次。
+
+空间复杂度：O\(N\)，用来存储栈和二叉树。
+
+### 代码
+
+方法1
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    // 从前序数组的第一个元素开始
+    int preorderIndex = 0;
+    int[] preorderArr;
+    HashMap<Integer, Integer> indexMap = new HashMap<>();
+
+    public TreeNode bstFromPreorder(int[] preorder) {
+        this.preorderArr = preorder;
+
+        // 得到排序后的中序遍历数组
+        int[] inorderArr = Arrays.copyOf(preorder, preorder.length);
+        Arrays.sort(inorderArr);
+
+        // build a hashmap value -> its index
+        int idx = 0;
+        for (Integer val : inorderArr) {
+            indexMap.put(val, idx++);
+        }
+        // 类似105题，使用中序数组递归构建二叉树（BST）
+        return helper(0, inorderArr.length);
+    }
+
+    public TreeNode helper(int in_left, int in_right) {
+        // if there is no elements to construct subtrees
+        if (in_left == in_right)
+            return null;
+
+        // 先序遍历的第一个元素是根节点
+        int root_val = preorderArr[preorderIndex];
+        TreeNode root = new TreeNode(root_val);
+
+        // root splits inorder list
+        // into left and right subtrees
+        int index = indexMap.get(root_val);
+
+        // recursion
+        preorderIndex++;
+        // build left subtree
+        root.left = helper(in_left, index);
+        // build right subtree
+        root.right = helper(index + 1, in_right);
+        return root;
+    }
+}
+```
+
+方法2
+
+```java
+class Solution {
+    int idx = 0;
+    int[] preorderArr;
+    int len;
+
+    public TreeNode bstFromPreorder(int[] preorder) {
+        this.preorderArr = preorder;
+        len = preorder.length;
+        return helper(Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    public TreeNode helper(int lower, int upper) {
+        // 如果所有先序遍历数组中的元素都用过了，说明BST已经构建完成
+        if (idx == len) {
+            return null;
+        }
+
+        int val = preorderArr[idx];
+        // 按照BST的特性，如果当前元素不能够被放在当前位置
+        if (val < lower || val > upper) {
+            return null;
+        }
+
+        // 构建当前元素，并递归构建左右子树
+        idx++;
+        TreeNode root = new TreeNode(val);
+        root.left = helper(lower, val);
+        root.right = helper(val, upper);
+        return root;
+    }
+}
+```
+
+方法3
+
+```java
+class Solution {
+    public TreeNode bstFromPreorder(int[] preorder) {
+        int len = preorder.length;
+        if (len == 0) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preorder[0]);
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        deque.push(root);
+
+        for (int i = 1; i < len; i++) {
+            // take the last element of the deque as a parent
+            // and create a child from the next preorder element
+            TreeNode node = deque.peek();
+            TreeNode child = new TreeNode(preorder[i]);
+            // adjust the parent 
+            while (!deque.isEmpty() && deque.peek().val < child.val)
+                node = deque.pop();
+
+            // follow BST logic to create a parent-child link
+            if (node.val < child.val) node.right = child;
+            else node.left = child;
+            // add the child into deque
+            deque.push(child);
+        }
+        return root;
+    }
 }
 ```
 

@@ -200,3 +200,96 @@ public class Solution {
 }
 ```
 
+## 346 Moving Average from Data Stream
+
+### 题目
+
+Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
+
+Example:
+
+```text
+MovingAverage m = new MovingAverage(3); 
+m.next(1) = 1 
+m.next(10) = (1 + 10) / 2 
+m.next(3) = (1 + 10 + 3) / 3 
+m.next(5) = (10 + 3 + 5) / 3
+```
+
+### 分析
+
+澄清返回的结果是double，实现的方式根据自己熟悉的和复杂度来，如果用array时间复杂度为O\(n\)，因为要移动整个数组元素。
+
+用LinkedList或者Deque，都可以进行两端的操作。
+
+### 代码
+
+```java
+class MovingAverage {
+
+    LinkedList<Integer> list;
+    int count;
+    int sum;
+
+    /** Initialize your data structure here. */
+    public MovingAverage(int size) {
+        list = new LinkedList<>();
+        count = size;
+        sum = 0;
+    }
+    
+    public double next(int val) {
+        if (list.size() < count) {
+            list.add(val);
+            sum += val;
+            return (double) sum / list.size();
+        } else { // list.size() == count
+            sum -= list.pollFirst();
+            list.add(val);
+            sum += val;
+        }
+        return (double) sum / count;
+    }
+}
+
+/**
+ * Your MovingAverage object will be instantiated and called as such:
+ * MovingAverage obj = new MovingAverage(size);
+ * double param_1 = obj.next(val);
+ */
+```
+
+```java
+class MovingAverage {
+
+    Deque<Integer> deque;
+    int count;
+    int sum;
+
+    /** Initialize your data structure here. */
+    public MovingAverage(int size) {
+        deque = new ArrayDeque<>();
+        count = size;
+        sum = 0;
+    }
+    
+    public double next(int val) {
+        deque.offer(val);
+       if (deque.size() <= count) {
+           sum += val;
+           return (double) sum / deque.size();
+       } else {
+           sum -= deque.poll();
+           sum += val;           
+       }
+       return (double) sum / count;
+    }
+}
+
+/**
+ * Your MovingAverage object will be instantiated and called as such:
+ * MovingAverage obj = new MovingAverage(size);
+ * double param_1 = obj.next(val);
+ */
+```
+
