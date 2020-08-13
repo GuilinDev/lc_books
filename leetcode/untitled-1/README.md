@@ -580,7 +580,7 @@ class Solution {
 }
 ```
 
-DFS，用两个stack，一个用来记录Tree的结点，另一个用来记录最大深度，了解下即可。
+DFS，用两个stack，一个用来记录Tree的结点，另一个用来记录最大深度，不推荐，了解下即可。
 
 ```java
 /**
@@ -621,7 +621,7 @@ class Solution {
 }
 ```
 
-BFS，用Queue来实现
+BFS，用Queue来实现，推荐的BFS方式
 
 ```java
 /**
