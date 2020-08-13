@@ -568,26 +568,37 @@ class Solution {
 
 ```java
 class Solution {
+    int index;
     public int evalRPN(String[] tokens) {
-        int len = tokens.length - 1;
-        return helper(tokens, len);
+        if (tokens == null || tokens.length == 0) {
+            return 0;
+        }
+        index = tokens.length - 1;
+        return recursion(tokens);
     }
-    private int helper(String[] tokens, int len) {
-        String s = tokens[len];
-        if (s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/")) {
-            int b = helper (tokens, --len);
-            int a = helper (tokens, --len);
-            if (s.equals("+")) {
+    private int recursion(String[] tokens) {
+        String token = tokens[index];
+        index--;
+        
+        if (token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/")) {
+            
+            // 遇到符号，先递归找到离该符号左边最近的两个数
+            int b = recursion(tokens);
+            int a = recursion(tokens);
+            
+            // 计算后，递归栈记录返回的数字
+            if (token.equals("+")) {
                 return a + b;
-            } else if (s.equals("-")) {
+            } else if (token.equals("-")) {
                 return a - b;
-            } else if (s.equals("*")) {
+            } else if (token.equals("*")) {
                 return a * b;
             } else {
                 return a / b;
             }
-        } else {//数字
-            return Integer.parseInt(s);
+            
+        } else { // 遇到数字，直接返回上一层递归，准备给符号用
+            return Integer.parseInt(token); // 递归栈记录返回的数字
         }
     }
 }
