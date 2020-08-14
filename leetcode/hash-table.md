@@ -1983,3 +1983,78 @@ class Solution {
 }
 ```
 
+## 244 Shortest Word Distance II
+
+### 题目
+
+Design a class which receives a list of words in the constructor, and implements a method that takes two words _word1_ and _word2_ and return the shortest distance between these two words in the list. Your method will be called _repeatedly_ many times with different parameters. 
+
+**Example:**  
+ Assume that words = `["practice", "makes", "perfect", "coding", "makes"]`.
+
+```text
+Input: word1 = “coding”, word2 = “practice”
+Output: 3
+```
+
+```text
+Input: word1 = "makes", word2 = "coding"
+Output: 1
+```
+
+**Note:**  
+ You may assume that _word1_ **does not equal to** _word2_, and _word1_ and _word2_ are both in the list.
+
+### 分析
+
+根据传进来的参数，需要找到两个字符串的位置最近的距离，在I中那道题243. Shortest Word Distance中，可以用直接计算然后选出并返回最短的距离即可，这道题用同样的思路会超时；用hashmap来进行，预处理，然后找到两个单词之间的最近距离。
+
+### 代码
+
+```java
+class WordDistance {
+    
+    private Map<String, List<Integer>> map;
+
+    public WordDistance(String[] words) {
+        // 构造器中先把单词（可能有重复）的各自下标进行预处理
+        map = new HashMap<String, List<Integer>>();
+        for(int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if(map.containsKey(word)) {
+                map.get(word).add(i);
+            } else {
+                List<Integer> list = new ArrayList<Integer>();
+                list.add(i);
+                map.put(word, list);
+            }
+        }
+    }
+
+    public int shortest(String word1, String word2) {
+        // 对比两个list之间各元素的最小差值
+        List<Integer> list1 = map.get(word1);
+        List<Integer> list2 = map.get(word2);
+        int distance = Integer.MAX_VALUE;
+        for(int i = 0, j = 0; i < list1.size() && j < list2.size(); ) {
+            int index1 = list1.get(i), index2 = list2.get(j);
+            //distance = Math.min(distance, Math.abs(index1 - index2));
+            if(index1 < index2) {
+                distance = Math.min(distance, index2 - index1);
+                i++;
+            } else {
+                distance = Math.min(distance, index1 - index2);
+                j++;
+            }
+        }
+        return distance;
+    }
+}
+
+/**
+ * Your WordDistance object will be instantiated and called as such:
+ * WordDistance obj = new WordDistance(words);
+ * int param_1 = obj.shortest(word1,word2);
+ */
+```
+
