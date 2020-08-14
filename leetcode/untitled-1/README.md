@@ -3711,6 +3711,7 @@ class Solution {
       dfs(root.left, sum - root.val, result, onePath);
       dfs(root.right, sum - root.val, result, onePath);
 
+      // backtracking中的回退不能忘记，退到当前节点的上一个节点
       onePath.remove(onePath.size() - 1);
    }
 }
