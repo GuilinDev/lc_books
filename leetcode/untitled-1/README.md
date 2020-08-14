@@ -2648,9 +2648,11 @@ Output: return the tree root node representing the following tree:
 
 ### 题意和分析
 
-给一个整数数组，创建一个最大二叉树，最大二叉树的定义是最大值为root，然后它的左子树和右子树也是最大二叉树，分治法来递归；使用到了一个辅助数据结构v来让保持降序。遍历原数组，对于每个遍历到的元素，创建一个结点，然后进行循环，如果v不空，且末尾结点值小于当前数字，那么将末尾结点连到当前结点的左子结点，并且移除数组中的末尾结点，这样可以保证子结点都会小于父结点。循环结束后，如果此时v仍不为空，说明结点值很大，那么将当前结点连到数组末尾结点的右子结点上。之后将当前结点加入v中，最后返回v的首结点。
+给一个整数数组，创建一个最大二叉树，最大二叉树的定义是最大值为root，然后它的左子树和右子树也是最大二叉树，分治法来递归；分解成小问题。
 
 ### 代码
+
+递归，优先掌握这个方法
 
 ```java
 /**
@@ -2659,18 +2661,70 @@ Output: return the tree root node representing the following tree:
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
     public TreeNode constructMaximumBinaryTree(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return recursion(nums, 0, nums.length - 1);
+    }
+    private TreeNode recursion(int[] nums, int left, int right) {
+        if (left > right) { //终止条件，注意传进来的区间，比如一个元素，left是可以等于right的
+            return null;
+        }
+        int index = findMax(nums, left, right);
+        
+        // 构建当前节点
+        TreeNode node = new TreeNode(nums[index]);
+        
+        // 递归构建当前结点的左右子树
+        node.left = recursion(nums, left, index - 1);
+        node.right = recursion(nums, index + 1, right);
+        
+        return node;
+    }
+    
+    // 返回区间最大值的index
+    private int findMax(int[] nums, int left, int right) {
+        
+        int maxIndex = left;
+        
+        for (int i = left; i <= right; i++) {
+            if (nums[i] > nums[maxIndex]) {
+                maxIndex = i;
+            }
+        }
+        
+        return maxIndex;
+    }
+}
+```
+
+迭代，了解一下，用一个数据结构来临时创建节点，然后根据大小特性接入成左子树或右子树
+
+```java
+class Solution {
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
         LinkedList<TreeNode> v = new LinkedList<>();
         for (int num: nums){
+            // 先构建当前节点
             TreeNode cur = new TreeNode(num);
+            
+            // 左边接比较小的部分
             while (!v.isEmpty() && v.peekFirst().val < cur.val){
                 cur.left = v.pop();
             }
 
+            // 右边接
             if (!v.isEmpty()){
                 v.peekFirst().right = cur;
             }
@@ -2682,18 +2736,9 @@ class Solution {
 }
 ```
 
-或者使用双端队列
+迭代，了解一下，使用双端队列也可以
 
 ```java
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
 class Solution {
     public TreeNode constructMaximumBinaryTree(int[] nums) {
         Deque<TreeNode> stack = new LinkedList<>();
