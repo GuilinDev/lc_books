@@ -226,3 +226,112 @@ class AutocompleteSystem {
  */
 ```
 
+## 303 Range Sum Query - Immutable
+
+### 题目
+
+Given an integer array nums, find the sum of the elements between indices i and j \(i ≤ j\), inclusive.
+
+**Example:**
+
+```text
+Given nums = [-2, 0, 3, -5, 2, -1]
+
+sumRange(0, 2) -> 1
+sumRange(2, 5) -> -1
+sumRange(0, 5) -> -3
+```
+
+**Constraints:**
+
+* You may assume that the array does not change.
+* There are many calls to sumRange function.
+* `0 <= nums.length <= 10^4`
+* `-10^5 <= nums[i] <= 10^5`
+* `0 <= i <= j < nums.length`
+
+### 分析
+
+题意简单，求给定作为parameter的Array的区间元素的和，这道题直接做也能通过，但题目的tag的有个DP的标签，于是也可以强行写成DP的方式 - 新设一个类变量数组，nums\[i\]表示从0到i元素的和，那么求sum query的时候直接就nums\[j\] - nums\[i - 1\]就行，包含nums\[i\]，这个算是自顶向下的记忆化搜索了。
+
+### 代码
+
+直接做也可以
+
+```java
+class NumArray {
+    int[] nums;
+    int len;
+
+    public NumArray(int[] nums) {
+        len = nums.length;
+        this.nums = nums;        
+    }
+    
+    public int sumRange(int i, int j) {
+        int result = 0;
+        
+        if (len == 0) {
+            return result;
+        }
+        
+        for(int index = i; index <= j; index++) {
+            result += nums[index];
+        }
+        return result;
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * int param_1 = obj.sumRange(i,j);
+ */
+```
+
+DP的方式
+
+```java
+class NumArray {
+    int[] nums;
+    int len;
+
+    public NumArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+        len = nums.length;
+        this.nums = new int[len];
+        
+        // 记忆化
+        this.nums[0] = nums[0];
+        for (int i = 1; i < len; i++) {
+            this.nums[i] = this.nums[i - 1] + nums[i];
+        }      
+    }
+    
+    public int sumRange(int i, int j) {
+        // corner cases
+        if (nums.length == 0) {
+            return 0;
+        }
+        
+        if (i <= 0) { // 这里需要包括等于
+            return nums[j];
+        }
+        
+        if (j >= nums.length) {
+            j = nums.length - 1; 
+        }
+        
+        return nums[j] - nums[i - 1];
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * int param_1 = obj.sumRange(i,j);
+ */
+```
+
