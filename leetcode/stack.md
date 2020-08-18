@@ -1064,5 +1064,62 @@ class MyQueue {
  */
 ```
 
+## 946 Validate Stack Sequence
 
+### 题目
+
+Given two sequences `pushed` and `popped` **with distinct values**, return `true` if and only if this could have been the result of a sequence of push and pop operations on an initially empty stack.
+
+**Example 1:**
+
+```text
+Input: pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+Output: true
+Explanation: We might do the following sequence:
+push(1), push(2), push(3), push(4), pop() -> 4,
+push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+```
+
+**Example 2:**
+
+```text
+Input: pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+Output: false
+Explanation: 1 cannot be popped before 2.
+```
+
+**Constraints:**
+
+* `0 <= pushed.length == popped.length <= 1000`
+* `0 <= pushed[i], popped[i] < 1000`
+* `pushed` is a permutation of `popped`.
+* `pushed` and `popped` have distinct values.
+
+### 分析
+
+给定 pushed 和 popped 两个数组，两个序列都不含有相同的数字，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop 操作序列的结果时，返回 true；否则，返回 false 。
+
+做法是开一个栈模拟，每次都 push 进一个新元素，然后和 pop 序列不断比对，如果发现一致，则出队。 最后如果 pop 序列都遍历完，则证明合法。这也是贪心的思想。
+
+### 代码
+
+```java
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        Stack<Integer> stack = new Stack<>();
+        int len = pushed.length;
+        int index1 = 0, index2 = 0;
+        
+        while (index1 < len && index2 < len) {
+            stack.push(pushed[index1]);
+            while (!stack.isEmpty() && stack.peek() == popped[index2]) {
+                index2++;
+                stack.pop();
+            }
+            index1++;
+        }
+        return index2 == len; //检查popped数组里面的元素是否pop完
+    }
+}
+```
 
