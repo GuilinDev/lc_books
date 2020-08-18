@@ -2591,5 +2591,95 @@ class Solution {
 }
 ```
 
-## 
+## 605 Can Place Flowers
+
+### 题目
+
+Suppose you have a long flowerbed in which some of the plots are planted and some are not. However, flowers cannot be planted in adjacent plots - they would compete for water and both would die.
+
+Given a flowerbed \(represented as an array containing 0 and 1, where 0 means empty and 1 means not empty\), and a number **n**, return if **n** new flowers can be planted in it without violating the no-adjacent-flowers rule.
+
+**Example 1:**  
+
+
+```text
+Input: flowerbed = [1,0,0,0,1], n = 1
+Output: True
+```
+
+**Example 2:**  
+
+
+```text
+Input: flowerbed = [1,0,0,0,1], n = 2
+Output: False
+```
+
+**Note:**  
+
+
+1. The input array won't violate no-adjacent-flowers rule.
+2. The input array size is in the range of \[1, 20000\].
+3. **n** is a non-negative integer which won't exceed the input array size.
+
+### 分析
+
+给一个array代表花盆，两盆花不能种在隔壁，看给定数目的花能不能完全种下。
+
+可以想到的是，从左到右遍历，遇到0的时候，检查一下当前0的位置的前一个和后一个位置是否也为0，是的话可以种一株花，否则不行，直到遍历完数组看能不能种完。这是Greedy的思想（遇到0就检查是不是能种），需要注意的是，使用Greedy的方法时，通常需要简单证明一下贪心算法的正确性（比如凑硬币的情况在一些钱币系统中是不正确的），证明贪心算法正确性的方法一般用数学归纳法和反证法。
+
+### 代码
+
+贪心
+
+```java
+class Solution {
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        if (n <= 0) {
+            return true;
+        }
+        int count = 0;
+        for (int i = 0; i < flowerbed.length && count < n; i++) {
+            if (flowerbed[i] == 0) { //遇到可以种的花盆，判断前后两个位置
+                
+                int prev = (i == 0) ? 0 : flowerbed[i - 1];
+                int next = (i == flowerbed.length - 1) ? 0 : flowerbed[i + 1];
+                
+                if (prev == 0 && next == 0) {
+                    count++;
+                    flowerbed[i] = 1; // 可以种，修改当前位置的标记可种
+                }
+            }
+        }
+        return count >= n;
+    }
+}
+```
+
+不用修改原数组的办法
+
+```java
+class Solution {
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        // 维护两个1中间，0的个数，初始化为1是让让中间 - (zeros - 1) / 2和两头 - count += zeros / 2有效，并且不用单独判断头尾的情况
+        int zeros = 1; 
+        int count = 0;
+        for(int i = 0; i < flowerbed.length; i++) {
+            if(flowerbed[i] == 0) { // 计算两个1之间0的个数
+                zeros++;
+            }else {
+                // 除了头尾，两个1之间可以放多少个0？(zeros - 1) / 2个
+                count += (zeros - 1) / 2;
+                zeros = 0;
+            }
+        }
+        
+        if(zeros != 0) { // 头尾
+            count += zeros / 2;
+        }
+        
+        return count >= n;
+    }
+}
+```
 

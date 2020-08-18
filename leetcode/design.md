@@ -335,3 +335,295 @@ class NumArray {
  */
 ```
 
+## 307 Range Sum Query - Mutable
+
+### 题目
+
+Given an integer array nums, find the sum of the elements between indices i and j \(i ≤ j\), inclusive.
+
+The update\(i, val\) function modifies nums by updating the element at index i to val.
+
+**Example:**
+
+```text
+Given nums = [1, 3, 5]
+
+sumRange(0, 2) -> 9
+update(1, 2)
+sumRange(0, 2) -> 8
+```
+
+**Constraints:**
+
+* The array is only modifiable by the update function.
+* You may assume the number of calls to update and sumRange function is distributed evenly.
+* `0 <= i <= j <= nums.length - 1`
+
+### 分析
+
+相比上一题，这道题传入数组可能被一个叫update的方法修改里面的元素。
+
+1\) 方法1，同上一道题，暴力法，别的不管，直接迭代求和。
+
+时间复杂度O\(n\)，空间复杂度O\(1\)。
+
+2\) 方法2，看到一种Divide and Conquer的办法，实际就是记忆化搜索换了个花样，这里学习下，思想是将数组分割成块，块的长度为 sqrt\(n\)。然后计算每个块的和，并将其存储在辅助存储器 b 中。要查询 RSQ\(i, j\)，将添加位于内部的所有块和部分在范围 \[i…j\] 重叠的块的总和。
+
+![](../.gitbook/assets/image%20%28110%29.png)
+
+在上面的示例中，数组 nums 的长度为 9，它被拆分为大小为 sqrt\(9\)的块。为了得到 RSQ\(1, 7\)，添加 b\[1\]。它存储范围 \[3，5\] 的和，以及 块0 和 块2 的部分和，它们是重叠的边界块。
+
+时间复杂度O\(n\)，空间复杂度O\(sqrt\(n\)\)。
+
+3\) 方法3，线段树，主要用来解决多种范围查询问题，比如在对数时间内从数组中找到最小值、最大值、总和、最大公约数、最小公倍数等。
+
+先介绍线段树，如下：
+
+![](../.gitbook/assets/image%20%28111%29.png)
+
+数组 A\[0,1,…,n−1\] 的线段树是一个二叉树，其中每个节点都包含数组的一个子范围 \[i…j\] 上的聚合信息（最小值、最大值、总和等），其左、右子树分别包含范围 \[i…  \(i+j\)/2 \] 和\[\(i+j\)/2 ​+1, j\] 上的信息。
+
+线段树既可以用数组也可以用树来实现。对于数组实现，如果索引 i 处的元素不是一个叶节点，那么其左子树和右子树分别存储在索引为 2i 和 2i+1 的元素处 \(相当于把树给拉直了\)。
+
+在上图所给出的示例中，每个叶节点都包含初始的数组元素 {2,4,5,7,8,9}。内部节点包含范围内相应元素的总和 - \(11\) 是从索引 0 到索引 2 的元素之和。而根节点 \(35\) 是它的两个子节点 \(6\) 和 \(29\) 的和,也是整个数组的和。
+
+线段树可以分为以下三个步骤：
+
+1. 从给定数组**构建**线段树的预处理步骤。 
+2. 修改元素时**更新**线段树。 
+3. 使用线段树进行**区域和检索**。
+
+**构建线段树**
+
+使用一种非常有效的自下而上的方法来构建线段树。从上面已经知道，如果某个节点 p 包含范围\[i…j\] 的和，那么其左、右子节点分别包含范围 \[i… \(i+j\)/2\] 和 \[\(i+j\)/2 +1, j\] 上的和。
+
+因此，为了找到节点 p 的和，需要提前计算其左、右子子树的和。
+
+从叶节点开始，用输入数组的元素 a\[0,1,…,n−1\] 初始化它们。然后逐步向上移动到更高一层来计算父节点的和，直到最后到达线段树的根节点。
+
+```java
+int[] tree;
+int n;
+public NumArray(int[] nums) {
+    if (nums.length > 0) {
+        n = nums.length;
+        tree = new int[n * 2];
+        buildTree(nums);
+    }
+}
+private void buildTree(int[] nums) {
+    for (int i = n, j = 0;  i < 2 * n; i++,  j++)
+        tree[i] = nums[j];
+    for (int i = n - 1; i > 0; --i)
+        tree[i] = tree[i * 2] + tree[i * 2 + 1];
+}
+
+```
+
+这一步时间复杂度O\(n\)，空间复杂度O\(n\)。
+
+**更新线段树**
+
+当更新数组中某个索引 i 处的元素时，需要重建线段树，因为一些树节点上的和值也会随之产生变化。再次使用自下而上的方法。首先更新存储 a\[i\] 元素的叶节点。从那里一路向上，直到根节点，并用其子节点值的总和来更新每个父节点的值。
+
+```java
+void update(int pos, int val) {
+    pos += n;
+    tree[pos] = val;
+    while (pos > 0) {
+        int left = pos;
+        int right = pos;
+        if (pos % 2 == 0) {
+            right = pos + 1;
+        } else {
+            left = pos - 1;
+        }
+        // parent is updated after child is updated
+        tree[pos / 2] = tree[left] + tree[right];
+        pos /= 2;
+    }
+}
+```
+
+这一步时间复杂度O\(logn\)，空间复杂度O\(1\)。
+
+**区域和检索**
+
+可以通过以下方式使用线段树进行区域和检索 \[L, R\]：算法保持循环不变：l ≤ r 以及已经算出 \[L…l\] 和 \[r…R\] 的总和，其中 l 和 r 分别是计算总和时的左边界和右边界。每次迭代的范围 \[l,r\] 都会缩小，直到在算法的大约 logn 次迭代后两个边界相遇为止。
+
+```java
+public int sumRange(int l, int r) {
+    // get leaf with value 'l'
+    l += n;
+    // get leaf with value 'r'
+    r += n;
+    int sum = 0;
+    while (l <= r) {
+        if ((l % 2) == 1) {
+           sum += tree[l];
+           l++;
+        }
+        if ((r % 2) == 0) {
+           sum += tree[r];
+           r--;
+        }
+        l /= 2;
+        r /= 2;
+    }
+    return sum;
+}
+```
+
+这一步时间复杂度O\(logn\)，空间复杂度O\(1\)。
+
+### 代码
+
+方法1
+
+```java
+class NumArray {
+    
+    int[] nums;
+
+    public NumArray(int[] nums) {        
+        this.nums = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            this.nums[i] = nums[i];
+        }
+    }
+    
+    public void update(int i, int val) {
+        nums[i] = val;
+    }
+    
+    public int sumRange(int i, int j) {
+        int sum = 0;
+        for (int index = i; index <= j; index++) {
+            sum += nums[index];
+        }
+        return sum;
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
+```
+
+方法2
+
+```java
+class NumArray {
+    
+    private int[] b;
+    private int len;
+    private int[] nums;
+
+    public NumArray(int[] nums) {
+        this.nums = nums;
+        double l = Math.sqrt(nums.length); //分段
+        len = (int) Math.ceil(nums.length/l);
+        b = new int [len];
+        for (int i = 0; i < nums.length; i++) { // 分段存储
+            b[i / len] += nums[i];
+        }
+    }
+
+    public int sumRange(int i, int j) {
+        int sum = 0;
+        int startBlock = i / len;
+        int endBlock = j / len;
+        if (startBlock == endBlock) {
+            for (int k = i; k <= j; k++)
+                sum += nums[k];
+        } else {
+            for (int k = i; k <= (startBlock + 1) * len - 1; k++) {
+                sum += nums[k];
+            }
+            for (int k = startBlock + 1; k <= endBlock - 1; k++) {
+                sum += b[k];
+            }
+            for (int k = endBlock * len; k <= j; k++) {
+                sum += nums[k];
+            }
+        }
+        return sum;
+    }
+
+    public void update(int i, int val) {
+        int b_l = i / len;
+        b[b_l] = b[b_l] - nums[i] + val;
+        nums[i] = val;
+    }
+
+}
+```
+
+方法3
+
+```java
+class NumArray {
+
+    int[] tree;
+    int n;
+    public NumArray(int[] nums) {
+        if (nums.length > 0) {
+            n = nums.length;
+            tree = new int[n * 2];
+            buildTree(nums);
+        }
+    }
+    private void buildTree(int[] nums) { // 线段树构建代码
+        for (int i = n, j = 0;  i < 2 * n; i++,  j++)
+            tree[i] = nums[j];
+        for (int i = n - 1; i > 0; --i)
+            tree[i] = tree[i * 2] + tree[i * 2 + 1];
+    }
+
+    public int sumRange(int i, int j) {
+        // get leaf with value 'l'
+        i += n;
+        // get leaf with value 'r'
+        j += n;
+        
+        int sum = 0;
+        while (i <= j) {
+            if ((i % 2) == 1) {
+               sum += tree[i];
+               i++;
+            }
+            if ((j % 2) == 0) {
+               sum += tree[j];
+               j--;
+            }
+            i /= 2;
+            j /= 2;
+        }
+        return sum;
+    }
+
+    public void update(int i, int val) {
+        i += n;
+        tree[i] = val;
+        while (i > 0) {
+            int left = i;
+            int right = i;
+            if (i % 2 == 0) {
+                right = i + 1;
+            } else {
+                left = i - 1;
+            }
+            // parent is updated after child is updated
+            tree[i / 2] = tree[left] + tree[right];
+            i /= 2;
+        }
+    }
+
+}
+```
+
+
+

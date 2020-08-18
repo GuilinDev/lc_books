@@ -5326,6 +5326,74 @@ class Solution {
 }
 ```
 
-  
+##  1026 Maximum Difference Between Node and Ancestor
 
+### 题目
+
+Given the `root` of a binary tree, find the maximum value `V` for which there exists **different** nodes `A` and `B` where `V = |A.val - B.val|` and `A` is an ancestor of `B`.
+
+\(A node A is an ancestor of B if either: any child of A is equal to B, or any child of A is an ancestor of B.\)
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2019/09/09/2whqcep.jpg)
+
+```text
+Input: [8,3,10,1,6,null,14,null,null,4,7,13]
+Output: 7
+Explanation: 
+We have various ancestor-node differences, some of which are given below :
+|8 - 3| = 5
+|3 - 7| = 4
+|8 - 1| = 7
+|10 - 13| = 3
+Among all possible differences, the maximum value of 7 is obtained by |8 - 1| = 7.
+```
+
+**Note:**
+
+1. The number of nodes in the tree is between `2` and `5000`.
+2. Each node will have value between `0` and `100000`.
+
+### 分析
+
+寻找当前node的左右子树的最大值和最小值，跟当前node的差值比较，并进行DFS查找。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int maxAncestorDiff(TreeNode root) {
+        return dfs(root, root.val, root.val);//初始化
+    }
+
+    public int dfs(TreeNode node, int minValue, int maxValue) {
+        if (node == null) { // 当前node为根时，最大值"或"最小值的差值
+            return maxValue - minValue;
+        }
+        // DFS递归寻找当前node为根时，的最大值和最小值
+        // 仔细想想当前节点若为最大值或最小值的情况
+        maxValue = Math.max(maxValue, node.val);
+        minValue = Math.min(minValue, node.val);
+        
+        // 只将根和子树比较
+        return Math.max(dfs(node.left, minValue, maxValue), dfs(node.right, minValue, maxValue));
+    }
+}
+```
 
