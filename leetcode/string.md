@@ -1203,9 +1203,9 @@ class Solution {
             for (String str : pre) {
                 for (int i = 0; i < str.length(); i++) {
                     if (str.charAt(i) == '(') {
-                        str = str.substring(0, i + 1) + "()" + str.substring(i+1, str.length());
+                        str = str.substring(0, i + 1) + "()" + str.substring(i + 1, str.length());
                         result.add(str);
-                        str = str.substring(0, i+1) + str.substring(i + 3, str.length());
+                        str = str.substring(0, i + 1) + str.substring(i + 3, str.length());
                     }
                 }
                 result .add("()" + str);
