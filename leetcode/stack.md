@@ -1123,3 +1123,110 @@ class Solution {
 }
 ```
 
+## 402 Remove k Digits
+
+### 题目
+
+Given a non-negative integer num represented as a string, remove k digits from the number so that the new number is the smallest possible.
+
+**Note:**  
+
+
+* The length of num is less than 10002 and will be ≥ k.
+* The given num does not contain any leading zero.
+
+**Example 1:**
+
+```text
+Input: num = "1432219", k = 3
+Output: "1219"
+Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219 which is the smallest.
+```
+
+**Example 2:**
+
+```text
+Input: num = "10200", k = 1
+Output: "200"
+Explanation: Remove the leading 1 and the number is 200. Note that the output must not contain leading zeroes.
+```
+
+**Example 3:**
+
+```text
+Input: num = "10", k = 2
+Output: "0"
+Explanation: Remove all the digits from the number and it is left with nothing which is 0.
+```
+
+### 分析
+
+ 给定一个以字符串表示的非负整数 _num_，移除这个数中的 _k_ 位数字，使得剩下的数字最小。
+
+完全枚举的复杂度是组合对数级的，肯定不行。分析下，对于两个相同长度的数字序列，最左边不同的数字决定了这两个数字的大小，例如，对于 A = 1axxx，B = 1bxxx，如果 a &gt; b 则 A &gt; B。知道了这个以后可以想到，在删除数字时应该从左向右迭代来判断。
+
+确定了迭代的顺序以后，就必须制定如何消除数字的标准，以便获得最小值。
+
+从一个简单的例子开始。给定一个数字序列，例如 425，如果要求只删除一个数字，那么从左到右，有 4、2 和 5 三个选择。将每一个数字和它的左邻居进行比较。从 2 开始，小于它的左邻居 4。则应该去掉数字 4。如果不这么做，则随后无论做什么，都不会得到最小数。
+
+![](../.gitbook/assets/image%20%28110%29.png)
+
+如果我们保留数字 4，那么所有可能的组合都是以数字 4（即 42，45）开头的。相反，如果去掉 4，留下 2，我们得到的是以 2 开头的组合（即 25），这明显小于任何留下数字 4 的组合。
+
+总结上述删除一个数字的规则如下： 给定一个数字序列 \[D1 ​D2 ​D3 ​…Dn\]，如果数字 D2 小于其左邻居D1，则应该删除左邻居（D1），以获得最小结果。
+
+这也是贪心的思想，一旦删除一个数字，剩下的数字就形成了一个新的问题，可以继续使用这个规则。在某些情况下，规则对任意数字都不适用，即单调递增序列。在这种情况下，只需要删除末尾的数字来获得最小数。可以使用栈或队列。
+
+算法：
+
+* 对于每个数字，如果该数字小于栈/队列顶部，即该数字的左邻居，则弹出，即删除左邻居。否则，把数字push到栈/队列上。
+*  重复上述步骤，直到任何条件不再适用，例如堆栈为空（不再保留数字）。或者已经删除了 `k` 位数字。
+* 
+### 代码
+
+利用栈或队列，或者直接把字符串转换成char  arr然后左右双指针操作。
+
+```java
+class Solution {
+    public String removeKdigits(String num, int k) {
+        Deque<Character> deque = new LinkedList<>();
+        char[] arr = num.toCharArray();
+        
+        //从左到右入队和遍历，移除比当前字符大的左边字符
+        for (char ch : arr) {
+            while (!deque.isEmpty() && k > 0 && deque.peekLast() > ch) { //跟其左邻居比较，左邻居大就出队删除
+                deque.removeLast();
+                k--; // 删掉一个
+            }
+            //当前字符入队
+            deque.addLast(ch);
+        }
+        
+        // 把所有较大的左邻居删除了后，还不够k个，这时候右边就是最大的，从右边开始删除
+        while (k > 0 && !deque.isEmpty()){
+            deque.removeLast();
+            k--;
+        }
+        
+        // 处理头部0的情况，移除左边
+        while (!deque.isEmpty() && deque.getFirst() == '0') {
+            deque.removeFirst();
+        }
+        
+        if (deque.isEmpty()) {
+            return "0";
+        }
+        
+        // 构建剩余的字符并返回
+        char[] res = new char[deque.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = deque.removeFirst();
+        }
+        
+        return new String(res);
+    }
+}
+```
+
+
+
