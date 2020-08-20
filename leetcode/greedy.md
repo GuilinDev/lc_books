@@ -466,3 +466,97 @@ class Solution {
 }
 ```
 
+## 452 Minimum Number of Arrows to Burst Balloons
+
+### 题目
+
+There are a number of spherical balloons spread in two-dimensional space. For each balloon, provided input is the start and end coordinates of the horizontal diameter. Since it's horizontal, y-coordinates don't matter and hence the x-coordinates of start and end of the diameter suffice. Start is always smaller than end. There will be at most 104 balloons.
+
+An arrow can be shot up exactly vertically from different points along the x-axis. A balloon with xstart and xend bursts by an arrow shot at x if xstart ≤ x ≤ xend. There is no limit to the number of arrows that can be shot. An arrow once shot keeps travelling up infinitely. The problem is to find the minimum number of arrows that must be shot to burst all balloons.
+
+**Example:**
+
+```text
+Input:
+[[10,16], [2,8], [1,6], [7,12]]
+
+Output:
+2
+
+Explanation:
+One way is to shoot one arrow for example at x = 6 (bursting the balloons [2,8] and [1,6]) and another arrow at x = 11 (bursting the other two balloons).
+```
+
+### 分析
+
+类似会议室的解法，先按照气球的末尾坐标排序，然后遍历检查每个气球的开始坐标如果大于当前箭支所在末尾坐标，则剪枝增加1。
+
+### 代码
+
+用终点排序，直接比较后一个起点和前面记录的终点
+
+```java
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+        if (points == null || points.length == 0 || points[0].length == 0) {
+            return 0;
+        }
+        
+        int arrows = 1; // 不为空至少需要一只箭
+        
+        // 按终点排序
+        Arrays.sort(points, Comparator.comparingInt(o -> o[1]));
+        
+        int currStart, currEnd;
+        int arrowEnd = points[0][1];
+        
+        
+        for (int[] point : points) {
+            currStart = point[0];
+            currEnd = point[1];
+            
+            if (arrowEnd < currStart) { // 右边缘已排序
+                arrows++;
+                arrowEnd = currEnd;
+            } 
+        }
+        return arrows;
+    }
+}
+```
+
+用起点排序，需要每一次循环维护新的end
+
+```java
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+        if (points == null || points.length == 0 || points[0].length == 0) {
+            return 0;
+        }
+        
+        int arrows = 1; // 不为空至少需要一只箭
+        
+        // 按起点排序
+        Arrays.sort(points, Comparator.comparingInt(o -> o[0]));
+        
+        int currStart, currEnd;
+        int arrowEnd = points[0][1];
+        
+        
+        for (int[] point : points) {
+            currStart = point[0];
+            currEnd = point[1];
+            
+            if (arrowEnd < currStart) {
+                arrows++;
+                arrowEnd = currEnd;
+            } else {
+                // 起点排序的额外步骤：气球有重复时找到比较小的终点（才能都射爆）
+                arrowEnd = Math.min(arrowEnd, currEnd);
+            }
+        }
+        return arrows;
+    }
+}
+```
+
