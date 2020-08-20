@@ -212,7 +212,7 @@ class Solution {
                 return false;
             }
         }
-        return dp[len - 1] >= 0; //等于是刚好到最后一个index
+        return dp[len - 1] >= 0; //等于是刚好到最后一个index, 也可以return true
     }
 }
 ```
@@ -253,6 +253,7 @@ class Solution {
             if (i > reach || reach >= len - 1) {
                 break;
             }
+            // 寻找最远跳力
             reach = Math.max(reach, i + nums[i]);
         }
         return reach >= len - 1;
