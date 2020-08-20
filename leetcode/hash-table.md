@@ -1653,7 +1653,7 @@ Java中的HashMap的结构要熟悉，containsKey\(\)没有哈希冲突的情况
 ```java
 class Solution {
     public boolean wordPattern(String pattern, String str) {
-        String[] strs = str.split(" ");
+        String[] strs = str.split("\\s+");
         if (pattern.length() != strs.length) {
             return false;
         }
@@ -1681,7 +1681,7 @@ class Solution {
 ```java
 class Solution {
     public boolean wordPattern(String pattern, String str) {
-        String[] strs = str.split(" ");
+        String[] strs = str.split("\\s+");
         if (pattern.length() != strs.length) {
             return false;
         }
