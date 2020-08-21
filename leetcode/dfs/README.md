@@ -1373,3 +1373,163 @@ class Solution {
 }
 ```
 
+## 473 Matchsticks to Square
+
+### 原题
+
+Remember the story of Little Match Girl? By now, you know exactly what matchsticks the little match girl has, please find out a way you can make one square by using up all those matchsticks. You should not break any stick, but you can link them up, and each matchstick must be used **exactly** one time.
+
+Your input will be several matchsticks the girl has, represented with their stick length. Your output will either be true or false, to represent whether you could make one square using all the matchsticks the little match girl has.
+
+**Example 1:**  
+
+
+```text
+Input: [1,1,2,2,2]
+Output: true
+
+Explanation: You can form a square with length 2, one side of the square came two sticks with length 1.
+```
+
+**Example 2:**  
+
+
+```text
+Input: [3,3,3,3,4]
+Output: false
+
+Explanation: You cannot find a way to form a square with all the matchsticks.
+```
+
+**Note:**  
+
+
+1. The length sum of the given matchsticks is in the range of `0` to `10^9`.
+2. The length of the given matchstick array will not exceed `15`.
+
+### 分析
+
+找出能否使用所有火柴拼成一个正方形的方法。不能折断火柴，可以把火柴连接起来，并且每根火柴都要用到。
+
+1\) DFS，对于所有的火柴，我们需要考虑：
+
+* 将它们分成四组，每一根火柴恰好属于其中的一组；
+* 每一组火柴的长度之和都相同，等于所有火柴长度之和的四分之一。
+
+使用DFS枚举出所有的分组情况，并对于每一种情况，判断是否满足上述的两个条件。
+
+具体做法是依次对每一根火柴进行搜索，当搜索到第 i 根火柴时，可以把它放到四组中的任意一种。对于每一种放置方法，我们继续对第 i + 1 根火柴进行递归。当搜索完全部的 N 根火柴后，再判断每一组火柴的长度之和是否都相同。
+
+时间复杂度：O\(4^N\)，每根火柴有四种放法。
+
+空间复杂度：O\(N\)O\(N\)。
+
+2\) DP
+
+### 代码
+
+朴素DFS
+
+```java
+class Solution {
+    public boolean makesquare(int[] nums) {
+        if (null == nums || nums.length < 4) {
+            return false;
+        }
+        int perimeter = 0;
+        for (int num : nums) {
+            perimeter += num;
+        }
+        if (perimeter % 4 != 0) {
+            return false;
+        }
+
+        return dfs(nums, 0, 0, 0, 0, 0, perimeter / 4);
+    }
+
+    /**
+     * 
+     * @param nums
+     * @param index 表示当前放置到了第几个元素
+     * @param a|b|c|d表示四个边长
+     * @param side 表示最终的边长
+     */
+    private boolean dfs(int[] nums, int index, int a, int b, int c, int d, int side) {
+        if (index == nums.length) {
+            return a == side && b == side && c == side && d == side;
+        }
+        
+        if (a > side || b > side || c > side || d > side) {
+            // 只要有一个边大于边长，则不用进行下一步放置了
+            return false;
+        }
+
+        // 每根火柴都有四种放置地点；分别将index位置的火柴放到a b c d四个位置，检查是否成功
+        return dfs(nums, index + 1, a + nums[index], b, c, d, side)
+            || dfs(nums, index + 1, a, b + nums[index], c, d, side)
+            || dfs(nums, index + 1, a, b, c + nums[index], d, side)
+            || dfs(nums, index + 1, a, b, c, d + nums[index], side);
+    }
+}
+
+```
+
+剪枝
+
+```java
+class Solution {
+    public boolean makesquare(int[] nums) {
+        if (nums == null || nums.length < 4) {
+            return false;
+        }
+        int perimeter = 0;
+        for (int num : nums) {
+            perimeter += num;
+        }
+
+        if (perimeter % 4 != 0) {
+            return false;
+        }
+
+        
+        Arrays.sort(nums);
+        // 倒序的话为了剪枝，先排大的，最后再塞小的
+        reverse(nums); // Collections.reverseorder() 和重写comprator都是对non-primitive的
+
+        return dfs(nums, new int[4], 0, perimeter / 4); //合并一下四条边
+    }
+
+    private boolean dfs(int[] nums, int[] sides, int index, int target) {
+        if (index == nums.length) {
+            if (sides[0] == target && sides[1] == target && sides[2] == target) { // 只检查三条边即可
+                return true;
+            }
+            return false;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (sides[i] + nums[index] > target) { // 当前边不考虑，剪枝
+                continue;
+            }
+            sides[i] += nums[index];
+            if (dfs(nums, sides, index+1, target)) {
+                return true;
+            }
+            sides[i] -= nums[index]; // 回溯
+        }
+        return false;
+    }
+
+    private void reverse(int[] nums) {
+        int i = 0, j = nums.length - 1;
+        while (i < j) {
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+            i++;
+            j--;
+        }
+    }
+}
+
+```
+
