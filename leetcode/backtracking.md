@@ -447,8 +447,8 @@ class Solution {
         result.add(new ArrayList<>(tempList));//注意添加的方式，是新建一个ArrayList对象
         for (int i = start; i < nums.length; i++) {
             tempList.add(nums[i]);
-            backtrack(result, tempList, nums, i + 1);
-            tempList.remove(tempList.size() - 1);//每一轮需要清空
+            backtrack(result, tempList, nums, i + 1); // 下一轮的递归是当前元素的下一个
+            tempList.remove(tempList.size() - 1);//回溯
         }
     }
 }
