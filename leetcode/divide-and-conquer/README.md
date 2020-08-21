@@ -917,11 +917,123 @@ Bonus point if you are able to do this using only _O_\(_n_\) extra space, where 
 
 ### 题意和分析
 
-从三角形的第二行开始，triangle\[i\]\[j\] = min\(triangle\[i - 1\]\[j - 1\], triangle\[i - 1\]\[j\]\)，然后两边的数字直接赋值上一行中找到的最小值，bonus说最好空间复杂度为_O_\(_n_\)，因此在原来的triangle数组上改动；
+这样看更方便一点：
 
-一种更好的办法是自底向上，逐个遍历triagnle的最后一行，对于每个数字，将它与它之后的元素比较，选择较小的+triangle数组上面一行相邻位置的元素作为新的元素，一层一层往上扫描，最小的数字冒泡到了前面，返回最前面的元素。
+```java
+[
+[2],
+[3,4],
+[6,5,7],
+[4,1,8,3]
+]
+
+相邻结点：与(i, j) 点相邻的结点为 (i + 1, j) 和 (i + 1, j + 1)。
+
+```
+
+定义 f\(i, j\) 为 \(i, j\) 点到底边的最小路径和，则易知递归求解式为:
+
+f\(i, j\) = triangle\[i\]\[j\] + min\(f\(i + 1, j\), f\(i + 1, j + 1\)\) 
+
+所以，朴素的递归解法如下：
+
+```java
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        return  dfs(triangle, 0, 0); //将三角形和元素的x，y坐标传入
+    }
+
+    private int dfs(List<List<Integer>> triangle, int i, int j) {
+        if (i == triangle.size()) {
+            return 0;
+        }
+        return triangle.get(i).get(j) + Math.min(dfs(triangle, i + 1, j), dfs(triangle, i + 1, j + 1));
+    }
+}
+```
+
+1\) 朴素的递归解法自然是可以做记忆化的自顶向下，可以同样大小的数据结构来做记忆化搜索。
+
+时间复杂度：O\(N^2\)。
+
+空间复杂度：O\(N^2\)。
+
+2\) DP，dp\[i\]\[j\] 表示从点 \(i, j\) 到底边的最小路径和，所以最后返回dp\[0\]\[0\]。
+
+状态转移方程：dp\[i\]\[j\] = triangle\[i\]\[j\] + min\(dp\[i + 1\]\[j\],dp\[i + 1\]\[j + 1\]\)
+
+时间复杂度：O\(N^2\)。
+
+空间复杂度：O\(N^2\)。
+
+3\) 考虑状态压缩，上述实际递推中，计算 dp\[i\]\[j\] 时，只用到了下一行的 dp\[i + 1\]\[j\] 和 dp\[i + 1\]\[j + 1\]。 因此 dp 数组不需要定义 N 行，只要定义 1 行就可以。 所以稍微修改一下上述代码，将 i 所在的维度去掉（如下），就可以将 O\(N^2\) 的空间复杂度优化成 O\(N\)。
+
+4\) 这道题从最底下开始算也可以，逐个遍历triagnle的最后一行，对于每个数字，将它与它之后的元素比较，选择较小的+triangle数组上面一行相邻位置的元素作为新的元素，一层一层往上扫描，最小的数字冒泡到了前面，返回最前面的元素。从三角形的第二行开始，状态方程为triangle\[i\]\[j\] = min\(triangle\[i - 1\]\[j - 1\], triangle\[i - 1\]\[j\]\)，然后两边的数字直接赋值上一行中找到的最小值。
+
+bonus说最好空间复杂度为_O_\(_n_\)，其实还可以在原来的triangle数组上改动。
 
 ### 代码
+
+自顶向下递归
+
+```java
+class Solution {
+    Integer[][] memo;
+    public int minimumTotal(List<List<Integer>> triangle) {
+        memo = new Integer[triangle.size()][triangle.size()];
+        return  dfs(triangle, 0, 0);
+    }
+
+    private int dfs(List<List<Integer>> triangle, int i, int j) {
+        if (i == triangle.size()) {
+            return 0;
+        }
+        if (memo[i][j] != null) {
+            return memo[i][j];
+        }
+        return memo[i][j] = triangle.get(i).get(j) + Math.min(dfs(triangle, i + 1, j), dfs(triangle, i + 1, j + 1));
+    }
+}
+```
+
+自底向上DP
+
+```java
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int size = triangle.size();
+        // dp[i][j] 表示从点 (i, j) 到底边的最小路径和。
+        int[][] dp = new int[size + 1][size + 1];
+        
+        // 从三角形的最后一行开始递推。
+        for (int i = size - 1; i >= 0; i--) {
+            for (int j = 0; j <= i; j++) {
+                dp[i][j] = triangle.get(i).get(j) + Math.min(dp[i + 1][j + 1], dp[i + 1][j]);
+            }
+        }
+        return dp[0][0];
+    }
+}
+```
+
+考虑状态压缩
+
+```java
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int size = triangle.size();
+        int[] dp = new int[size + 1];
+        for (int i = size - 1; i >= 0; i--) {
+            for (int j = 0; j <= i; j++) {
+                dp[j] = triangle.get(i).get(j) + Math.min(dp[j], dp[j + 1]);
+            }
+        }
+        return dp[0];
+    }
+}
+```
+
+另一种状态转移方程，triangle\[i\]\[j\] = min\(triangle\[i - 1\]\[j - 1\], triangle\[i - 1\]\[j\]\)，并在原数据结构上修改
 
 ```java
 class Solution {
@@ -930,7 +1042,7 @@ class Solution {
         for (int i = size - 2; i >= 0; i--) {//size-1是最后一行
             for (int j = 0; j <= i; j++) {//对当前层的数字逐个遍历
                 int self = triangle.get(i).get(j);
-                int result = Math.min(triangle.get(i+1).get(j) + self, triangle.get(i+1).get(j+1)+self);
+                int result = Math.min(triangle.get(i+1).get(j) + self, triangle.get(i+1).get(j+1) + self);
                 triangle.get(i).set(j, result);
             }
         }
