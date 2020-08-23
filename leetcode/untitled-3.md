@@ -587,3 +587,89 @@ class Solution {
 }
 ```
 
+## 1197 **Minimum Knight Moves**
+
+### **题目**
+
+In an infinite chess board with coordinates from -infinity to +infinity, you have a knight at square \[0, 0\].
+
+A knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, then one square in an orthogonal direction.
+
+![](../.gitbook/assets/image%20%28113%29.png)
+
+Return the minimum number of steps needed to move the knight to the square \[x, y\]. It is guaranteed the answer exists.
+
+Example 1:
+
+```java
+Input: x = 2, y = 1 
+Output: 1 
+Explanation: [0, 0] → [2, 1] 
+```
+
+Example 2:
+
+```java
+Input: x = 5, y = 5 
+Output: 4 
+Explanation: [0, 0] → [2, 1] → [4, 2] → [3, 4] → [5, 5]
+```
+
+Constraints:
+
+```java
+|x| + |y| <= 300
+```
+
+### **分析**
+
+如果用DFS枚举所有走法，然后挑出一个最小的路径，会爆栈。
+
+ 其实题目的坐标是-x -y \| -x y \| x -y \| x y \| 四个象限 互为镜像的，也就是 可以只考虑 x y的情况即可，让x = \|x\|, y = \|y\|，使用bfs 宽度优先搜索，搜索中检查是否被访问过和是否在该层边界内，也就是求最短路径的问题。
+
+时间复杂度：O\(V+E\)，V是访问的节点个数，E是边。
+
+空间复杂度：O\(V\)。
+
+### **代码**
+
+```java
+class Solution {
+    // 八个方向
+    int[][] dirs = new int[][]{{-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {-2, -1}, {-2, 1}, {2, -1}, {2, 1}};
+
+    public int minKnightMoves(int x, int y) {
+        x = Math.abs(x);
+        y = Math.abs(y);
+
+        HashSet<String> visited = new HashSet<>();
+        LinkedList<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{0, 0});
+        visited.add("0,0");
+
+        int step = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                int[] cur = queue.poll();
+                if (cur[0] == x && cur[1] == y) {
+                    return step;
+                }
+
+                for (int[] dir : dirs) {
+                    int i = cur[0] + dir[0];
+                    int j = cur[1] + dir[1];
+                    if (!visited.contains(i + "," + j) && i >= -1 && j >= -1) {
+                        queue.add(new int[]{i, j});
+                        visited.add(i + "," + j);
+                    }
+                }
+            }
+
+            step++;
+        }
+        return -1;
+    }
+}
+```
+
