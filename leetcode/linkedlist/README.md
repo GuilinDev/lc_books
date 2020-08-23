@@ -1397,9 +1397,11 @@ public class Solution {
 
         ListNode a = headA;
         ListNode b = headB;
-        while (a != b) {//对两个链表分别遍历，直到其中一条链表到结尾；结束条件如果相交则一定会在开始重合的节点，如果不相交则二者都为null从而跳出循环
-            a = a == null ? headB : a.next;
-            b = b == null ? headA : b.next;
+        //对两个链表分别遍历，直到其中一条链表到结尾；结束条件如果相交则一定会在开始重合的节点，
+        //如果不相交则二者都为null从而跳出循环
+        while (a != b) {
+            a = (a == null) ? headB : a.next;
+            b = (b == null) ? headA : b.next;
         }
 
         return a;//return b;
