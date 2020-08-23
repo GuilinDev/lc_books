@@ -2058,5 +2058,79 @@ class Solution {
 }
 ```
 
+## 727 Minimum Window Subsequence
 
+### 题目
+
+Given strings S and T, find the minimum \(contiguous\) substring W of S, so that T is a subsequence of W.
+
+If there is no such window in S that covers all characters in T, return the empty string "". If there are multiple such minimum-length windows, return the one with the left-most starting index.
+
+Example 1:
+
+```java
+Input: 
+S = "abcdebdde", T = "bde" 
+Output: "bcde" 
+Explanation: 
+"bcde" is the answer because it occurs before "bdde" which has the same length. 
+"deb" is not a smaller window because the elements of T in the window must occur in order.
+```
+
+Note:
+
+* All the strings in the input will only contain lowercase letters. 
+* The length of S will be in the range \[1, 20000\]. 
+* The length of T will be in the range \[1, 100\].
+
+### 分析
+
+DP - 假设 T = 'ab'，当遍历到 S 中的 'b' 时，这时候只需要知道 'b' 之前最近的 'a'，就可以找到一个符合条件的窗口 \[i, j\]，其中 'a' = S\[i\], ..., S\[j\] = 'b'。
+
+比较差的做法是在遍历到 'b' 之后再往前遍历找到最近的 'a'。但对于 'abbb...bb' 这种字符串，这种做法就比较低效了。更好的做法是记住最后一个遇见的 'a'，之后每当遍历到 'b' 时，就根据之前记住的 'a' 来确定窗口。这是简单的例子，如果 T = 'abc'，要怎么拓展呢？在遍历到 S 中的 'c' 时（假设 S\[k\] = 'c'），如果之前已经找到了包含 'ab' 的窗口（假设为 \[i, j\]\)，那么 \[i, k\] 就是一个包含 'abc' 的窗口。
+
+简单来说就是上面描述的这样，先计算包含 T 的前缀子串的窗口，再根据前缀子串窗口不断拓展，找到包含整个字符串的窗口。具体做法：
+
+1. 建立一个二维dp数组，大小为\|S\|\*\|T\|。dp\[i\]\[j\]表示S的\(0~i\)子串和T的\(0~j\)所对应最小W的长度
+2. 对S和T中的每个位置进行匹配： 
+   1.  如果S\[i\] != T\[j\]，则dp\[i\]\[j\] = dp\[i-1\]\[j\]+1。 
+   2.  如果S\[i\] == T\[j\], 则dp\[i\]\[j\] = min\(dp\[i-1\]\[j\]+1, dp\[i-1\]\[j-1\]+1\)
+3. 最后遍历dp\[i\]\[len\(T\)\]，求出第一个最小的值ans和ans对应的i，S中从i-ans到i的的子串即为所求
+
+时间复杂度分析：对S和T中的每个位置进行计算，时间复杂度O\(\|S\|∗\|T\|\)
+
+### 代码
+
+```java
+class Solution {
+    public String minWindow(String S, String T) {
+        int lenS = S.length(), lenT = T.length();
+        int[][] dp = new int[lenS + 1][lenT + 1];
+        for (int j = 1; j <= lenT; j++) {
+            dp[0][j] = Integer.MAX_VALUE / 10;
+        }
+
+        for (int i = 1; i <= lenS; i++) {
+            for (int j = 1; j <= lenT; j++) {
+                if (S.charAt(i - 1) != T.charAt(j - 1)) dp[i][j] = dp[i - 1][j] + 1;
+                else dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i - 1][j - 1] + 1);
+            }
+        }
+
+        int result = Integer.MAX_VALUE, k = -1;
+        for (int j = 1; j <= lenS; j++) {
+            if (result > dp[j][lenT]) {
+                result = dp[j][lenT];
+                k = j;
+            }
+        }
+        if (result >= Integer.MAX_VALUE / 10) {
+            return "";
+        }
+        
+        return S.substring(k - result, k);
+    }
+}
+ 
+```
 
