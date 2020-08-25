@@ -436,17 +436,27 @@ Output: 1->1->2->3->4->4
 
 ![](../../.gitbook/assets/image%20%2831%29.png)
 
-在第一步中，p1指向的节点值为2，p2指向节点值为6,2小于6，所以curr指向p1，p1指向下一节点，即指向节点值为5的节。
+在第一步中，p1指向的节点值为2，p2指向节点值为6,2小于6，所以curr指向p1，p1指向下一节点，即指向节点值为5的节点，如下图：
 
-第二步中，p1指向的节点的值仍然小于p2指向的节点的值，所以继续向后移动。
+![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRmuc417VJljI84G40QlbH42dluE5SpiaYH2TIwyDzdqZ0c8nUUu8aVdQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
-第三步中，p1指向的节点的值大于p2指向的节点的值，curr指向p2当前指向的节点，p2向后移动。
+第二步中，p1指向的节点的值仍然小于p2指向的节点的值，所以继续向后移动，如下图：
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRHukZ74JHXIiaibNOFSSGtibr187pAaNdPx082jXn4MdqErGA4TzBg282w/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+第三步中，p1指向的节点的值大于p2指向的节点的值，curr指向p2当前指向的节点，p2向后移动，如下图：
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuR3ExsOfXmOPgXwHZ7T8mCKHnUeZ7CZYHBRZ19iauR4qWk9DmBrG2xjyw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
 以此类推，直到p1或者p2指针移动到链表的末端，因为我们在每次比较中都选择较小的值，所以当p1或者p2中任何一个指针指向链表末端，代表另外一个没有还没到达末端的链表的后序的值都比已到达末端的链表中最大的值要大，所以只需要将后续的节点追加到新的链表后即可。
 
 也可以用递归的方式解决这个问题。递归（recursion）是一种在计算机科学中非常基本且普遍的思考问题的方式。典型的递归思路就是可以把问题变为更小的问题，并且这个更小的问题可以继续递归成更小的问题，知道这个问题小到到达一个边界条件（boundary condition），以至于可以很轻松地解决。
 
-在这个问题中，我们的边界条件很简单，就是当L2指向了null，返回L1或者L1指向了null，返回L2。如果L1或者L2没有指向null，就需要比较L1和L2对应的值哪个更小，当有结果以后，这个新的链表就更长了，而需要比较的链表就更短了，显然，这样这个问题就比较之前的简单了，如此反复递归即可。
+![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRK0h25KYice64mIvQSicpxN3Fiaiahlr0VhicAT2bx02Joc5MjGyMicYwylWw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+在这个问题中，我们的边界条件很简单，就是当L2指向了null，返回L1或者L1指向了null，返回L2。如果L1或者L2没有指向null，就需要比较L1和L2对应的值哪个更小，当有结果以后，这个新的链表就更长了，而需要比较的链表就更短了，显然，这样这个问题就比较之前的简单了，如此反复递归即可。代码如下：
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRXFmicQDh6Es9zz0j5R5p9oFIzelCkedrStyzicI5GvvWOHjTbX4BxQMQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
 ### 代码
 
