@@ -452,11 +452,7 @@ Output: 1->1->2->3->4->4
 
 也可以用递归的方式解决这个问题。递归（recursion）是一种在计算机科学中非常基本且普遍的思考问题的方式。典型的递归思路就是可以把问题变为更小的问题，并且这个更小的问题可以继续递归成更小的问题，知道这个问题小到到达一个边界条件（boundary condition），以至于可以很轻松地解决。
 
-![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRK0h25KYice64mIvQSicpxN3Fiaiahlr0VhicAT2bx02Joc5MjGyMicYwylWw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
-
-在这个问题中，我们的边界条件很简单，就是当L2指向了null，返回L1或者L1指向了null，返回L2。如果L1或者L2没有指向null，就需要比较L1和L2对应的值哪个更小，当有结果以后，这个新的链表就更长了，而需要比较的链表就更短了，显然，这样这个问题就比较之前的简单了，如此反复递归即可。代码如下：
-
-![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRXFmicQDh6Es9zz0j5R5p9oFIzelCkedrStyzicI5GvvWOHjTbX4BxQMQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+在这个问题中，我们的边界条件很简单，就是当L2指向了null，返回L1或者L1指向了null，返回L2。如果L1或者L2没有指向null，就需要比较L1和L2对应的值哪个更小，当有结果以后，这个新的链表就更长了，而需要比较的链表就更短了，显然，这样这个问题就比较之前的简单了，如此反复递归即可。
 
 ### 代码
 
