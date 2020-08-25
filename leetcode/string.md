@@ -445,21 +445,23 @@ Z型打印，从左到右横着读变成"从上到下-斜上-从上到下"这样
 ```java
 class Solution {
     public String convert(String s, int numRows) {
-        if (numRows <= 1) {
+        if(numRows <= 1) {
             return s;
         }
-        String result = "";
         int size = 2 * numRows - 2;
-        for (int i = 0; i < numRows; i++) {//一行一行打印
-            for (int j = i; j < s.length(); j += size) {
-                result += s.charAt(j);//打印正常字体的字符
-                int temp = j + size - 2 * i;
-                if ( i != 0 && i != numRows - 1 && temp < s.length()) { //打印斜上的黑体字的字符
-                    result += s.charAt(temp);
+        int len = s.length();
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < numRows; i++) { // 逐行打印
+            for (int j = i; j < len; j += size) { // j的值每次跳过行数
+                sb.append(s.charAt(j));
+                int position = j + size - i * 2; // 计算斜上字符的坐标
+                if (i != 0 && i != numRows - 1 && position < len) { // 将斜上字符加入到结果中
+                    sb.append(s.charAt(position));
                 }
             }
         }
-        return result;
+        return sb.toString();
     }
 }
 ```
