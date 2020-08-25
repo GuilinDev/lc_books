@@ -436,17 +436,11 @@ Output: 1->1->2->3->4->4
 
 ![](../../.gitbook/assets/image%20%2831%29.png)
 
-在第一步中，p1指向的节点值为2，p2指向节点值为6,2小于6，所以curr指向p1，p1指向下一节点，即指向节点值为5的节点，如下图：
+在第一步中，p1指向的节点值为2，p2指向节点值为6,2小于6，所以curr指向p1，p1指向下一节点，即指向节点值为5的节。
 
-![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRmuc417VJljI84G40QlbH42dluE5SpiaYH2TIwyDzdqZ0c8nUUu8aVdQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+第二步中，p1指向的节点的值仍然小于p2指向的节点的值，所以继续向后移动。
 
-第二步中，p1指向的节点的值仍然小于p2指向的节点的值，所以继续向后移动，如下图：
-
-![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuRHukZ74JHXIiaibNOFSSGtibr187pAaNdPx082jXn4MdqErGA4TzBg282w/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
-
-第三步中，p1指向的节点的值大于p2指向的节点的值，curr指向p2当前指向的节点，p2向后移动，如下图：
-
-![](https://mmbiz.qpic.cn/mmbiz_jpg/L1aVyQn0RA4lYpsR0LNIlIHh1PgrpKuR3ExsOfXmOPgXwHZ7T8mCKHnUeZ7CZYHBRZ19iauR4qWk9DmBrG2xjyw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+第三步中，p1指向的节点的值大于p2指向的节点的值，curr指向p2当前指向的节点，p2向后移动。
 
 以此类推，直到p1或者p2指针移动到链表的末端，因为我们在每次比较中都选择较小的值，所以当p1或者p2中任何一个指针指向链表末端，代表另外一个没有还没到达末端的链表的后序的值都比已到达末端的链表中最大的值要大，所以只需要将后续的节点追加到新的链表后即可。
 
