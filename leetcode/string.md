@@ -445,23 +445,21 @@ Z型打印，从左到右横着读变成"从上到下-斜上-从上到下"这样
 ```java
 class Solution {
     public String convert(String s, int numRows) {
-        if(numRows <= 1) {
+        if (numRows <= 1) {
             return s;
         }
+        String result = "";
         int size = 2 * numRows - 2;
-        int len = s.length();
-        StringBuilder sb = new StringBuilder();
-        
-        for (int i = 0; i < numRows; i++) { // 逐行打印
-            for (int j = i; j < len; j += size) { // j的值每次跳过行数
-                sb.append(s.charAt(j));
-                int position = j + size - i * 2; // 计算斜上字符的坐标
-                if (i != 0 && i != numRows - 1 && position < len) { // 将斜上字符加入到结果中
-                    sb.append(s.charAt(position));
+        for (int i = 0; i < numRows; i++) {//一行一行打印
+            for (int j = i; j < s.length(); j += size) {
+                result += s.charAt(j);//打印正常字体的字符
+                int temp = j + size - 2 * i;
+                if ( i != 0 && i != numRows - 1 && temp < s.length()) { //打印斜上的黑体字的字符
+                    result += s.charAt(temp);
                 }
             }
         }
-        return sb.toString();
+        return result;
     }
 }
 ```
@@ -2734,68 +2732,5 @@ Explanation: In this case, the given string "bcbcbc" is the longest because all 
 
 ### 分析
 
-遇到找最大最小字串问题，第一反应滑动窗口行不行。 但是很快这个想法就被否定了，因为滑动窗口（这里是可变滑动窗口）需要扩张和收缩窗口大小，这样做起来比较麻烦。因为题目要求的是奇偶性，而不是类似“元音出现最多的子串”等。
-
-1\) 没了思路，那就试试暴力法吧。暴力法的思路比较朴素和直观。 那就是双层循环找到所有子串，然后对于每一个子串，统计元音个数，如果子串的元音个数都是偶数，则更新答案，最后返回最大的满足条件的子串长度即可。暴力可以用一个小的 trick。枚举所有子串的时候，从最长的子串开始枚举的，这样找到一个满足条件的直接返回就行了（early return），不必再去找较小的子串以及维护最大值。
-
-* 时间复杂度：双层循环找出所有子串的复杂度是O\(n^2\)，统计字串中元音个数复杂度也是$O\(n\)，因此这种算法的时间复杂度为$O\(n^3\)。
-* 空间复杂度：O\(1\)
-
-暴力法可以通过测试。
-
-2\) 上面暴力法思路中对于每一个子串，统计元音个数，仔细观察的话，会发现有很多重复的统计。那么优化这部分的内容就可以获得更好的效率。
-
-对于这种连续的数字问题，这里考虑使用[前缀和](https://oi-wiki.org/basic/prefix-sum/)来优化，做预处理。
-
-经过这种空间换时间的策略之后，时间复杂度会降低到O\(n ^ 2\)，但是相应空间复杂度会上升到O\(n\)，这种取舍在很多情况下是值得的。
-
-3\) 
-
-
-
 ### 代码
-
-暴力法
-
-```java
-class Solution {
-    public int findTheLongestSubstring(String s) {
-        int len = s.length();
-        char[] vowels = {'a', 'e', 'i', 'o', 'u'};
-        for (int i = len; i >= 0; i--) { // i是offset，从最长的字符串长度len开始
-            for (int j = 0; j < len - i + 1; j++) {// j是起点             
-                String sub = s.substring(j, j + i); // 从最长字符串开始
-                boolean has_odd_vowel = false;
-                
-                for (char vowel : vowels) { // 逐个检查每个元音
-                    if (countVowel(sub, vowel) % 2 != 0) {
-                        has_odd_vowel = true;
-                        break;
-                    }
-                }
-                
-                if (!has_odd_vowel) { // early return
-                    return i;
-                }
-            }
-        }
-        return 0;
-    }
-    private int countVowel (String sub, char ch) {
-        int result = 0;
-        for (int k = 0; k < sub.length(); k++) {
-            if (ch == sub.charAt(k)) {
-                result++;
-            }
-        }
-        return result;
-    }
-}
-```
-
-前缀和+剪枝
-
-
-
-前缀和+状态压缩
 
