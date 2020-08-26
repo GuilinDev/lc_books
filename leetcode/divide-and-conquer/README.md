@@ -300,6 +300,213 @@ class Solution {
 }
 ```
 
+## 63 Unique Path II
+
+### 题目
+
+A robot is located at the top-left corner of a _m_ x _n_ grid \(marked 'Start' in the diagram below\).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid \(marked 'Finish' in the diagram below\).
+
+Now consider if some obstacles are added to the grids. How many unique paths would there be?
+
+![](https://assets.leetcode.com/uploads/2018/10/22/robot_maze.png)
+
+An obstacle and empty space is marked as `1` and `0` respectively in the grid.
+
+**Note:** _m_ and _n_ will be at most 100.
+
+**Example 1:**
+
+```text
+Input:
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+Output: 2
+Explanation:
+There is one obstacle in the middle of the 3x3 grid above.
+There are two ways to reach the bottom-right corner:
+1. Right -> Right -> Down -> Down
+2. Down -> Down -> Right -> Right
+```
+
+### 分析
+
+这道题是给定的二维数组里面可能会有障碍物，用1表示，依然是62题DP的做法和考虑状态压缩，只是在dp过程或者滚动数组过程中，需要检查一下当前路径是否有障碍物，如果有，将当前状态（格子）设为0，表示当前状态格子对右边和下边的格子不做贡献。
+
+### 代码
+
+正常DP
+
+```java
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0) {
+            return 0;
+        }
+        
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        
+        int[][] dp = new int[m][n];
+        
+        // 初始化
+        for (int k = 0; k < m; k++) {
+            // 当前格子为障碍物，或者上边的状态为0，堵路了，当前状态为0
+            if (obstacleGrid[k][0] == 1 || (k > 0 && dp[k - 1][0] == 0)) {
+                dp[k][0] = 0;
+            } else {
+                dp[k][0] = 1;
+            }
+        }        
+        for (int k = 0; k < n; k++) {
+            // 当前格子为障碍物，或者左边的状态为0，堵路了，当前状态为0
+            if (obstacleGrid[0][k] == 1 || (k > 0 && dp[0][k - 1] == 0)) {
+                dp[0][k] = 0;
+            } else {
+                dp[0][k] = 1;
+            }
+        }
+        
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) { // 障碍物
+                    dp[i][j] = 0; //当前状态贡献为0
+                } else { // 正常找路
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+}
+```
+
+把初始化写到一个循环里面，上面分开写比较好懂
+
+```java
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0) {
+            return 0;
+        }    
+        
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        
+        int[][] dp = new int[m][n];
+        
+        // 这里如果先分开对第一行和第一列进行初始化不太好写，因为有可能存在某一行/列全是障碍的情况，
+        // 这时候应该一条路都没有，如果先初始化第一行或第一列，需要检查所在行或列是否都为障碍
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) { // 障碍物
+                    dp[i][j] = 0; //当前状态贡献为0
+                } else { // 正常找路
+                    if (i == 0 && j == 0) { //第一个格子进行初始化
+                        dp[i][j] = 1;
+                    } else if (i == 0) { // 第一行
+                        if (dp[i][j - 1] == 0) { // 上一个是障碍
+                            dp[i][j] = 0;
+                        } else {
+                            dp[i][j] = 1;
+                        }
+                    } else if (j == 0) { // 第一列
+                        if (dp[i - 1][j] == 0) {
+                            dp[i][j] = 0;
+                        } else {
+                            dp[i][j] = 1;
+                        }
+                    } else {
+                        dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                    }
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+}
+```
+
+DP，反过来从右下到左上写也是一样，锻炼下逆向思维
+
+```java
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0) {
+            return 0;
+        }       
+        
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        
+        int[][] dp = new int[m][n];
+        
+        // 这里如果先对第一行和第一列进行初始化不太好写，因为有可能存在某一行/列全是障碍的情况，
+        // 这时候应该一条路都没有，如果先初始化第一行或第一列，需要检查所在行或列是否都为障碍
+        
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                if (obstacleGrid[i][j] == 1) {//有障碍物，注意这个条件要先检查
+                    dp[i][j] = 0;
+                } else {
+                    if (i == m - 1 && j == n - 1) {//在右下角的终点处，初始化为一条路
+                        dp[i][j] = 1;
+                    } else if (i == m - 1) {//初始化一列
+                        if (dp[i][j + 1] == 0) {//最后一列如果下面的路被堵住了，上面的格子均为0条路径
+                            dp[i][j] = 0;
+                        } else {
+                            dp[i][j] = 1;
+                        }
+                    } else if(j == n - 1) {//初始化一行
+                        if (dp[i + 1][j] == 0) {//最后一行如果右面的路被堵住了，左面的格子均为0条路径
+                            dp[i][j] = 0;
+                        } else {
+                            dp[i][j] = 1;
+                        }
+                    } else{
+                        dp[i][j] = dp[i + 1][j] + dp[i][j + 1];
+                    }
+                }
+            }
+        }
+        return dp[0][0];
+    }
+}
+```
+
+DP + 状态压缩，滚动行比滚动列较好维护一些
+
+```java
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0) {
+            return 0;
+        }
+        
+        int cols = obstacleGrid[0].length; //计算一行中的列数
+        
+        int[] dp = new int[cols]; // hold一行的数组，该一维数组每次向下滚动一行
+        dp[0] = 1; // 初始化第一行为1，下面的检查中可能会改变为0
+        
+        for (int[] oneRow : obstacleGrid) {
+            for (int j = 0; j < cols; j++) { // 这里从j=0第一列开始检查
+                if (oneRow[j] == 1) {//当前行的障碍物
+                    dp[j] = 0;
+                } else if (j > 0) {//这里第一行已经初始化，不要再检查
+                    dp[j] += dp[j - 1]; //状态压缩前上面的值已经滚动到当前行，这时候只需加上左边值即可
+                }
+            }
+        }
+        return dp[cols - 1]; //最后一行的最后一个元素
+    }
+}
+```
+
 ## 338 - Counting Bits
 
 ### 原题概述
