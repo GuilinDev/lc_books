@@ -191,24 +191,88 @@ Output: 28
 
 所以，问题转化为：求 start 点到 h1 点，或到 h2 点的路径中的较小者，这相当于将问题域变小了 1，递归下去，直到问题域变为 1 个点。
 
-使用额外的一个二维数组dp，其中dp\[i\]\[j\]表示到当前位置不同的走法的个数，然后可以得到递推式为: dp\[i\]\[j\] = dp\[i - 1\]\[j\] + dp\[i\]\[j - 1\]，另外对于空间复杂度， 每次只需要用到上一行当前列，以及前一列当前行的信息，只需要用一个一维数组存上一行的信息即可，然后扫过来依次更替掉上一行对应列的信息即可，一行一行的刷新，因此可以简化为使用一维数组dp。 时间复杂度是O\(m\*n\)，空间复杂度O\(n\)。
+使用额外的一个二维数组dp，其中dp\[i\]\[j\]表示到当前位置不同的走法的个数，然后可以得到递推式为: dp\[i\]\[j\] = dp\[i - 1\]\[j\] + dp\[i\]\[j - 1\]。
+
+考虑状态压缩， 每次只需要用到上一行当前列，以及前一列当前行的信息，只需要用一个一维数组存上一行的信息即可，然后扫过来依次更替掉上一行对应列的信息即可，一行一行的刷新，因此可以简化为使用一维数组dp。 时间复杂度是O\(m\*n\)，空间复杂度O\(n\)。
 
 ### 代码
 
+动态规划
+
 ```java
 class Solution {
+    //dp[m][n] = dp[m - 1][n] + dp[m][n - 1] 
+    public int uniquePaths(int m, int n) {
+        if (m < 0 || n < 0) {
+            return 0;
+        }
+        int[][] dp = new int[m][n];
+        
+        
+        // 第一行和第一列的初始化，只有1种走法
+        for (int k = 0; k < m; k++) {
+            dp[k][0] = 1;
+        }
+        for (int k = 0; k < n; k++) {
+            dp[0][k] = 1;
+        }
+        
+        // 对非第一行和非第一列进行填表
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        
+        return dp[m - 1][n - 1];
+    }
+}
+```
+
+考虑状态压缩，滚动列
+
+```java
+class Solution {
+    //dp[m][n] = dp[m - 1][n] + dp[m][n - 1] 
     public int uniquePaths(int m, int n) {
         if (m < 0 || n < 0) {
             return 0;
         }
         int[] dp = new int[n];
-        dp[0] = 1;//只记录列
-        for (int i = 0; i < m; i++) {//行从第0行开始
-            for (int j = 1; j < n; j++) {//列从第1列开始
-                dp[j] += dp[j - 1];
+        
+        dp[0] = 1; // 只记录列
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 1; j < n; j++) { // 第一列已经初始化
+                dp[j] += dp[j - 1]; // 前面的列加上当前的列
             }
         }
-        return dp[n - 1];
+        
+        return dp[n - 1]; //返回最后一列的最后一个
+    }
+}
+```
+
+可以想象，考虑状态压缩的情况下，滚动行也是同样的道理
+
+```java
+class Solution {
+    //dp[m][n] = dp[m - 1][n] + dp[m][n - 1] 
+    public int uniquePaths(int m, int n) {
+        if (m < 0 || n < 0) {
+            return 0;
+        }
+        int[] dp = new int[m];
+        
+        dp[0] = 1; // 只记录列
+        
+        for (int j = 0; j < n; j++) {
+            for (int i = 1; i < m; i++) {
+                dp[i] += dp[i - 1]; // 滚动行往下
+            }
+        }
+        
+        return dp[m - 1]; // 返回最后一行的最后一个
     }
 }
 ```
