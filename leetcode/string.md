@@ -445,21 +445,23 @@ Z型打印，从左到右横着读变成"从上到下-斜上-从上到下"这样
 ```java
 class Solution {
     public String convert(String s, int numRows) {
-        if (numRows <= 1) {
+        if(numRows <= 1) {
             return s;
         }
-        String result = "";
         int size = 2 * numRows - 2;
-        for (int i = 0; i < numRows; i++) {//一行一行打印
-            for (int j = i; j < s.length(); j += size) {
-                result += s.charAt(j);//打印正常字体的字符
-                int temp = j + size - 2 * i;
-                if ( i != 0 && i != numRows - 1 && temp < s.length()) { //打印斜上的黑体字的字符
-                    result += s.charAt(temp);
+        int len = s.length();
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < numRows; i++) { // 逐行打印
+            for (int j = i; j < len; j += size) { // j的值每次跳过行数
+                sb.append(s.charAt(j));
+                int position = j + size - i * 2; // 计算斜上字符的坐标
+                if (i != 0 && i != numRows - 1 && position < len) { // 将斜上字符加入到结果中
+                    sb.append(s.charAt(position));
                 }
             }
         }
-        return result;
+        return sb.toString();
     }
 }
 ```
@@ -1526,20 +1528,20 @@ class Solution {
 
         //处理正负号（可能有可能也没有）
         char flag = '+';
-        int i = 0;//记录字符串的索引
+        int index = 0;//记录字符串的索引
         if (str.charAt(0) == '-') {
             flag = '-';
-            i++;//挪到正/负号的下一位
+            index++;//挪到正/负号的下一位
         } else if (str.charAt(0) == '+') {
-            i++;
+            index++;
         }
 
-        //使用double来保存结果
+        //使用double来保存结果,这里用long也会有test cases越界，用BigInteger的话则计算的时候代码较多
         double result = 0;
         //检查条件，i索引不越界，且值在0到9之间
-        while (str.length() > i && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
-            result = result * 10 + (str.charAt(i) - '0');//从左到右每次取一位字符来计算
-            i++;//向右移动索引
+        while (str.length() > index && str.charAt(i) >= '0' && str.charAt(index) <= '9') {
+            result = result * 10 + (str.charAt(index) - '0');//从左到右每次取一位字符来计算
+            index++;//向右移动索引
         }
 
         //如果flag是'-'，是负数，在前面加上负号
@@ -2732,5 +2734,214 @@ Explanation: In this case, the given string "bcbcbc" is the longest because all 
 
 ### 分析
 
+遇到找最大最小字串问题，第一反应滑动窗口行不行。 但是很快这个想法就被否定了，因为滑动窗口（这里是可变滑动窗口）需要扩张和收缩窗口大小，这样做起来比较麻烦。因为题目要求的是奇偶性，而不是类似“元音出现最多的子串”等。
+
+1\) 没了思路，那就试试暴力法吧。暴力法的思路比较朴素和直观。 那就是双层循环找到所有子串，然后对于每一个子串，统计元音个数，如果子串的元音个数都是偶数，则更新答案，最后返回最大的满足条件的子串长度即可。暴力可以用一个小的 trick。枚举所有子串的时候，从最长的子串开始枚举的，这样找到一个满足条件的直接返回就行了（early return），不必再去找较小的子串以及维护最大值。
+
+* 时间复杂度：双层循环找出所有子串的复杂度是O\(n^2\)，统计字串中元音个数复杂度也是$O\(n\)，因此这种算法的时间复杂度为$O\(n^3\)。
+* 空间复杂度：O\(1\)
+
+暴力法可以通过测试。
+
+2\) 上面暴力法思路中对于每一个子串，统计元音个数，仔细观察的话，会发现有很多重复的统计。那么优化这部分的内容就可以获得更好的效率。
+
+对于这种连续的数字问题，这里考虑使用[前缀和](https://oi-wiki.org/basic/prefix-sum/)来优化，做预处理。
+
+经过这种空间换时间的策略之后，时间复杂度会降低到O\(n ^ 2\)，但是相应空间复杂度会上升到O\(n\)，这种取舍在很多情况下是值得的。
+
+3\) 前面的前缀和思路，通过空间（prefix）换取时间的方式降低了时间复杂度。但是时间复杂度仍然是平方，是否可以继续优化呢？
+
+实际上由于我们只关心元音出现的奇偶性，并不关心每一个元音字母具体出现的次数。因此可以使用**`是奇数，是偶数`**两个状态来表示，由于只有两个状态，考虑使用位运算。
+
+使用 5 位的二进制来表示以 i 结尾的字符串中包含各个元音的奇偶性，其中 0 表示偶数，1 表示奇数，并且最低位表示 a，然后依次是 e，i，o，u。比如 `10110` 则表示的是包含偶数个 a 和 o，奇数个 e，i，u。
+
+为什么用 0 表示偶数？1 表示奇数？
+
+其实这个解法还用到了一个性质，这个性质是小学数学知识：
+
+* 如果两个数字奇偶性相同，那么其相减一定是偶数。
+* 如果两个数字奇偶性不同，那么其相减一定是奇数。
+
+看到这里，`为什么用 0 表示偶数？1 表示奇数？`。因为这里我们打算用异或运算，而异或的性质是：
+
+如果对两个二进制做异或，会对其每一位进行位运算，如果相同则位 0，否则位 1。这和上面的性质非常相似。上面说`奇偶性相同则位偶数，否则为奇数`。因此很自然地`用 0 表示偶数？1 表示奇数`会更加方便。
+
+时间复杂度O\(n\)，空间复杂度O\(n\)。
+
 ### 代码
+
+暴力法，O\(n ^ 3\)
+
+```java
+class Solution {
+    public int findTheLongestSubstring(String s) {
+        int len = s.length();
+        char[] vowels = {'a', 'e', 'i', 'o', 'u'};
+        for (int i = len; i >= 0; i--) { // i是offset，从最长的字符串长度len开始
+            for (int j = 0; j < len - i + 1; j++) {// j是起点             
+                String sub = s.substring(j, j + i); // 从最长字符串开始
+                boolean has_odd_vowel = false;
+                
+                for (char vowel : vowels) { // 逐个检查每个元音
+                    if (countVowel(sub, vowel) % 2 != 0) {
+                        has_odd_vowel = true;
+                        break;
+                    }
+                }
+                
+                if (!has_odd_vowel) { // early return
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+    private int countVowel (String sub, char ch) {
+        int result = 0;
+        for (int k = 0; k < sub.length(); k++) {
+            if (ch == sub.charAt(k)) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
+```
+
+前缀和+剪枝，O\(n ^ 2\)
+
+```java
+class Solution {
+    public int findTheLongestSubstring(String s) {
+
+        int len = s.length();
+
+        if (len == 0) {
+            return 0;
+        }
+
+        int[][] preSum = new int[len][5]; // 记录5个元音字母的出现次数
+        
+        // 初始化
+        int start = getIndex(s.charAt(0)); // 找到当前字符在数组中的位置
+        if (start != -1) {
+            preSum[0][start]++;
+        }
+
+        // 计算字符串中每个位置的preSum
+        for (int i = 1; i < len; i++) {
+
+            int index = getIndex(s.charAt(i));
+
+            for (int j = 0; j < 5; j++) { //index分别为0，1，2，3，4
+
+                if (index == j) { // 遇到元音，长度+1
+                    preSum[i][j] = preSum[i - 1][j] + 1;
+                } else { // 遇到辅音
+                    preSum[i][j] = preSum[i - 1][j];
+                }
+            }
+        }
+
+        for (int i = len - 1; i >= 0; i--) { // offset
+            for (int j = 0; j < len - i; j++) {
+                if (checkValid(preSum, s, j, j + i)) { // [)
+                    return i + 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+
+    public boolean checkValid(int[][] preSum, String s, int left, int right) {
+
+        int index = getIndex(s.charAt(left));
+
+        for (int k = 0; k < 5; k++) {
+            if (((preSum[right][k] - preSum[left][k] + (index == k ? 1 : 0)) & 1) == 1) { //根据存储的信息，相减计算当前字串是否有偶数的元音
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    private int getIndex(char ch) {
+
+        if (ch == 'a') 
+            return 0;
+        else if (ch == 'e')
+            return 1;
+        else if (ch == 'i')
+            return 2;
+        else if (ch == 'o')
+            return 3;
+        else if (ch == 'u')
+            return 4;
+        else
+            return -1;
+    }
+}
+```
+
+前缀和+状态压缩，O\(n\)
+
+```java
+class Solution {
+    HashMap<Character, Integer> vowlToBitIndex = new HashMap<Character, Integer>() {
+        {
+            put('a', 1);
+            put('e', 2);
+            put('i', 4);
+            put('o', 8);
+            put('u', 16);
+        }
+    };
+    
+    public int findTheLongestSubstring(String s) {
+        HashMap<Integer, Integer> stateToIndex = new HashMap<>();
+        stateToIndex.put(0, -1);
+        int state = 0, maxLen = 0;
+        for(int i = 0; i < s.length(); ++i) {
+            char cur = s.charAt(i);
+            if(vowlToBitIndex.containsKey(cur)) {
+                // flap the digits of the state. 1-> 0 or 0 -> 1
+                int bitToFlip = vowlToBitIndex.get(cur); 
+                state ^= bitToFlip; 
+            }
+            
+            stateToIndex.putIfAbsent(state, i);
+            maxLen = Math.max(maxLen, i - stateToIndex.get(state));
+        }
+        
+        return maxLen;    
+    }
+}
+```
+
+```python
+
+class Solution:
+    def findTheLongestSubstring(self, s: str) -> int:
+        mapper = {
+            "a": 1,
+            "e": 2,
+            "i": 4,
+            "o": 8,
+            "u": 16
+        }
+        seen = {0: -1}
+        res = cur = 0
+
+        for i in range(len(s)):
+            if s[i] in mapper:
+                cur ^= mapper.get(s[i])
+            # 全部奇偶性都相同，相减一定都是偶数
+            if cur in seen:
+                res = max(res, i - seen.get(cur))
+            else:
+                seen[cur] = i
+        return res
+```
 
