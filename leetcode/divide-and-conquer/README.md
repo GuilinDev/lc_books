@@ -1115,14 +1115,6 @@ class Solution {
 }
 ```
 
-## 62 - Unique Paths
-
-### 原题概述
-
-### 题意和分析
-
-### 代码
-
 ## **64 Minimum Path Sum** 
 
 ### **原题概述**
