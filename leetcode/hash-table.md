@@ -512,16 +512,51 @@ class Solution {
         }
 
         //利用最大堆
-        PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>((a,b)->(b.getValue() - a.getValue()));
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            maxHeap.add(entry);
-        }
+        PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>(
+                (a,b)->(b.getValue() - a.getValue()));
+        
+        maxHeap.addAll(map.entrySet());
 
         List<Integer> result = new ArrayList<>();
         while (result.size() < k) {
             Map.Entry<Integer, Integer> entry = maxHeap.poll();//取出顶部元素并删除
             result.add(entry.getKey());
         }
+        return result;
+    }
+}
+```
+
+同理，用最小堆也可以
+
+```java
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+
+        // hashmap统计出现次数
+        for(int num: nums){
+            map.put(num, map.getOrDefault(num,0) + 1);
+        }
+
+        // 用最小堆准备找到k个
+        PriorityQueue<Map.Entry<Integer, Integer>> minHeap =
+                new PriorityQueue<>(Comparator.comparingInt(Map.Entry::getValue));
+
+        // 遍历hashmap
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
+            minHeap.add(entry);
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+
+        // 找个k个最多出现的值
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = minHeap.poll().getKey();
+        }
+      
         return result;
     }
 }
