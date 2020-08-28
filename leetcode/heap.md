@@ -294,5 +294,113 @@ Explanation: All possible pairs are returned from the sequence: [1,3],[2,3]
 
 ### 分析
 
+1\)  暴力的想法是，维护一个大小为k的大顶堆把所有可能的结果加入堆即可，这没有利用到两个数组是有序的这一条件。  
+时间复杂度 O\(m_n_logk\)
+
+2\) 类似Ugly Number的做法，记录nums1\[i\]在nums2中当前的候选元素 
+
+时间复杂度O\(k\*len\(nums1\)\)
+
+3\) 利用小顶堆堆进一步优化上面方法
+
+ 时间复杂度包括堆的初始化nlogn 和res的更新klogn 总O\(\(k+n\)longn\)
+
 ### 代码
+
+暴力
+
+```java
+class Solution {
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        k = Math.min(k, nums1.length * nums2.length); //注意k的取值
+        if (k == 0) {
+            return result;
+        }
+
+        Queue<int[]> pq = new PriorityQueue<>(k, (o1, o2) -> o2[0] + o2[1] - o1[0] - o1[1]);
+        for (int e1 : nums1)
+            for (int e2 : nums2) {
+                if (pq.size() < k) {
+                    pq.offer(new int[]{e1, e2});
+                } else if (e1 + e2 <= pq.peek()[0] + pq.peek()[1]) {
+                    pq.poll();
+                    pq.offer(new int[]{e1, e2});
+                }
+            }
+        while (k-- > 0) {
+            int[] e = pq.poll();
+            result.add(0, Arrays.asList(e[0], e[1]));
+        }
+
+        return result;
+
+    }
+}
+```
+
+记录一个数组的数在另一个数组位置的方法
+
+```java
+class Solution {
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        k = Math.min(k, nums1.length * nums2.length);
+
+        int[] ptrs = new int[nums1.length]; //ptrs[i]=j表示nums1[i]此时候选元素是nums2[j]
+        while (k-- > 0) {
+            int minIndex = -1, min = 0x7fffffff;
+            for (int i = 0; i < nums1.length; i++) { //在nums[i]的每个候选中挑选最小的【此处可以利用小顶堆快速找到，从而实现优化】
+                if (ptrs[i] < nums2.length && nums1[i] + nums2[ptrs[i]] < min) {
+                    minIndex = i;
+                    min = nums1[i] + nums2[ptrs[i]];
+                }
+            }
+            result.add(Arrays.asList(nums1[minIndex], nums2[ptrs[minIndex]]));
+            ptrs[minIndex]++;
+        }
+        return result;
+    }
+}
+```
+
+最小堆
+
+```java
+class Node {
+    int v; //nums1的元素值
+    int idx; //v对应的在nums2中的候选值索引
+
+    public Node(int _v, int _idx) {
+        v = _v;
+        idx = _idx;
+    }
+}
+
+
+class Solution {
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<List<Integer>> res = new ArrayList<>();
+        k = Math.min(k, nums1.length * nums2.length);
+        if (k == 0) return res;
+
+        Queue<Node> pq = new PriorityQueue<>(nums1.length,
+                (o1, o2) -> o1.v + nums2[o1.idx] - o2.v - nums2[o2.idx]);
+        for (int i = 0; i < nums1.length; i++) {
+            pq.offer(new Node(nums1[i], 0));
+        }
+
+        while (k-- > 0) {
+            res.add(Arrays.asList(pq.peek().v, nums2[pq.peek().idx]));
+            pq.peek().idx++;
+            if (pq.peek().idx == nums2.length)
+                pq.poll();
+            else
+                pq.offer(pq.poll()); //因为pq.peek().idx更新了，需要把堆顶Node取出后再重新放入
+        }
+
+        return res;
+    }
+}
+```
 
