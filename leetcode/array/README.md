@@ -467,9 +467,70 @@ Explanation: In this case, no transaction is done, i.e. max profit = 0.
 
 ### 题意和分析
 
-这道题跟121 Best Time to Buy and Sell Stock相比，可以无限购买，那就从第二天开始算，如果当前的股票价格高于前一日的话，就把差额利润算入到结果当中，如果后面的值更高，那继续把利润加入；虽然例子中说了不能卖了再买，但是如上算法的利润是一样的，所以只需遍历数组，然后把每个数和它后面的数进行比较即可。
+这道题跟121 Best Time to Buy and Sell Stock相比，可以无限购买。股票系列原始状态转移方程，三个维度分别是 天数-可以交易k次-是否持有股票： 
+
+今天不持有股票： dp\[i\]\[k\]\[0\] = max\(dp\[i-1\]\[k\]\[0\], dp\[i-1\]\[k\]\[1\] + prices\[i\]\) 
+
+今天持有股票： dp\[i\]\[k\]\[1\] = max\(dp\[i-1\]\[k\]\[1\], dp\[i-1\]\[k-1\]\[0\] - prices\[i\]\) = max\(dp\[i-1\]\[k\]\[1\], dp\[i-1\]\[k\]\[0\] - prices\[i\]\)
+
+这道题数组中的 k 是无限次可交易，不会改变了，也就是说不需要记录 k 这个状态了，所以状态转移方程为： 
+
+今天不持有股票： dp\[i\]\[0\] = max\(dp\[i-1\]\[0\], dp\[i-1\]\[1\] + prices\[i\]\) 
+
+今天持有股票： dp\[i\]\[1\] = max\(dp\[i-1\]\[1\], dp\[i-1\]\[0\] - prices\[i\]\)
 
 ### 代码
+
+DP
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int day = prices.length;
+        
+        if (day <= 1) {
+            return 0;
+        }
+                
+        // dp[][]表示利润，两个维度表示天数和是否有股票，0表示没有，1表示有
+        int[][] dp = new int[day][2]; 
+        
+        dp[0][0] = 0;           // 第1天，手中无股票
+        dp[0][1] = -prices[0];  // 第1天手中有股票（在第1天买入）
+        
+        for (int i = 1; i < day; i++) {            
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);          
+        }
+        return dp[day - 1][0]; //最后卖出股票肯定比没卖出股票(dp[day - 1][0])利润要大
+    }
+}
+```
+
+考虑状态压缩
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int len = prices.length;
+        
+        if (len <= 1) {
+            return 0;
+        }
+                
+        int dp_i_0 = 0;
+        int dp_i_1 = Integer.MIN_VALUE;
+        for (int i = 0; i < len; i++) {
+            int temp = dp_i_0;
+            dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+            dp_i_1 = Math.max(dp_i_1, temp - prices[i]);
+        }
+        return dp_i_0;
+    }
+}
+```
+
+直接计算，从第二天开始算，如果当前的股票价格高于前一日的话，就把差额利润算入到结果当中，如果后面的值更高，那继续把利润加入；虽然例子中说了不能卖了再买，但是如上算法的利润是一样的，所以只需遍历数组，然后把每个数和它后面的数进行比较即可。
 
 ```java
 class Solution {
