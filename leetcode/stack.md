@@ -166,7 +166,7 @@ class MinStack {
         //如果两个栈的顶部元素相等，那都要弹出，最小值不能留在第二个栈里面
         int x = stack1.pop();
         if (stack2.peek() == x) {
-            stack2.pop(); // 仔细想想，只要stack1中还有元素，stack2中的最小值就不会pop完
+            stack2.pop();
         }
     }
 
@@ -202,7 +202,6 @@ class MinStack {
     }
 
     public void push(int x) {
-        // 把可能的倒数第二小的值存在第二位
         if (x <= min_val) {
             stack.push(min_val);
             min_val = x;
@@ -211,8 +210,7 @@ class MinStack {
     }
 
     public void pop() {
-        // 同样这里要pop两次，栈顶元素和可能的刚才第二小元素
-        if (stack.pop() == min_val) { // 如果不等于，说明之前倒数第二个元素不是倒数第二小
+        if (stack.pop() == min_val) {
             min_val = stack.pop();
         }
     }
@@ -907,13 +905,11 @@ queue.empty(); // returns false
 
 ### 题意和分析
 
-用栈来实现队列，刚好和225-Implement Stack using Queues相反。这个现实主要是用在读写分离的情况下，[函数式编程里面也常实现](https://stackoverflow.com/questions/2050120/why-use-two-stacks-to-make-a-queue/2050402#2050402)。
-
-栈和队列的核心不同点就是栈是先进后出，而队列是先进先出，所以要用栈的先进后出的特性来模拟出队列的先进先出。那么怎么做呢，只要我们在插入元素的时候每次都从前面插入即可，比如如果一个队列是1,2,3,4，那么在栈中保存为4,3,2,1，那么返回栈顶元素1，也就是队列的首元素，则问题迎刃而解。所以此题的难度是push函数，我们需要一个辅助栈s2，把s的元素也逆着顺序存入temp中，此时加入新元素x，再把temp中的元素存回来，这样就是我们要的顺序了，其他三个操作也就直接调用栈的操作即可。
+用栈来实现队列，刚好和225-Implement Stack using Queues相反。栈和队列的核心不同点就是栈是先进后出，而队列是先进先出，所以要用栈的先进后出的特性来模拟出队列的先进先出。那么怎么做呢，只要我们在插入元素的时候每次都从前面插入即可，比如如果一个队列是1,2,3,4，那么在栈中保存为4,3,2,1，那么返回栈顶元素1，也就是队列的首元素，则问题迎刃而解。所以此题的难度是push函数，我们需要一个辅助栈s2，把s的元素也逆着顺序存入temp中，此时加入新元素x，再把temp中的元素存回来，这样就是我们要的顺序了，其他三个操作也就直接调用栈的操作即可。
 
 ### 代码
 
-把逻辑都写在push里面
+另外一种写法，把逻辑都写在push里面
 
 ```java
 class MyQueue {
