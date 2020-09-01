@@ -5742,7 +5742,7 @@ class Solution {
 }
 ```
 
-## 776
+## 776 Split BST
 
 ### 题目
 
