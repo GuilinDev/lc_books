@@ -5590,3 +5590,155 @@ class Solution {
 }
 ```
 
+## 538 Convert BST to Greater Tree
+
+### 题目
+
+Given a Binary Search Tree \(BST\), convert it to a Greater Tree such that every key of the original BST is changed to the original key plus sum of all keys greater than the original key in BST.
+
+**Example:**
+
+```text
+Input: The root of a Binary Search Tree like this:
+              5
+            /   \
+           2     13
+
+Output: The root of a Greater Tree like this:
+             18
+            /   \
+          20     13
+```
+
+**Note:** This question is the same as 1038: [https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/](https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/)
+
+### 分析
+
+先递归到右子树，这样加的值会少一些；然后做相加操作，然后递归到左子树。或者维护一个变量，记录右子树中应该加的sum，然后从右边开始遍历。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int sum = 0;
+    public TreeNode convertBST(TreeNode root) {
+        inorder(root);
+        return root;
+    }
+    private void inorder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        inorder(node.right); // 直到最右子树
+        node.val += sum;
+        sum = node.val; //已经加过了
+        inorder(node.left); // 最后遍历左子树
+    }
+}
+```
+
+```java
+class Solution {
+    public TreeNode convertBST(TreeNode root) {
+        dfs(root, 0);
+        return root;
+    }
+    public int dfs(TreeNode root, int val) {
+        if(root == null) {
+            return val;
+        }
+        int right = dfs(root.right, val);
+        int left = dfs(root.left, root.val + right);
+        
+        root.val = root.val + right;
+        
+        return left;
+    }
+}
+```
+
+## 1038 Binary Search Tree to Greater Sum Tree
+
+### 题目 
+
+Given the root of a binary **search** tree with distinct values, modify it so that every `node` has a new value equal to the sum of the values of the original tree that are greater than or equal to `node.val`.
+
+As a reminder, a _binary search tree_ is a tree that satisfies these constraints:
+
+* The left subtree of a node contains only nodes with keys **less than** the node's key.
+* The right subtree of a node contains only nodes with keys **greater than** the node's key.
+* Both the left and right subtrees must also be binary search trees.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2019/05/02/tree.png)
+
+```text
+Input: [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+```
+
+**Constraints:**
+
+1. The number of nodes in the tree is between `1` and `100`.
+2. Each node will have value between `0` and `100`.
+3. The given tree is a binary search tree.
+
+**Note:** This question is the same as 538: [https://leetcode.com/problems/convert-bst-to-greater-tree/](https://leetcode.com/problems/convert-bst-to-greater-tree/)
+
+### 分析 
+
+与538完全一样。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode bstToGst(TreeNode root) {
+        dfs(root, 0);
+        return root;
+    }
+    private int dfs(TreeNode node, int sum) {
+        if (node == null) {
+            return sum;
+        }
+        int right = dfs(node.right, sum); // 先计算当前节点左子树的sum
+        int left = dfs(node.left, node.val + right); // 递归右子树的值
+        
+        node.val += right; //当前节点需要加上右子树的值
+        
+        return left; // 最后遍历的地方
+    }
+}
+```
+
