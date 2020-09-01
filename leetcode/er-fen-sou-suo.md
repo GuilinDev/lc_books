@@ -420,3 +420,107 @@ public class Solution extends VersionControl {
 }
 ```
 
+## 1011 Capacity To Ship Packages Within D Days
+
+### 题目
+
+A conveyor belt has packages that must be shipped from one port to another within `D` days.
+
+The `i`-th package on the conveyor belt has a weight of `weights[i]`.  Each day, we load the ship with packages on the conveyor belt \(in the order given by `weights`\). We may not load more weight than the maximum weight capacity of the ship.
+
+Return the least weight capacity of the ship that will result in all the packages on the conveyor belt being shipped within `D` days.
+
+**Example 1:**
+
+```text
+Input: weights = [1,2,3,4,5,6,7,8,9,10], D = 5
+Output: 15
+Explanation: 
+A ship capacity of 15 is the minimum to ship all the packages in 5 days like this:
+1st day: 1, 2, 3, 4, 5
+2nd day: 6, 7
+3rd day: 8
+4th day: 9
+5th day: 10
+
+Note that the cargo must be shipped in the order given, so using a ship of capacity 14 and splitting the packages into parts like (2, 3, 4, 5), (1, 6, 7), (8), (9), (10) is not allowed. 
+```
+
+**Example 2:**
+
+```text
+Input: weights = [3,2,2,4,1,4], D = 3
+Output: 6
+Explanation: 
+A ship capacity of 6 is the minimum to ship all the packages in 3 days like this:
+1st day: 3, 2
+2nd day: 2, 4
+3rd day: 1, 4
+```
+
+**Example 3:**
+
+```text
+Input: weights = [1,2,3,1,1], D = 4
+Output: 3
+Explanation: 
+1st day: 1
+2nd day: 2
+3rd day: 3
+4th day: 1, 1
+```
+
+**Constraints:**
+
+* `1 <= D <= weights.length <= 50000`
+* `1 <= weights[i] <= 500`
+
+### 分析
+
+题目很绕，首先比较直观的方法是可以合并数组，以第一个例子，重量列表 \[1,2,3,4,5,6,7,8,9,10\] 和天数 D = 5为例，目标就是要生成一个新列表，其中有 5 个元素，每个元素代表每天搬运的总重量，新列表中最大值即船舶最小运载能力。任务就变成了将重量列表中的元素合并，直至其长度与天数一致。
+
+现在重量列表有 10 个元素，最大值 10 假设为每天搬运上限的话，可以合并前 4 个元素求和得到 10 ，这样列表就变成了 7 个元素，即合并出一个 7 天完成搬运任务的方案。但仍达不到我们 5 天的目标，继续合并，如图：
+
+![](../.gitbook/assets/image%20%28114%29.png)
+
+最终合并出的 5 个元素，代表 要求5 天完成任务的情况下每天运载的重量，最小的船舶运载能力即其最大值 15。根据这个思路可以写出一个很麻烦的代码，分析的时候可用，代码不用掌握。
+
+这道题可以用二分法来解，想到这个办法需要比较扎实的算法理解，首先二分法的左边界left = max\(weights\)，表示起码要能装下一个货物；右边界right = sum\(weights\)，表示最大能装下所有货物。现在的问题就是找到中间的一个最小的capacity，恰好能让所有货物在D天内发出。
+
+从mid = \(left + right\) / 2这个中点的capacity开始查是否合适，如果当前货物（累加）大于mid，就将所需的货柜+1并重置当前货物，这样遍历完一次所有货物后得到一个need表示以mid为capacity，所需的总天数。如果need &gt; D，说明当前货柜太小了，需要left = mid + 1，反之则是货柜太大了，需要right == mid，等于可以继续往左看一下，最后返回left。
+
+### 代码
+
+```java
+class Solution {
+    public int shipWithinDays(int[] weights, int D) {
+        int left = 0, right = 0;
+        for (int weight : weights) { // 找到左右边界
+            left = Math.max(left, weight);
+            right += weight;
+        }
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int need = 1;
+            int curLoad = 0;
+            
+            for (int weight : weights) {
+                if (curLoad + weight > mid) { // 达到上限了，需要一个新的一天新货柜
+                    need++;
+                    curLoad = 0;
+                }
+                curLoad += weight;
+            }
+            
+            if (need > D) { // 需要的天数太多，需要扩容
+                left = mid + 1;
+            } else {
+                right = mid; //如果等于mid，还可以继续往左边走看看能否更小
+            }
+        }
+        return left;
+    }
+}
+```
+
