@@ -2479,3 +2479,192 @@ class Solution {
  
 ```
 
+## 887 Super Egg Drop
+
+### 题目
+
+You are given `K` eggs, and you have access to a building with `N` floors from `1` to `N`. 
+
+Each egg is identical in function, and if an egg breaks, you cannot drop it again.
+
+You know that there exists a floor `F` with `0 <= F <= N` such that any egg dropped at a floor higher than `F` will break, and any egg dropped at or below floor `F` will not break.
+
+Each _move_, you may take an egg \(if you have an unbroken one\) and drop it from any floor `X` \(with `1 <= X <= N`\). 
+
+Your goal is to know **with certainty** what the value of `F` is.
+
+What is the minimum number of moves that you need to know with certainty what `F` is, regardless of the initial value of `F`?
+
+1. 
+**Example 1:**
+
+```text
+Input: K = 1, N = 2
+Output: 2
+Explanation: 
+Drop the egg from floor 1.  If it breaks, we know with certainty that F = 0.
+Otherwise, drop the egg from floor 2.  If it breaks, we know with certainty that F = 1.
+If it didn't break, then we know with certainty F = 2.
+Hence, we needed 2 moves in the worst case to know what F is with certainty.
+```
+
+**Example 2:**
+
+```text
+Input: K = 2, N = 6
+Output: 3
+```
+
+**Example 3:**
+
+```text
+Input: K = 3, N = 14
+Output: 4
+```
+
+**Note:**
+
+1. `1 <= K <= 100`
+2. `1 <= N <= 10000`
+
+### 分析
+
+若干层楼，若干个鸡蛋，求算出最少的尝试次数，找到鸡蛋恰好摔不碎的那层楼。国内大厂以及谷歌脸书面试都经常考察这道题，只不过他们觉得扔鸡蛋太浪费，改成扔杯子，扔破碗什么的。这道题的解法技巧很多，光动态规划就好几种效率不同的思路，最后还有一种极其高效数学解法。
+
+这里只关注一种效率不算最高，但非常经典的DP解法 - 记忆化搜索。
+
+比方说**现在先不管鸡蛋个数的限制**，有 7 层楼，怎么去找鸡蛋恰好摔碎的那层楼？
+
+最原始的方式就是线性扫描：先在 1 楼扔一下，没碎，再去 2 楼扔一下，没碎，再去 3 楼……
+
+以这种策略，**最坏**情况应该就是我试到第 7 层鸡蛋也没碎（`F = 7`），也就是扔了 7 次鸡蛋，线性时间。
+
+现在再来理解一下什么叫「至少」要扔几次。依然不考虑鸡蛋个数限制，同样是 7 层楼，可以优化策略。
+
+最好的策略是使用二分查找思路，我先去第\(left + right \)/ 2 =  `(1 + 7) / 2 = 4` 层扔一下：
+
+如果碎了说明 `F` 小于 4，就去第 `(1 + 3) / 2 = 2` 层试……
+
+如果没碎说明 `F` 大于等于 4，就去第 `(5 + 7) / 2 = 6` 层试……
+
+以这种策略，**最坏**情况应该是试到第 7 层鸡蛋还没碎（`F = 7`），或者鸡蛋一直碎到第 1 层（`F = 0`）。然而无论那种最坏情况，只需要试 `log7` 向上取整等于 3 次，比刚才尝试 7 次要少，这就是所谓的**至少**要扔几次。这个是对数时间。
+
+所以实际上，如果不限制鸡蛋个数的话，二分思路显然可以得到最少尝试的次数，但问题是，**现在给你了鸡蛋个数的限制 `K`，直接使用二分思路就不行了**。比如说只给 1 个鸡蛋，7 层楼，你敢用二分吗？直接去第 4 层扔一下，如果鸡蛋没碎还好，但如果碎了你就没有鸡蛋继续测试了，无法确定鸡蛋恰好摔不碎的楼层 `F` 了。这种情况下只能用线性扫描的方法，算法返回结果应该是 7。
+
+如果先用二分查找，等到只剩 1 个鸡蛋的时候再执行线性扫描，这样得到的结果是不是就是最少的扔鸡蛋次数呢？并不是，比如说把楼层变高一些，100 层，给你 2 个鸡蛋，你在 50 层扔一下，碎了，那就只能线性扫描 1～49 层了，最坏情况下要扔 50 次，依然是线性扫描。
+
+动态规划步骤：
+
+1） 状态定义，很明显，就是当前拥有的鸡蛋数K和需要测试的楼层数N。随着测试的进行，鸡蛋个数可能减少，楼层的搜索范围会减小，这就是状态的变化。 
+
+2） 状态转移，其实就是去选择哪层楼扔鸡蛋。回顾刚才的线性扫描和二分思路，二分查找每次选择到楼层区间的中间去扔鸡蛋，而线性扫描选择一层层向上测试。不同的选择会造成状态的转移。
+
+有以上两点，可以肯定是个二维的dp数组或者带有两个状态参数的dp函数来表示状态转移；外加一个 for 循环来遍历所有选择，择最优的选择更新结果:
+
+```java
+// 当前状态为 (K 个鸡蛋，N 层楼)
+// 返回当前这个状态下的最优结果
+function dp(K, N):
+    int res
+    for 1 <= i <= N:
+        res = min(res, 这次在第 i 层楼扔鸡蛋)
+    return res
+```
+
+这段伪码还没有展示递归和状态转移。
+
+3）在第`i`层楼扔了鸡蛋之后，可能出现两种情况：鸡蛋碎了，鸡蛋没碎。**注意，这时候状态转移**：
+
+* **如果鸡蛋碎了**，那么鸡蛋的个数`K`应该减一，搜索的楼层区间应该从`[1..N]`变为`[1..i-1]`共`i-1`层楼；
+* **如果鸡蛋没碎**，那么鸡蛋的个数`K`不变，搜索的楼层区间应该从 `[1..N]`变为`[i+1..N]`共`N-i`层楼。
+*  在第`i`层楼扔鸡蛋如果没碎，楼层的搜索区间缩小至上面的楼层，是否应该包含第`i`层楼？不必，因为已经包含了。 F 是可以等于 0 的，向上递归后，第`i`层楼其实就相当于第 0 层，可以被取到。
+
+ 要求的是**最坏情况**下扔鸡蛋的次数，所以鸡蛋在第`i`层楼碎没碎，取决于那种情况的结果**更大**：
+
+```java
+function dp(K, N):
+    for 1 <= i <= N:
+        // 最坏情况下的最少扔鸡蛋次数
+        res = min(res, 
+                  max( 
+                        dp(K - 1, i - 1), # 碎
+                        dp(K, N - i)      # 没碎
+                     ) + 1 # 在第 i 楼扔了一次
+                 )
+    return res
+```
+
+递归的 base case 很容易理解：
+
+* 当楼层数`N`等于 0 时，显然不需要扔鸡蛋；
+* 当鸡蛋数`K`为 1 时，显然只能线性扫描所有楼层；
+
+### 代码
+
+**动态规划算法的时间复杂度就是子问题个数 × 函数本身的复杂度**。函数本身的复杂度就是忽略递归部分的复杂度，这里`dp`函数中有一个 for 循环，所以函数本身的复杂度是 O\(N\)。子问题个数也就是不同状态组合的总数，显然是两个状态的乘积，也就是 O\(KN\)。
+
+所以算法的总时间复杂度是 O\(K\*N^2\), 空间复杂度为子问题个数，即 O\(KN\)。
+
+```java
+class Solution {
+    public int superEggDrop(int K, int N) {
+        int[][] memo = new int[K + 1][N + 1];
+        return helper(K, N, memo);
+    }
+    private int helper(int eggs, int floors, int[][] memo) {
+
+        if (floors <= 1) {
+            return floors;
+        }
+        if (eggs == 1) {
+            return floors;
+        }
+        
+        // 记忆化搜索
+        if (memo[eggs][floors] > 0) {
+            return memo[eggs][floors];
+        }
+        
+        // 穷举
+        int low = 1, high = floors, result = floors;
+
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+
+            int left = helper(eggs - 1, mid - 1, memo);
+            int right = helper(eggs, floors - mid, memo);
+
+            result = Math.min(result, Math.max(left, right) + 1);
+
+            if (left == right) {// Converge
+                break; 
+            } else if (left < right) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        memo[eggs][floors] = result; // 记忆化
+        
+        return result;
+    }
+}
+```
+
+递推
+
+```java
+class Solution {
+    public int superEggDrop(int K, int N) {
+        int[][] dp = new int[N + 1][K + 1];
+        int m = 0;
+        while (dp[m][K] < N) {
+            m++;
+            for (int k = 1; k <= K; ++k)
+                dp[m][k] = dp[m - 1][k - 1] + dp[m - 1][k] + 1;
+        }
+        return m;
+    }
+}
+```
+
