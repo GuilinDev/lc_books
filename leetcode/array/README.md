@@ -378,7 +378,8 @@ class Solution {
             //移动较矮的那条线的index
             if (height[left] < height[right]) {
                 left++;
-            } else {
+            } else { 
+            // 如果两根柱子相等高度，移动任何一根都可以，因为长度变小了，就算当前柱子为最低，也不会跳过最大值
                 right--;
             }
         }
