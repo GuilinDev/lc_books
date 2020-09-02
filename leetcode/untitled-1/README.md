@@ -492,7 +492,7 @@ class Solution {
 }
 ```
 
-递归\([层序遍历各种题总结](https://leetcode.com/problems/binary-tree-level-order-traversal/discuss/114449/A-general-approach-to-level-order-traversal-questions-in-Java)\)
+递归\([层序遍历各种题总结](https://leetcode.com/problems/binary-tree-level-order-traversal/discuss/114449/A-general-approach-to-level-order-traversal-questions-in-Java)-DFS实现\)
 
 ```java
 /**
@@ -1940,7 +1940,13 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
@@ -5394,6 +5400,427 @@ class Solution {
         // 只将根和子树比较
         return Math.max(dfs(node.left, minValue, maxValue), dfs(node.right, minValue, maxValue));
     }
+}
+```
+
+## 863 All Nodes Distance K in Binary Tree
+
+### 题目
+
+We are given a binary tree \(with root node `root`\), a `target` node, and an integer value `K`.
+
+Return a list of the values of all nodes that have a distance `K` from the `target` node.  The answer can be returned in any order.
+
+1. 
+**Example 1:**
+
+```text
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, K = 2
+
+Output: [7,4,1]
+
+Explanation: 
+The nodes that are a distance 2 from the target node (with value 5)
+have values 7, 4, and 1.
+
+
+
+Note that the inputs "root" and "target" are actually TreeNodes.
+The descriptions of the inputs above are just serializations of these objects.
+```
+
+**Note:**
+
+1. The given tree is non-empty.
+2. Each node in the tree has unique values `0 <= node.val <= 500`.
+3. The `target` node is a node in the tree.
+4. `0 <= K <= 1000`.
+
+### 分析
+
+1\) DFS -  对所有节点添加一个指向父节点的引用，之后做DFS，找到所有距离 `target` 节点 `K` 距离的节点。具体做法：
+
+* 先找到该节点，并记录父信息； 
+* 除了路径上的父信息，其它无用删掉； 
+* dfs, 中间利用父信息来避免重复遍历；
+
+时间复杂度O\(N\)，空间复杂度O\(N\)
+
+2\) BFS，把树当作图来处理，从起始点BFS搜索路径长度为K的集合就好了，二叉树父节点到子节点好办，问题是子节点是没法回溯其父节点的，因此需要先建立左右子节点到父节点的关系，用哈希表保存。
+
+时间复杂度O\(N\)，空间复杂度O\(N\)
+
+### 代码
+
+DFS
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        Map<TreeNode, TreeNode> parents = new HashMap<>(); // 记录父节点信息
+        parents.put(root, null);
+        
+        findNode(root, target, parents); // 在寻找目标节点的过程中，记录父节点信息，左右子节点为key，父节点为value
+        
+        Map<TreeNode, TreeNode> pathParents = new HashMap<>();
+        
+        cleanNonPathParent(target, parents, pathParents);
+        List<Integer> res = new ArrayList<>();
+        dfs(target, K , pathParents, res);
+        
+        return res;
+    }
+    /* 找到目标节点，从跟到目标节点的路径上的节点同时需要保存父节点，哈希保存 */
+    private boolean findNode(TreeNode node, TreeNode target, Map<TreeNode, TreeNode> parents) {
+        if(node == null) { // base case1
+            return false;
+        }
+        if(node == target) { // base case2
+            return true;
+        }
+        if(node.left != null) {
+            parents.put(node.left, node);
+            if(findNode(node.left, target, parents)){
+                return true;
+            }
+        }
+        if(node.right != null ) {
+            parents.put(node.right, node);
+            return findNode(node.right, target, parents);
+        }
+        return false;
+    }
+    /* 找到root - > target 路径上的父节点信息 ，其它信息无用且会干扰后续dfs过程*/
+    private void cleanNonPathParent(TreeNode target, Map<TreeNode, TreeNode> parents, Map<TreeNode, TreeNode> pathParents){
+        while(target != null ){
+            pathParents.put(target, parents.get(target));
+            target = parents.get(target);
+        }
+    }
+    
+    /* dfs, 有路径父节点的还要往上查询 */
+    private void dfs(TreeNode root, int k, Map<TreeNode, TreeNode> pathParents, List<Integer> res ){
+        if( root == null ){
+            return;
+        }
+        k--;
+        if( k  < 0 ){
+            res.add(root.val);
+            return;
+        }
+        if(!pathParents.containsKey(root.left) && root.left != null){
+            dfs(root.left, k, pathParents, res);
+        }
+        if(!pathParents.containsKey(root.right) && root.right != null){
+            dfs(root.right, k, pathParents, res);
+        }
+        if(pathParents.containsKey(root) && pathParents.get(root) !=null){
+            dfs(pathParents.get(root), k, pathParents, res);
+        }
+    }
+}
+```
+
+BFS
+
+```java
+class Solution {
+    //key 是子节点 value 是父节点
+    private HashMap<TreeNode, TreeNode> map = new HashMap<>();
+    //key 是子节点 value是是否访问
+    private HashMap<TreeNode, Boolean> visited = new HashMap<>();
+
+    private LinkedList<Integer> result = new LinkedList<>();
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        if(k == 0) {
+            result.add(target.val);
+            return result;
+        }
+
+        bfs(root, null);
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(target);
+        visited.put(target, true);
+
+        int step = 0;
+        while(!queue.isEmpty()){
+            step++;
+            int size = queue.size();
+            for (int i = 0; i < size ; i++) {
+                TreeNode temp = queue.poll();
+                if (temp.left != null && !visited.get(temp.left)){
+                    if(step == k) result.add(temp.left.val);
+                    queue.add(temp.left);
+                    visited.put(temp.left, true);
+                }
+                if (temp.right != null && !visited.get(temp.right)){
+                    if(step == k) result.add(temp.right.val);
+                    queue.add(temp.right);
+                    visited.put(temp.right, true);
+                }
+                TreeNode parent = map.get(temp);
+                if(parent != null && !visited.get(parent)){
+                    if(step == k) result.add(parent.val);
+                    queue.add(parent);
+                    visited.put(parent, true);
+                }
+            }
+            if(step == k) break;
+        }
+        return result;
+    }
+
+    private void bfs(TreeNode node, TreeNode parent) {
+        if(node == null) return;
+        visited.put(node, false);
+        map.put(node, parent);
+        bfs(node.left, node);
+        bfs(node.right, node);
+    }
+}
+```
+
+## 538 Convert BST to Greater Tree
+
+### 题目
+
+Given a Binary Search Tree \(BST\), convert it to a Greater Tree such that every key of the original BST is changed to the original key plus sum of all keys greater than the original key in BST.
+
+**Example:**
+
+```text
+Input: The root of a Binary Search Tree like this:
+              5
+            /   \
+           2     13
+
+Output: The root of a Greater Tree like this:
+             18
+            /   \
+          20     13
+```
+
+**Note:** This question is the same as 1038: [https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/](https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/)
+
+### 分析
+
+先递归到右子树，这样加的值会少一些；然后做相加操作，然后递归到左子树。或者维护一个变量，记录右子树中应该加的sum，然后从右边开始遍历。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int sum = 0;
+    public TreeNode convertBST(TreeNode root) {
+        inorder(root);
+        return root;
+    }
+    private void inorder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        inorder(node.right); // 直到最右子树
+        node.val += sum;
+        sum = node.val; //已经加过了
+        inorder(node.left); // 最后遍历左子树
+    }
+}
+```
+
+```java
+class Solution {
+    public TreeNode convertBST(TreeNode root) {
+        dfs(root, 0);
+        return root;
+    }
+    public int dfs(TreeNode root, int val) {
+        if(root == null) {
+            return val;
+        }
+        int right = dfs(root.right, val);
+        int left = dfs(root.left, root.val + right);
+        
+        root.val = root.val + right;
+        
+        return left;
+    }
+}
+```
+
+## 1038 Binary Search Tree to Greater Sum Tree
+
+### 题目 
+
+Given the root of a binary **search** tree with distinct values, modify it so that every `node` has a new value equal to the sum of the values of the original tree that are greater than or equal to `node.val`.
+
+As a reminder, a _binary search tree_ is a tree that satisfies these constraints:
+
+* The left subtree of a node contains only nodes with keys **less than** the node's key.
+* The right subtree of a node contains only nodes with keys **greater than** the node's key.
+* Both the left and right subtrees must also be binary search trees.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2019/05/02/tree.png)
+
+```text
+Input: [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+```
+
+**Constraints:**
+
+1. The number of nodes in the tree is between `1` and `100`.
+2. Each node will have value between `0` and `100`.
+3. The given tree is a binary search tree.
+
+**Note:** This question is the same as 538: [https://leetcode.com/problems/convert-bst-to-greater-tree/](https://leetcode.com/problems/convert-bst-to-greater-tree/)
+
+### 分析 
+
+与538完全一样。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode bstToGst(TreeNode root) {
+        dfs(root, 0);
+        return root;
+    }
+    private int dfs(TreeNode node, int sum) {
+        if (node == null) {
+            return sum;
+        }
+        int right = dfs(node.right, sum); // 先计算当前节点左子树的sum
+        int left = dfs(node.left, node.val + right); // 递归右子树的值
+        
+        node.val += right; //当前节点需要加上右子树的值
+        
+        return left; // 最后遍历的地方
+    }
+}
+```
+
+## 776 Split BST
+
+### 题目
+
+Given a Binary Search Tree \(BST\) with root node `root`, and a target value `V`, split the tree into two subtrees where one subtree has nodes that are all smaller or equal to the target value, while the other subtree has all nodes that are greater than the target value.  It's not necessarily the case that the tree contains a node with value `V`.
+
+Additionally, most of the structure of the original tree should remain.  Formally, for any child C with parent P in the original tree, if they are both in the same subtree after the split, then node C should still have the parent P.
+
+You should output the root TreeNode of both subtrees after splitting, in any order.
+
+**Example 1:**
+
+```text
+Input: root = [4,2,6,1,3,5,7], V = 2
+Output: [[2,1],[4,3,6,null,null,5,7]]
+Explanation:
+Note that root, output[0], and output[1] are TreeNode objects, not arrays.
+
+The given tree [4,2,6,1,3,5,7] is represented by the following diagram:
+
+          4
+        /   \
+      2      6
+     / \    / \
+    1   3  5   7
+
+while the diagrams for the outputs are:
+
+          4
+        /   \
+      3      6      and    2
+            / \           /
+           5   7         1
+```
+
+**Note:**
+
+1. The size of the BST will not exceed `50`.
+2. The BST is always valid and each node's value is different.
+
+### 分析
+
+树的题目用递归。考虑当前root, 处理完后, 会返回两棵树，一个较大书，一颗较小树。
+
+如果当前 root.val &lt;= V, 那么所有的左子树root.left（包含root）都在较小树中,这时候将右子树split成较小部分和较大部分，并且root需要连接到右子树的较小部分（递归得到）; 如果root.val &gt; V也是类似的情况。
+
+时间复杂度O\(logn\)，如果是balanced BST. 最坏情况O\(n\)如果不平衡的话.
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode[] splitBST(TreeNode root, int V) {
+        if(root==null) {
+            return new TreeNode[]{null, null};
+        }
+        
+        TreeNode[] splitted;
+        if(root.val<= V) {
+            splitted = splitBST(root.right, V);
+            root.right = splitted[0]; //连接右子树的较小部分
+            splitted[0] = root;
+        } else {
+            splitted = splitBST(root.left, V);
+            root.left = splitted[1]; //连接左子树中的较大部分
+            splitted[1] = root;
+        }
+        
+        return splitted;
+    }    
 }
 ```
 

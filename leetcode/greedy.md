@@ -288,7 +288,7 @@ You can assume that you can always reach the last index.
 
 上一道题55 Jump Game是判断能否到达最后，这一道题是找出步数最少的走法；
 
-LC的讨论里面，大部分都是贪婪算法的思路（其实也是一位数组的BFS），每次在可跳范围内选择可以使得跳的更远的位置。
+LC的讨论里面，大部分都是贪婪算法的思路（其实也是一维数组的BFS），每次在可跳范围内选择可以使得跳的更远的位置。
 
 如下图，开始的位置是 2，可跳的范围是橙色的。然后因为 3 可以跳的更远，所以选择跳到 3 的位置。
 
@@ -307,44 +307,21 @@ Greedy，时间O\(n\)，空间O\(1\)
 ```java
 class Solution {
     public int jump(int[] nums) {
-        int currEnd = 0;
-        int steps = 0;
-        int currFarthest = 0;
-        for (int i = 0; i < nums.length - 1; i++) { // 检查到倒数第二个元素，这样才有“下一个”元素
-            // 每遇到一个新数就，就判断一下最远可以跳到的距离
-            // 每次找局部最优，最后达到全局最优
-            currFarthest = Math.max(currFarthest, nums[i] + i);
-            if (i == currEnd) {//遇到边界，就更新边界，并且步数加一
-                currEnd = currFarthest;
+        int currEnd = 0; // 当前数能达到的最远距离
+        int steps = 0; // 返回结果
+        int currFar = 0; // 当前数和之前一起考虑所能达到的最远距离
+        for (int i = 0; i <= nums.length - 1; i++) { // 检查每一个数的最大跳力            
+            if (i > currEnd) {//当前已有的(上个数贡献的)跳力已尽（边界已到），需要再跳一次去当前能达到的最远边界currFar
+                currEnd = currFar;
                 steps++;
             }
+            // 每遇到一个新数就，就判断一下最远可以跳到的距离
+            currFar = Math.max(currFar, nums[i] + i);
         }
         return steps;
     }
 }
 ```
-
-另一个写法
-
-```java
-class Solution {
-    public int jump(int[] nums) {
-        int step = 0;
-        int last = 0;//上一步能到达的最远距离
-        int curr = 0;//当前结点最远能覆盖的距离
-        for (int i = 0; i < nums.length; i++) {
-            if (i > last) {//上一步不能到达，得再跳一次了，步数+1
-                last = curr;
-                step++;
-            }
-            curr = Math.max(curr, i + nums[i]);
-        }
-        return step;
-    }
-}
-```
-
-
 
 ## 135 Candy
 
@@ -557,6 +534,168 @@ class Solution {
             }
         }
         return arrows;
+    }
+}
+```
+
+## 455 Assign Cookies
+
+### 题目
+
+Assume you are an awesome parent and want to give your children some cookies. But, you should give each child at most one cookie. Each child i has a greed factor gi, which is the minimum size of a cookie that the child will be content with; and each cookie j has a size sj. If sj &gt;= gi, we can assign the cookie j to the child i, and the child i will be content. Your goal is to maximize the number of your content children and output the maximum number.
+
+**Note:**  
+You may assume the greed factor is always positive.  
+You cannot assign more than one cookie to one child.
+
+**Example 1:**  
+
+
+```text
+Input: [1,2,3], [1,1]
+
+Output: 1
+
+Explanation: You have 3 children and 2 cookies. The greed factors of 3 children are 1, 2, 3. 
+And even though you have 2 cookies, since their size is both 1, you could only make the child whose greed factor is 1 content.
+You need to output 1.
+```
+
+**Example 2:**  
+
+
+```text
+Input: [1,2], [1,2,3]
+
+Output: 2
+
+Explanation: You have 2 children and 3 cookies. The greed factors of 2 children are 1, 2. 
+You have 3 cookies and their sizes are big enough to gratify all of the children, 
+You need to output 2.
+```
+
+### 分析
+
+1） 方法一，考虑以下情况
+
+* 给一个孩子的饼干应当尽量小并且又能满足该孩子，这样大饼干才能拿来给满足度比较大的孩子。 
+* 因为满足度最小的孩子最容易得到满足，所以先满足满足度最小的孩子。
+
+在以上的解法中，只在每次分配时饼干时选择一种看起来是当前最优的分配方法，但还不知道这种局部最优的分配方法最后是否能得到全局最优解。使用反证法进行证明（贪心法通常由反证法或数学归纳法证明），即假设存在一种比我们使用的贪心策略更优的最优策略。如果不存在这种最优策略，表示贪心策略就是最优策略，得到的解也就是全局最优解。
+
+贪心法的正确性证明：假设在某次选择中，贪心策略选择给当前满足度最小的孩子分配第 m 个饼干，第 m 个饼干为可以满足该孩子的最小饼干。假设存在一种最优策略，可以给该孩子分配第 n 个饼干，并且 m &lt; n。可以发现，经过这一轮分配，贪心策略分配后剩下的饼干一定有一个比最优策略来得大。因此在后续的分配中，贪心策略一定能满足更多的孩子。也就是说不存在比贪心策略更优的策略，即贪心策略就是最优策略。
+
+### 代码
+
+排序 + Greedy 
+
+```java
+class Solution {
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        
+        int g_i = 0;
+        int s_i = 0;
+        int result = 0;
+        
+        while (g_i < g.length && s_i < s.length) {
+            if (g[g_i] <= s[s_i]) {
+                result++;
+                g_i++; // 满足了一个孩子
+            }
+            s_i++;
+        }
+        return result; // 这里返回g_i也行，用不着result
+    }
+}
+```
+
+## 860 Lemonade Change
+
+### 题目
+
+At a lemonade stand, each lemonade costs `$5`. 
+
+Customers are standing in a queue to buy from you, and order one at a time \(in the order specified by `bills`\).
+
+Each customer will only buy one lemonade and pay with either a `$5`, `$10`, or `$20` bill.  You must provide the correct change to each customer, so that the net transaction is that the customer pays $5.
+
+Note that you don't have any change in hand at first.
+
+Return `true` if and only if you can provide every customer with correct change.
+
+**Example 1:**
+
+```text
+Input: [5,5,5,10,20]
+Output: true
+Explanation: 
+From the first 3 customers, we collect three $5 bills in order.
+From the fourth customer, we collect a $10 bill and give back a $5.
+From the fifth customer, we give a $10 bill and a $5 bill.
+Since all customers got correct change, we output true.
+```
+
+**Example 2:**
+
+```text
+Input: [5,5,10]
+Output: true
+```
+
+**Example 3:**
+
+```text
+Input: [10,10]
+Output: false
+```
+
+**Example 4:**
+
+```text
+Input: [5,5,10,10,20]
+Output: false
+Explanation: 
+From the first two customers in order, we collect two $5 bills.
+For the next two customers in order, we collect a $10 bill and give back a $5 bill.
+For the last customer, we can't give change of $15 back because we only have two $10 bills.
+Since not every customer received correct change, the answer is false.
+```
+
+**Note:**
+
+* `0 <= bills.length <= 10000`
+* `bills[i]` will be either `5`, `10`, or `20`.
+
+### 分析
+
+只有三种面值，看最后是否能够找钱。使用贪心的思想，如果遇到$5，直接收下；如果遇到$10，找$5；如果遇到$20，有两种选择，找3个$5，或者找1个$5和$10 - 这里考虑贪心，总是先找$10，因为手里有两个$5肯定比一个$10要好。
+
+算法：
+
+收到$5 - five++
+
+收到$10 - five--, ten++
+
+收到$20 - five--, ten-- 或者five -- 三次 if ten ==0
+
+中间检查$5是否为负，时间复杂度O\(n\)，空间复杂度O\(1\)。
+
+### 代码
+
+```java
+class Solution {
+    public boolean lemonadeChange(int[] bills) {
+        int five = 0, ten = 0;
+        for (int bill : bills) {
+            if (bill == 5) five++;
+            else if (bill == 10) {five--; ten++;}
+            else if (ten > 0) {ten--; five--;}
+            else five -= 3;
+            if (five < 0) return false;
+        }
+        return true;
     }
 }
 ```

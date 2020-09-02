@@ -137,6 +137,82 @@ class Solution {
 }
 ```
 
+使用HashMap和Deque
+
+```java
+class Solution {
+    public String minWindow(String s, String t) {
+        
+        // By default the window is the entire string...
+        int bestMin = 0;
+        int bestMax = s.length() -1;
+        
+        // This holds the amount of each character we need to see
+        Map<Character, Integer> charCount = new HashMap<>();
+        
+        for (int i = 0; i < t.length(); i++) {
+            char c = t.charAt(i);
+            Integer count = charCount.getOrDefault(c, 0);
+            charCount.put(c, count+1);
+        }
+        
+        // This holds characters and their last seen indexes in the string
+        Map<Character, Deque<Integer>> lastSeen = new HashMap<>();
+        // This holds characters that we have seen the minimum amount of
+        Set<Character> seenMin = new HashSet<>();
+        
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i); 
+            
+            // check if this is a character we are looking for
+            if (charCount.containsKey(c)) {
+                
+                Deque<Integer> positions = lastSeen.getOrDefault(c, new LinkedList<>());
+                
+                // If we have stored the maximum positions, remove the earliest and add the newest to the end
+                if (positions.size() == charCount.get(c)) {
+                    positions.removeFirst();
+                }      
+                
+                positions.addLast(i);
+                
+                if (positions.size() == charCount.get(c)) {
+                    seenMin.add(c);
+                }
+                
+                lastSeen.put(c, positions);
+                
+                // If we have seen all our characters the minimum amount of times
+                // we can try and calculate the minimum total length that holds all those characters
+                if (seenMin.size() == charCount.size()) {
+                    int min = Integer.MAX_VALUE;
+                    int max = Integer.MIN_VALUE;
+                    
+                    // Iterate over the positions for each character and grab their min/max positions
+                    for (Deque<Integer> values : lastSeen.values()) {
+                        min = Math.min(min, values.getFirst());
+                        max = Math.max(max, values.getLast());
+                    }  
+                    
+                    // If we have a smaller length than our current best length, save it.
+                    if (max - min < bestMax - bestMin) {
+                        bestMax = max;
+                        bestMin = min;
+                    }
+                }
+            }      
+        }
+        
+        // If we have seen all of our characters the minimum amount of times we know we will have a valid solution
+        if (seenMin.size() == charCount.size()) {
+            return s.substring(bestMin, bestMax+1);  
+        } else {
+            return "";
+        }
+    }
+}
+```
+
 ## 159 Longest Substring with At Most Two Distinct Characters
 
 ### 原题概述

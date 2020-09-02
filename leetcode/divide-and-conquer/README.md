@@ -2039,6 +2039,128 @@ class Solution {
 }
 ```
 
+## 1143 Longest Common Subsequence
+
+### 题目
+
+Given two strings `text1` and `text2`, return the length of their longest common subsequence.
+
+A _subsequence_ of a string is a new string generated from the original string with some characters\(can be none\) deleted without changing the relative order of the remaining characters. \(eg, "ace" is a subsequence of "abcde" while "aec" is not\). A _common subsequence_ of two strings is a subsequence that is common to both strings.
+
+If there is no common subsequence, return 0.
+
+**Example 1:**
+
+```text
+Input: text1 = "abcde", text2 = "ace" 
+Output: 3  
+Explanation: The longest common subsequence is "ace" and its length is 3.
+```
+
+**Example 2:**
+
+```text
+Input: text1 = "abc", text2 = "abc"
+Output: 3
+Explanation: The longest common subsequence is "abc" and its length is 3.
+```
+
+**Example 3:**
+
+```text
+Input: text1 = "abc", text2 = "def"
+Output: 0
+Explanation: There is no such common subsequence, so the result is 0.
+```
+
+**Constraints:**
+
+* `1 <= text1.length <= 1000`
+* `1 <= text2.length <= 1000`
+* The input strings consist of lowercase English characters only.
+
+### 分析
+
+这个是典型的二维DP，可以看作以下的DP表格：
+
+![](../../.gitbook/assets/image%20%28115%29.png)
+
+1） 状态定义，为了方便理解此表，暂时认为索引是从 1 开始的，待会的代码中只要稍作调整即可。其中，dp\[i\]\[j\] 的含义是：对于 s1\[1..i\] 和 s2\[1..j\]，它们的 LCS 长度是 dp\[i\]\[j\]。
+
+比如上图的例子，d\[2\]\[4\] 的含义就是：对于 "ac" 和 "babc"，它们的 LCS 长度是 2。最终想得到的答案应该是 dp\[3\]\[6\]。
+
+2） 初始化base case，专门让索引为 0 的行和列表示空串，dp\[0\]\[..\] 和 dp\[..\]\[0\] 都应该初始化为 0，这就是 base case。比如说，按照刚才 dp 数组的定义，dp\[0\]\[3\]=0 的含义是：对于字符串 "" 和 "bab"，其 LCS 的长度为 0。因为有一个字符串是空串，它们的最长公共子序列的长度显然应该是 0。
+
+注：二维DP表中，初始化的两条边在数组创建后本身就为0。
+
+3）这是动态规划最难的一步，不过这种字符串问题的套路都差不多。状态转移说简单些就是做选择，比如说这个问题，是求 s1 和 s2 的最长公共子序列，不妨称这个子序列为 lcs。那么对于 s1 和 s2 中的每个字符，有什么选择？很简单，两种选择，要么在 lcs 中，要么不在。
+
+![](../../.gitbook/assets/image%20%28117%29.png)
+
+这个「在」和「不在」就是选择，关键是，应该如何选择呢？这个需要动点脑筋：如果某个字符应该在 lcs 中，那么这个字符肯定同时存在于 s1 和 s2 中，因为 lcs 是最长公共子序列嘛。所以本题的思路是这样：
+
+* 用两个指针 i 和 j 从后往前遍历 s1 和 s2，如果 s1\[i\]==s2\[j\]，那么这个字符一定在 lcs 中；
+* 否则的话，s1\[i\] 和 s2\[j\] 这两个字符至少有一个不在 lcs 中，需要丢弃一个
+
+ 对于第一种情况，找到一个 `lcs` 中的字符，同时将 `i` `j` 向前移动一位，并给 `lcs` 的长度加一；对于后者，则尝试两种情况，取更大的结果。相应代码（以从后向前为例，这道题从前往后也可以的）：
+
+```java
+for i in range(1, m + 1):
+    for j in range(1, n + 1):
+        if str1[i - 1] == str2[j - 1]:
+            # 找到一个 lcs 中的字符
+            dp[i][j] = 1 + dp[i-1][j-1]
+        else:
+            dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    
+return dp[-1][-1]
+
+```
+
+ 对于 `s1[i]` 和 `s2[j]` 不相等的情况，**至少有一个**字符不在 `lcs` 中，会不会两个字符都不在呢？比如下面这种情况：
+
+![](../../.gitbook/assets/image%20%28116%29.png)
+
+相应转移方程的代码为：
+
+```java
+if str1[i - 1] == str2[j - 1]:
+    # ...
+else: # 考虑有三种情况
+    dp[i][j] = max(dp[i-1][j], 
+                   dp[i][j-1],
+                   dp[i-1][j-1])
+
+```
+
+ 其实这样改也能得到正确答案，只是多此一举，因为 `dp[i-1][j-1]` 永远是三者中最小的，max 根本不可能取到它。
+
+4）考虑状态压缩，两个字符串各占一维，无法状态压缩。
+
+### 代码
+
+```java
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int len1 = text1.length();
+        int len2 = text2.length();
+        int[][] dp = new int[len1 + 1][len2 + 1]; // 多一位是包含0个字符和0个字符的情况，初始两条为0
+        
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) { // index为0的第一个字符，为dp数组中的第2个（从1开始），dp数组中的第一个元素对应空字符串
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    // 谁能让lcs更大，就听谁的，dp[i - 1][j - 1]不用考虑
+                    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+}
+```
+
 ## 322 Coin Change
 
 ### 原题
