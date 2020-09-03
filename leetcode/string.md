@@ -1052,33 +1052,30 @@ Although the above answer is in lexicographical order, your answer could be in a
 
 ```java
 class Solution {
+    //把电话键盘上数字对应的字母列出来，比如输入为2对应"abc"，其中0和1里面没有字符
+    String[] mapping = new String[]{"","", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
     public List<String> letterCombinations(String digits) {
-
-        //把电话键盘上数字对应的字母列出来，比如输入为2，对应"abc"
-        String[] mapping = new String[] {"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
-        List<String> list = new ArrayList<String>();
-
-        letterCombinations(list,digits,"",0,mapping);//index从0开始
-
-        return list;
-    }
-
-    private void letterCombinations (List<String> list, String digits,
-                                     String curr, int index,String[] mapping) {
-        //最后一层退出条件
-        if (index == digits.length()) {
-            if(curr.length() != 0)  // 防止回溯到空字符串
-                list.add(curr);
-            return;
+        List<String> allComs = new ArrayList<>();
+        if (digits.isEmpty()) {
+            return allComs;
         }
-
-        //找到数字对应的字符串
+        int len = digits.length();
+        letterCombinations(allComs, digits, "", 0);
+        return allComs;
+    }
+    private void letterCombinations(List<String> allComs, String digits, String oneCom, int index) {
+        if (index == digits.length()) {
+            if (oneCom.length() == digits.length()) {
+                if (oneCom.length() != 0) {
+                    allComs.add(oneCom);
+                }
+                return;
+            }
+        }
         String temp = mapping[digits.charAt(index) - '0'];
         for (int i = 0; i < temp.length(); i++) {
-            //每次循环把不同字符串加到当前curr之后
-            String next = curr + temp.charAt(i);
-            //进入下一层
-            letterCombinations(list,digits,next,index+1,mapping);
+            String newCom = oneCom + temp.charAt(i);
+            letterCombinations(allComs, digits, newCom, index + 1);
         }
     }
 }
