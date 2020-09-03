@@ -1067,7 +1067,8 @@ class Solution {
                                      String curr, int index,String[] mapping) {
         //最后一层退出条件
         if (index == digits.length()) {
-            if(curr.length() != 0) list.add(curr);
+            if(curr.length() != 0)  // 防止回溯到空字符串
+                list.add(curr);
             return;
         }
 
