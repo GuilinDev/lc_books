@@ -1381,7 +1381,8 @@ class Solution {
       int colBegin = 0;
       int rowEnd = matrix.length - 1;
 
-      while (rowBegin <= rowEnd && colBegin <= colEnd) {
+      // 这里包含等于，所以下面三四两个循环要if检查一下，防止打印两遍，可以以一行或一列来理解
+      while (rowBegin <= rowEnd && colBegin <= colEnd) { 
          //从左向右
          for (int i = colBegin; i <= colEnd; i++) {
             result.add(matrix[rowBegin][i]);
@@ -1395,7 +1396,7 @@ class Solution {
          colEnd--;
 
          //从右到左
-         if (rowBegin <= rowEnd) {//这里检查防止行已经打印完重复打印
+         if (rowBegin <= rowEnd) {//防止行重复打印，可能在上面“从左到右”打印过了
             for (int i = colEnd; i >= colBegin; i--) {
                result.add(matrix[rowEnd][i]);
             }
@@ -1403,7 +1404,7 @@ class Solution {
          rowEnd--;
 
          //从下到上
-         if (colBegin <= colEnd) {//这里检查防止列已经打印完重复打印
+         if (colBegin <= colEnd) {//防止列重复打印，可能在上面“从上到下”打印过了
             for (int i = rowEnd; i >= rowBegin; i--) {
                result.add(matrix[i][colBegin]);
             }
