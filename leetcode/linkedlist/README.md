@@ -774,7 +774,7 @@ Could you do this in one pass?
 
 ### 题意和分析
 
-要求移除链表倒数的第N个节点，n不会大于链表的元素总数，如果两次遍历就简单了，先找到链表长度，然后移除len-N+1的的元素，但是要求一次遍历解决问题，所以就要求遍历到这个结点就应该删除了。应用双指针，一个dummy头防止第一个被删了，双指针slow和fast；首先fast指针向前走N步，然后slow和fast同时走，直到fast走到最后一个元素，此时slow指向的就是要移除元素的前一个元素，将下一个元素移除即可。
+要求移除链表倒数的第N个节点，n不会大于链表的元素总数，如果两次遍历就简单了，先找到链表长度，然后移除len-N+1的的元素，但是要求一次遍历解决问题，所以就要求遍历到这个结点就应该删除了。应用双指针，pre和cur；首先cur指针向前走N步，如果cur此时指向空，这个为corner case，那就需要移除为首元素，此时返回head.next即可；如果cur不指向空，那就让cur和cur同时走，直到cur走到最后一个元素，此时pre指向的就是要移除元素的前一个元素，此时将下一个元素移除即可。
 
 ### 代码
 
@@ -784,31 +784,31 @@ Could you do this in one pass?
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode dummy = new ListNode(-1);
-        ListNode slow = dummy, fast = dummy;
-        dummy.next = head;
-        
-        int steps = n;
-        while (steps > 0) { // fast先走n步
-            fast = fast.next;
-            steps--;
+        if (head.next == null) {//n肯定有效，如果只有一个结点则没法移除
+            return null;
         }
-        
-        while (fast.next != null) { // 同时走直到fast走到最后一个
-            slow = slow.next;
-            fast = fast.next;
+        ListNode pre = head, cur = head;
+        for (int i = 0; i < n; i++) {//cur先走n步
+            cur = cur.next;
         }
-        
-        slow.next = slow.next.next; //此时slow在待移除节点的前一个，移除
-        
-        return dummy.next;
+        if (cur == null) {//到末尾了，移除第一结点
+            return head.next;
+        }
+
+        while (cur.next != null) {
+            cur = cur.next;
+            pre = pre.next;
+        }
+
+        //此时pre在待移除结点的前一位
+        pre.next = pre.next.next;
+
+        return head;
     }
 }
 ```

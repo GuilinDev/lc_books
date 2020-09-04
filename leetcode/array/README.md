@@ -791,21 +791,20 @@ class Solution {
 ```java
 class Solution {
     public int[] productExceptSelf(int[] nums) {
-        int len = nums.length, back = 1;
+        int len = nums.length;
         int[] result = new int[len];
-
-        //第一次遍历计算所有i元素前面的乘积
-        result[0] = 1;//初始化为1，因为第二次遍历会乘过来
+        result[0] = 1;
+        
         for (int i = 1; i < len; i++) {
             result[i] = result[i - 1] * nums[i - 1];
         }
-
-        //第二次遍历从后面开始计算，逐渐累积
+        
+        int backs = 1; // 记录后缀乘积
         for (int i = len - 1; i >= 0; i--) {
-            result[i] *= back;
-            back *= nums[i];
+            result[i] = backs * result[i]; // 后缀乘积乘以前缀乘积
+            backs = backs * nums[i]; //更新后缀乘积
         }
-
+        
         return result;
     }
 }
