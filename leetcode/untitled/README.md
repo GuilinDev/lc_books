@@ -318,6 +318,26 @@ class Solution {
 
 面试中有可能给定的数组是排好序的，那么就用二分查找法来做，找出中间元素nums\[mid\]的下标mid，然后用元素值nums\[mid\]和下标值mid之间做对比，如果元素值大于下标值，则说明缺失的数字在左边，此时将right赋为mid，反之则将left赋为mid+1。
 
+## 136 - Single Number
+
+### 原题概述
+
+### 题意与分析
+
+### 代码
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int result = 0;
+        for (int i = 0; i < nums.length; i++) {
+            result ^= nums[i];//logical exclusive OR，相同的数就消掉,
+        }
+        return result;
+    }
+}
+```
+
 ## 137 - Single Number II
 
 ### 原题概述
