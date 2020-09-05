@@ -824,6 +824,10 @@ Explanation: The output [11, 0, 11, 11] would also be accepted.
 ### 代码
 
 ```java
+
+```
+
+```java
 class Solution {
     List<Integer> result;
 
@@ -873,6 +877,47 @@ class Solution {
                 }
             }
         }
+    }
+}
+```
+
+另外一个思路
+
+```java
+class Solution {
+    public List<Integer> splitIntoFibonacci(String S) {
+        List<Integer> result = new ArrayList<>();
+        backtracking(S, result, 0);
+        return result;
+    }
+
+    public boolean backtracking(String s, List<Integer> result, int index1) {
+        if (index1 == s.length() && result.size() >= 3) { // 结果集中至少3个数
+            return true;
+        }
+        for (int index2 = index1; index2 < s.length(); index2++) { // 从当前index开始直到末尾
+            if (s.charAt(index1) == '0' && index2 > index1) { //当前数字为0，且不在第一个位置
+                break;
+            }
+            long num = Long.parseLong(s.substring(index1, index2 + 1));
+            if (num > Integer.MAX_VALUE) {
+                break;
+            }
+            int size = result.size();
+            // early termination
+            if (size >= 2 && num > result.get(size - 1) + result.get(size - 2)) {
+                break;
+            }
+            if (size <= 1 || num == result.get(size - 1) + result.get(size - 2)) {
+                result.add((int) num);
+                // branch pruning. if one branch has found fib seq, return true to upper call
+                if (backtracking(s, result, index2 + 1)) {
+                    return true;
+                }
+                result.remove(result.size() - 1);
+            }
+        }
+        return false;
     }
 }
 ```
