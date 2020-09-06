@@ -325,7 +325,7 @@ we combine 1 and 1 to get 0 so the array converts to [1] then that's the value o
 
 ### 分析
 
-用优先队列来模拟一个大顶堆，每次取最大的两个数相减，然后把相减的数再返回队列。O\(N\)。
+用优先队列来模拟一个大顶堆，每次取最大的两个数相减，然后把相减的数再返回队列。O\(NLogN\)。
 
 ### 代码
 
