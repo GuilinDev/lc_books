@@ -340,7 +340,7 @@ class Solution {
             int temp = pq.poll() - pq.poll();
             pq.offer(temp);
         }
-        return pq.poll();
+        return pq.poll(); //这里允许0进入堆中，最后返回
     }
 }
 ```
