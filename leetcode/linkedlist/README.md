@@ -1847,7 +1847,7 @@ class Solution {
 
 ## 82 - Remove Duplicates from Sorted List II
 
-#### 原题概述
+### 原题概述
 
 Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only _distinct_ numbers from the original list.
 
