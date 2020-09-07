@@ -524,3 +524,72 @@ class Solution {
 }
 ```
 
+## 378 Kth Smallest Element in a Sorted Matrix
+
+### 原题
+
+Given a n x n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest element in the matrix.
+
+Note that it is the kth smallest element in the sorted order, not the kth distinct element.
+
+**Example:**
+
+```text
+matrix = [
+   [ 1,  5,  9],
+   [10, 11, 13],
+   [12, 13, 15]
+],
+k = 8,
+
+return 13.
+```
+
+**Note:**  
+You may assume k is always valid, 1 ≤ k ≤ n2.
+
+### 分析
+
+寻找第k小的元素，这个数是第k小，不是第k个distinct小（比它更小的数可能有重复）。
+
+暴力的思路无非就是将数组中的元素都放在数组或List中，然后排序，找到第k小的即可，改进以下可以用最大堆或最小堆（将每列最小的元素放进堆中，然后查找每一列下面的元素加入堆，每次取出堆中的元素都是最小的）。
+
+以上这些没有应用到原来的matirx是行和列都是排序的特征。比较容易想到二分法，现在的规律是：每个元素右下角的肯定比自己大，左上角的肯定比自己小，但是左下角和右上角的无法确定。进行数值的二分法，最小值为左上角，最大值为右下角，根据这两个数，求出中间值，然后从左上角开始，数行和列有多少个数比中间值小，计数，如果这个数达到count，就把最大数往中间值挪动，否则把最小值往中间值移动，最后返回左边界。
+
+### 代码
+
+```java
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        
+        int count = 0;
+        int min = matrix[0][0];
+        int max = matrix[rows - 1][cols - 1];
+        
+        while (min < max) {
+            int mid = min + (max - min) / 2;
+            
+            // 计算当前行和列有多少个小于mid的数
+            for (int i = 0; i < rows && matrix[i][0] <= mid; i++) { // 当前行的第一个元素小于mid，当前行可查
+                for (int j = 0; j < cols; j++) {
+                    if (matrix[i][j] <= mid) {
+                        count++;
+                    }
+                }
+            }
+            if (count >= k) {
+                max = mid;
+            } else {
+                min = mid + 1;
+            }
+            
+            // 移动上边界或下边界，重新统计
+            count = 0;
+        }
+        return min;
+    }
+}
+```
+
