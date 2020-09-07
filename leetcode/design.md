@@ -625,5 +625,282 @@ class NumArray {
 }
 ```
 
+## 380 Insert Delete GetRandom O\(1\)
 
+### 题目
+
+Design a data structure that supports all following operations in average **O\(1\)** time.
+
+1. `insert(val)`: Inserts an item val to the set if not already present.
+2. `remove(val)`: Removes an item val from the set if present.
+3. `getRandom`: Returns a random element from current set of elements \(it's guaranteed that at least one element exists when this method is called\). Each element must have the **same probability** of being returned.
+
+**Example:**
+
+```text
+// Init an empty set.
+RandomizedSet randomSet = new RandomizedSet();
+
+// Inserts 1 to the set. Returns true as 1 was inserted successfully.
+randomSet.insert(1);
+
+// Returns false as 2 does not exist in the set.
+randomSet.remove(2);
+
+// Inserts 2 to the set, returns true. Set now contains [1,2].
+randomSet.insert(2);
+
+// getRandom should return either 1 or 2 randomly.
+randomSet.getRandom();
+
+// Removes 1 from the set, returns true. Set now contains [2].
+randomSet.remove(1);
+
+// 2 was already in the set, so return false.
+randomSet.insert(2);
+
+// Since 2 is the only number in the set, getRandom always return 2.
+randomSet.getRandom();
+```
+
+### 分析
+
+需要在平均复杂度为 O\(1\) 实现以下操作：
+
+* insert 
+* remove 
+* getRadom 
+
+让我们想想如何实现它。先看 insert，有两个平均插入时间为 O\(1\) 的选择：
+
+* 哈希表：Java 中为 HashMap，Python 中为 dictionary。 
+* 动态数组：Java 中为 ArrayList，Python 中为 list。 
+
+一个个进行思考，虽然哈希表提供常数时间的insert和remove，但是实现 getRandom 时会出现问题。
+
+getRandom 的思想是选择一个随机索引，然后使用该索引返回一个元素。而哈希表中没有线性索引，因此要获得真正的随机值，则要将哈希表中的键转换为列表，这需要线性时间。解决的方法是用一个动态数组存储值，并在该列表中实现常数时间的 getRandom。
+
+动态数组有索引，可以实现常数时间的 insert 和 getRandom，则接下来的问题是如何实现常数时间的 remove。
+
+删除任意索引元素需要线性时间，这里的解决方案是总是删除最后一个元素。
+
+技巧：将要删除元素和最后一个元素交换。 将最后一个元素删除。 为此，必须在常数时间获取到要删除元素的索引，因此需要一个哈希表来存储值到索引的映射。
+
+综上所述，使用以下数据结构：
+
+* 动态数组存储元素值 
+* 哈希表存储存储值到索引的映射。
+
+### 代码
+
+```java
+class RandomizedSet {
+    Map<Integer, Integer> dict;
+    List<Integer> list;
+    Random rand = new Random();
+
+    /**
+     * Initialize your data structure here.
+     */
+    public RandomizedSet() {
+        dict = new HashMap();
+        list = new ArrayList();
+    }
+
+    /**
+     * Inserts a value to the set. Returns true if the set did not already contain the specified element.
+     */
+    public boolean insert(int val) {
+        if (dict.containsKey(val)) { // 重复值，return false
+            return false;
+        }
+
+        dict.put(val, list.size());
+        list.add(list.size(), val);
+        return true;
+    }
+
+    /**
+     * Removes a value from the set. Returns true if the set contained the specified element.
+     */
+    public boolean remove(int val) {
+        if (!dict.containsKey(val)) {
+            return false;
+        }
+
+        // move the last element to the place idx of the element to delete
+        int lastElement = list.get(list.size() - 1);
+        int idx = dict.get(val);
+        list.set(idx, lastElement);
+        dict.put(lastElement, idx);
+        
+        // delete the last element
+        list.remove(list.size() - 1);
+        dict.remove(val);
+        
+        return true;
+    }
+
+    /**
+     * Get a random element from the set.
+     */
+    public int getRandom() {
+        return list.get(rand.nextInt(list.size()));
+    }
+}
+
+/**
+ * Your RandomizedSet object will be instantiated and called as such:
+ * RandomizedSet obj = new RandomizedSet();
+ * boolean param_1 = obj.insert(val);
+ * boolean param_2 = obj.remove(val);
+ * int param_3 = obj.getRandom();
+ */
+```
+
+## 348 Design Tic-Tac-Toe
+
+### 题目
+
+Design a Tic-tac-toe game that is played between two players on a n x n grid.
+
+You may assume the following rules:
+
+1. A move is guaranteed to be valid and is placed on an empty block.
+2. Once a winning condition is reached, no more moves is allowed.
+3. A player who succeeds in placing n of their marks in a horizontal, vertical, or diagonal row wins the game.
+
+**Example:**
+
+```text
+Given n = 3, assume that player 1 is "X" and player 2 is "O" in the board.
+
+TicTacToe toe = new TicTacToe(3);
+
+toe.move(0, 0, 1); -> Returns 0 (no one wins)
+|X| | |
+| | | |    // Player 1 makes a move at (0, 0).
+| | | |
+
+toe.move(0, 2, 2); -> Returns 0 (no one wins)
+|X| |O|
+| | | |    // Player 2 makes a move at (0, 2).
+| | | |
+
+toe.move(2, 2, 1); -> Returns 0 (no one wins)
+|X| |O|
+| | | |    // Player 1 makes a move at (2, 2).
+| | |X|
+
+toe.move(1, 1, 2); -> Returns 0 (no one wins)
+|X| |O|
+| |O| |    // Player 2 makes a move at (1, 1).
+| | |X|
+
+toe.move(2, 0, 1); -> Returns 0 (no one wins)
+|X| |O|
+| |O| |    // Player 1 makes a move at (2, 0).
+|X| |X|
+
+toe.move(1, 0, 2); -> Returns 0 (no one wins)
+|X| |O|
+|O|O| |    // Player 2 makes a move at (1, 0).
+|X| |X|
+
+toe.move(2, 1, 1); -> Returns 1 (player 1 wins)
+|X| |O|
+|O|O| |    // Player 1 makes a move at (2, 1).
+|X|X|X|
+```
+
+**Follow up:**  
+Could you do better than O\(n2\) per `move()` operation?
+
+### 分析
+
+1\) 绘制棋盘，判断当前落子所在行与列是否都是该棋手的子，以及如果落子在对角线上,则同时需要判断对角线上的子是否都是该棋手的子。
+
+2\) 不需要复现棋盘，只需要计算每个player在各条线是否放了n个棋子就能知道是否获胜。 不用二维数组，近一步减小空间消耗，+1计算player1的棋子数，-1计算player2的棋子数，只要有一方达到边界就算赢（n-1，player1赢，1-n，player2赢）。时间O\(1\)，空间O\(n\)。
+
+### 代码
+
+方法1
+
+```java
+class TicTacToe {
+    private int[][] scope;
+
+    public TicTacToe(int n) {
+        scope = new int[n][n];
+    }
+
+    public int move(int row, int col, int player) {
+        scope[row][col] = player;
+        // 横
+        boolean win = true;
+        for (int item : scope[row]) {
+            if (item != player) {
+                win = false;
+                break;
+            }
+        }
+        if (win) {
+            return player;
+        }
+        // 竖
+        win = true;
+        for (int i = 0; i < scope.length; i++) {
+            if (scope[i][col] != player) {
+                win = false;
+                break;
+            }
+        }
+        if (win) {
+            return player;
+        }
+        // 左对角
+        win = true;
+        for (int i = 0; i < scope.length; i++) {
+            if (scope[i][i] != player) {
+                win = false;
+                break;
+            }
+        }
+        if (win) {
+            return player;
+        }
+        // 有对角
+        win = true;
+        for (int i = 0; i < scope.length; i++) {
+            if (scope[i][scope.length - 1 - i] != player) {
+                win = false;
+                break;
+            }
+        }
+        if (win) {
+            return player;
+        } else {
+            return 0;
+        }
+    }
+}
+```
+
+方法2
+
+```java
+class TicTacToe {
+    int[] rows, cols, dig;
+    int n;
+    public TicTacToe(int n) {
+        rows = new int[n];
+        cols = new int[n];
+        dig = new int[2];
+        this.n = n;
+    }
+    public int move(int row, int col, int player) {
+        return ((player == 1 && rows[row]++ == n-1 | cols[col]++ == n-1 | (row == col && dig[0]++ == n-1) | (row + col == n-1 && dig[1]++ == n-1)) || (player == 2 && rows[row]-- == 1-n | cols[col]-- == 1-n | (row == col && dig[0]-- == 1-n) | (row + col == n-1 && dig[1]-- == 1-n))) ? player : 0;
+    }
+}
+```
 

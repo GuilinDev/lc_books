@@ -774,7 +774,7 @@ Could you do this in one pass?
 
 ### 题意和分析
 
-要求移除链表倒数的第N个节点，n不会大于链表的元素总数，如果两次遍历就简单了，先找到链表长度，然后移除len-N+1的的元素，但是要求一次遍历解决问题，所以就要求遍历到这个结点就应该删除了。应用双指针，一个dummy头防止第一个被删了，双指针slow和fast；首先fast指针向前走N步，然后slow和fast同时走，直到fast走到最后一个元素，此时slow指向的就是要移除元素的前一个元素，将下一个元素移除即可。
+要求移除链表倒数的第N个节点，n不会大于链表的元素总数，如果两次遍历就简单了，先找到链表长度，然后移除len-N+1的的元素，但是要求一次遍历解决问题，所以就要求遍历到这个结点就应该删除了。应用双指针，pre和cur；首先cur指针向前走N步，如果cur此时指向空，这个为corner case，那就需要移除为首元素，此时返回head.next即可；如果cur不指向空，那就让cur和cur同时走，直到cur走到最后一个元素，此时pre指向的就是要移除元素的前一个元素，此时将下一个元素移除即可。
 
 ### 代码
 
@@ -784,31 +784,31 @@ Could you do this in one pass?
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode dummy = new ListNode(-1);
-        ListNode slow = dummy, fast = dummy;
-        dummy.next = head;
-        
-        int steps = n;
-        while (steps > 0) { // fast先走n步
-            fast = fast.next;
-            steps--;
+        if (head.next == null) {//n肯定有效，如果只有一个结点则没法移除
+            return null;
         }
-        
-        while (fast.next != null) { // 同时走直到fast走到最后一个
-            slow = slow.next;
-            fast = fast.next;
+        ListNode pre = head, cur = head;
+        for (int i = 0; i < n; i++) {//cur先走n步
+            cur = cur.next;
         }
-        
-        slow.next = slow.next.next; //此时slow在待移除节点的前一个，移除
-        
-        return dummy.next;
+        if (cur == null) {//到末尾了，移除第一结点
+            return head.next;
+        }
+
+        while (cur.next != null) {
+            cur = cur.next;
+            pre = pre.next;
+        }
+
+        //此时pre在待移除结点的前一位
+        pre.next = pre.next.next;
+
+        return head;
     }
 }
 ```
@@ -1796,9 +1796,7 @@ Output: 1->2->3
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
@@ -1822,32 +1820,9 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public ListNode deleteDuplicates(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-        ListNode curr = head;
-        while (curr.next != null) {
-            if (curr.val == curr.next.val) {
-                // 删除下一个节点
-                ListNode temp = curr.next;
-                curr.next = curr.next.next;
-                temp.next = null; //将重复的下一个节点指向null
-            } else {
-                curr = curr.next;
-            }
-            
-        }
-        return head;
-    }
-}
-```
-
 ## 82 - Remove Duplicates from Sorted List II
 
-### 原题概述
+#### 原题概述
 
 Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only _distinct_ numbers from the original list.
 
@@ -1879,31 +1854,26 @@ Output: 2->3
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-        ListNode dummy = new ListNode(-1);
+        ListNode dummy = new ListNode(0);
         dummy.next = head;
-        ListNode prev = dummy, curr = head;
-        
-        while (curr != null) {
-            while (curr.next != null && curr.val == curr.next.val) { //当前值和next值重复
-                curr = curr.next;
+        ListNode previous = dummy;
+        ListNode current = head;
+
+        while (current != null) {//还没到尾部
+            while (current.next != null && current.val == current.next.val) {//有重复，一直将current前移直到没有重复，current会停在最后一个元素的位置（到头了）或者停留在最后一个重复元素的位置
+                current = current.next;
             }
-            if (prev.next == curr) { //上面的while循环没有找到重复值
-                prev = prev.next;
-            } else { // curr继续去找可能的重复值
-                prev.next = curr.next; //将上面while循环的重复值都删掉，暂时将prev头接到curr位置
+            if (previous.next == current) {//没有重复，current就在previous前面一位，直接移动previous
+                previous = previous.next;
+            } else {//如果current在previous前面很多位，说明有重复，直接将previous.next指向current.next，跳过所有重复的元素
+                previous.next = current.next;
             }
-            
-            curr = curr.next; // curr = prev.next也可以，从另外一条路过来
+            current = current.next;
         }
         return dummy.next;
     }
@@ -1918,9 +1888,7 @@ class Solution {
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
@@ -1928,14 +1896,14 @@ class Solution {
         if (head == null || head.next == null) {
             return head;
         }
-        if (head.val != head.next.val) { 
-            head.next = deleteDuplicates(head.next); // 没重复，直接调用下一个节点，返回当前head
+        if (head.val != head.next.val) {//head.next和head没有重复就一直递归传入head.next
+            head.next = deleteDuplicates(head.next);
             return head;
-        } else {
+        } else {//有重复，删掉当前的元素
             while (head.next != null && head.val == head.next.val) {
-                head = head.next; //有重复，直接抛弃
+                head = head.next;
             }
-            return deleteDuplicates(head.next); // 抛弃最后一个重复的节点，返回下一个节点
+            return deleteDuplicates(head.next);//删掉当前元素后再递归调用
         }
     }
 }
