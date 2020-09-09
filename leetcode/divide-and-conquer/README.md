@@ -2911,3 +2911,118 @@ class Solution {
 }
 ```
 
+## 392 Is Subsequence
+
+### 题目
+
+Given a string **s** and a string **t**, check if **s** is subsequence of **t**.
+
+A subsequence of a string is a new string which is formed from the original string by deleting some \(can be none\) of the characters without disturbing the relative positions of the remaining characters. \(ie, `"ace"` is a subsequence of `"abcde"` while `"aec"` is not\).
+
+**Follow up:**  
+If there are lots of incoming S, say S1, S2, ... , Sk where k &gt;= 1B, and you want to check one by one to see if T has its subsequence. In this scenario, how would you change your code?
+
+**Credits:**  
+Special thanks to [@pbrother](https://leetcode.com/pbrother/) for adding this problem and creating all test cases.
+
+**Example 1:**
+
+```text
+Input: s = "abc", t = "ahbgdc"
+Output: true
+```
+
+**Example 2:**
+
+```text
+Input: s = "axc", t = "ahbgdc"
+Output: false
+```
+
+**Constraints:**
+
+* `0 <= s.length <= 100`
+* `0 <= t.length <= 10^4`
+* Both strings consists only of lowercase characters.
+
+### 分析
+
+1）双指针
+
+> 假定当前需要匹配字符 c，而字符 c 在 t 中的位置以 x1 ​和 x2出现（x1 ​&lt; x2 ​），那么贪心取x 1 ​是最优解，因为 x2 ​后面能取到的字符，x1 ​也都能取到，并且通过x1 ​与 x2 ​之间的可选字符，更有希望能匹配成功
+
+2）考虑前面的双指针的做法，可以注意到有大量的时间用于在 t 中找到下一个匹配字符。
+
+可以预处理出对于 t 的每一个位置，从该位置开始往后每一个字符第一次出现的位置。可以使用动态规划的方法实现预处理：
+
+**状态定义**- 令 f\[i\]\[j\] 表示字符串 t 中从位置 i 开始往后字符 j 第一次出现的位置。
+
+**初始化** - 
+
+**状态转移方程** - 在进行状态转移时，如果 t 中位置 i 的字符就是 j，那么 f\[i\]\[j\]=if\[i\]\[j\]=i，否则 j 出现在位置 i+1 开始往后，即 f\[i\]\[j\]=f\[i+1\]\[j\]，因此要倒过来进行动态规划，从后往前枚举 i。
+
+![](../../.gitbook/assets/image%20%28120%29.png)
+
+**考虑状态压缩** - 同时注意到，该解法中对 t 的处理与 s 无关，且预处理完成后，可以利用预处理数组的信息，线性地算出任意一个字符串 s 是否为 t 的子串。这样可以解决follow up问题，“如果有大量输入的 S，称作S1, S2, ... , Sk 其中 k &gt;= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？”
+
+### 代码
+
+双指针
+
+```java
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        if (s.isEmpty()) {
+            return true;
+        }
+        if (t.isEmpty()) {
+            return false;
+        }
+        int indexS = 0;
+        int indexT = 0;
+        
+        while (indexS < s.length() && indexT < t.length()) {
+            if (s.charAt(indexS) == t.charAt(indexT)) {
+                indexS++;
+                indexT++;
+            } else {
+                indexT++;
+            }
+        }
+        return indexS == s.length();
+    }
+}
+```
+
+DP
+
+```java
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int lenS = s.length(), lenT = t.length();
+
+        int[][] f = new int[lenT + 1][26]; // s中只为小写字母
+        for (int i = 0; i < 26; i++) {
+            f[lenT][i] = lenT;
+        }
+
+        for (int i = lenT - 1; i >= 0; i--) {
+            for (int j = 0; j < 26; j++) {
+                if (t.charAt(i) == j + 'a')
+                    f[i][j] = i;
+                else
+                    f[i][j] = f[i + 1][j];
+            }
+        }
+        int add = 0;
+        for (int i = 0; i < lenS; i++) {
+            if (f[add][s.charAt(i) - 'a'] == lenT) {
+                return false;
+            }
+            add = f[add][s.charAt(i) - 'a'] + 1;
+        }
+        return true;
+    }
+}
+```
+

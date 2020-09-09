@@ -614,13 +614,18 @@ Explanation: The order is invalid, so return "".
 
 ### 题意和分析
 
-这道题让给了我们一些按“字母顺序”排列的单词，但是这个字母顺序不是我们熟知的顺序，而是另类的顺序，让我们根据这些“有序”的单词来找出新的字母顺序，这实际上是一道有向图的问题。跟207 Couurse Schedule，210 Couurse Schedule II和630 Couurse ScheduleIII类似。
+这道题让给了我们一些按“字母顺序”排列的单词，但是这个字母顺序不是我们熟知的顺序，而是另类的顺序，让我们根据这些“有序”的单词来找出新的字母顺序，这实际上是一道有向图的问题。跟207 Course Schedule，210 Course Schedule II和630 Course Schedule III类似。理解题目：
+
+* “abf” -&gt; "abc" 这个意思是 abf 本身之间没有顺序关系， 但是 abf 和 abc 之间有顺序 所以 f 在 c之前； 
+* “abc” -&gt; "ab" 这个就是错误的，因为 c -&gt; "没有" ，有问题。
 
 1\)DFS，建立一个二维的boolean数组g，然后把出现过的字母的对应的位置都赋为true，然后我们把可以推出的顺序的对应位置也赋为true，然后我们就开始递归调用，如果递归函数有返回false的，说明有冲突，则返回false，递归调用结束后结果res中存了入度不为0的字母，最后把入度为0的字母加到最后面，最后把结果result翻转一下即可；
 
 2\) BFS
 
-3\) Topological Sorting
+3\) Topological Sorting，将词典中字符串的字符两两对比，只有第一个不同的字符才是正确的排序，如ert和wrf，只能推断出e的优先级高于w，剩余字符的优先级不能推断。将字符串的优先级构建为图，然后进行拓扑排序。如果图中无环，则将拓扑排序输出，否则顺序是非法的。
+
+注意对于输入"za","zb","ca","cb"，字符关系为a-&gt;b、z-&gt;c，输出可以为azbc、zacb，只要输出一种即可。
 
 ### 代码
 
@@ -731,123 +736,70 @@ class Solution {
 }
 ```
 
-Topological Sorting，参考[这里](https://leetcode.com/problems/alien-dictionary/discuss/70169/My-Concise-JAVA-solution-based-on-Topological-Sorting)
+Topological Sorting
 
 ```java
 class Solution {
     public String alienOrder(String[] words) {
-        List<Point> pairs = new LinkedList<Point>(); // Adjacency list: pair = (node, node's predecessor)
-        Set<Character>chs = new HashSet<Character>();// All distinct characters
-
-        // 1. Convert characters to a graph: Adjacency lists 
-        for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-            boolean alreadySet = false;// Only set one pair where the characters at the same position differs in two neighbor rows. e.g. "wrtk" < "wrfp"=> 't' < 'f'
-            for (int j = 0; j < words[i].length(); j++) {
-                if (!alreadySet && i > 0 && j < words[i-1].length() && words[i].charAt(j) != words[i-1].charAt(j)) {// Set dependency of two characters by comparing two neighbor rows. 
-                    pairs.add(new Point(words[i].charAt(j), words[i-1].charAt(j)));
-                    alreadySet = true;
-                }
-                chs.add(word.charAt(j));// Add distinct character to chs set
+        //1.构建图
+        Map<Character, Set<Character>> map = new HashMap<>();
+        for (int i = 0; i < words.length - 1; i++) {
+            for (int j = 0; j < words[i].length() && j < words[i + 1].length(); j++) {
+                //如果字符相同，比较下一个
+                if (words[i].charAt(j) == words[i + 1].charAt(j)) continue;
+                //保存第一个不同的字符顺序
+                Set<Character> set = map.getOrDefault(words[i].charAt(j), new HashSet<>());
+                set.add(words[i + 1].charAt(j));
+                map.put(words[i].charAt(j), set);
+                break;
             }
         }
 
-        // 2. Topological sorting: keep adding elements whose in-degree is 0
-        String res = "";
-        int indegree[] = new int[256];
-        Arrays.fill(indegree, Integer.MIN_VALUE);
-
-        for (Character ch : chs) indegree[ch] = 0;// Initialize in-degree of the distinct characters in the words list
-        for (int i = 0; i < pairs.size(); i++)// Increase in-degree according to the dependency of pairs list
-            indegree[pairs.get(i).x]++;
-
-        Queue<Character> queue = new LinkedList<Character>();
-        for (int i = 0; i < 256; i++) {
-            if (indegree[i] == 0) {// Add the character whose in-degree = 0, which means it doesn't have any predecessor 
-                res += (char) i;
-                queue.offer((char) i);
+        //2.拓扑排序
+        //创建保存入度的数组
+        int[] degrees = new int[26];
+        Arrays.fill(degrees, -1);
+        //注意，不是26字母都在words中出现，所以出度分为两种情况：没有出现的字母出度为-1，出现了的字母的出度为非负数
+        for (String str : words) {
+            //将出现过的字符的出度设定为0
+            for (char c : str.toCharArray())
+                degrees[c - 'a'] = 0;
+        }
+        for (char key : map.keySet()) {
+            for (char val : map.get(key)) {
+                degrees[val - 'a']++;
             }
         }
-
-        while (!queue.isEmpty()) {
-            Character predecessor = queue.poll(); // Dequeue the character whose in-degree = 0 from queue
-
-            for (int i = 0; i < pairs.size(); i++) {
-                if (pairs.get(i).y == predecessor) {// Update in-degree: decrease 1 to the successors of the character whose in-degree = 0
-                    indegree[pairs.get(i).x]--;
-                    if (indegree[pairs.get(i).x] == 0) {// If in-degree = 0, add the character to the queue, and append it to the result string
-                        res += (char) pairs.get(i).x;
-                        queue.offer((char) pairs.get(i).x);
-                    }
-                }
-            }
-        }
-        return res.length() == chs.size() ? res : "";// NOTE: res.length should equal the size of distinct characters, otherwise a cycle must exist 
-    }
-}
-```
-
-
-
-```java
-class Solution {
-    public String alienOrder(String[] words) {
-        if (words == null || words.length == 0) {
-            return "";
-        }
+        //创建StringBuilder保存拓扑排序
         StringBuilder sb = new StringBuilder();
-        HashMap<Character, Set<Character>> suc = new HashMap<Character, Set<Character>>();
-        HashMap<Character, Integer> pre = new HashMap<Character, Integer> ();
-        HashSet<Character> charSet = new HashSet<Character>();
-        String previousWord = new String("");
-        for (String currentWord : words) {
-            for (Character c : currentWord.toCharArray()) {
-                charSet.add(c);
-            }
-            for (int i = 0; i < Math.min(previousWord.length(), currentWord.length()); ++i) {
-                if (previousWord.charAt(i) != currentWord.charAt(i)) {
-                    if (!pre.containsKey(currentWord.charAt(i))) { //----section_pre----
-                        pre.put(currentWord.charAt(i), 1);
-                    } else {
-                        //ERROR1: 过滤掉重复的关系 ["za","zb","ca","cb"], 从输入得出的中间结论，"a->b"会重复出现两次，需要滤重。为了实现滤重，重新调整了section_pre和section_suc部分的顺序。
-                        if (suc.containsKey(previousWord.charAt(i)) &&
-                                suc.get(previousWord.charAt(i)).contains(currentWord.charAt(i))) {
-                            continue;
-                        }
-                        pre.put(currentWord.charAt(i), pre.get(currentWord.charAt(i)) + 1);
-                    }
-                    if (!suc.containsKey(previousWord.charAt(i))) { //----section_suc----
-                        suc.put(previousWord.charAt(i), new HashSet<Character> ());
-                    }
-                    suc.get(previousWord.charAt(i)).add(currentWord.charAt(i));
-                    break; //the BEST part of this question
-                }
-            }
-            previousWord = currentWord;
-        }
-        Queue<Character> queue = new LinkedList<Character>();
-        for (Character each : charSet) {
-            if (!pre.containsKey(each)) {
-                queue.add(each);
+        //创建一个Queue保存入度为0的节点
+        Queue<Character> list = new LinkedList<>();
+
+        int count = 0;//计算图中节点数
+        for (int i = 0; i < 26; i++) {
+            if (degrees[i] != -1) count++;
+            if (degrees[i] == 0) {
+                list.add((char) ('a' + i));
             }
         }
 
-
-        while (!queue.isEmpty()) {
-            Character currentChar = queue.poll();
-            sb.append(currentChar);
-            //ERROR2 should check containsKey
-            if (!suc.containsKey(currentChar)) {
-                continue;
-            }
-            for (Character each : suc.get(currentChar)) {
-                pre.put(each, pre.get(each) - 1);
-                if (pre.get(each) == 0) {
-                    queue.offer(each);
+        while (!list.isEmpty()) {
+            Character cur = list.poll();
+            sb.append(cur);
+            //将邻接点出度-1
+            if (map.containsKey(cur)) {
+                Set<Character> set = map.get(cur);
+                for (Character c : set) {
+                    degrees[c - 'a']--;
+                    if (degrees[c - 'a'] == 0) list.add(c);
                 }
             }
         }
-        return sb.length() == charSet.size() ? sb.toString() : "";
+
+        //判断是否有环
+        if (sb.length() != count) return "";
+        else return sb.toString();
+
     }
 }
 ```
