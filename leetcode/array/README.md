@@ -947,7 +947,7 @@ rotate the input matrix in-place such that it becomes:
 class Solution {
     public void rotate(int[][] matrix) {
         int n = matrix.length;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) { // 将右上角和左下角交换
             for (int j = i; j < n; j++) {//j = i不用重复转置
                 //转换为转置矩阵transport matrix
                 int temp = matrix[i][j];
