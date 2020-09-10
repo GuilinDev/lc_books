@@ -45,6 +45,7 @@
     * [动态规划必要知识](leetcode/divide-and-conquer/dong-tai-gui-hua-bi-yao-zhi-shi.md)
   * [Greedy](leetcode/greedy.md)
   * [Geometry](leetcode/geometry.md)
+  * [Segment Tree](leetcode/segment-tree.md)
   * [Design](leetcode/design.md)
   * [5. Math](leetcode/math.md)
   * [6. Bit Manipulation](leetcode/untitled/README.md)
