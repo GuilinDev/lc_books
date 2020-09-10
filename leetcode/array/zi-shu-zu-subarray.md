@@ -146,7 +146,7 @@ Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
 
 对于全局最大值的更新，这里和2）类似。由于极大值的获取是寄希望于之后“可能”出现的新subarray，所以更新全局最大值的时候不能和此时的极大值1进行比较，而应该和实实在在的0比较。
 
-DP解法，思路跟53题的做法一样，使用滚动数组，只是corner cases更多，获得dp\[i\]的值只需要dp\[i-1\]的值，所以是不需要保存整个DP表的。这样一来，DP可以用滚动数组进行优化。简单的写法其实就是设一对prevMin/prevMax表示上一个值，以及还有一对curMin/curMax表示当前值。
+DP解法，思路跟53题的做法一样，使用滚动数组，只是corner cases更多，获得dp\[i\]的值只需要dp\[i-1\]的值，所以是不需要保存整个DP表的。这样一来，DP可以用滚动数组进行优化空间。简单的写法其实就是设一对prevMin/prevMax表示上一个值，以及还有一对curMin/curMax表示当前值。
 
 Time：O\(n\)；Space：O\(1\)。
 
