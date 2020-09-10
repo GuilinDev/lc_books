@@ -268,13 +268,10 @@ class Solution {
         }
 
         //手动实现一个comparator
-        Comparator<String> comp = new Comparator<String>() {
-            @Override
-            public int compare(String str1, String str2) {
-                String s1 = str1 + str2;
-                String s2 = str2 + str1;
-                return s2.compareTo(s1);//这里把大的放在前面
-            }
+        Comparator<String> comp = (str1, str2) -> {
+            String s1 = str1 + str2;
+            String s2 = str2 + str1;
+            return s2.compareTo(s1);//这里把大的放在前面
         };
 
 
