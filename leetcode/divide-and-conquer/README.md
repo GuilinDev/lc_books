@@ -41,6 +41,32 @@ Explanation: In this case, no transaction is done, i.e. max profit = 0.
 
 ### 代码
 
+DP
+
+```java
+class Solution {
+    // dp[i][j][k]: i - day, j - tranaction times, k - whether have stocks on hand
+    public int maxProfit(int[] prices) {
+        int maxProfix = 0;
+        if (prices == null || prices.length == 0) {
+            return maxProfix;
+        }
+        int len = prices.length;
+        int[] dp = new int[len];
+        dp[0] = 0; // profit为0，尚未开始买卖
+        int minPrice = prices[0];
+        
+        for (int i = 1; i < len; i++) {
+            dp[i] = Math.max(dp[i - 1], prices[i] - minPrice);
+            minPrice = Math.min(minPrice, prices[i]);
+        }
+        return dp[len - 1];
+    }
+}
+```
+
+状态压缩
+
 ```java
 class Solution {
     public int maxProfit(int[] prices) {
