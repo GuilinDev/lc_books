@@ -35,7 +35,7 @@ trie.search("app");     // returns true
 ```java
 class Trie {
     
-    private boolean is_string;
+    private boolean is_string; //记录到某个位置是否是一个单词
     private Trie[] next;
 
     /** Initialize your data structure here. */
