@@ -505,7 +505,7 @@ Given `[1,1,1,2,2,3]` and k = 2, return `[1,2]`.
 
 ```java
 class Solution {
-    public List<Integer> topKFrequent(int[] nums, int k) {
+    public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
             map.put(num, map.getOrDefault(num, 0) + 1);//原数组的元素为key，出现次数为value
@@ -513,14 +513,17 @@ class Solution {
 
         //利用最大堆
         PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>(
-                (a,b)->(b.getValue() - a.getValue()));
-        
+                (a, b) -> (b.getValue() - a.getValue())
+        );
+
         maxHeap.addAll(map.entrySet());
 
-        List<Integer> result = new ArrayList<>();
-        while (result.size() < k) {
+        int[] result = new int[k];
+        int index = 0;
+        while (index < k) {
             Map.Entry<Integer, Integer> entry = maxHeap.poll();//取出顶部元素并删除
-            result.add(entry.getKey());
+            result[index] = entry.getKey();
+            index++;
         }
         return result;
     }
