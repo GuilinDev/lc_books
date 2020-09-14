@@ -508,6 +508,69 @@ class Solution {
 }
 ```
 
+## 77 Combinations
+
+### 题目
+
+Given two integers _n_ and _k_, return all possible combinations of _k_ numbers out of 1 ... _n_.
+
+You may return the answer in **any order**.
+
+**Example 1:**
+
+```text
+Input: n = 4, k = 2
+Output:
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+```
+
+**Example 2:**
+
+```text
+Input: n = 1, k = 1
+Output: [[1]]
+```
+
+**Constraints:**
+
+* `1 <= n <= 20`
+* `1 <= k <= n`
+
+### 分析
+
+利用数学归纳法的递归写法，和回溯模板。
+
+### 代码
+
+```java
+class Solution {
+    public static List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> results = new ArrayList<List<Integer>>();
+        combine(results, new ArrayList<Integer>(), 1, n, k);
+        return results;
+    }
+
+    public static void combine(List<List<Integer>> results, List<Integer> oneResult, int start, int n, int k) {
+        if (k == 0) {
+            results.add(new ArrayList<Integer>(oneResult));
+            return;
+        }
+        for (int i = start; i <= n; i++) {
+            oneResult.add(i);
+            combine(results, oneResult, i + 1, n, k - 1);
+            oneResult.remove(oneResult.size() - 1);
+        }
+    }
+}
+```
+
 ## 89 Gray Code
 
 ### 原题概述
