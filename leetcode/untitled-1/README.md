@@ -1237,9 +1237,9 @@ class Solution {
 
         while (!queue.isEmpty()) {
             TreeNode node = queue.poll();//vs peek()
-            TreeNode left = node.left;
+            TreeNode temp = node.left;
             node.left = node.right;
-            node.right = left;
+            node.right = temp;
             if (node.left != null) {
                 queue.offer(node.left);
             }
