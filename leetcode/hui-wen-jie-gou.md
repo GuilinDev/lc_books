@@ -932,3 +932,86 @@ class Solution {
 }
 ```
 
+## 912 Sort and Array
+
+### 题目
+
+Given an array of integers `nums`, sort the array in ascending order.
+
+**Example 1:**
+
+```text
+Input: nums = [5,2,3,1]
+Output: [1,2,3,5]
+```
+
+**Example 2:**
+
+```text
+Input: nums = [5,1,1,2,0,0]
+Output: [0,0,1,1,2,5]
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 50000`
+* `-50000 <= nums[i] <= 50000`
+
+### 分析
+
+Quick sort和Merge Sort
+
+### 代码
+
+快排
+
+```java
+class Solution {
+    public int[] sortArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return quickSort(nums, 0, nums.length - 1);
+    }
+
+    int[] quickSort(int[] arr, int left, int right) {
+        if (left >= right) return arr;
+        int i = partition(arr, left, right);
+        quickSort(arr, left, i - 1);
+        quickSort(arr, i + 1, right);
+
+        return arr;
+    }
+
+    int partition(int[] arr, int start, int end) {
+        int pivot = arr[start];
+        int sortedIdx = start; // 该轮应该放好位置的元素的index
+        int index = start + 1; // 寻找跟pivot比较的数的index
+
+        while (index <= end) {
+            if (arr[index] < pivot) {
+                sortedIdx++;
+                swap(arr, sortedIdx, index);
+            }
+            index++;
+        }
+        // 把pivot放到正确位置上
+        swap(arr, start, sortedIdx);
+        return sortedIdx;
+    }
+
+    void swap(int[] arr, int p, int q) {
+        int temp = arr[p];
+        arr[p] = arr[q];
+        arr[q] = temp;
+    }
+
+}
+```
+
+归并
+
+```text
+
+```
+
