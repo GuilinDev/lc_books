@@ -1046,36 +1046,38 @@ Although the above answer is in lexicographical order, your answer could be in a
 
 > 当一个题目，存在各种满足条件的组合，并且需要把它们全部列出来，就可以考虑backtracking了，不过注意，backtracking一定程度上属于穷举，当数据特别大的时候吧不合适，这时通常应该考虑DP。
 
-先创建一个mapping，对应所有的键，比如输入"23"，2对应"abc"，3对应"def"，在递归的时候先确定2对应的字母之一，比如a，然后
+先创建一个mapping，对应所有的键，比如输入"23"，2对应"abc"，3对应"def"，在递归的时候先确定2对应的字母之一，比如a，然后按照回溯模板的做法来即可。
 
 ### 代码
 
 ```java
 class Solution {
-    //把电话键盘上数字对应的字母列出来，比如输入为2对应"abc"，其中0和1里面没有字符
-    String[] mapping = new String[]{"","", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    // 类变量，也可以把这些作为参数参数helper function
+    List<String> results;
+    StringBuilder oneResult;
+    String[] buttons;
     public List<String> letterCombinations(String digits) {
-        List<String> allComs = new ArrayList<>();
-        if (digits.isEmpty()) {
-            return allComs;
+        results = new ArrayList<>();
+        if (digits.isEmpty()) { // corner cases
+            return results;
         }
-        int len = digits.length();
-        letterCombinations(allComs, digits, "", 0);
-        return allComs;
+        oneResult = new StringBuilder();
+        // 方便查找字符
+        buttons = new String[]{"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        dfs(0, digits);
+        return results;
     }
-    private void letterCombinations(List<String> allComs, String digits, String oneCom, int index) {
-        if (index == digits.length()) {
-            if (oneCom.length() == digits.length()) {
-                if (oneCom.length() != 0) {
-                    allComs.add(oneCom);
-                }
-                return;
-            }
-        }
-        String temp = mapping[digits.charAt(index) - '0'];
-        for (int i = 0; i < temp.length(); i++) {
-            String newCom = oneCom + temp.charAt(i);
-            letterCombinations(allComs, digits, newCom, index + 1);
+    private void dfs(int curLen, String digits) {
+        if (oneResult.length() == digits.length()) {
+            results.add(oneResult.toString());
+            return;
+        } 
+        for (char ch : buttons[digits.charAt(curLen) - '0'].toCharArray()) { //遍历根据输入数字找到的某个字符串的所有字符
+            oneResult.append(ch);
+            dfs(curLen + 1, digits);
+            //回溯
+            oneResult.deleteCharAt(oneResult.length() - 1);
         }
     }
 }
@@ -1103,34 +1105,6 @@ class Solution {
             }
         }
         return result;
-    }
-}
-```
-
-DFS
-
-```java
-class Solution {
-    public List<String> letterCombinations(String digits) {
-        LinkedList<String> result = new LinkedList<>();
-        if (digits.isEmpty()) {
-            return result;
-        }
-        String[] mapping = new String[]{"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
-        backtracking(result, mapping, digits, "", 0);
-        return result;
-    }
-    private void backtracking(LinkedList<String> result, String[] mapping, String digits, String prefix, int offset) {
-        if (offset >= digits.length()) {
-            result.add(prefix);
-            return;
-        }
-        
-        int index = digits.charAt(offset) - '0';
-        String map = mapping[index];
-        for (int i = 0; i < map.length(); i++) {
-            backtracking(result, mapping, digits, prefix + map.charAt(i), offset + 1);
-        }
     }
 }
 ```
