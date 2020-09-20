@@ -2226,17 +2226,10 @@ DP方程和递归树
 这道题是完全背包问题的变种，采用动态规划维护一个二维数组dp，dp\[i\]\[j\]表示从第1个元素到第i个元素累计总金额为j时的最少硬币数量，递推公式为：
 
 ```text
-dp[i][j] = min(dp[i - 1][j], dp[i][j - coins[i]] + 1);   
-         = dp[i - 1][j]
-```
-
-观察方程，最少的硬币数量只跟第2个维度，也就是总金额有关系，优化空间成一维DP的方程为:
-
-```text
 dp[i]= min(dp[i], dp[i − coins[j]] + 1)
 ```
 
-意思是当零钱为 i 元需要的最少硬币数 = min \(啥也不干 或者第i元 - 硬币中所有出现的可能小于i元的硬币的出现次数 + 1\)。
+意思是当零钱为 i 元需要的最少硬币数 = min \(啥也不干 or 第i元 - 硬币中所有出现的可能小于i元的硬币的出现次数 + 1\)。
 
 ### 代码
 
@@ -2290,9 +2283,9 @@ class Solution {
    public int coinChange(int[] coins, int amount) {
        int[] dp = new int[amount + 1];
        for (int i = 1; i <= amount; i++) {
-            dp[i] = amount + 1;
+            dp[i] = amount + 1; //初始化每个位置，不能到达，dp[0]为凑满0元，可以达到
         }
-       // 直接套方程
+       // 转移方程
         for (int i = 1; i <= amount; i++) {
             for (int coin : coins) {
                 if (coin <= i) {
@@ -2305,7 +2298,6 @@ class Solution {
         }
        return dp[amount];
     }
-
 }
 ```
 
