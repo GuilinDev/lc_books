@@ -904,3 +904,174 @@ class TicTacToe {
 }
 ```
 
+## 355 Design Twitter
+
+### 题目
+
+Design a simplified version of Twitter where users can post tweets, follow/unfollow another user and is able to see the 10 most recent tweets in the user's news feed. Your design should support the following methods:
+
+1. **postTweet\(userId, tweetId\)**: Compose a new tweet.
+2. **getNewsFeed\(userId\)**: Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent.
+3. **follow\(followerId, followeeId\)**: Follower follows a followee.
+4. **unfollow\(followerId, followeeId\)**: Follower unfollows a followee.
+
+**Example:**
+
+```text
+Twitter twitter = new Twitter();
+
+// User 1 posts a new tweet (id = 5).
+twitter.postTweet(1, 5);
+
+// User 1's news feed should return a list with 1 tweet id -> [5].
+twitter.getNewsFeed(1);
+
+// User 1 follows user 2.
+twitter.follow(1, 2);
+
+// User 2 posts a new tweet (id = 6).
+twitter.postTweet(2, 6);
+
+// User 1's news feed should return a list with 2 tweet ids -> [6, 5].
+// Tweet id 6 should precede tweet id 5 because it is posted after tweet id 5.
+twitter.getNewsFeed(1);
+
+// User 1 unfollows user 2.
+twitter.unfollow(1, 2);
+
+// User 1's news feed should return a list with 1 tweet id -> [5],
+// since user 1 is no longer following user 2.
+twitter.getNewsFeed(1);
+```
+
+### 分析
+
+设计一个简化版的Twitter。额外创建一个Tweet类，用来记录每条推特的状态，里面有个时间戳，为了简化可以把时间戳用计数器的方式来表示；另外额外创建一个用户类，定义用户的各种行为。
+
+用一个hashmap来存储整个Twitter系统，key和value分别是用户ID和tweet ID，用一个hashset保存follow用户的列表以防重复follow。
+
+这道题是对各种数据结构的综合应用。
+
+### 代码
+
+```java
+class Twitter {
+    private static int counter = 0; // 发推的计数器
+    class Tweet {
+        int id;
+        int timestamp;
+        Tweet next; // 下一个节点
+        
+        public Tweet(int id) {
+            this.id = id;
+            timestamp = counter++; // 累加时间戳
+            next = null;
+        }
+    }
+    
+    class User {
+        int id;
+        Set<Integer> followed; // 关注的人
+        Tweet tweet_head; // 发推后的tweet首个tweet，记录头部方便根据时间戳查找其后的推特
+        
+        public User(int id) {
+            this.id = id;
+            followed = new HashSet<>();
+            tweet_head = null; //用户初始没有推特
+            follow(id); // 初始化时首先关注自己
+        }
+        
+        public void follow(int id) {
+            followed.add(id);
+        }
+        
+        public void unfollow(int id) {
+            followed.remove(id);
+        }
+        
+        // 每次发新的推特时，更新tweet_head
+        public void post(int tweetId) {
+            Tweet t = new Tweet(tweetId);
+            t.next = tweet_head; // 把新的tweet链接到旧的头部
+            tweet_head = t; // 更新头部
+        }
+    }
+    
+    private HashMap<Integer, User> userMap; // 用来记录整个Twitter用户系统
+
+    /** Initialize your data structure here. */
+    public Twitter() {
+        userMap = new HashMap<>();
+    }
+    
+    /** Compose a new tweet. */
+    public void postTweet(int userId, int tweetId) {
+        if (!userMap.containsKey(userId)) { // 给定的userId不在系统之中
+            User u = new User(userId);
+            userMap.put(userId, u);
+        }
+        userMap.get(userId).post(tweetId); // 用户发推
+    }
+    
+    /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+    public List<Integer> getNewsFeed(int userId) {
+        List<Integer> result = new LinkedList<>();
+        if (!userMap.containsKey(userId)) { // corner case
+            return result;
+        }
+        
+        // 从关注的所有人中获取10条tweet
+        Set<Integer> users = userMap.get(userId).followed; // 获取当前用户所有关注的人
+        PriorityQueue<Tweet> pq = new PriorityQueue<Tweet>(users.size(), (a, b)->(b.timestamp - a.timestamp));// 所有关注的人的推特按时间排序
+        for (int user : users) {
+            Tweet t = userMap.get(user).tweet_head; //获取当前关注的人的推特的首条推特
+            if (t != null) { // 当前关注的人的推特可能为空
+                pq.offer(t); // 按时间戳进行堆排序
+            }
+        }
+        
+        // 从堆中取10条记录
+        int n = 10;
+        while (!pq.isEmpty() && n > 0) {
+            Tweet t = pq.poll();
+            result.add(t.id);
+            n--;
+            if (t.next != null) { //BFS，将下一个tweet加入到优先队列中
+                pq.offer(t.next);
+            }
+        }
+        return result;
+    }
+    
+    /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
+    public void follow(int followerId, int followeeId) {
+        if (!userMap.containsKey(followerId)) {
+            User u = new User(followerId);
+            userMap.put(followerId, u);
+        }
+        if (!userMap.containsKey(followeeId)) {
+            User u = new User(followeeId);
+            userMap.put(followeeId, u);
+        }
+        userMap.get(followerId).follow(followeeId);
+    }
+    
+    /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
+    public void unfollow(int followerId, int followeeId) {
+        if (!userMap.containsKey(followerId) || followerId == followeeId) { // 自己不能取消关注自己
+            return;
+        }
+        userMap.get(followerId).unfollow(followeeId);
+    }
+}
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter obj = new Twitter();
+ * obj.postTweet(userId,tweetId);
+ * List<Integer> param_2 = obj.getNewsFeed(userId);
+ * obj.follow(followerId,followeeId);
+ * obj.unfollow(followerId,followeeId);
+ */
+```
+
