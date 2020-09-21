@@ -283,6 +283,50 @@ class Solution {
 }
 ```
 
+另外一种写法，因为课程是数字来表示，所以可以不用邻接表
+
+```java
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] results = new int[numCourses];
+        int[] indegrees = new int[numCourses]; //入度表也可以用hashmap表示
+
+        // 创建入度表
+        for (int[] pre : prerequisites) {
+            indegrees[pre[0]]++; // 把每个入度简化为增加1
+        }
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        // 首先将入度为0的顶点放进来
+        for (int i = 0; i < numCourses; i++) { // 课程表用数字表示
+            if (indegrees[i] == 0) {
+                queue.offer(i);
+            } 
+        }
+
+        int count = 0; // 记录课程是否全部被修完
+        while (!queue.isEmpty()) {
+            int currCourse = queue.poll();
+            results[count] = currCourse; // 把访问到的顶点（修完的课）加入到结果中
+            count++;
+
+            // 更新剩余未访问的顶点（未修的课）的入度，并将入度为0的课加入到队列中准备访问
+            for (int[] pre : prerequisites) {
+                if (pre[1] == currCourse) { // 只用修改依赖课程是当前课程的课程
+                    indegrees[pre[0]]--; // 依赖课程是当前课程的课程的入度--11
+                    if (indegrees[pre[0]] == 0) { // 入度为0则将课程加入到BFS的下一层中
+                        queue.offer(pre[0]); 
+                    }
+                }
+            }
+        }
+
+        // 检查下全部课程是否都被修完
+        return count == numCourses;
+    }
+}
+```
+
 **方法2** - DFS，通过 DFS 判断图中是否有环。
 
 1. 借助一个标志列表 `flags`，用于判断每个节点 `i` （课程）的状态：
@@ -403,49 +447,41 @@ BFS
 ```java
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        if (numCourses == 0) {
-            return new int[0];
-        }
-        int[] inDegrees = new int[numCourses];
-        
-        //BFS
-        Queue<Integer> queue = new LinkedList<>();
-        
-        // 建立入度表
+        int[] results = new int[numCourses];
+        int[] indegrees = new int[numCourses]; //入度表也可以用hashmap表示
+
+        // 创建入度表
         for (int[] pre : prerequisites) {
-            inDegrees[pre[0]]++;
+            indegrees[pre[0]]++; // 把每个入度简化为增加1
         }
-        
-        // 入度为0的节点的队列
-        for (int i = 0; i < inDegrees.length; i++) {
-            if (inDegrees[i] == 0) {
-                queue.offer(i); // 入度索引
-            }
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        // 首先将入度为0的顶点放进来
+        for (int i = 0; i < numCourses; i++) { // 课程表用数字表示
+            if (indegrees[i] == 0) {
+                queue.offer(i);
+            } 
         }
-        
-        int count = 0; // 可以学完的课程的数量
-        int[] result = new int[numCourses];//可以学完的课程
-        
-        // 根据提供的先修课列表，删除入度为 0 的节点
-        while (!queue.isEmpty()){
-            int curr = queue.poll();
-            
-            result[count] = curr;   // 将可以学完的课程加入结果当中
+
+        int count = 0; // 记录课程是否全部被修完
+        while (!queue.isEmpty()) {
+            int currCourse = queue.poll();
+            results[count] = currCourse; // 把访问到的顶点（修完的课）加入到结果中
             count++;
-            
+
+            // 更新剩余未访问的顶点（未修的课）的入度，并将入度为0的课加入到队列中准备访问
             for (int[] pre : prerequisites) {
-                if (pre[1] == curr){
-                    inDegrees[pre[0]]--;
-                    if (inDegrees[pre[0]] == 0) {
-                        queue.offer(pre[0]);
+                if (pre[1] == currCourse) { // 只用修改依赖课程是当前课程的课程
+                    indegrees[pre[0]]--; // 依赖课程是当前课程的课程的入度--11
+                    if (indegrees[pre[0]] == 0) { // 入度为0则将课程加入到BFS的下一层中
+                        queue.offer(pre[0]); 
                     }
                 }
             }
         }
-        if (count == numCourses) { // 可以全部学完
-            return result;
-        }
-        return new int[0];        
+
+        // 检查下全部课程是否都被修完
+        return count == numCourses ? results : new int[]{};
     }
 }
 ```
@@ -926,5 +962,93 @@ Follow up: what to do if the call is really expensive?
 
 We can cache the result in a hashmap.
 
+## 743 Network Delay Time
 
+### 题目
+
+There are `N` network nodes, labelled `1` to `N`.
+
+Given `times`, a list of travel times as **directed** edges `times[i] = (u, v, w)`, where `u` is the source node, `v` is the target node, and `w` is the time it takes for a signal to travel from source to target.
+
+Now, we send a signal from a certain node `K`. How long will it take for all nodes to receive the signal? If it is impossible, return `-1`.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2019/05/23/931_example_1.png)
+
+```text
+Input: times = [[2,1,1],[2,3,1],[3,4,1]], N = 4, K = 2
+Output: 2
+```
+
+**Note:**
+
+1. `N` will be in the range `[1, 100]`.
+2. `K` will be in the range `[1, N]`.
+3. The length of `times` will be in the range `[1, 6000]`.
+4. All edges `times[i] = (u, v, w)` will have `1 <= u, v <= N` and `0 <= w <= 100`.
+
+### 分析
+
+根据题目，从一个节点访问所有别的节点，总共需要多长时间。这个是图的BFS或者DFS做法，求从源节点到最远目标节点的最短路径，是Dijkstra类似的问题，Time O\(Nlog\(N\) + E\), Space: O\(N + E\)。
+
+PS另外两种算法： 
+
+Floyd–Warshall算法：Time complexity: O\(N^3\), Space complexity: O\(N^2\)
+
+Bellman-Ford算法：Time complexity: O\(N\*E\), Space complexity: O\(N\)
+
+### 代码
+
+BFS实现Dijkstra，java的API需要熟悉下
+
+```java
+class Solution {
+    public int networkDelayTime(int[][] times, int N, int K) {
+        Map<Integer, Map<Integer, Integer>> map = new HashMap<>(); //分解二维数组，用一个hashmap来存储源节点和带遍历的目标节点+delay时间
+        for (int[] time : times) { // key为源节点，value为map，其中key为目标节点，value为delay时间
+            map.putIfAbsent(time[0], new HashMap<>());
+            map.get(time[0]).put(time[1], time[2]);
+        }
+        
+        // 用一个优先队列来记录从源节点向外扩散的层，每一层的目标节点根据delay time来确定
+        // 目标节点-delay time
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        
+        // 先把参数源节点加入到优先队列，它的delay time是0
+        pq.offer(new int[]{K, 0});
+        
+        // 因为节点是以整数表示，所以用一个数组true/false即可表示是否被访问过
+        boolean[] visited = new boolean[N + 1]; //从1开始，免得标记时还需要转换
+        
+        int result = 0;
+        
+        // BFS
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int currNode = curr[0];
+            int currDelay = curr[1];
+            
+            if (visited[currNode]) { // 当前节点已被访问过
+                continue;
+            }
+            
+            // 标记访问
+            visited[currNode] = true;
+            
+            result = currDelay; //把结果更新为当前层的delay time
+            
+            // 处理当前层每个节点的下一层
+            if (map.containsKey(currNode)) { // 防止null
+                for (int neighbor : map.get(currNode).keySet()) { // 获取当前节点的所有目标节点
+                    pq.offer(new int[]{neighbor, currDelay + map.get(currNode).get(neighbor)}); // 源节点到当前层delay time + 当前层到目标节点的delay time
+                }
+            } 
+            
+            N--; // 层数-1
+        }
+        return N == 0 ? result : -1;
+    }
+}
+```
 
