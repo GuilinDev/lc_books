@@ -283,7 +283,7 @@ class Solution {
 }
 ```
 
-另外一种写法，因为课程是数字来表示，所以可以不用邻接表
+另外一种写法，因为课程是数字来表示，所以可以不用邻接表来存储每个入度，直接相加即可
 
 ```java
 class Solution {
@@ -442,6 +442,54 @@ BFS
 3. 将课程的邻居入度减 1 
 4. 若邻居课程入度为 0，加入队列 
 
+邻接表
+
+```java
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] results = new int[numCourses];
+        int[] indegrees = new int[numCourses]; // 入度表
+        List<List<Integer>> adjacency = new ArrayList<>(); //邻接表存储图
+        
+        //BFS
+        Queue<Integer> queue = new LinkedList<>();
+        
+        for (int i = 0; i < numCourses; i++) {
+            adjacency.add(new ArrayList<>());
+        }
+        
+        // 给每门课添加入度，以及将入度信息和课程本身添加到邻接表中
+        for (int[] pre : prerequisites) {
+            indegrees[pre[0]]++;
+            adjacency.get(pre[1]).add(pre[0]);
+        }
+        
+        // 将入度为0（没有前置课程的）的课程索引初始化入队
+        for (int i = 0; i < numCourses; i++) {
+            if (indegrees[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        
+        // BFS拓扑排序
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int pre = queue.poll();
+            results[count] = pre;
+            count++;
+
+            for (int cur : adjacency.get(pre)) { // 当前课程减去入度
+                indegrees[cur]--;
+                if (indegrees[cur] == 0) {
+                    queue.offer(cur);
+                }
+            }
+        }
+        return numCourses == count ? results : new int[]{};
+    }
+}
+```
+
 用一个变量记录学完的课程数量，一个数组记录最终结果，简洁好理解。
 
 ```java
@@ -541,7 +589,7 @@ class Solution {
 }
 ```
 
-2\) hashset作为邻接矩阵，推荐
+2\) hashset作为邻接矩阵
 
 ```java
 class Solution {
