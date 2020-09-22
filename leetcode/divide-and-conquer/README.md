@@ -1007,7 +1007,7 @@ class Solution {
 
         char[] wordArr1 = word1.toCharArray(), wordArr2 = word2.toCharArray();
 
-        //为第一行和第一列赋值
+        //为第一行和第一列赋值，0个word1和word2比较，以及word1和0个word2比较
         for (int i = 0; i <= len1; i++) dp[i][0] = i;
         for (int i = 0; i <= len2; i++) dp[0][i] = i;
 
