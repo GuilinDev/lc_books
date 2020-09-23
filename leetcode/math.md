@@ -744,3 +744,85 @@ class Solution {
 }
 ```
 
+## 313 Super Ugly Number
+
+### 题目
+
+Write a program to find the `nth` super ugly number.
+
+Super ugly numbers are positive numbers whose all prime factors are in the given prime list `primes` of size `k`.
+
+**Example:**
+
+```text
+Input: n = 12, primes = [2,7,13,19]
+Output: 32 
+Explanation: [1,2,4,7,8,13,14,16,19,26,28,32] is the sequence of the first 12 
+             super ugly numbers given primes = [2,7,13,19] of size 4.
+```
+
+**Note:**
+
+* `1` is a super ugly number for any given `primes`.
+* The given numbers in `primes` are in ascending order.
+* 0 &lt; `k` ≤ 100, 0 &lt; `n` ≤ 106, 0 &lt; `primes[i]` &lt; 1000.
+* The nth super ugly number is guaranteed to fit in a 32-bit signed integer.
+
+### 分析
+
+跟Ugly Number 和Ugly Number II相比，质因数不止2，3，5，而是给定的一个array，依然用Ugly Number II的各种方法。
+
+### 代码
+
+DP
+
+```java
+class Solution {
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        int[] dp = new int[n];
+        int[] idx = new int[primes.length];
+
+        dp[0] = 1;
+        for (int i = 1; i < n; i++) {
+            //find next
+            dp[i] = Integer.MAX_VALUE;
+            for (int j = 0; j < primes.length; j++)
+                dp[i] = Math.min(dp[i], primes[j] * dp[idx[j]]);
+
+            //slip duplicate
+            for (int j = 0; j < primes.length; j++) {
+                while (primes[j] * dp[idx[j]] <= dp[i]) idx[j]++;
+            }
+        }
+
+        return dp[n - 1];
+    }
+}
+```
+
+```java
+class Solution {
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        int[] dp = new int[n];
+        int[] idx = new int[primes.length];
+        int[] val = new int[primes.length];
+        Arrays.fill(val, 1);
+
+        int next = 1;
+        for (int i = 0; i < n; i++) {
+            dp[i] = next;
+            
+            next = Integer.MAX_VALUE;
+            for (int j = 0; j < primes.length; j++) {
+                //skip duplicate and avoid extra multiplication
+                if (val[j] == dp[i]) val[j] = dp[idx[j]++] * primes[j];
+                //find next ugly number
+                next = Math.min(next, val[j]);
+            }
+        }
+
+        return dp[n - 1];
+    }
+}
+```
+
