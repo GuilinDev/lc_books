@@ -695,3 +695,52 @@ class Solution {
 }
 ```
 
+利用优先队列来保持顺序
+
+```java
+class Solution {
+    public int nthUglyNumber(int n) {
+        PriorityQueue<Long> pq = new PriorityQueue<>();
+        pq.offer(1L);
+        
+        for (int i = 1; i < n; i++) {
+            long temp = pq.poll();
+            
+            // 去重
+            while (!pq.isEmpty() && pq.peek() == temp) {
+                temp = pq.poll();
+            }
+            
+            // 更新pq中丑数，保持顺序
+            pq.offer(temp * 2);
+            pq.offer(temp * 3);
+            pq.offer(temp * 5);
+        }
+        
+        return pq.poll().intValue();
+    }
+}
+```
+
+也可以用TreeSet，并且不用考虑去重
+
+```java
+class Solution {
+    public int nthUglyNumber(int n) {
+        TreeSet<Long> set = new TreeSet<>();
+        set.add(1L);
+        
+        for (int i = 1; i < n; i++) {
+            long first = set.pollFirst();
+            
+            // 更新pq中丑数，保持顺序
+            set.add(first * 2);
+            set.add(first * 3);
+            set.add(first * 5);
+        }
+        
+        return set.first().intValue();
+    }
+}
+```
+
