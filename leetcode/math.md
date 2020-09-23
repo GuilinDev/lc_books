@@ -666,3 +666,32 @@ class Solution {
 }
 ```
 
+考虑状态压缩
+
+```java
+class Solution {
+    public int nthUglyNumber(int n) {
+        
+        int num_2 = 1;
+        int num_3 = 1;
+        int num_5 = 1;
+        
+        int result = 1;
+        
+        for (int i = 1; i < n; i++) { 
+            result = Math.min(num_2 * 2, Math.min(num_3 * 3, num_5 * 5));
+            if (result == num_2 * 2) {
+                num_2 *= 2;
+            }
+            if (result == num_3 * 3) {
+                num_3 *= 3;
+            }
+            if (result == num_5 * 5) {
+                num_5 *= 5;
+            }
+        }
+        return result;
+    }
+}
+```
+
