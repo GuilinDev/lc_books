@@ -367,7 +367,7 @@ class Solution {
         return result;
     }
     
-    // 以下为Union Find的状态压缩代码
+    // 以下为Union Find的路径压缩代码
     private int find(int p, int[] parent) {
         if (parent[p] == p) {
             return p;
