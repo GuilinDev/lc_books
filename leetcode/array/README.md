@@ -303,7 +303,7 @@ class Solution {
 }
 ```
 
-3. O（m + n）解法
+3. O（m + n）解法，合并两个链表
 
 ```java
 class Solution {
