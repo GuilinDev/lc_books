@@ -144,8 +144,8 @@ class Solution {
 ```
 
 Union Find，整体思路：  
-    1. 实现Union函数  
-    2. 循环元素值 并判断下侧和右侧是否为岛屿  
+    1. 实现Union Find函数  
+    2. 循环元素值 并判断**下侧**和**右侧**是否为岛屿  
         如果 是：合并元素值  
         如果 否：不做处理
 
@@ -154,60 +154,54 @@ Union Find，整体思路：
 ```java
 class Solution {
     public int numIslands(char[][] grid) {
-        int result = 0;
+        //DFS
         if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return result;
+            return 0;
         }
         int rows = grid.length;
         int cols = grid[0].length;
-
-        // 1维数组存储连通后剩余岛屿的数量(-1)，以及连通后的水域(0, -2)
-        int[] nums = new int[rows * cols];
-        // 初始值，不连通或自连通
-        Arrays.fill(nums, -1);
-
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
-                if(grid[i][j] == '1') {
-                    grid[i][j] = '0'; // 不用额外数组，先把自己修改一下
-
-                    //判断下侧是否有岛屿,同BFS解法中的坐标转换为数字
-                    if(i < (rows - 1) && grid[i + 1][j] == '1') {
-                        union(nums, i * cols + j, (i + 1) * cols + j);
+        
+        int[] parent = new int[rows * cols]; // 存储每个连通分量的最终父节点
+        
+        Arrays.fill(parent, -1); 
+        
+        for(int i = 0; i < rows;i++){
+            for(int j = 0; j < cols; j++){                
+                if(grid[i][j] == '1'){
+                    parent[i * cols + j]= i * cols + j; // note, that `parent` was filled witn -1 values
+                    if(i > 0 && grid[i - 1][j] == '1') { // 与左边比较
+                        union(i * cols + j, (i - 1) * cols + j, parent); // union current+top
                     }
-
-                    //判断右侧是否有岛屿,同BFS解法中的坐标转换为数字
-                    if(j < (cols - 1) && grid[i][j + 1] == '1') {
-                        union(nums, i * cols + j, i * cols + j + 1);
+                    if(j > 0 && grid[i][j - 1] == '1') { // 与上面比较
+                        union(i * cols + j, i * cols + (j - 1), parent); // union current+left
                     }
-                } else {
-                    nums[i * cols + j] = -2;
                 }
+                
             }
         }
-
-        for(int num : nums) { // 检查连通后的岛屿
-            if(num == -1) {
-                result++;
+        
+        Set<Integer> set = new HashSet<>();
+        for(int k = 0; k < parent.length; k++){
+            if(parent[k] != -1) {
+                set.add(find(k, parent)); // 寻找多少个圈子
             }
         }
-
-        return result;
+        return set.size();
+        
     }
-
-    public int find(int[] parents, int i) {
-        if(parents[i] == -1) { // 连通
-            return i;
+    // 以下为并查集的路径压缩代码
+    private int find(int p, int[] parent) {
+        if (parent[p] == p) {
+            return p;
         }
-
-        return find(parents, parents[i]);
+        parent[p] = find(parent[p], parent); // 路径压缩，使find的时间复杂度为O(1)
+        return parent[p];
     }
-
-    public void union(int[] parents, int x, int y) {
-        int xset = find(parents, x);
-        int yset = find(parents, y);
-        if(xset != yset) {
-            parents[xset] = yset;
+    private void union(int p1, int p2, int[] parent) {
+        int f1 = find(p1, parent);
+        int f2 = find(p2, parent);
+        if (f1 != f2) {
+            parent[f1] = f2;
         }
     }
 }

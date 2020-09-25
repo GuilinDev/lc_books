@@ -2060,42 +2060,31 @@ Output: -1->0->3->4->5
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ *     ListNode(int x) { val = x; }
  * }
  */
 class Solution {
     public ListNode insertionSortList(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
+        if (head == null) {
+            return null;
         }
         ListNode dummy = new ListNode(-1);
-        
-        // insert 每次寻找需要插入的位置
-        ListNode insert = dummy;
-        insert.next = head;
-                
-        ListNode prev = head; // 已排序部分的最右边节点
-        ListNode curr = head.next; // 未排序部分的最左边节点
-        
-        while (curr != null) {
-            while (curr.val > insert.next.val && insert != prev) {
-                insert = insert.next;
+        ListNode current = head;//准备插入的的结点
+        ListNode pre = dummy;//current结点会插入到pre和pre.next之间
+        ListNode next = null; //下一个准备插入的结点
+
+        //插入排序两层循环
+        while (current != null) {
+            next = current.next;//先把当前结点的尾部维持好
+            //找到合适的位置插入
+            while (pre.next != null && pre.next.val < current.val) {
+                pre = pre.next;
             }
-            
-            if (insert == prev) { // 当前节点的位置是当前有序部分的最右边
-                curr = curr.next;
-                prev = prev.next;
-            } else { // 插入到有序数组的左边或中间
-                prev.next = prev.next.next;
-                ListNode temp = insert.next;
-                insert.next = curr;
-                curr.next = temp;
-                
-                curr = prev.next;
-            }
-            insert = dummy;
+            //找到合适位置后进行插入操作
+            current.next = pre.next;
+            pre.next = current;
+            pre = dummy;
+            current = next;
         }
         return dummy.next;
     }
