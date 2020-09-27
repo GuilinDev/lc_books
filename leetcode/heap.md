@@ -198,58 +198,27 @@ Deque的做法
 ```java
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        
-        if (nums == null || k <= 0) {
+        if (nums == null || nums.length == 0) {
             return new int[0];
         }
         int len = nums.length;
-
-        //如果原本元素个数少于k，直接查一遍
-        if (len <= k) {
-            int max = Integer.MIN_VALUE;
-            for (int num : nums) {
-                //max = num > max ? num : max;
-                if (num > max) {
-                    max = num;
-                }
-            }
-            return new int[]{max};
-        }
-        
         int[] result = new int[len - k + 1];
         
-        Deque<Integer> window 
-            = new ArrayDeque<Integer>(k);//队列中存的是元素的下标
+        Deque<Integer> window = new ArrayDeque<>(); // 记录窗口内元素的indices，也可以linklist
+        int index = 0;
         
-        //刚开始窗口为空的时候，将第一个元素的下标default放到队列中去
-            window.offer(0);
-
-        //依次将每一个元素循环，放入到窗口中去
-        for (int i = 0; i < len; i++) {
-            
-            //判断窗口中头部的元素的下标，从而知道该元素是否应该继续在本轮存在于窗口，或者根据窗口滑动应该被移除
-            if (window.peek() < i - k + 1) {
+        for (int i = 0; i <= len - 1; i++) {
+            if (!window.isEmpty() && window.peek() < i - k + 1) { //队列头顶元素的index在过了做窗口后需要删除
                 window.poll();
             }
-
-            //新的元素nums[i]准备放入队列中，这时候要先和原本队列中的元素的下标
-            Iterator<Integer> it = window.iterator();
-            while(it.hasNext()) {
-                //原先窗口中的元素只要比新来的元素小，就通通移除，反正没有这些较小元素的机会
-                if (nums[it.next()] < nums[i]) {
-                    it.remove();
-                }
+            while (!window.isEmpty() && nums[window.peekLast()] <= nums[i]) { //队列中比新进来元素小的元素用不到
+                window.pollLast();
             }
-
-            //每次循环将新元素的下标添加到窗口中
-            if (i != 0) {
-                window.offer(i);
+            window.offer(i); // 将当前元素的index加入到队列中
+            
+            if (i >= k - 1) { // 前k-1个元素暂时没有最大值
+                result[index++] = nums[window.peek()];
             }            
-
-            //i >= k - 1表示至少遍历了k个元素了（可以开始查找最大数了），这时候把最头部（左边）的老大加入到结果中
-            if (i >= k - 1) {
-                result[i - k + 1] = nums[window.peek()];
-            }
         }
         return result;
     }
