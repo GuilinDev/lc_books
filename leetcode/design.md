@@ -1116,7 +1116,7 @@ circularQueue.Rear();  // return 4
 
 ### 分析
 
-用数组来实现，
+可以用链表或者array实现，维护两个索引head和tail，每次入队时，tail向右移动一位；每次出队时，head向右移动一位。为了不让head和tail跑到array长度的外面去，所以用取模的方式让head和tail重新回到头部，另外额外维护一个实时的长度len方便检查是否为空或者满。
 
 循环队列应用场景：
 
