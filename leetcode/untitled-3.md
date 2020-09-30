@@ -59,8 +59,8 @@ class Solution {
             return result;
         }
 
-        Set<String> visited = new HashSet<>();
-        Queue<String> queue = new LinkedList<>();//存储状态
+        Set<String> visited = new HashSet<>(); // 记录BFS中产生的状态的字符串
+        Queue<String> queue = new LinkedList<>();//存储BFS中每一层的元素
 
         //初始化
         visited.add(s);
