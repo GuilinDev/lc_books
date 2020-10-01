@@ -98,7 +98,7 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 class Solution {
     public int romanToInt(String s) {
         int nums[] = new int[s.length()];//创建一个s包含的字符的长度的数组
-        //给数组每个位置赋值为相对应的值
+        //给新创建的数组每个位置赋值为相对应的值，方便查找
         for (int i = 0; i < s.length(); i++) {
             switch (s.charAt(i)) {
                 case 'M':
@@ -126,13 +126,13 @@ class Solution {
         }
 
         int result = 0;
-        for(int i = 0;i < nums.length-1; i++){
-            if(nums[i] < nums[i+1])
+        for(int i = 0; i < nums.length - 1; i++){
+            if(nums[i] < nums[i + 1]) // 当前位置为IV IX这样的情况
                 result -= nums[i];
-            else
+            else  // 当前位置为VI XI这样的情况，或者相等
                 result += nums[i];
         }
-        return result + nums[nums.length-1];
+        return result + nums[nums.length - 1]; //最后一位单独加上
     }
 }
 ```
@@ -212,6 +212,8 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 因为有输入的限制，所以投机取巧可以建立一个数表，每次查表找出最大的当前最大的数，然后减去再继续查表
 
 ### 代码
+
+穷举法来对应
 
 ```java
 class Solution {
