@@ -948,7 +948,7 @@ III - p和s不为空，且递归过程中p的第二个字符不为\*，那就如
 
 dp\[i\]\[j\]：**表示字符串中s中的前i个字符与字符串p中的前j个字符是否能够匹配**。如果能匹配则为true，反之为false。
 
-**假如**已经算出了前i-1个字符与前j-1个字符的匹配情况了，那如何计算dp\[i\]\[j\]dp\[i\]\[j\]呢？
+**假如**已经算出了前i-1个字符与前j-1个字符的匹配情况了，那如何计算dp\[i\]\[j\]呢？
 
 * 如果s\[i\] == p\[j\]，说明dp\[i\]\[j\]取决于dp\[i-1\]\[j-1\] 
 * 如果s\[i\] != p\[j\]，说明两个字符串不匹配 
@@ -959,7 +959,7 @@ _对于 '.' 和 '\*'的处理_
 
 * 当p\[j\] == '.'的时候，说明这个字符什么都可以当，和之前s\[i\] == p\[j\]是一样的，故dp\[i\]\[j\] == dp\[i - 1\]\[j - 1\].
 * 当p\[j\] == '\*' 的时候这要分两种情况：
-  * 如果前面的字符p\[j - 1\]能与s当前的字符s\[i\]匹配上的话，那就dp\[i\]\[j\]的状态就去取决于dp\[ i- 1\]\[j\]\[j\]，也是就相当于看前面的状态。
+  * 如果前面的字符p\[j - 1\]能与s当前的字符s\[i\]匹配上的话，那就dp\[i\]\[j\]的状态就取决于dp\[ i- 1\]\[j\]，也是就相当于看前面的状态。
   * 如果前面的字符p\[j - 1\]不能与s当前的字符s\[i\]匹配上的话，是不是就代表匹配失败了呢？不一定，因为这毕竟是一个 \* 号而不是真正的要匹配的字符，说白了大不了不用它来匹配了，也就是使用0次，那就dp\[i\]\[j\]的状态就去取决于dp\[i\]\[j - 2\]。上面这两种状态只要能满足其中一种就可以了，即：
 
 ![](../.gitbook/assets/image%20%2863%29.png)
@@ -984,6 +984,39 @@ class Solution {
 ```
 
 DP
+
+```java
+class Solution {
+    public boolean isMatch(String s, String p) {
+        int lenS = s.length(), lenP = p.length();
+        boolean[][] dp = new boolean[lenS + 1][lenP + 1]; //多一个初始状态，都为0的情况
+        dp[0][0] = true;
+        
+        for (int j = 2; j <= lenP; j++) { // 先把"*"处理了
+            if (p.charAt(j - 1) == '*') {
+                dp[0][j] = dp[0][j - 2];
+            }
+        }
+        
+        for (int i = 1; i <= lenS; i++) {
+            for (int j = 1; j <= lenP; j++) {
+                if (match(s.charAt(i - 1), p.charAt(j - 1))) { // 前面两个字符相匹配
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else if (p.charAt(j - 1) == '*') { // p中前面一个字符为'*'，分两种情况
+                    dp[i][j] = dp[i][j - 2]; // 情况1
+                    if (match(s.charAt(i - 1), p.charAt(j - 2))) { // 情况2
+                        dp[i][j] |= dp[i - 1][j]; // |=表示可能dp[i][j]之前'*'处理过
+                    }
+                }
+            }
+        }
+        return dp[lenS][lenP];
+    }
+    private boolean match(char a, char b) {
+        return a == b || b == '.';
+    }
+}
+```
 
 ```java
 class Solution {
