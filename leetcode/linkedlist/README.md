@@ -2060,31 +2060,42 @@ Output: -1->0->3->4->5
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode(int x) { val = x; }
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
 class Solution {
     public ListNode insertionSortList(ListNode head) {
-        if (head == null) {
-            return null;
+        if (head == null || head.next == null) {
+            return head;
         }
         ListNode dummy = new ListNode(-1);
-        ListNode current = head;//准备插入的的结点
-        ListNode pre = dummy;//current结点会插入到pre和pre.next之间
-        ListNode next = null; //下一个准备插入的结点
-
-        //插入排序两层循环
-        while (current != null) {
-            next = current.next;//先把当前结点的尾部维持好
-            //找到合适的位置插入
-            while (pre.next != null && pre.next.val < current.val) {
-                pre = pre.next;
+        
+        // insert 每次寻找需要插入的位置
+        ListNode insert = dummy;
+        insert.next = head;
+                
+        ListNode prev = head; // 已排序部分的最右边节点
+        ListNode curr = head.next; // 未排序部分的最左边节点
+        
+        while (curr != null) {
+            while (curr.val > insert.next.val && insert != prev) {
+                insert = insert.next;
             }
-            //找到合适位置后进行插入操作
-            current.next = pre.next;
-            pre.next = current;
-            pre = dummy;
-            current = next;
+            
+            if (insert == prev) { // 当前节点的位置是当前有序部分的最右边
+                curr = curr.next;
+                prev = prev.next;
+            } else { // 插入到有序数组的左边或中间
+                prev.next = prev.next.next;
+                ListNode temp = insert.next;
+                insert.next = curr;
+                curr.next = temp;
+                
+                curr = prev.next;
+            }
+            insert = dummy;
         }
         return dummy.next;
     }
@@ -2599,7 +2610,7 @@ class Solution {
 
 ```
 
-in-place的做法，想避免使用额外空间，我们只能通过利用链表原来的数据结构来存储结点。基本思路是这样的，对链表进行三次扫描，第一次扫描对每个结点进行复制，然后把复制出来的新节点接在原结点的next，也就是让链表变成一个重复链表，就是新旧更替；第二次扫描中我们把旧结点的random指针赋给新节点的随机指针，因为新结点都跟在旧结点的下一个，所以赋值比较简单，就是node.next.random = node.random.next，其中node.next就是新结点，因为第一次扫描就是把新结点接在旧结点后面。现在把结点的随机指针都接好了，最后一次扫描把链表拆成两个，第一个还原原链表，而第二个就是我们要求的复制链表。因为现在链表是旧新更替，只要把每隔两个结点分别相连，对链表进行分割即可。这个方法总共进行三次线性扫描，所以时间复杂度是O\(n\)。而这里并不需要额外空间，所以空间复杂度是O\(1\)。比起上面的方法，这里多做一次线性扫描，但是不需要额外空间，还是比较值的。
+in-place的做法，想避免使用额外空间，我们只能通过利用链表原来的数据结构来存储结点。基本思路是这样的，对链表进行三次扫描，第一次扫描对每个结点进行复制，然后把复制出来的新节点接在原结点的next，也就是让链表变成一个重复链表，就是新旧更替；第二次扫描中我们把旧结点的random指针赋给新节点的random指针，因为新结点都跟在旧结点的下一个，所以赋值比较简单，就是node.next.random = node.random.next，其中node.next就是新结点，因为第一次扫描就是把新结点接在旧结点后面。现在把结点的随机指针都接好了，最后一次扫描把链表拆成两个，第一个还原原链表，而第二个就是我们要求的复制链表。因为现在链表是旧新更替，只要把每隔两个结点分别相连，对链表进行分割即可。这个方法总共进行三次线性扫描，所以时间复杂度是O\(n\)。而这里并不需要额外空间，所以空间复杂度是O\(1\)。比起上面的方法，这里多做一次线性扫描，但是不需要额外空间，还是比较值的。
 
 ```java
 /*
