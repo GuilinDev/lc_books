@@ -287,7 +287,7 @@ class Solution {
         
         for (int num : nums) {
             preSum += num;
-            if (map.containsKey(preSum - k)) {
+            if (map.containsKey(preSum - k)) { // preSum[i] - preSum[j] = k移项
                 result += map.get(preSum - k);
             }
             map.put(preSum, map.getOrDefault(preSum, 0) + 1);
