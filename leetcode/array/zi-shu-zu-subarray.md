@@ -283,7 +283,7 @@ class Solution {
         int preSum = 0;
         int result = 0;
         HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(0, 1); // 初始化
+        map.put(0, 1); // 初始化，表示达到target-t时的sum有一个
         
         for (int num : nums) {
             preSum += num;
