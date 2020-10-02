@@ -202,115 +202,117 @@ Trie解法，具体步骤：
 
 ```java
 class Solution {
-    //------构建前缀树的类，需要掌握，208 - Implement Trie (Prefix Tree)
+    // ------------------
     class Trie {
-    
-        private boolean is_string;
+        private boolean is_word;
         private Trie[] next;
-    
+
+
         /** Initialize your data structure here. */
         public Trie() {
-            is_string = false;
             next = new Trie[26];
+            is_word = false;
         }
-        
+
         /** Inserts a word into the trie. */
         public void insert(String word) {
             Trie root = this;
-            char[] w = word.toCharArray();
-            for (char x : w) {
-                if (root.next[x - 'a'] == null) { // 当前节点的下一个节点不存在，说明是新来的，新建一个
-                    root.next[x - 'a'] = new Trie();
+            for (int i = 0; i < word.length(); i++) {
+                char ch = word.charAt(i);
+                if (root.next[ch - 'a'] == null) {
+                    root.next[ch - 'a'] = new Trie();
                 }
-                // 移动索引到当前节点
-                root = root.next[x - 'a'];
+                root = root.next[ch - 'a'];
             }
-            root.is_string = true;
+            root.is_word = true;
         }
-        
+
         /** Returns if the word is in the trie. */
         public boolean search(String word) {
-            Trie root = this;
-            char[] w = word.toCharArray();
-            for (char x : w) { // 挨个节点查找
-                if (root.next[x - 'a'] == null) { // 没找到
-                    return false;
-                }
-                root = root.next[x - 'a']; // 移动索引并准备检查下一个节点
+
+            if (find(word) == null) {
+                return false;
             }
-            return root.is_string;
+
+            return find(word).is_word;
         }
-        
+
         /** Returns if there is any word in the trie that starts with the given prefix. */
         public boolean startsWith(String prefix) {
+
+            return find(prefix) == null ? false : true;
+        }
+
+        private Trie find(String str) {
             Trie root = this;
-            char[] p = prefix.toCharArray();
-            for (char x : p) {
-                if (root.next[x - 'a'] == null) { // 没找到
-                    return false;
+            for (int i = 0; i < str.length(); i++) {
+                char ch = str.charAt(i);
+                if (root.next[ch - 'a'] == null) {
+                    return null;
                 }
-                root = root.next[x - 'a'];
+                root = root.next[ch - 'a'];
             }
-            return true;
+            return root;
         }
     }
-    //------上面是208题构建前缀树的类
 
-    char[][] _board = null;
-    ArrayList<String> _result = new ArrayList<>();
+    /**
+     * Your Trie object will be instantiated and called as such:
+     * Trie obj = new Trie();
+     * obj.insert(word);
+     * boolean param_2 = obj.search(word);
+     * boolean param_3 = obj.startsWith(prefix);
+     */ 
+    //------------------- 以上是构建Trie的代码
+    //O(m * n * h) - h为Trie的高度
     Trie root = new Trie();
-
+    List<String> results;
     public List<String> findWords(char[][] board, String[] words) {
-
-        // 第一步，构建前缀树
+        results= new ArrayList<>();
+       if (board == null || board.length == 0 || board[0].length == 0 || words == null) {
+           return results;
+       }
+        
+        int rows = board.length, cols = board[0].length;
+        // 1. 构建Trie并加入单词
         for (String word : words) {
             root.insert(word);
         }
-
-        this._board = board;
-        // 对于矩阵中的每一个点进行回溯
-        for (int row = 0; row < board.length; ++row) {
-            for (int col = 0; col < board[row].length; ++col) {
-                StringBuilder sb = new StringBuilder();//每次到一个点，就先进建一个Stringbuilder类型
-                boolean[][] is_visit = new boolean[board.length][board[0].length];
-                backtracking(row, col, sb, is_visit);
+        
+        // 2. 对board中的每一个字符进行dfs，查找以该字符为起始是否是一个单词        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                StringBuilder sb = new StringBuilder();
+                // 这里额外空间可以传入一个记录visited的board，下面不用改成'#'也行
+                dfs(i, j, board, sb);
             }
         }
-        return this._result;
+        return results;
     }
-
-    private void backtracking(int row, int col, StringBuilder sb, boolean[][] is_visit) {
-        //退出回溯的条件，如果row和col是在边缘
-        if (row > _board.length - 1 || row < 0 || col < 0 || col > _board[0].length - 1) {
+    
+    private void dfs(int i, int j, char[][] board, StringBuilder sb) {
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] == '#') {
             return;
         }
-
-        //如果当前节点访问过了就return
-        if (is_visit[row][col]) {
-            return;
-        }
-        //如果不是边缘的话，那么sb加入当前的字符
-        sb.append(_board[row][col]);
-        is_visit[row][col] = true;
-        //前缀树包含这个单词的话
-
+        sb.append(board[i][j]);
+        char temp = board[i][j];
+        board[i][j] = '#';
+        
         if (root.search(sb.toString())) {
-            if (!_result.contains(sb.toString())) {
-                _result.add(sb.toString());
-            }
+            if (!results.contains(sb.toString())) {
+                results.add(sb.toString());
+            }            
         }
-        //如果前缀树搜索含有这个前缀，就继续上下左右搜索
+        
         if (root.startsWith(sb.toString())) {
-            backtracking(row + 1, col, sb, is_visit);
-            backtracking(row - 1, col, sb, is_visit);
-            backtracking(row, col - 1, sb, is_visit);
-            backtracking(row, col + 1, sb, is_visit);
-
-
+            // board中四个方向的dfs
+            dfs(i - 1, j, board, sb);
+            dfs(i + 1, j, board, sb);
+            dfs(i, j - 1, board, sb);
+            dfs(i, j + 1, board, sb);
         }
-        sb.deleteCharAt(sb.length() - 1);
-        is_visit[row][col] = false;
-        //return;
+        sb.deleteCharAt(sb.length() - 1); //Trie中的路径
+        board[i][j] = temp;
     }
 }
 ```
