@@ -76,11 +76,11 @@ class Solution {
         TreeNode current = root;
         while (current != null) {
             result.add(current.val);
-            if (current.right != null) {//按照从上到下，逐次放入右儿子
+            if (current.right != null) {//按照从上到下，逐次放入右子树到最下面
                 stack.push(current.right);
             }
-            current = current.left;
-            if (current == null && !stack.isEmpty()) {//说明左儿子已经放完了
+            current = current.left;//根节点已经访问过，现在去左子树
+            if (current == null && !stack.isEmpty()) {//说明左子树已经放完，stack里是“右子树”
                 current = stack.pop();
             }
         }
