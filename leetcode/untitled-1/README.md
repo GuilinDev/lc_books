@@ -76,11 +76,11 @@ class Solution {
         TreeNode current = root;
         while (current != null) {
             result.add(current.val);
-            if (current.right != null) {//按照从上到下，逐次放入右子树到最下面
+            if (current.right != null) {//按照从上到下，逐次放入右儿子
                 stack.push(current.right);
             }
-            current = current.left;//根节点已经访问过，现在去左子树
-            if (current == null && !stack.isEmpty()) {//说明左子树已经放完，stack里是“右子树”
+            current = current.left;
+            if (current == null && !stack.isEmpty()) {//说明左儿子已经放完了
                 current = stack.pop();
             }
         }
@@ -287,7 +287,7 @@ class Solution {
         // 由于遍历顺序，不能像后序遍历那样先把root加入stack中，注意whle退出条件
         while (current != null || !stack.isEmpty()) {
             while (current != null) {
-                stack.push(current);
+                stack.add(current);
                 current = current.left;//先移动指针去左儿子
             }
             //左儿子没了开始从二叉树的最底层弹，同时考虑每个结点的右儿子

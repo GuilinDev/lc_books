@@ -22,117 +22,64 @@ Output: "BANC"
 
 要求在字符串s中找到最小的子字符串w（window），其中包含T中所有的字符，如果没有就返回空字符串，如果有，最小的字符串只有唯一的一个。
 
-[这里](https://leetcode.com/problems/minimum-window-substring/discuss/26808/Here-is-a-10-line-template-that-can-solve-most-'substring'-problems)有大神总结的找子字符串的模板，利用了ASCII码创建数组来查询子字符串，维护两个索引来完成。
-
 ### 代码
 
-```java
-class Solution {
-    public String minWindow(String s, String t) {
-        if (s == null || t == null) return "";
-        // total number of character in p to be contained in s
-        int countToBeContained = t.length(), minLen = Integer.MAX_VALUE, startIndex = -1;
-        // calculate the number of each character to be contained in S
-        int[] dict = new int[128];
-        for (char c : t.toCharArray()) dict[c]++;
-
-        int fast = 0, slow = 0;
-        while (fast < s.length()) {
-            // if need to be contained, include it and minus the counter
-            if (dict[s.charAt(fast++)]-- > 0)
-                countToBeContained--;
-
-            // all included, move the slow pointer to minimize the window
-            while (countToBeContained == 0) {
-                // current window contains same number of the current character as in t, cannot move forward anymore
-                if (dict[s.charAt(slow++)]++ == 0) countToBeContained++;
-
-                // update minLen
-                if (fast - slow + 1 < minLen) {
-                    startIndex = slow - 1;
-                    minLen = fast - slow + 1;
-                }
-            }
-        }
-        return startIndex == -1 ? "" : s.substring(startIndex, startIndex + minLen);
-    }
-}
-```
+Labuladuodong的[双指针模板](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247485141&idx=1&sn=0e4583ad935e76e9a3f6793792e60734&chksm=9bd7f8ddaca071cbb7570b2433290e5e2628d20473022a5517271de6d6e50783961bebc3dd3b&scene=21#wechat_redirect)，用两个HashMap，比较好理解的做法
 
 ```java
 class Solution {
     public String minWindow(String s, String t) {
-        if (s.isEmpty() || t.isEmpty()) {
-            return "";
-        }
-        int countToBeContained = t.length(); // t在s的子字符串中还剩多少个字符没有包含
-        int minLen = Integer.MAX_VALUE; // 返回结果
-        int startIndex = -1; // 记录s中是否有子字符串包括所有t的字符
-
-        int[] letters = new int[128];
-        // t的字符在ASCII数组中的出现**次数**
+        HashMap<Character, Integer> needs = new HashMap<>(); // target - t中字符的出现次数
+        HashMap<Character, Integer> window = new HashMap<>(); // 窗口种相应“有效”字符的出现次数
+        
         for (char ch : t.toCharArray()) {
-            letters[ch]++;
+            needs.put(ch, needs.getOrDefault(ch, 0) + 1);
         }
-
-        // 维护两个索引，fast负责增加字符，slow负责删掉字符
-        int fast = 0;
-        int slow = 0;
-        while (fast < s.length()) {
-            if (letters[s.charAt(fast)] > 0) { // 在s中右边fast指向的字符是在t中出现的字符
-                countToBeContained--; // t中待查的字符总数减1
-            }
-            letters[s.charAt(fast)]--; // ASCII数组中当前字符的出现次数减1，s中出现而t中未出现的字符不可能>=0
-            fast++;
-
-            while (countToBeContained == 0) { // 找到一个s中的子字符串，包含所有t中的字符
-                if (letters[s.charAt(slow)] == 0) { // slow永远在fast左边，fast之前遍历到而slow现在遍历到：s中出现而t中未出现的字符不可能>=0
-                    countToBeContained++; // t中待查的字符总数加1，因为删掉了；不进入此判断的s中的非t中字符直接跳过而countToBeContained不增加
-                }
-                letters[s.charAt(slow)]++; // ASCII数组中当前slow指向的字符的出现次数加1
-                slow++;
-
-                if (fast - slow + 1 < minLen) {
-                    startIndex = slow - 1;
-                    minLen = fast - slow + 1;
+        
+        int left = 0, right = 0; // 窗口的左右边界初始为零[left, right)
+        int valid = 0; // 窗口中满足在needs的字符个数
+        
+        // 记录最小覆盖字串的起始索引及长度
+        int start = 0, len = Integer.MAX_VALUE;
+        while (right < s.length()) {
+            // ch是准备进入窗口的字符
+            char ch = s.charAt(right);
+            // 得到ch后右移窗口，相当于寻找一个【可行解】
+            right++;
+            
+            // 更新窗口内的一系列数据
+            if (needs.containsKey(ch)) {//target-t中需要该字符
+                window.put(ch, window.getOrDefault(ch, 0) + 1);
+                
+                // 该字符在window中的数量已经等于（满足）了target-t中该字符
+                if (window.get(ch).equals(needs.get(ch))) { 
+                    valid++;
                 }
             }
-        }
-        return startIndex == -1 ? "" : s.substring(startIndex, startIndex + minLen);
-    }
-}
-```
-
-清爽一点的写法
-
-```java
-class Solution {
-    public String minWindow(String s, String t) {
-        int[] count = new int[128];
-        for (char c : t.toCharArray()) {
-            count[c]++;
-        }
-        int from = 0;
-        //total数目表示当前尚未找到的t字符串里面的字符数，比如total==2表示当前该子字符串还有2个字符尚未在s中找到，
-        //具体哪两个字符则由count数组的相应出现字符的数目来确定的
-        int total = t.length();
-        int min = Integer.MAX_VALUE;//最小子字符串的长度
-        for (int i = 0, j = 0; i < s.length(); i++) {//双指针，i在前，正常遍历；j在后，记录包含所有t字符串的字符的起始位置
-            if (count[s.charAt(i)]-- > 0) {//i位置的字符在之前出现过（count数组的初始化），再出现就是重复的了，把total减1；每个字符的位置也得次数也得-1
-                total--;
-            }
-            while (total == 0) {//t中的字符都找到了
-                if (i - j + 1 < min) {//比较一下是否有更短的子字符串
-                    min = i - j + 1;
-                    from = j;
+            
+            // 判断窗口左侧是否需要收紧，以此来优化【可行解】，得到最优解
+            while(valid == needs.size()) { // valid已经达到target-t中所有字符的数量
+                //更新最小覆盖字串
+                if (right - left < len) { //遇到更小的字串
+                    start = left;
+                    len = right - left;
                 }
-                count[s.charAt(j)]++;//移动j把刚才减的1加回来，促使前面的指针i继续往前走寻找t中字符
-                if (count[s.charAt(j++)] > 0) {
-                    total++;
+                // 准备移除窗口的字符
+                char de = s.charAt(left);
+                // 移动窗口左侧缩小窗口
+                left++;
+                
+                // 更新窗口内的一系列数据，窗口左边遇到一个“有效”字符
+                if (needs.containsKey(de)) {
+                    if (window.get(de).equals(needs.get(de))) {
+                        valid--;
+                    }
+                    window.put(de, window.get(de) - 1); // 该有效字符减少一次
                 }
             }
         }
-        return (min == Integer.MAX_VALUE) ? "" : s.substring(from, from + min);
+        // 返回最小覆盖字串
+        return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
     }
 }
 ```
