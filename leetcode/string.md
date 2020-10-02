@@ -1020,38 +1020,6 @@ class Solution {
 }
 ```
 
-```java
-class Solution {
-    public boolean isMatch(String s, String p) {
-        int m = s.length();
-        int n = p.length();
-        
-        boolean[][] dp = new boolean[m + 1][n + 1];
-        dp[0][0] = true; // 表示s总前0个字符和p中前0个字符是匹配的
-        for (int i = 0; i <= m; i++) {
-            for (int j = 1; j <= n; j++) { // p应该至少一个字符，代表前面的状态
-                if (p.charAt(j - 1) != '*') {
-                    dp[i][j] = match(s, p, i, j) ? dp[i - 1][j - 1] : false; // 如果当前字符match，取决于上一个状态
-                } else { // 上一个是*号
-                    dp[i][j] = match(s, p, i, j - 1) ? (dp[i][j - 2] || dp[i - 1][j]) : dp[i][j - 2];
-                }
-            }
-        }
-        return dp[m][n];
-    }
-    
-    private boolean match(String s, String p, int i, int j) {
-        if (i == 0) {
-            return false;
-        }
-        if (p.charAt(j - 1) == '.') { // .可以和任何字符匹配，直接返回true
-            return true;
-        }
-        return s.charAt(i - 1) == p.charAt(j - 1);
-    }
-}
-```
-
 ## 17 - Letter Combinations of a Phone Number
 
 ### 原题概述
