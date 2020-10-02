@@ -470,40 +470,44 @@ class Solution {
         if (nums == null || nums.length == 0) {
             return result;
         }
+        
         int left = 0;
         int right = nums.length - 1;
-        while (left + 1 < right) {
+        int startPoint = -1;
+        int endPoint = -1;
+        
+        while (left <= right) {// 第一次binary search找左边界
             int mid = left + (right - left) / 2;
-             if (nums[mid] <= target) { // 有等号找到有边界，因为即使等于也不停止
-                left = mid;
+            if (nums[mid] >= target) {
+                right = mid - 1;
             } else {
-                right = mid;
+                left = mid + 1;
             }
         }
-        if (nums[left] == target) {
-            result[1] = left;
-        }
-        if (nums[right] == target) {
-            result[1] = right;
+        
+        if (left <= nums.length - 1 && nums[left] == target) {
+            startPoint = left;
+        } 
+        if (startPoint == -1) { // 左边界没有该值，直接返回[-1,-1]
+            return result;
         }
         
         left = 0;
         right = nums.length - 1;
-        while (left + 1 < right) {
+        while (left <= right) {// 第二次binary search找右边界
             int mid = left + (right - left) / 2;
-             if (nums[mid] < target) { // 这里少一个“=”，别的都一样，没有等号找到左边界
-                left = mid;
+            if (nums[mid] <= target) {
+                left = mid + 1;
             } else {
-                right = mid; // 如果等于还需要往左
+                right = mid - 1;
             }
         }
-        if (nums[left] == target) {
-            result[0] = left;
-        }
+        if (right >= 0 && nums[right] == target) {
+            endPoint = right;
+        } 
         
-        if (nums[right] == target) {
-            result[0] = right;
-        }
+        result[0] = startPoint;
+        result[1] = endPoint;
         
         return result;
     }

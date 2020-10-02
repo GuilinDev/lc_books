@@ -287,7 +287,7 @@ class Solution {
         // 由于遍历顺序，不能像后序遍历那样先把root加入stack中，注意whle退出条件
         while (current != null || !stack.isEmpty()) {
             while (current != null) {
-                stack.add(current);
+                stack.push(current);
                 current = current.left;//先移动指针去左儿子
             }
             //左儿子没了开始从二叉树的最底层弹，同时考虑每个结点的右儿子
