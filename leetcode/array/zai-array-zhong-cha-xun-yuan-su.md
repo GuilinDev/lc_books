@@ -386,28 +386,35 @@ class Solution {
         if (nums == null || nums.length == 0) {
             return false;
         }
-
-        int left = 0, right = nums.length - 1;
-        while (left <= right) {
+        int left = 0;
+        int right = nums.length - 1;
+        
+        while (left + 1 < right) {
             int mid = left + (right - left) / 2;
             if (nums[mid] == target) {
                 return true;
-            }
-            if (nums[mid] > nums[left]) {//现在无法判断target在哪一边
-                if (target < nums[mid] && target >= nums[left]) {//target在左半边，注意这里有重复的数，应该是>=
-                    right = mid - 1;
-                } else {//target在右半边
-                    left = mid + 1;
+            } else if (nums[mid] > nums[left]) { // 左侧有序
+                if (nums[left] <= target && nums[mid] > target) { // 在有序部分
+                    right = mid;
+                } else { // 在乱序部分
+                    left = mid;
                 }
-            } else if (nums[mid] < nums[left]) {//现在无法判断target在哪一边
-                if (target > nums[mid] && target <= nums[right]) {//target在右半边，注意这里有重复的数，应该是>=
-                    left = mid + 1;
+            } else if (nums[mid] < nums[right]) {// 右侧有序
+                if (nums[mid] < target && nums[right] >= target) {//在有序部分
+                    left = mid;
+                } else {// 在乱序部分
+                    right = mid;
+                }
+            } else { // nums[mid]和nums[left]以及nums[right]的关系无法判断大小
+                if (nums[left] == target) {
+                    return true;
                 } else {
-                    right = mid - 1;
-                }
-            } else {//中间数和左边数（前面两个条件和右边数比也是一样的）相等的情况下，只能挪一步
-                left++;
+                   left++; //只能从左到右排除一个元素
+                }                
             }
+        }
+        if (nums[left] == target || nums[right] == target) {
+            return true;
         }
         return false;
     }
@@ -419,8 +426,8 @@ class Solution {
 ```java
 class Solution {
     public boolean search(int[] nums, int target) {
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]==target){
+        for(int i = 0;i < nums.length; i++){
+            if(nums[i] == target){
                 return true;
             }
         }
