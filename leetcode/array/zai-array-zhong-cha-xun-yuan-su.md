@@ -464,54 +464,52 @@ Output: [-1,-1]
 ### 代码
 
 ```java
-class Solution {
-    public int[] searchRange(int[] nums, int target) {
+public int[] searchRange(int[] nums, int target) {
         int[] result = {-1, -1};
         if (nums == null || nums.length == 0) {
             return result;
         }
-        
         int left = 0;
         int right = nums.length - 1;
-        int startPoint = -1;
-        int endPoint = -1;
-        
-        while (left <= right) {// 第一次binary search找左边界
+        while (left + 1 < right) {
             int mid = left + (right - left) / 2;
-            if (nums[mid] >= target) {
-                right = mid - 1;
+             if (nums[mid] >= target) { // 找左边界，找到了一个target，还需要继续往左边找
+                right = mid;
             } else {
-                left = mid + 1;
+                left = mid;
             }
         }
-        
-        if (left <= nums.length - 1 && nums[left] == target) {
-            startPoint = left;
-        } 
-        if (startPoint == -1) { // 左边界没有该值，直接返回[-1,-1]
-            return result;
+        // 这里left和right都可能是target，所以先判断右边界再判断左边界
+        if (nums[right] == target) {
+            result[0] = right;
         }
+        if (nums[left] == target) {
+            result[0] = left;
+        } 
+        
         
         left = 0;
         right = nums.length - 1;
-        while (left <= right) {// 第二次binary search找右边界
+        
+        while (left + 1 < right) {
             int mid = left + (right - left) / 2;
-            if (nums[mid] <= target) {
-                left = mid + 1;
+             if (nums[mid] <= target) { // 找有边界，找到了一个target，还需要继续往右边找
+                left = mid;
             } else {
-                right = mid - 1;
+                right = mid;
             }
         }
-        if (right >= 0 && nums[right] == target) {
-            endPoint = right;
-        } 
         
-        result[0] = startPoint;
-        result[1] = endPoint;
+        // 这里left和right都可能是target，所以先判断左边界再判断右边界
+        if (nums[left] == target) {
+            result[1] = left;
+        }
+        if (nums[right] == target) {
+            result[1] = right;
+        }
         
         return result;
     }
-}
 ```
 
 
