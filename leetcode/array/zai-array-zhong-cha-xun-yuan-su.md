@@ -306,39 +306,41 @@ Output: -1
 ### 代码
 
 ```java
-class Solution {
+   class Solution {
+   // 先判断有序的是左侧还是右侧，再在其中判断target是否在有序的该侧
     public int search(int[] nums, int target) {
-        if (nums == null | nums.length == 0) {
+        if (nums == null || nums.length == 0) {
             return -1;
         }
+        
         int left = 0;
         int right = nums.length - 1;
         
-        while (left <= right) {
+        while (left + 1 < right) {
             int mid = left + (right - left) / 2;
             if (nums[mid] == target) {
                 return mid;
-            } else if (nums[mid] > nums[right]) { // 这里和nums[right]比较，左半边有序，如题目中例子
-                // 先检查target是否在左半边有序的部分
-                if (target >= nums[left] && target < nums[mid]) { // 需要两个条件确定（仅是target < nums[mid]可能在右边乱序部分）
-                    right = mid - 1;                  
-                } else { // 继续去右边乱序部分找
-                    left = mid + 1;
+            } else if (nums[mid] > nums[right]) { //左侧有序
+                if (nums[left] <= target && nums[mid] > target) { // 判定target是否在有序的左侧
+                    right = mid;
+                } else { // 在乱序的右侧
+                    left = mid;
                 }
-                
-            } else { // 右半边有序
-                // 先检查target是否在右半边有序的部分
-                if (target > nums[mid] && target <= nums[right]) { // 同样两个条件
-                    left = mid + 1;
-                } else { // 继续去左边乱序部分找
-                    right = mid - 1;
+            } else { // nums[mid] < nums[right]，右侧有序
+                if (nums[right] >= target && nums[mid] < target) { // 判定target是否在有序的右侧
+                    left = mid;
+                } else {// 在乱序的左侧
+                    right = mid;
                 }
             }
         }
-        return -1;
+        
+        if (nums[left] == target) {
+            return left;
+        }
+        return nums[right] == target ? right : -1;
     }
 }
-   
 ```
 
 ## 81 - Search in Rotated Sorted Array II
