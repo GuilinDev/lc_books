@@ -30,7 +30,7 @@ Labuladuodong的[双指针模板](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0M
 class Solution {
     public String minWindow(String s, String t) {
         HashMap<Character, Integer> needs = new HashMap<>(); // target - t中字符的出现次数
-        HashMap<Character, Integer> window = new HashMap<>(); // 窗口种相应“有效”字符的出现次数
+        HashMap<Character, Integer> window = new HashMap<>(); // 窗口中相应“有效”字符的出现次数
         
         for (char ch : t.toCharArray()) {
             needs.put(ch, needs.getOrDefault(ch, 0) + 1);
@@ -58,7 +58,9 @@ class Solution {
             }
             
             // 判断窗口左侧是否需要收紧，以此来优化【可行解】，得到最优解
-            while(valid == needs.size()) { // valid已经达到target-t中所有字符的数量
+            // valid已经达到target中所有字符的数量，表示找到一个s中的子字符串包含全部t中字符
+            // 注意这里是hashmap的size而不是t的leng，因为可能有重复元素
+            while(valid == needs.size()) { 
                 //更新最小覆盖字串
                 if (right - left < len) { //遇到更小的字串
                     start = left;
