@@ -635,38 +635,40 @@ Constraints:
 
 ```java
 class Solution {
-    // 八个方向
-    int[][] dirs = new int[][]{{-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {-2, -1}, {-2, 1}, {2, -1}, {2, 1}};
-
     public int minKnightMoves(int x, int y) {
+        // 八个方向
+        int[][] dirs = {{-2,1},{-1,2},{2,1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2}};   
+        
+        // 小优化，也可不用
         x = Math.abs(x);
-        y = Math.abs(y);
-
-        HashSet<String> visited = new HashSet<>();
-        LinkedList<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{0, 0});
-        visited.add("0,0");
-
-        int step = 0;
+        y = Math.abs(y)
+        
+        Queue<int[]> queue = new LinkedList<>();        
+        queue.offer(new int[]{0, 0});        
+        HashSet<String> visited = new HashSet();
+        int steps = 0;
+        
+        visited.add("0,0"); // 将坐标转换成string，方便查找
+        
         while (!queue.isEmpty()) {
             int size = queue.size();
-            while (size-- > 0) {
-                int[] cur = queue.poll();
-                if (cur[0] == x && cur[1] == y) {
-                    return step;
+            for (int i = 0; i < size; i++) {
+                int[] curPos = queue.poll();
+                if (curPos[0] == x && curPos[1] == y) {
+                    return steps;
                 }
-
+            
                 for (int[] dir : dirs) {
-                    int i = cur[0] + dir[0];
-                    int j = cur[1] + dir[1];
-                    if (!visited.contains(i + "," + j) && i >= -1 && j >= -1) {
-                        queue.add(new int[]{i, j});
-                        visited.add(i + "," + j);
+                    int newX = curPos[0] + dir[0];
+                    int newY = curPos[1] + dir[1];
+                    String newPos = newX + "," + newY;
+                    if (!visited.contains(newPos)) {
+                        queue.offer(new int[]{newX, newY});
+                        visited.add(newPos);
                     }
                 }
             }
-
-            step++;
+            steps++;
         }
         return -1;
     }
