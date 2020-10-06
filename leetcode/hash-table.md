@@ -2096,3 +2096,75 @@ class WordDistance {
  */
 ```
 
+## 846 Hand of Straights
+
+### 原题
+
+Alice has a `hand` of cards, given as an array of integers.
+
+Now she wants to rearrange the cards into groups so that each group is size `W`, and consists of `W` consecutive cards.
+
+Return `true` if and only if she can.
+
+1. 
+**Example 1:**
+
+```text
+Input: hand = [1,2,3,6,2,3,4,7,8], W = 3
+Output: true
+Explanation: Alice's hand can be rearranged as [1,2,3],[2,3,4],[6,7,8].
+```
+
+**Example 2:**
+
+```text
+Input: hand = [1,2,3,4,5], W = 4
+Output: false
+Explanation: Alice's hand can't be rearranged into groups of 4.
+```
+
+**Constraints:**
+
+* `1 <= hand.length <= 10000`
+* `0 <= hand[i] <= 10^9`
+* `1 <= W <= hand.length`
+
+**Note:** This question is the same as 1296: [https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/](https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/)
+
+### 分析
+
+Solution 1 
+
+Count number of different cards to a map c 
+
+Loop from the smallest card number. 
+
+Everytime we meet a new card i, we cut off i - i + W - 1 from the counter.
+
+Complexity: Time O\(MlogM + MW\), where M is the number of different cards.
+
+### 代码
+
+```java
+class Solution {
+
+    public boolean isNStraightHand(int[] hand, int W) {
+        Map<Integer, Integer> treemap = new TreeMap<>();
+        for (int h : hand) {
+            treemap.put(h, treemap.getOrDefault(h, 0) + 1);
+        }
+        for (int k : treemap.keySet()) {
+            if (treemap.get(k) > 0) {
+                for (int i = W- 1; i >= 0; i--) {
+                    if (treemap.getOrDefault(k + i, 0) < treemap.get(k)) {
+                        return false;
+                    }
+                    treemap.put(k + i, treemap.get(k + i) - treemap.get(k));
+                }
+            }
+        }
+        return true;
+    }
+}
+```
+
