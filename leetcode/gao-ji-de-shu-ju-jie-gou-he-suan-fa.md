@@ -336,60 +336,53 @@ Union Find
 
 ```java
 class Solution {
-
-   class UnionFind {
-      private int count = 0;
-      private int[] parent, rank;
-
-      public UnionFind(int n) {
-         count = n;
-         parent = new int[n];
-         rank = new int[n];
-         for (int i = 0; i < n; i++) {
-            parent[i] = i;
-         }
-      }
-
-      public int find(int p) {
-         while (p != parent[p]) {
-            parent[p] = parent[parent[p]];    // path compression by halving
-            p = parent[p];
-         }
-         return p;
-      }
-
-      public void union(int p, int q) {
-         int rootP = find(p);
-         int rootQ = find(q);
-         if (rootP == rootQ) return;
-         if (rank[rootQ] > rank[rootP]) {
-            parent[rootP] = rootQ;
-         }
-         else {
-            parent[rootQ] = rootP;
-            if (rank[rootP] == rank[rootQ]) {
-               rank[rootP]++;
+    public int findCircleNum(int[][] M) {
+        int len = M.length;
+        if (len == 0) {
+            return 0;
+        }
+        
+        // init，初始各人是各人的朋友圈
+        int[] parent = new int[len];
+        for (int k = 0; k < len; k++) {
+            parent[k] = k;
+        }
+        
+        int result = len; // 初始每个人是一个朋友圈，共len个
+        
+        for (int i = 0; i < len; i++) { // 遍历每一个人
+            for (int j = i + 1; j < len; j++) { // 只检查当前i的斜线右边的横排
+                if (M[i][j] == 0) { // i和j不是朋友
+                    continue;
+                }
+                
+                if (find(i, parent) == find(j, parent)) { // 已经在一个朋友圈
+                    continue;
+                }
+                
+                union(i, j, parent); // M[i][j] == 1，是朋友
+                result--; // 能union一个，减少一个最初为len的朋友圈
             }
-         }
-         count--;
-      }
-
-      public int count() {
-         return count;
-      }
-   }
-
-   public int findCircleNum(int[][] M) {
-      int n = M.length;
-      UnionFind uf = new UnionFind(n);
-      for (int i = 0; i < n - 1; i++) {
-         for (int j = i + 1; j < n; j++) {
-            if (M[i][j] == 1) uf.union(i, j);
-         }
-      }
-      return uf.count();
-   }
-
+        }
+        return result;
+    }
+    
+    // 以下为Union Find的路径压缩代码
+    private int find(int p, int[] parent) {
+        if (parent[p] == p) {
+            return p;
+        }
+        parent[p] = find(parent[p], parent); // UF的路径压缩
+        return parent[p];
+    }
+    private void union(int p1, int p2, int[] parent) {
+        int f1 = find(p1, parent);
+        int f2 = find(p2, parent);
+        
+        if (f1 != f2) {
+            parent[f1] = f2;
+        }
+    }
 }
 ```
 

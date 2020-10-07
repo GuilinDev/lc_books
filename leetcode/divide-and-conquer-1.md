@@ -546,52 +546,56 @@ class Solution {
 }
 ```
 
-快排
+快选模板
 
 ```java
 class Solution {
-     public int[][] kClosest(int[][] points, int K) {
-        int start = 0;
-        int end = points.length - 1;
-        while (start < end) {
-            // 计算欧几里得距离
-            int index = patition(points, start, end);
-            if (index == K) {
+    public int[][] kClosest(int[][] points, int K) {
+        return quickSelect(points, K, 0, points.length - 1);
+    }
+    
+    private int[][] quickSelect(int[][] points, int K, int start, int end) {
+        while (start < end) { // 只快排一次
+            int mid = partition(points, start, end);
+            if (mid == K) {
                 break;
-            } else if (index < K) {
-                start = index + 1;
+            } else if (mid < K) {
+                start = mid + 1;
             } else {
-                end = index - 1;
+                end = mid - 1;
             }
         }
-
         return Arrays.copyOf(points, K);
     }
-
-    private int patition(int[][] points, int start, int end) {
-        int i = start;
-        int j = end + 1;
-        int mid = distance(points[i][0], points[i][1]);
-        while (true) {
-            while (distance(points[++i][0], points[i][1]) < mid && i < end);
-            while (distance(points[--j][0], points[j][1]) > mid && j > start);
-            if (i >= j) {
+    
+    private int partition(int[][] points, int left, int right) {
+        int[] pivot = points[left];
+        int i = left + 1;
+        int j = right;
+        
+        while (i <= j) {
+            while (i <= j && cal(points[i]) <= cal(pivot)) {
+                i++;
+            }
+            while (i <= j && cal(points[j]) > cal(pivot)) {
+                j--;
+            }
+            if (i > j) {
                 break;
             }
+            // swap i, j
             swap(points, i, j);
         }
-        swap(points, start, j);
+        swap(points, left, j);
         return j;
     }
-
-    private int distance(int a, int b) {
-        return a * a + b * b;
+    private int cal(int[] a) {
+        return a[0] * a[0] + a[1] * a[1];
     }
-
-    private void swap(int[][] points, int a, int b) {
-        int[] temp = points[a];
-        points[a] = points[b];
-        points[b] = temp;
+    private void swap(int[][] points, int i, int j) {
+        int[] temp = points[i];
+        points[i] = points[j];
+        points[j] = temp;
     }
 }
 ```

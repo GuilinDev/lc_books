@@ -675,3 +675,176 @@ class Solution {
 }
 ```
 
+## 490 The Maze
+
+### 题目
+
+There is a ball in a `maze` with empty spaces \(represented as `0`\) and walls \(represented as `1`\). The ball can go through the empty spaces by rolling **up, down, left or right**, but it won't stop rolling until hitting a wall. When the ball stops, it could choose the next direction.
+
+Given the `maze`, the ball's `start` position and the `destination`, where `start = [startrow, startcol]` and `destination = [destinationrow, destinationcol]`, return `true` if the ball can stop at the destination, otherwise return `false`.
+
+You may assume that **the borders of the maze are all walls** \(see examples\).
+
+**Example 1:** ![](https://assets.leetcode.com/uploads/2020/09/01/maze1.png)
+
+```text
+Input: maze = [[0,0,1,0,0],[0,0,0,0,0],[0,0,0,1,0],[1,1,0,1,1],[0,0,0,0,0]], start = [0,4], destination = [4,4]
+Output: true
+Explanation: One possible way is : left -> down -> left -> down -> right -> down -> right.
+```
+
+**Example 2:** ![](https://assets.leetcode.com/uploads/2020/09/01/maze2.png)
+
+```text
+Input: maze = [[0,0,1,0,0],[0,0,0,0,0],[0,0,0,1,0],[1,1,0,1,1],[0,0,0,0,0]], start = [0,4], destination = [3,2]
+Output: false
+Explanation: There is no way for the ball to stop at the destination. Notice that you can pass through the destination but you cannot stop there.
+```
+
+**Example 3:**
+
+```text
+Input: maze = [[0,0,0,0,0],[1,1,0,0,1],[0,0,0,0,0],[0,1,0,0,1],[0,1,0,0,0]], start = [4,3], destination = [0,1]
+Output: false
+```
+
+**Constraints:**
+
+* `1 <= maze.length, maze[i].length <= 100`
+* `maze[i][j]` is `0` or `1`.
+* `start.length == 2`
+* `destination.length == 2`
+* `0 <= startrow, destinationrow <= maze.length`
+* `0 <= startcol, destinationcol <= maze[i].length`
+* Both the ball and the destination exist on an empty space, and they will not be at the same position initially.
+* The maze contains **at least 2 empty spaces**.
+
+### 分析
+
+BFS或者DFS
+
+1\) BFS，不是每次走一步，而是一直走
+
+2\) DFS
+
+### 代码
+
+BFS
+
+```java
+class Solution {
+    int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        int rows = maze.length, cols = maze[0].length;
+        Queue<Integer> queue = new ArrayDeque<>();
+        int startPos = start[0] * 100 + start[1], desPos = destination[0] * 100 + destination[1];
+        
+        queue.offer(startPos);
+        HashSet<Integer> visited = new HashSet<>();
+        visited.add(startPos); // BFS的元素刚访问就要标记，而不是等出栈时再标记，否则会重复访问
+        
+        while (!queue.isEmpty()) {
+            int currPos = queue.poll();
+            
+            if (currPos == desPos) { //能访问到，拉平后的坐标是不会重复的
+                return true;
+            }
+            visited.add(currPos); //立即标记访问过
+            
+            int currX = currPos / 100;
+            int currY = currPos % 100;
+            
+            for (int[] dir : dirs) {
+                int newX = currX;
+                int newY = currY;
+                // 这里并非只走一步，而是只要为0就一直四个方向走，一直到障碍物停止
+                while (newX >= 0 && newX < rows && newY >= 0 && newY < cols && maze[newX][newY] == 0) {
+                    newX += dir[0];
+                    newY += dir[1];
+                }
+                // while循环中是到障碍时停下，这里要从障碍中退出来
+                newX -= dir[0];
+                newY -= dir[1];
+                
+                int newDest = newX * 100 + newY;
+                // 将障碍物前一个的位置判断并加入到队列中，路程中间的不用加，因为可能重复访问
+                if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && !visited.contains(newDest)) {
+                    queue.offer(newDest);
+                }
+            }
+        }
+        return false;
+    }
+}
+```
+
+DFS
+
+
+
+## 505 The Maze II
+
+### 题目
+
+There is a **ball** in a maze with empty spaces and walls. The ball can go through empty spaces by rolling **up**, **down**, **left** or **right**, but it won't stop rolling until hitting a wall. When the ball stops, it could choose the next direction.
+
+Given the ball's **start position**, the **destination** and the **maze**, find the shortest distance for the ball to stop at the destination. The distance is defined by the number of **empty spaces** traveled by the ball from the start position \(excluded\) to the destination \(included\). If the ball cannot stop at the destination, return -1.
+
+The maze is represented by a binary 2D array. 1 means the wall and 0 means the empty space. You may assume that the borders of the maze are all walls. The start and destination coordinates are represented by row and column indexes.
+
+**Example 1:**
+
+```text
+Input 1: a maze represented by a 2D array
+
+0 0 1 0 0
+0 0 0 0 0
+0 0 0 1 0
+1 1 0 1 1
+0 0 0 0 0
+
+Input 2: start coordinate (rowStart, colStart) = (0, 4)
+Input 3: destination coordinate (rowDest, colDest) = (4, 4)
+
+Output: 12
+
+Explanation: One shortest way is : left -> down -> left -> down -> right -> down -> right.
+             The total distance is 1 + 1 + 3 + 1 + 2 + 2 + 2 = 12.
+
+```
+
+![](../.gitbook/assets/image%20%28123%29.png)
+
+**Example 2:**
+
+```text
+Input 1: a maze represented by a 2D array
+
+0 0 1 0 0
+0 0 0 0 0
+0 0 0 1 0
+1 1 0 1 1
+0 0 0 0 0
+
+Input 2: start coordinate (rowStart, colStart) = (0, 4)
+Input 3: destination coordinate (rowDest, colDest) = (3, 2)
+
+Output: -1
+
+Explanation: There is no way for the ball to stop at the destination.
+
+```
+
+![](../.gitbook/assets/image%20%28124%29.png)
+
+**Note:**
+
+1. There is only one ball and one destination in the maze.
+2. Both the ball and the destination exist on an empty space, and they will not be at the same position initially.
+3. The given maze does not contain border \(like the red rectangle in the example pictures\), but you could assume the border of the maze are all walls.
+4. The maze contains at least 2 empty spaces, and both the width and height of the maze won't exceed 100.
+
+### 分析
+
+### 代码
+
