@@ -846,5 +846,69 @@ Explanation: There is no way for the ball to stop at the destination.
 
 ### 分析
 
+1\) BFS，同上题，不用记录visited，用一个二维数组来记录到达\[x,y\]时的需要多少步
+
+2\) DFS
+
 ### 代码
+
+BFS
+
+```java
+class Solution {
+    int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    public int shortestDistance(int[][] maze, int[] start, int[] destination) {
+        int rows = maze.length, cols = maze[0].length;
+        int startPos = start[0] * 100 + start[1], desPos = destination[0] * 100 + destination[1];
+        
+        // 不用额外用个visited来记录，数组steps可以记录
+        //HashSet<Integer> visited = new HashSet<>();        
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(startPos);
+        
+        int[][] steps = new int[rows][cols];
+        for (int[] s : steps) { // 到达所有位置的步数初始化为-1
+            Arrays.fill(s, -1);
+        }
+        steps[start[0]][start[1]] = 0; //起点到起点为0步
+        
+        while(!queue.isEmpty()) {
+            int currPos = queue.poll();
+            
+            //visited.add(currPos);
+            
+            int currX = currPos / 100;
+            int currY = currPos % 100;
+            
+            for (int[] dir : dirs) {
+                int newX = currX;
+                int newY = currY;
+                int count = steps[currX][currY];
+                while (newX >= 0 && newX < rows && newY >= 0 && newY < cols && maze[newX][newY] == 0) {
+                    newX += dir[0];
+                    newY += dir[1];
+                    count++;
+                }
+                
+                newX -= dir[0];
+                newY -= dir[1];
+                count--;
+                
+                int newDest = newX * 100 + newY;
+                // 没有访问过，或者找到新的路径比刚才所需的步数要少
+                if (steps[newX][newY] == -1 || count < steps[newX][newY]) {
+                    queue.offer(newDest);
+                    steps[newX][newY] = count;
+                }
+            }
+        }
+        // 返回终止点的步数，一个值或者-1
+        return steps[destination[0]][destination[1]];
+    }
+}
+```
+
+DFS
+
+
 
