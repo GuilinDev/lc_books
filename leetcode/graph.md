@@ -241,6 +241,55 @@ Explanation: There are a total of 2 courses to take.
 
 空间复杂度 O\(N + M\)： 为建立邻接表所需额外空间，adjacency 长度为 N ，并存储 MM条临边的数据。
 
+
+
+用一个HashMap来记录依赖的出度课程，这个是背诵模板
+
+```java
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        // HashMap来记录课程和该课程的出度课程
+        HashMap<Integer, HashSet<Integer>> map = new HashMap<>();
+        // 数组记录每个课程的入度
+        int[] inDegrees = new int[numCourses];
+        
+        for (int[] pre : prerequisites) {
+            inDegrees[pre[0]]++;
+            // key - 课程 value - 依赖该课程的课程
+            map.computeIfAbsent(pre[1], k -> new HashSet<>()).add(pre[0]);
+        }
+        
+        Queue<Integer> queue = new ArrayDeque<>();
+        // 找到入度为0的课程
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegrees[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        
+        while (!queue.isEmpty()) {
+            int currCourse = queue.poll();            
+            numCourses--;
+            
+            // 独立的课程，虽然入度为0，但跟任何别的课程没有联系
+            if (!map.containsKey(currCourse)) {
+                continue;
+            }
+            
+            for (int followingCourse : map.get(currCourse)) {
+                inDegrees[followingCourse]--;
+                if (inDegrees[followingCourse] == 0) {
+                    queue.offer(followingCourse);
+                }
+            }
+        }
+        return numCourses == 0;
+    }
+}
+```
+
+用邻接表
+
 ```java
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
@@ -283,7 +332,7 @@ class Solution {
 }
 ```
 
-另外一种写法，因为课程是数字来表示，所以可以不用邻接表来存储每个入度，直接相加即可
+因为课程是数字来表示，所以可以不用邻接表来存储每个入度，直接相加即可
 
 ```java
 class Solution {
