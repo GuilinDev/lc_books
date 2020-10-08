@@ -5824,3 +5824,73 @@ class Solution {
 }
 ```
 
+## 199 Binary Tree Right Side View
+
+### 题目
+
+Given a binary tree, imagine yourself standing on the _right_ side of it, return the values of the nodes you can see ordered from top to bottom.
+
+**Example:**
+
+```text
+Input: [1,2,3,null,5,null,4]
+Output: [1, 3, 4]
+Explanation:
+
+   1            <---
+ /   \
+2     3         <---
+ \     \
+  5     4       <---
+```
+
+### 分析
+
+如果当前节点所在深度还没有出现在result里，也就是"每一层"的第一个节点还没有开始计数， 说明在该深度下当前节点是第一个被访问的节点\(也就是最右节点\)，因此将当前节点加入result中。 注意深搜的遍历顺序，一条道走到底
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<Integer> result;
+    public List<Integer> rightSideView(TreeNode root) {
+        result = new ArrayList<>();
+        dfs(root, 0); // 从根节点开始访问，根节点深度是0
+        return result;
+    }
+    private void dfs(TreeNode node, int depth) {
+        if (node == null) {
+            return;
+        }
+        
+        // 如果当前节点所在深度还没有出现在result里，也就是"每一层"的第一个节点还没有开始计数，
+        // 说明在该深度下当前节点是第一个被访问的节点(也就是最右节点)，因此将当前节点加入result中。
+        // 注意深搜的遍历顺序，一条道走到底
+        if (depth == result.size()) {
+            result.add(node.val);
+        }
+        
+        depth++;
+        
+        // 先访问 当前节点，再递归地访问 右子树 和 左子树。
+        dfs(node.right, depth);
+        dfs(node.left, depth);
+    }
+}
+```
+
