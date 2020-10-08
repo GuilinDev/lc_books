@@ -1294,8 +1294,9 @@ class Solution {
         int maxLen = 0;
         int[] count = new int[parent.length];
         for (int val : map.values()) {
-            count[find(val, parent)]++;
-            maxLen = Math.max(maxLen, count[find(val, parent)]);
+            int currParent = find(val, parent);
+            count[currParent]++;
+            maxLen = Math.max(maxLen, count[currParent]);
         }
         return maxLen;
     }
