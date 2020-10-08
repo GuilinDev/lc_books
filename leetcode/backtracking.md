@@ -268,28 +268,29 @@ A solution set is:
 ```java
 class Solution {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<List<Integer>> result = new ArrayList<>();
         if (candidates == null || candidates.length == 0) {
             return result;
         }
-        List<Integer> oneRecord = new ArrayList<>();
         Arrays.sort(candidates);
-        backtrack(candidates, target, 0, oneRecord, result); 
+        List<Integer> path = new ArrayList<>();
+        dfs(candidates, result, path, target, 0, 0);
         return result;
     }
-
-    // index的作用是标记排序后的数组在某层递归树中应该从哪里开始取数字
-    private void backtrack(int[] candidates, int remian, int index, List<Integer> oneRecord, List<List<Integer>> result) {
-        if (remian < 0 ) {//组合不合适
+    private void dfs(int[] candidates, List<List<Integer>> result, List<Integer> path, int target, int sum, int index) {
+        if (sum == target) {
+            result.add(new ArrayList<>(path));
+        }
+        
+        if (sum > target) {
             return;
-        } else if (remian == 0) {//找到合适的组合
-            result.add(new ArrayList<>(oneRecord));
-        } else {
-            for (int i = index; i < candidates.length; i++) {
-                oneRecord.add(candidates[i]);
-                backtrack(candidates, remian - candidates[i], i, oneRecord, result);
-                oneRecord.remove(oneRecord.size() - 1);//按照索引移除所有元素
-            }
+        }
+        
+        for (int i = index; i < candidates.length; i++) {
+            path.add(candidates[i]);
+            //下一轮还可以选本身，所以是i而非i+1,sum + candidates[i]作为参数而不是赋值
+            dfs(candidates, result, path, target, sum + candidates[i], i); 
+            path.remove(path.size() - 1);
         }
     }
 }
@@ -439,19 +440,25 @@ Output:
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
-        Arrays.sort(nums);//需要排序，这样才知道哪些数字已经用过
-        backtrack(result, new ArrayList<>(), nums, 0);//初始传入0作为起始点
+        List<Integer> path = new ArrayList<>();
+        Arrays.sort(nums); // 因为没有重复，不排序也会遍历所有组合，排序会有些小优化路径
+        result.add(path);
+        dfs(nums, result, path, 0);
         return result;
     }
-    private void backtrack(List<List<Integer>> result, List<Integer> tempList, int[] nums, int start) {
-        result.add(new ArrayList<>(tempList));//注意添加的方式，是新建一个ArrayList对象
-        for (int i = start; i < nums.length; i++) {
-            tempList.add(nums[i]);
-            backtrack(result, tempList, nums, i + 1); // 下一轮的递归是当前元素的下一个
-            tempList.remove(tempList.size() - 1);//回溯
+    private void dfs(int[] nums, List<List<Integer>> result, List<Integer> path, int index) {
+        for (int i = index; i < nums.length; i++) {
+            if (path.contains(nums[i])) {
+                continue;
+            }
+            path.add(nums[i]);
+            result.add(new ArrayList<>(path));
+            dfs(nums, result, path, i + 1); // i + 1表示将当前元素的后面所有元素加上
+            path.remove(path.size() - 1);
         }
     }
 }
+
 ```
 
 ## 90 Subsets II
