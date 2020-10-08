@@ -1261,7 +1261,71 @@ class Solution {
 
 ```
 
-Union Find
+Union Find模板
+
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        HashMap<Integer, Integer> map = new HashMap<>(); //k-v: 元素 - 元素位置
+        int[] parent = new int[nums.length];
+        
+        for (int i = 0; i < nums.length; i++) {
+            parent[i] = i;
+            if (map.containsKey(nums[i])) {// 先把所有元素设为自己的leader，顺便除重
+                continue;
+            }
+            map.put(nums[i], i);
+        }
+        
+        for (int i = 0; i < nums.length; i++) {
+            // 遇到相邻的元素，并且leader不一样，做union操作
+            if (map.containsKey(nums[i] - 1) && find(i, parent) != find(map.get(nums[i] - 1), parent)) {
+                union(i, map.get(nums[i] - 1), parent);
+            }
+            if (map.containsKey(nums[i] + 1) && find(i, parent) != find(map.get(nums[i] + 1), parent)) {
+                union(i, map.get(nums[i] + 1), parent);
+            }
+        }
+        
+        // 找到parent中value最多的元素，代表某老大出现的次数最多，因此该集团的成员最多
+        int maxLen = 0;
+        int[] count = new int[parent.length];
+        for (int val : map.values()) {
+            count[find(val, parent)]++;
+            maxLen = Math.max(maxLen, count[find(val, parent)]);
+        }
+        return maxLen;
+    }
+    
+    // 以下为Union Find代码，
+    private int find(int p, int[] parent) {
+        if (p == parent[p]) {
+            return parent[p];
+        }
+        parent[p] = find(parent[p], parent); // 路径压缩，到最终leader
+        /**路径压缩的迭代写法
+        while (p != parent[p]) {
+            parent[p] = parent[parent[p]];
+            p = parent[p];
+        }
+        */
+        return parent[p];
+    }
+    private void union(int p, int q, int[] parent) {
+        int f1 = find(p, parent);
+        int f2 = find(q, parent);
+        
+        if (f1 != f2) {
+            parent[f1] = f2;
+        }
+    }
+}
+```
+
+Union Find 做成class
 
 ```java
 class Solution {
