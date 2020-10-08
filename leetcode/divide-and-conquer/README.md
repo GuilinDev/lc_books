@@ -719,7 +719,7 @@ class Solution {
             for (int j = i; j >= 0; j--) { //这里从0开始也可以，但反着查比较符合自然想法
                 if (dp[j] && wordSet.contains(s.substring(j, i))) {
                     dp[i] = true;
-                    break;
+                    break; // 当前为true必须跳出
                 }
             }
         }
