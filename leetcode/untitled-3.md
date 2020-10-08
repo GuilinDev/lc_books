@@ -910,5 +910,99 @@ class Solution {
 
 DFS
 
+## 127 Word Ladder
 
+### 题目
+
+Given two words \(_beginWord_ and _endWord_\), and a dictionary's word list, find the length of shortest transformation sequence from _beginWord_ to _endWord_, such that:
+
+1. Only one letter can be changed at a time.
+2. Each transformed word must exist in the word list.
+
+**Note:**
+
+* Return 0 if there is no such transformation sequence.
+* All words have the same length.
+* All words contain only lowercase alphabetic characters.
+* You may assume no duplicates in the word list.
+* You may assume _beginWord_ and _endWord_ are non-empty and are not the same.
+
+**Example 1:**
+
+```text
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output: 5
+
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+```
+
+**Example 2:**
+
+```text
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: 0
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+```
+
+### 分析
+
+### 代码
+
+BFS
+
+```java
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> dict = new HashSet<>(wordList);
+        if (!dict.contains(endWord)) {
+            return 0;
+        }
+        Queue<String> queue = new ArrayDeque<>();
+        queue.offer(beginWord);
+        
+        int level = 1;
+        HashSet<String> visited = new HashSet<>();
+        visited.add(beginWord);
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String currWord = queue.poll();
+                if (currWord.equals(endWord)) {
+                    return level;
+                }
+                
+                int len = currWord.length();
+                for (int j = 0; j < len; j++) {
+                    char[] currWordArr = currWord.toCharArray();
+                    for (int k = 0; k < 26; k++) {
+                        currWordArr[j] = (char)('a' + k);
+                        String newCurr = new String(currWordArr);
+                        if (dict.contains(newCurr) && !visited.contains(newCurr)) {
+                            queue.offer(newCurr);
+                            visited.add(newCurr);
+                        }
+                    }
+                }
+            }
+            level++;
+        }
+        return 0;
+    }
+}
+```
+
+DFS
+
+Trie
 
