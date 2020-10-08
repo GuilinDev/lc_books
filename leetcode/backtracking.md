@@ -326,25 +326,27 @@ Output:
 ```java
 class Solution {
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<List<Integer>> result = new ArrayList<>();
         if (nums == null || nums.length == 0) {
             return result;
         }
-        //Arrays.sort(nums);//因为没有重复元素，所以这道题不用排序
-        backtrack(result, nums, new ArrayList<Integer>());
+        List<Integer> path = new ArrayList<>();
+        dfs(nums, result, path);
         return result;
     }
-    private void backtrack(List<List<Integer>> result, int[] nums, List<Integer> oneList) {
-        if (oneList.size() == nums.length) {
-            result.add(new ArrayList<>(oneList));
-        } else {
-            for (int num : nums) {
-                if (!oneResult.contains(num)) { //有重复元素则跳过此当前元素
-                    oneResult.add(num);
-                    backtracking(nums, oneResult, results);
-                    oneResult.remove(oneResult.size() - 1); // 移除递归树的最下面一个元素
-                }
+    private void dfs(int[] nums, List<List<Integer>> result, List<Integer> path) {
+        if (path.size() == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int num : nums) { // 当前数取了后应该从index = 0开始
+            if (path.contains(num)) {
+                continue;
             }
+            path.add(num);
+            dfs(nums, result, path);
+            path.remove(path.size() - 1);
         }
     }
 }
