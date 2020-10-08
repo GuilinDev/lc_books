@@ -212,14 +212,6 @@ class Solution {
 }
 ```
 
-## 137 - Single Number II
-
-### 原题概述 <a id="yuan-ti-gai-shu"></a>
-
-### 题意和分析 <a id="ti-yi-he-fen-xi"></a>
-
-### 代码 <a id="dai-ma"></a>
-
 ## 260 - Single Number III
 
 ### 题目 <a id="yuan-ti-gai-shu"></a>
