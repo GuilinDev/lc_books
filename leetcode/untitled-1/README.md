@@ -1049,6 +1049,8 @@ class Solution {
         if (root.left == null && root.right == null) {
             return 1;
         }
+        
+        // 判断左右子树是否为null，防止最后在Math.min的时候返回最已经为null的左子树或右子树(较小值为0)
         if (root.left == null) {
             return minDepth(root.right) + 1;
         }
