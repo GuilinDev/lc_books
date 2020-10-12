@@ -5896,3 +5896,115 @@ class Solution {
 }
 ```
 
+## 513 Find Bottom Left Tree Value
+
+### 题目
+
+Given a binary tree, find the leftmost value in the last row of the tree.
+
+**Example 1:**  
+
+
+```text
+Input:
+
+    2
+   / \
+  1   3
+
+Output:
+1
+```
+
+**Example 2:**  
+
+
+```text
+Input:
+
+        1
+       / \
+      2   3
+     /   / \
+    4   5   6
+       /
+      7
+
+Output:
+7
+```
+
+**Note:** You may assume the tree \(i.e., the given root node\) is not **NULL**.
+
+### 分析
+
+BFS记录该层第一个；或者DFS记录最大层数，判断第一次进入该层的节点。
+
+### 代码
+
+BFS
+
+```java
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        
+        while (!queue.isEmpty()) {
+            root = queue.poll();
+            // 先存右边，方便取左边
+            if (root.right != null) {
+                queue.offer(root.right);
+            }
+            if (root.left != null) {
+                queue.offer(root.left);
+            }
+        }
+        return root.val;
+    }
+}
+```
+
+DFS
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int result;
+    int maxDepth;
+    public int findBottomLeftValue(TreeNode root) {
+        result = 0;
+        maxDepth = 0;
+        helper(root, 1);
+        return result;
+    }
+    private void helper(TreeNode node, int depth) {
+        if (node == null) {
+            return;
+        }
+        // 未达到该层时maxDepth < depth，只要遍历到该层第一个数后就为maxDepth == depth了
+        if (maxDepth < depth) {
+            maxDepth = depth;
+            result = node.val; 
+        }
+        depth++;
+        helper(node.left, depth);
+        helper(node.right, depth);
+    }
+}
+```
+
