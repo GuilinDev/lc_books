@@ -65,24 +65,33 @@ class Solution {
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
         Stack<TreeNode> stack = new Stack<>();
-
-        TreeNode current = root;
-        while (current != null) {
-            result.add(current.val);
-            if (current.right != null) {//按照从上到下，逐次放入右子树到最下面
-                stack.push(current.right);
+        stack.push(root);
+        
+        while (!stack.isEmpty()) {
+            root = stack.pop();
+            if (root == null) {
+                continue;
             }
-            current = current.left;//根节点已经访问过，现在去左子树
-            if (current == null && !stack.isEmpty()) {//说明左子树已经放完，stack里是“右子树”
-                current = stack.pop();
-            }
+            stack.push(root.right);
+            stack.push(root.left);
+            if (root.left == null && root.right == null) {
+                result.add(root.val);
+            } else {
+                stack.push(new TreeNode(root.val)); // 这里不是直接加入root，而是新建一个node
+            }            
         }
         return result;
     }
@@ -136,7 +145,7 @@ class Solution {
 }
 ```
 
-迭代，可以用不同的数据结构，从后往前插入比较方便
+迭代，代码块换个顺序
 
 ```java
 /**
@@ -145,34 +154,41 @@ class Solution {
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
-        LinkedList<Integer> result = new LinkedList<>();
+        List<Integer> result = new ArrayList<>();
         Stack<TreeNode> stack = new Stack<>();
-
-        if (root == null) {
-            return result;
-        }
-
         stack.push(root);
-
+        
         while (!stack.isEmpty()) {
-            TreeNode current = stack.pop();
-            result.addFirst(current.val);
-            if (current.left != null) {
-                stack.push(current.left);
+            root = stack.pop();
+            if (root == null) {
+                continue;
             }
-            if (current.right != null) {
-                stack.push(current.right);
+        
+            if (root.left == null && root.right == null) {
+                result.add(root.val);
+            } else {
+                stack.push(new TreeNode(root.val)); // 这里不是直接加入root，而是新建一个node
             }
+            stack.push(root.right);
+            stack.push(root.left);
         }
         return result;
     }
 }
 ```
+
+可以用不同的数据结构，从后往前插入
 
 ```java
 /**
@@ -265,7 +281,7 @@ class Solution {
 }
 ```
 
-迭代
+迭代，代码块换个顺序
 
 ```java
 /**
@@ -274,26 +290,33 @@ class Solution {
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
         Stack<TreeNode> stack = new Stack<>();
-
-        TreeNode current = root;
+        stack.push(root);
         
-        // 由于遍历顺序，不能像后序遍历那样先把root加入stack中，注意whle退出条件
-        while (current != null || !stack.isEmpty()) {
-            while (current != null) {
-                stack.push(current);
-                current = current.left;//先移动指针去左儿子
+        while (!stack.isEmpty()) {
+            root = stack.pop();
+            if (root == null) {
+                continue;
             }
-            //左儿子没了开始从二叉树的最底层弹，同时考虑每个结点的右儿子
-            current = stack.pop();
-            result.add(current.val);//这时候可以add了
-            current = current.right;
+            stack.push(root.right);
+            if (root.left == null && root.right == null) {
+                result.add(root.val);
+            } else {
+                stack.push(new TreeNode(root.val)); // 这里不是直接加入root，而是新建一个node
+            }
+            stack.push(root.left);
         }
         return result;
     }
