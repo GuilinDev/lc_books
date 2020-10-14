@@ -5516,21 +5516,30 @@ Among all possible differences, the maximum value of 7 is obtained by |8 - 1| = 
  * }
  */
 class Solution {
+    int result;
     public int maxAncestorDiff(TreeNode root) {
-        return dfs(root, root.val, root.val);//初始化
-    }
-
-    public int dfs(TreeNode node, int minValue, int maxValue) {
-        if (node == null) { // 当前node为根时，最大值"或"最小值的差值
-            return maxValue - minValue;
+        result = 0;
+        if (root == null || (root.left == null && root.right == null)) {
+            return 0;
         }
-        // DFS递归寻找当前node为根时，的最大值和最小值
-        // 仔细想想当前节点若为最大值或最小值的情况
-        maxValue = Math.max(maxValue, node.val);
-        minValue = Math.min(minValue, node.val);
+        helper(root, root.val, root.val);
+        return result;
         
-        // 只将根和子树比较
-        return Math.max(dfs(node.left, minValue, maxValue), dfs(node.right, minValue, maxValue));
+    }
+    private void helper(TreeNode node, int min, int max) {
+       
+        max = Math.max(max, node.val);
+        min = Math.min(min, node.val);
+        
+        // 打擂台
+        result = Math.max(result, Math.abs(max - min));
+        
+        if (node.left != null) {
+            helper(node.left, min, max);
+        }
+        if (node.right != null) {
+            helper(node.right, min, max);
+        }
     }
 }
 ```
