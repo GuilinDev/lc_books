@@ -1072,11 +1072,7 @@ class Solution {
 
 ## 642 Design Search Autocomplete System 
 
-### 原题
-
-### 思路
-
-### 代码
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/design\#642-design-search-autocomplete-system](https://app.gitbook.com/@guilindev/s/interview/leetcode/design#642-design-search-autocomplete-system)
 
 ## 359 Logger Rate Limiter 
 
