@@ -53,7 +53,6 @@
   * [7. Design](leetcode/7.-design.md)
   * [8. 高级数据结构和算法](leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa.md)
   * [Tag](leetcode/tag.md)
-* [HackerRank - 点技能点](hackerrank.md)
 * [System Design](untitled.md)
 * [Behavior Questions](untitled-1.md)
 * [基础知识拾遗](ji-chu-zhi-shi/README.md)
