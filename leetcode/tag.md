@@ -46,11 +46,11 @@ Output: ""
 
 1.如果这个字符数量大于等于其他的总和，那么其余所有字符只需依次插空 
 
-![](../.gitbook/assets/image%20%28128%29.png)
+![](../.gitbook/assets/image%20%28129%29.png)
 
 2.如果这个字符数量没有那么多，插到最末尾后，就重头开始循环插空 
 
-![](../.gitbook/assets/image%20%28127%29.png)
+![](../.gitbook/assets/image%20%28128%29.png)
 
 第一个图，依次把b和c插完了 第二个图，当到第二个c时，已经到末尾了，就重头开始插空（插空都是从第1个后面的空格开始，因为对于极端情况，当a比其他所有字符数量刚好大于1时，只有这样才能相邻不相同）
 
@@ -887,9 +887,82 @@ class Solution {
 
 ### 原题
 
+Given an array `A` of non-negative integers, return the maximum sum of elements in two non-overlapping \(contiguous\) subarrays, which have lengths `L` and `M`.  \(For clarification, the `L`-length subarray could occur before or after the `M`-length subarray.\)
+
+Formally, return the largest `V` for which `V = (A[i] + A[i+1] + ... + A[i+L-1]) + (A[j] + A[j+1] + ... + A[j+M-1])` and either:
+
+* `0 <= i < i + L - 1 < j < j + M - 1 < A.length`, **or**
+* `0 <= j < j + M - 1 < i < i + L - 1 < A.length`.
+
+1. 
+**Example 1:**
+
+```text
+Input: A = [0,6,5,2,2,5,1,9,4], L = 1, M = 2
+Output: 20
+Explanation: One choice of subarrays is [9] with length 1, and [6,5] with length 2.
+```
+
+**Example 2:**
+
+```text
+Input: A = [3,8,1,3,2,1,8,9,0], L = 3, M = 2
+Output: 29
+Explanation: One choice of subarrays is [3,8,1] with length 3, and [8,9] with length 2.
+```
+
+**Example 3:**
+
+```text
+Input: A = [2,1,5,6,0,9,5,0,3,8], L = 4, M = 3
+Output: 31
+Explanation: One choice of subarrays is [5,6,0,9] with length 4, and [3,8] with length 3.
+```
+
+**Note:**
+
+1. `L >= 1`
+2. `M >= 1`
+3. `L + M <= A.length <= 1000`
+4. `0 <= A[i] <= 1000`
+
 ### 思路
 
+前缀和
+
+`Lsum`, sum of the last `L` elements  
+ `Msum`, sum of the last `M` elements
+
+`Lmax`, max sum of contiguous `L` elements before the last `M` elements.  
+ `Mmax`, max sum of contiguous `M` elements before the last `L` elements/
+
+#### **复杂度：**
+
+Two pass, `O(N)` time,`O(1)` extra space.
+
+It can be done in one pass. I just don't feel like merging them.  
+ If you don't like change the original input, don't have to.
+
 ### 代码
+
+```java
+class Solution {
+    public int maxSumTwoNoOverlap(int[] A, int L, int M) {
+        //求出前缀和
+        for (int i = 1; i < A.length; ++i) {
+            A[i] += A[i - 1];
+        }
+        
+        int res = A[L + M - 1], Lmax = A[L - 1], Mmax = A[M - 1];
+        for (int i = L + M; i < A.length; ++i) {
+            Lmax = Math.max(Lmax, A[i - M] - A[i - L - M]);
+            Mmax = Math.max(Mmax, A[i - L] - A[i - L - M]);
+            res = Math.max(res, Math.max(Lmax + A[i] - A[i - M], Mmax + A[i] - A[i - L]));
+        }
+        return res;
+    }
+}
+```
 
 ##  1060 Missing Element in Sorted Array 
 
