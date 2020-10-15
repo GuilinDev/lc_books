@@ -46,11 +46,11 @@ Output: ""
 
 1.如果这个字符数量大于等于其他的总和，那么其余所有字符只需依次插空 
 
-![](../.gitbook/assets/image%20%28126%29.png)
+![](../.gitbook/assets/image%20%28128%29.png)
 
 2.如果这个字符数量没有那么多，插到最末尾后，就重头开始循环插空 
 
-![](../.gitbook/assets/image%20%28125%29.png)
+![](../.gitbook/assets/image%20%28127%29.png)
 
 第一个图，依次把b和c插完了 第二个图，当到第二个c时，已经到末尾了，就重头开始插空（插空都是从第1个后面的空格开始，因为对于极端情况，当a比其他所有字符数量刚好大于1时，只有这样才能相邻不相同）
 
@@ -110,9 +110,130 @@ class Solution {
 
 ### 原题
 
+You are given an array of positive integers `w` where `w[i]` describes the weight of `ith` index \(0-indexed\).
+
+We need to call the function `pickIndex()` which **randomly** returns an integer in the range `[0, w.length - 1]`. `pickIndex()` should return the integer proportional to its weight in the `w` array. For example, for `w = [1, 3]`, the probability of picking the index `0` is `1 / (1 + 3) = 0.25` \(i.e 25%\) while the probability of picking the index `1` is `3 / (1 + 3) = 0.75` \(i.e 75%\).
+
+More formally, the probability of picking index `i` is `w[i] / sum(w)`.
+
+**Example 1:**
+
+```text
+Input
+["Solution","pickIndex"]
+[[[1]],[]]
+Output
+[null,0]
+
+Explanation
+Solution solution = new Solution([1]);
+solution.pickIndex(); // return 0. Since there is only one single element on the array the only option is to return the first element.
+```
+
+**Example 2:**
+
+```text
+Input
+["Solution","pickIndex","pickIndex","pickIndex","pickIndex","pickIndex"]
+[[[1,3]],[],[],[],[],[]]
+Output
+[null,1,1,1,1,0]
+
+Explanation
+Solution solution = new Solution([1, 3]);
+solution.pickIndex(); // return 1. It's returning the second element (index = 1) that has probability of 3/4.
+solution.pickIndex(); // return 1
+solution.pickIndex(); // return 1
+solution.pickIndex(); // return 1
+solution.pickIndex(); // return 0. It's returning the first element (index = 0) that has probability of 1/4.
+
+Since this is a randomization problem, multiple answers are allowed so the following outputs can be considered correct :
+[null,1,1,1,1,0]
+[null,1,1,1,1,1]
+[null,1,1,1,0,0]
+[null,1,1,1,0,1]
+[null,1,0,1,0,0]
+......
+and so on.
+```
+
+**Constraints:**
+
+* `1 <= w.length <= 10000`
+* `1 <= w[i] <= 10^5`
+* `pickIndex` will be called at most `10000` times.
+
 ### 思路
 
+按数组中元素的值作为权重，写一个随机函数。
+
+![](../.gitbook/assets/image%20%28125%29.png)
+
+方法2，用TreeMap代替二分，见代码
+
+![](../.gitbook/assets/image%20%28126%29.png)
+
 ### 代码
+
+方法1，前缀和
+
+```java
+class Solution {
+
+    List<Integer> psum = new ArrayList<>();
+    int tot = 0;
+    Random rand = new Random();
+
+    public Solution(int[] w) {
+        for (int x : w) {
+            tot += x;
+            psum.add(tot);
+        }
+    }
+
+    public int pickIndex() {
+        int targ = rand.nextInt(tot);
+
+        int lo = 0;
+        int hi = psum.size() - 1;
+        while (lo != hi) {
+            int mid = (lo + hi) / 2;
+            if (targ >= psum.get(mid)) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(w);
+ * int param_1 = obj.pickIndex();
+ */
+```
+
+方法2，TreeMap代替二分
+
+```java
+class Solution {
+    //(wsum, index)
+    TreeMap<Integer, Integer> map;
+    public Solution(int[] w) {
+        map = new TreeMap();
+        map.put(w[0], 0);
+        for(int i = 1; i < w.length; i++){
+            w[i] += w[i - 1];
+            map.put(w[i], i);
+        }
+    }
+    
+    public int pickIndex() {
+        Random rand = new Random();
+        int target = rand.nextInt(map.lastKey());
+        return map.higherEntry(target).getValue();
+    }
+}
+```
 
 ## 843 Guess the Word
 
