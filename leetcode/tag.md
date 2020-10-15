@@ -361,11 +361,7 @@ class Solution {
 
 ## 329 Longest Increasing Path in a Matrix 
 
-### 原题
-
-### 思路
-
-### 代码
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#329-longest-increasing-path-in-a-matrix](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#329-longest-increasing-path-in-a-matrix)
 
 ##  428 Serialize and Deserialize N-ary Tree 
 
