@@ -945,21 +945,47 @@ It can be done in one pass. I just don't feel like merging them.
 
 ### 代码
 
+前缀和
+
+```java
+public int maxSumTwoNoOverlap(int[] A, int L, int M) {
+        int[] prefixSum = new int[A.length + 1];
+        for (int i = 0; i < A.length; ++i) {
+            prefixSum[i + 1] = prefixSum[i] + A[i];
+        }
+        return Math.max(maxSum(prefixSum, L, M), maxSum(prefixSum, M, L));
+    }
+    private int maxSum(int[] p, int L, int M) {
+        int ans = 0;
+        for (int i = L + M, maxL = 0; i < p.length; ++i) {
+            maxL = Math.max(maxL, p[i - M] - p[i - M - L]); // update max of L-length subarray.
+            ans = Math.max(ans, maxL + p[i] - p[i - M]); // update max of the sum of L-length & M-length subarrays.
+        }
+        return ans;
+    }
+```
+
+滑动窗口
+
 ```java
 class Solution {
     public int maxSumTwoNoOverlap(int[] A, int L, int M) {
-        //求出前缀和
-        for (int i = 1; i < A.length; ++i) {
-            A[i] += A[i - 1];
+        return Math.max(maxSum(A, L, M), maxSum(A, M, L));
+    }
+    private int maxSum(int[] A, int L, int M) {
+        int sumL = 0, sumM = 0;
+        for (int i = 0; i < L + M; ++i) { // compute the initial values of L & M length subarrays.
+            if (i < L) sumL += A[i];
+            else sumM += A[i];
         }
-        
-        int res = A[L + M - 1], Lmax = A[L - 1], Mmax = A[M - 1];
-        for (int i = L + M; i < A.length; ++i) {
-            Lmax = Math.max(Lmax, A[i - M] - A[i - L - M]);
-            Mmax = Math.max(Mmax, A[i - L] - A[i - L - M]);
-            res = Math.max(res, Math.max(Lmax + A[i] - A[i - M], Mmax + A[i] - A[i - L]));
+        int ans = sumM + sumL; // sum of sumL and sumM.
+        for (int i = L + M, maxL = sumL; i < A.length; ++i) {
+            sumM += A[i] - A[i - M]; // update sumM.
+            sumL += A[i - M] - A[i - L - M]; // update sumL.
+            maxL = Math.max(maxL, sumL); // update max value of L-length subarray.
+            ans = Math.max(ans, maxL + sumM); // update max value of sum of L & M-length subarrays.
         }
-        return res;
+        return ans;
     }
 }
 ```
@@ -968,9 +994,81 @@ class Solution {
 
 ### 原题
 
+Given a sorted array `A` of **unique** numbers, find the _`K`_`-th` missing number starting from the leftmost number of the array.
+
+**Example 1:**
+
+```text
+Input: A = [4,7,9,10], K = 1
+Output: 5
+Explanation: 
+The first missing number is 5.
+```
+
+**Example 2:**
+
+```text
+Input: A = [4,7,9,10], K = 3
+Output: 8
+Explanation: 
+The missing numbers are [5,6,8,...], hence the third missing number is 8.
+```
+
+**Example 3:**
+
+```text
+Input: A = [1,2,4], K = 3
+Output: 6
+Explanation: 
+The missing numbers are [3,5,6,7,...], hence the third missing number is 6.
+```
+
+**Note:**
+
+1. `1 <= A.length <= 50000`
+2. `1 <= A[i] <= 1e7`
+3. `1 <= K <= 1e8`
+
 ### 思路
 
+ 出一个有序数组 `A`，数组中的每个数字都是 **独一无二的**，找出从数组最左边开始的第 _`K`_ 个缺失数字。
+
+暴力法线性扫描，找到 `missing(idx - 1) < K <= missing(idx)`。
+
+优化解法用二分查找。
+
 ### 代码
+
+```java
+class Solution {
+    public int missingElement(int[] nums, int k) {
+        int length = nums.length;
+        if (k > missing(length - 1, nums))
+            return nums[length - 1] + k - missing(length - 1, nums);
+        int left = 0, right = length - 1, mid;
+        while (left < right) {
+            mid = left + (right - left) / 2;
+            if (missing(mid, nums) < k) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return nums[left - 1] + k - missing(left - 1, nums);
+    }
+
+    /**
+     * 到 A[idx] 为止总共缺失的数字个数
+     *
+     * @param idx  2
+     * @param nums [4,7,9,10]
+     * @return
+     */
+    private int missing(int idx, int[] nums) {
+        return nums[idx] - nums[0] - idx;   // 应该有的数量 - 实际有的数量 = 缺失的数量
+    }
+}
+```
 
 ## 642 Design Search Autocomplete System 
 
