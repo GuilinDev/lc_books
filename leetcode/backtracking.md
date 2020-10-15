@@ -994,3 +994,95 @@ class Solution {
 }
 ```
 
+## 282 Expression Add Operators
+
+### 题目
+
+Given a string that contains only digits `0-9` and a target value, return all possibilities to add **binary** operators \(not unary\) `+`, `-`, or `*` between the digits so they evaluate to the target value.
+
+**Example 1:**
+
+```text
+Input: num = "123", target = 6
+Output: ["1+2+3", "1*2*3"] 
+```
+
+**Example 2:**
+
+```text
+Input: num = "232", target = 8
+Output: ["2*3+2", "2+3*2"]
+```
+
+**Example 3:**
+
+```text
+Input: num = "105", target = 5
+Output: ["1*0+5","10-5"]
+```
+
+**Example 4:**
+
+```text
+Input: num = "00", target = 0
+Output: ["0+0", "0-0", "0*0"]
+```
+
+**Example 5:**
+
+```text
+Input: num = "3456237490", target = 9191
+Output: []
+```
+
+**Constraints:**
+
+* `0 <= num.length <= 10`
+* `num` only contain digits.
+
+### 分析
+
+回溯法，走每一种可能的路径，记录下来作为返回结果。每次都需要注意0，记录下次乘的被乘数。注意溢出情况。同理时间复杂度O\(n!\)。
+
+### 代码
+
+```java
+class Solution {
+    public List<String> addOperators(String num, int target) {
+        List<String> result = new ArrayList<>();
+        if (num.isEmpty()) {
+            return result;
+        }
+        helper(num, target, result, "", 0, 0, 0); //这里要是用StringBuilder需要每次清空，比较麻烦
+        return result;
+    }
+    private void helper(String num, int target, List<String> result, String path, long curSum, long lastNum, int index) {
+        if (index > num.length()) {
+            return;
+        }
+        if (index == num.length() && curSum == target) { // 把所有字符数字尝试完了,找到一个路径，符合条件
+            result.add(path);            
+            return;
+        }
+        for (int i = index; i < num.length(); i++) { // 从当前位置开始遍历
+            if (i > index && num.charAt(index) == '0') { // 多位数的情况下，数字不能以0开头，避免01+2这种情况
+                break;
+            }
+            
+            //从递归树的锚定位置到当前位置，取出数字，可能是一位数或多位数
+            long N = Long.parseLong(num.substring(index, i + 1)); 
+            
+            
+            if (index == 0) { //path中还没有数的时候，不能去把"+","-","*"放到路径最前面（当前path的开头），只能添加数字，避免+1+2这种情况
+                helper(num, target, result, path + "" + N, N, N, i + 1);
+            } else {
+                helper(num, target, result, path + "+" + N, curSum + N, N, i + 1);
+                helper(num, target, result, path + "-" + N, curSum - N, -N, i + 1);
+                // 乘法比较特殊，需要退出刚才加/减的数字，把退出的该数字算到乘法中去
+                helper(num, target, result, path + "*" + N, curSum - lastNum + lastNum * N, lastNum * N, i + 1);
+            }
+        }
+    }
+}
+```
+
