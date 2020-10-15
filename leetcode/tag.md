@@ -399,8 +399,6 @@ You do not necessarily need to follow the above suggested formats, there are man
 2. 将 “\[” 与 “\]” 之间的节点放到父节点的 “children” 列表中； 
 3. 遇到 “\]” 时，将该父节点出栈，尝试处理与该父节点同一层级、或上一层级的节点。
 
-2）BFS
-
 ### 代码
 
 DFS
@@ -485,19 +483,95 @@ class Codec {
 // codec.deserialize(codec.serialize(root));
 ```
 
-BFS
-
-```java
-
-```
-
 ## 1438 Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit 
 
 ### 原题
 
+Given an array of integers `nums` and an integer `limit`, return the size of the longest **non-empty** subarray such that the absolute difference between any two elements of this subarray is less than or equal to `limit`_._
+
+**Example 1:**
+
+```text
+Input: nums = [8,2,4,7], limit = 4
+Output: 2 
+Explanation: All subarrays are: 
+[8] with maximum absolute diff |8-8| = 0 <= 4.
+[8,2] with maximum absolute diff |8-2| = 6 > 4. 
+[8,2,4] with maximum absolute diff |8-2| = 6 > 4.
+[8,2,4,7] with maximum absolute diff |8-2| = 6 > 4.
+[2] with maximum absolute diff |2-2| = 0 <= 4.
+[2,4] with maximum absolute diff |2-4| = 2 <= 4.
+[2,4,7] with maximum absolute diff |2-7| = 5 > 4.
+[4] with maximum absolute diff |4-4| = 0 <= 4.
+[4,7] with maximum absolute diff |4-7| = 3 <= 4.
+[7] with maximum absolute diff |7-7| = 0 <= 4. 
+Therefore, the size of the longest subarray is 2.
+```
+
+**Example 2:**
+
+```text
+Input: nums = [10,1,2,4,7,2], limit = 5
+Output: 4 
+Explanation: The subarray [2,4,7,2] is the longest since the maximum absolute diff is |2-7| = 5 <= 5.
+```
+
+**Example 3:**
+
+```text
+Input: nums = [4,2,2,2,4,4,2,2], limit = 0
+Output: 3
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 10^5`
+* `1 <= nums[i] <= 10^9`
+* `0 <= limit <= 10^9`
+
 ### 思路
 
+给一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。如果不存在满足条件的子数组，则返回 0 。
+
+用单调队列维护当前窗口的最大值和最小值，保持最大值与最小值的差小于 limit 即可
+
 ### 代码
+
+```java
+class Solution {
+    public int longestSubarray(int[] nums, int limit) {
+        //这里维护的是最大值们对应的下标
+        Deque<Integer> maxQ=new LinkedList<>();
+        Deque<Integer> minQ=new LinkedList<>();
+        int ans=0;
+        //窗口左沿
+        int start=0;
+        //窗口右沿
+        for (int end=0; end<nums.length;end++){
+            //右沿元素进入窗口、维护最大值单调队列
+            while(!maxQ.isEmpty() && nums[maxQ.peekLast()]<nums[end]){
+                maxQ.pollLast();
+            }
+            maxQ.add(end);
+            //右沿元素进入窗口、维护最小值单调队列
+            while(!minQ.isEmpty() && nums[minQ.peekLast()]>nums[end]){
+                minQ.pollLast();
+            }
+            minQ.add(end);
+
+            //如果当前窗口的最大值最小值的差大于 limit，则不断缩小窗口（左沿++），直至最大值变小或者最小值变大从而满足 limit 限制
+            while(!maxQ.isEmpty() && !minQ.isEmpty() && nums[maxQ.peek()]-nums[minQ.peek()]>limit){
+                if(maxQ.peek()<=start) maxQ.poll();
+                if(minQ.peek()<=start) minQ.poll();
+                start++;
+            }
+            ans = Math.max(ans,end-start+1);
+        }
+        return ans;
+    }
+}
+
+```
 
 ##  729 My Calendar I 
 
