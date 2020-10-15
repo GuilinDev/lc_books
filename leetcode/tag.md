@@ -2,11 +2,7 @@
 
 ## 1 Two Sum 
 
-### 原题
-
-### 思路
-
-### 代码
+### [https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum\#1-2sum](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum#1-2sum)
 
 ## 560 SubArray Sum Equals to K 
 
