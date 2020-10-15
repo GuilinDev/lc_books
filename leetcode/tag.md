@@ -367,9 +367,129 @@ class Solution {
 
 ### 原题
 
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize an N-ary tree. An N-ary tree is a rooted tree in which each node has no more than N children. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that an N-ary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+For example, you may serialize the following `3-ary` tree
+
+![](https://assets.leetcode.com/uploads/2018/10/12/narytreeexample.png)
+
+as `[1 [3[5 6] 2 4]]`. Note that this is just an example, you do not necessarily need to follow this format.
+
+Or you can follow LeetCode's level order traversal serialization format, where each group of children is separated by the null value.
+
+![](https://assets.leetcode.com/uploads/2019/11/08/sample_4_964.png)
+
+For example, the above tree may be serialized as `[1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14]`.
+
+You do not necessarily need to follow the above suggested formats, there are many more different formats that work so please be creative and come up with different approaches yourself.
+
+**Constraints:**
+
+* The height of the n-ary tree is less than or equal to `1000`
+* The total number of nodes is between `[0, 10^4]`
+* Do not use class member/global/static variables to store states. Your encode and decode algorithms should be stateless.
+
 ### 思路
 
+1\) DFS, 根据题目提示，至少有两种 encode 形式，而这里选择与 Json 字符串类似的、具有层次信息的一种：“1 \[ 3 \[ 5 6 \] 2 4 \]”。这样就有如下处理思路：
+
+1. 使用栈每一个 “\[” 前的节点，作为父节点（因为可能有很多层级，便要纪律很多个父节点）； 
+2. 将 “\[” 与 “\]” 之间的节点放到父节点的 “children” 列表中； 
+3. 遇到 “\]” 时，将该父节点出栈，尝试处理与该父节点同一层级、或上一层级的节点。
+
+2）BFS
+
 ### 代码
+
+DFS
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+
+class Codec {
+    //序列化：将二叉树前序遍历，每个子树由[]表示
+    // 如题目中给出的示例序列化后变为：1[3[5][6]][2][4]
+    // Encodes a tree to a single string.
+    public String serialize(Node root) {
+        //前序遍历
+        if (root == null) return "";
+        StringBuilder sb = new StringBuilder();
+        helper(root, sb);
+        return sb.substring(1, sb.length() - 1);
+    }
+
+    //前序遍历
+    private void helper(Node root, StringBuilder sb) {
+        if (root == null) return;
+        sb.append("[").append(root.val);
+        if (root.children != null) {
+            for (Node child : root.children) {
+                helper(child, sb);
+            }
+        }
+        sb.append("]");
+    }
+
+    // 创建一个Stack用来保存节点。遍历字符串，如果出现数字，则创建新节点，如果Stack不为空，则取如果stack不为空，则获取顶层元素，
+    //加入顶层元素的child中，然后压栈。如果遇到']'则弹栈，直至遍历完字符串。树的元素没有负数，则不需要考虑别的情况。
+    public Node deserialize(String data) {
+        if (data == null || data.length() == 0) return null;
+        Stack<Node> stack = new Stack<>();
+        for (int i = 0; i < data.length(); i++) {
+            char c = data.charAt(i);
+            if (c == ']') stack.pop();
+            else {
+                if (c >= '0' && c <= '9') {
+                    //取当前数组
+                    int start = i;
+                    while (i < data.length() - 1 && data.charAt(i + 1) >= '0' && data.charAt(i + 1) <= '9') {
+                        i++;
+                    }
+                    Node node = new Node(Integer.valueOf(data.substring(start, i + 1)), new ArrayList<>());
+                    if (!stack.isEmpty()) {
+                        Node parent = stack.peek();
+                        List<Node> list = parent.children;
+                        list.add(node);
+                    }
+                    //压栈
+                    stack.push(node);
+                }
+            }
+        }
+        if (stack.isEmpty()) return null;
+        return stack.peek();
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+```
+
+BFS
+
+```java
+
+```
 
 ## 1438 Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit 
 
