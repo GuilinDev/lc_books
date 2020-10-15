@@ -1266,11 +1266,7 @@ class Logger {
 
 ## 946 Validate Stack Sequences 
 
-### 原题
-
-### 思路
-
-### 代码
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#946-validate-stack-sequence](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#946-validate-stack-sequence)
 
 ## 1293 Shortest Path in a Grid with Obstacles Elimination 
 
