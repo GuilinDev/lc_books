@@ -46,7 +46,7 @@ Output: ""
 
 1.如果这个字符数量大于等于其他的总和，那么其余所有字符只需依次插空 
 
-![](../.gitbook/assets/image%20%28129%29.png)
+![](../.gitbook/assets/image%20%28131%29.png)
 
 2.如果这个字符数量没有那么多，插到最末尾后，就重头开始循环插空 
 
@@ -1078,9 +1078,191 @@ class Solution {
 
 ### 原题
 
+Design a logger system that receive stream of messages along with its timestamps, each message should be printed if and only if it is **not printed in the last 10 seconds**.
+
+Given a message and a timestamp \(in seconds granularity\), return true if the message should be printed in the given timestamp, otherwise returns false.
+
+It is possible that several messages arrive roughly at the same time.
+
+**Example:**
+
+```text
+Logger logger = new Logger();
+
+// logging string "foo" at timestamp 1
+logger.shouldPrintMessage(1, "foo"); returns true; 
+
+// logging string "bar" at timestamp 2
+logger.shouldPrintMessage(2,"bar"); returns true;
+
+// logging string "foo" at timestamp 3
+logger.shouldPrintMessage(3,"foo"); returns false;
+
+// logging string "bar" at timestamp 8
+logger.shouldPrintMessage(8,"bar"); returns false;
+
+// logging string "foo" at timestamp 10
+logger.shouldPrintMessage(10,"foo"); returns false;
+
+// logging string "foo" at timestamp 11
+logger.shouldPrintMessage(11,"foo"); returns true;
+```
+
 ### 思路
 
+1\)  直观解法，队列 + 集合
+
+在我们解决问题之前，必须明确问题的条件。这里有一个重要的注意事项：可能会有几条日志同时到达。
+
+我们知道日志的顺序是按时间顺序排列的，即日志的时间戳是单调递增的，尽管不是严格地递增。这个条件非常关键，因为它可以简化任务，如下面的解决方案所示。
+
+第一个解决方案，我们按照问题中描述的任务直观地实现一个解决方案。
+
+我们将接收的日志存储在队列中。为了加速重复项的检查，我们使用集合来检索日志。
+
+![](../.gitbook/assets/image%20%28129%29.png)
+
+从上面的示例可以看出，其中数字表示每个日志的时间戳，时间戳为 18 的日志到达后将使时间戳为 5 和 7 的日志失效，这两个日志超出了 10 秒的时间窗口。
+
+**算法：**
+
+首先，我们使用队列作为滑动窗口，将存储所有时间范围内（10 秒）的日志。 在接收每个日志后，它都有一个时间戮，这意味着滑动窗口需要变化，所以应该将队列中超出时间范围的日志失效。 由于队列和集合应该同步，我们还应该在集合中删除失效的日志。 更新队列和集合后，我们只需检查新接收的日志是否有任何重复项。如果没有，我们将日志添加到队列和集合中。
+
+可以发现使用集合并不是绝对必要的。也可以简单地迭代队列来检查是否有任何重复的日志。
+
+另一个重要的注意事项是如果消息不是按时间顺序排列的，那么我们必须遍历整个队列以删除过期的日志。可以使用一些排序队列（如优先级队列）来保存日志。
+
+**复杂度分析**
+
+时间复杂度：O\(N\)。N 是队列的大小，在最坏的情况下，队列中的日志全部过期了，则需要情况队列。
+
+空间复杂度：O\(N\)，N 是队列的大小，我们在队列和集合中存储了日志的信息，所需空间的上限是 2N，当没有重复的日志时。
+
+2） 优化，哈希表
+
+可以将队列和集合数据结构组合成一个哈希表或字典，这样我们就能够保留队列中所有唯一的日志，也能够快速判断日志的重复性。
+
+做法是用一个哈希表 / 字典，日志作为键，时间戳作为值。哈希表保留所有唯一的日志以及日志的最新时间戳。
+
+![](../.gitbook/assets/image%20%28130%29.png)
+
+从上面的例子可以看到，哈希表中有一条记录，日志 m2 和时间戳 2。然后出现另一条日志 m2，时间戳为 15。由于日志是在 13 秒之前打印的（即超出时间范围），因此它可以再次打印消息。然后，日志 m2 的时间戳将更新为 15。
+
+**算法：**
+
+* 初始化一个哈希表 / 字典来记录日志到时间戳的映射。 
+* 新日志到达时，条件如下时可以打印： 
+  * 我们以前从未见过这个日志。 
+  * 我们以前见过这条日志但是是在 10 多秒之前。 
+* 在上述两种情况下，我们将更新哈希表中对应的日志的时间戮。
+
+注：为了清楚起见，我们把这两个情况分别处理，也可以把这两个情况结合起来，得到一个更简洁的解决方案。
+
+这种使用哈希表的方法与使用队列的方法的主要区别在于，在队列中我们要进行清理，即在每次调用函数时，我们首先删除那些过期的日志。
+
+在哈希表中即使日志过期，我们也会保留所有日志。这种特性可能会成为问题，因为随着时间的推移，内存的使用将继续增长。有时，更需要使用前面方法的垃圾回收机制。
+
+复杂度分析
+
+* 时间复杂度：O\(1\)。哈希表的查找和更新是常数的时间复杂度。 
+* 空间复杂度：O\(M\)，其中 MMM 是日志的数量。随着时间的推移，哈希表记录了每个出现过的唯一日志。
+
 ### 代码
+
+直观解法，队列+集合
+
+```java
+class Pair<U, V> {
+  public U first;
+  public V second;
+
+  public Pair(U first, V second) {
+    this.first = first;
+    this.second = second;
+  }
+}
+
+class Logger {
+  private LinkedList<Pair<String, Integer>> msgQueue;
+  private HashSet<String> msgSet;
+
+  /** Initialize your data structure here. */
+  public Logger() {
+    msgQueue = new LinkedList<Pair<String, Integer>>();
+    msgSet = new HashSet<String>();
+  }
+
+  /**
+   * Returns true if the message should be printed in the given timestamp, otherwise returns false.
+   */
+  public boolean shouldPrintMessage(int timestamp, String message) {
+
+    // clean up.
+    while (msgQueue.size() > 0) {
+      Pair<String, Integer> head = msgQueue.getFirst();
+      if (timestamp - head.second >= 10) {
+        msgQueue.removeFirst();
+        msgSet.remove(head.first);
+      } else
+        break;
+    }
+
+    if (!msgSet.contains(message)) {
+      Pair<String, Integer> newEntry = new Pair<String, Integer>(message, timestamp);
+      msgQueue.addLast(newEntry);
+      msgSet.add(message);
+      return true;
+    } else
+      return false;
+
+  }
+}
+
+
+/**
+ * Your Logger object will be instantiated and called as such:
+ * Logger obj = new Logger();
+ * boolean param_1 = obj.shouldPrintMessage(timestamp,message);
+ */
+```
+
+哈希表
+
+```java
+class Logger {
+  private HashMap<String, Integer> msgDict;
+
+  /** Initialize your data structure here. */
+  public Logger() {
+    msgDict = new HashMap<String, Integer>();
+  }
+
+  /**
+   * Returns true if the message should be printed in the given timestamp, otherwise returns false.
+   */
+  public boolean shouldPrintMessage(int timestamp, String message) {
+
+    if (!this.msgDict.containsKey(message)) {
+      this.msgDict.put(message, timestamp);
+      return true;
+    }
+
+    Integer oldTimestamp = this.msgDict.get(message);
+    if (timestamp - oldTimestamp >= 10) {
+      this.msgDict.put(message, timestamp);
+      return true;
+    } else
+      return false;
+  }
+}
+
+
+/**
+ * Your Logger object will be instantiated and called as such:
+ * Logger obj = new Logger();
+ * boolean param_1 = obj.shouldPrintMessage(timestamp,message);
+ */
+```
 
 ## 946 Validate Stack Sequences 
 
