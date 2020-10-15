@@ -6,11 +6,7 @@
 
 ## 560 SubArray Sum Equals to K 
 
-### 原题
-
-### 思路
-
-### 代码
+### [https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray\#560-subarray-sum-equals-k](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray#560-subarray-sum-equals-k)
 
 ## 85 Maximal Rectangle
 
