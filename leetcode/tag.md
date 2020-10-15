@@ -16,9 +16,95 @@
 
 ### 原题
 
+Given a string `S`, check if the letters can be rearranged so that two characters that are adjacent to each other are not the same.
+
+If possible, output any possible result.  If not possible, return the empty string.
+
+**Example 1:**
+
+```text
+Input: S = "aab"
+Output: "aba"
+```
+
+**Example 2:**
+
+```text
+Input: S = "aaab"
+Output: ""
+```
+
+**Note:**
+
+* `S` will consist of lowercase letters and have length in range `[1, 500]`.
+
 ### 思路
 
+插空法
+
+要相邻两个字符不相同，需要将字符全部错开即可，所以第一步，是把每个字符的数量统计出来。~~但数量不同，错开的方式也不一样，如果一个字符的数量大于或等于其他字符的总和，那么只需将这个字符和其他字符依次放在一起即可，如果这个字符数量没有那么多，则那样做不行，所以直接按顺序来看怎么排比较复杂~~。 那不如换个角度来想，只要不是连续两个相同的就行，那可以将数量最多的依次排开，其余的插空即可，这里分两种情况： 
+
+1.如果这个字符数量大于等于其他的总和，那么其余所有字符只需依次插空 
+
+![](../.gitbook/assets/image%20%28126%29.png)
+
+2.如果这个字符数量没有那么多，插到最末尾后，就重头开始循环插空 
+
+![](../.gitbook/assets/image%20%28125%29.png)
+
+第一个图，依次把b和c插完了 第二个图，当到第二个c时，已经到末尾了，就重头开始插空（插空都是从第1个后面的空格开始，因为对于极端情况，当a比其他所有字符数量刚好大于1时，只有这样才能相邻不相同）
+
 ### 代码
+
+```java
+class Solution {
+    public String reorganizeString(String S) {
+        int len = S.length();
+		//记录字符的数量
+		int[] arr = new int[26];
+		char[] array = S.toCharArray();
+		int max = 0;
+		int idx = 0;
+		for (char c : array) {
+			arr[c - 'a']++;
+			if(max < arr[c - 'a']) {
+				max = arr[c - 'a'];
+				idx = c - 'a';
+			}
+		}
+		if((len & 1) == 0 && max > len/2) {
+			return "";
+		}
+		if((len & 1) == 1 && max > len/2 + 1) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		//先把数量最多字符铺开，等待插空
+		while(arr[idx] > 0) {
+			sb.append((char)(idx+'a'));
+			arr[idx]--;
+		}
+		int position = 1;
+		for(int i=0; i<arr.length; i++) {
+			
+			while(arr[i] > 0) {
+				//插空
+				sb.insert(position, (char)(i+'a'));
+				arr[i]--;
+				//空位往后移
+				position += 2;
+				//到末尾时，重头来
+				if(position > sb.length()) {
+					position = 1;
+				}
+			}
+			
+		}
+		
+		return sb.toString();
+    }
+}
+```
 
 ## 528 Random Pick with Weight
 
