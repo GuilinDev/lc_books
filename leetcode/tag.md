@@ -577,9 +577,162 @@ class Solution {
 
 ### 原题
 
+Implement a `MyCalendar` class to store your events. A new event can be added if adding the event will not cause a double booking.
+
+Your class will have the method, `book(int start, int end)`. Formally, this represents a booking on the half open interval `[start, end)`, the range of real numbers `x` such that `start <= x < end`.
+
+A double booking happens when two events have some non-empty intersection \(ie., there is some time that is common to both events.\)
+
+For each call to the method `MyCalendar.book`, return `true` if the event can be added to the calendar successfully without causing a double booking. Otherwise, return `false` and do not add the event to the calendar. Your class will be called like this: `MyCalendar cal = new MyCalendar();` `MyCalendar.book(start, end)`
+
+**Example 1:**
+
+```text
+MyCalendar();
+MyCalendar.book(10, 20); // returns true
+MyCalendar.book(15, 25); // returns false
+MyCalendar.book(20, 30); // returns true
+Explanation: 
+The first event can be booked.  The second can't because time 15 is already booked by another event.
+The third event can be booked, as the first event takes every time less than 20, but not including 20.
+```
+
+**Note:**
+
+* The number of calls to `MyCalendar.book` per test case will be at most `1000`.
+* In calls to `MyCalendar.book(start, end)`, `start` and `end` are integers in the range `[0, 10^9]`.
+
 ### 思路
 
+1\) 线段树
+
+1. 构造线段树节点。 
+2. 新添加的线段树节点，要么只能全在node.start往左，要么只能全在node.end往右。 
+3. 左右子树如果不存在，这表示该区间不存在，可以插入，如果存在，则往其左右子树递推即可。 
+4. 不满足条件的则表示与当前节点的区间发生了重叠，不能插入。
+
+本题构造的线段树节点，以及线段树的更新操作，基本上就是二叉搜索树新增节点的变形，极端情况下，效率会从O\(logN\)退化到O\(N\)
+
+2） TreeMap
+
+直接利用TreeMap，以start为key,end为value。
+
+1. 找到比start小的值，看其value是不是比start大，如果大于start，则表示重复，不能插入 
+2. 找到比start大的值，看其本身是不是比end小，如果小于end，则表示重复，不能插入
+
 ### 代码
+
+线段树
+
+```java
+class MyCalendar {
+
+    // 线段树的根
+    private SegmentTreeNode root;
+
+    /**
+     * 线段树结构体
+     */
+    private static class SegmentTreeNode {
+        int start;// 时间开始区间
+        int end;// 时间结束区间
+
+        SegmentTreeNode left;// 区间左孩子
+        SegmentTreeNode right;// 区间右孩子
+
+        SegmentTreeNode(int start,int end){
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    public MyCalendar() {
+        root = new SegmentTreeNode(0,0);
+    }
+
+    public boolean book(int start, int end) {
+        return updateSegment(root,start,end);
+    }
+
+    /**
+     * 更新线段树节点
+     * @param root 线段树节点
+     * @param start 新插入的开始时间
+     * @param end 新插入的结束时间
+     * @return 是否合法
+     */
+    private boolean updateSegment(SegmentTreeNode root,int start,int end){
+        // 新节点，要么只能全在node.start往左，要么只能全在node.end往右
+        SegmentTreeNode node = root;
+        while (true){
+            // 因为start,end是前闭后开区间，所以end可以取等号
+            if (end <= node.start){
+                // 左子树为空，表示可以添加
+                if (node.left == null){
+                    node.left = new SegmentTreeNode(start,end);
+                    return true;
+                }
+                // 进入左子树线段树
+                node = node.left;
+            }else if (start >= node.end){
+                // 右子树为空，表示可以添加
+                if (node.right == null){
+                    node.right = new SegmentTreeNode(start, end);
+                    return true;
+                }
+                // 进入右子树的线段树
+                node = node.right;
+            }else {
+                // start或end在[node.start,node.end)中，产生了重复预定
+                return false;
+            }
+        }
+    }
+}
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * boolean param_1 = obj.book(start,end);
+ */
+
+```
+
+TreeMap
+
+```java
+class MyCalendar {
+    // key->start ; value->end
+    private TreeMap<Integer,Integer> tm;
+
+    public MyCalendar() {
+        tm = new TreeMap<>();
+    }
+
+    public boolean book(int start, int end) {
+        if (start >= end){
+            return false;
+        }
+        Integer low = tm.floorKey(start);
+        if(low != null && tm.get(low) > start){
+            return false;// 前节点考虑
+        }
+        Integer high = tm.ceilingKey(start);
+        if (high != null && high < end){
+            return false;// 后节点考虑
+        }
+        tm.put(start,end);
+        return true;
+    }
+}
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * boolean param_1 = obj.book(start,end);
+ */
+
+```
 
 ##  722 Remove Comments 
 
