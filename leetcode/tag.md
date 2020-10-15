@@ -46,7 +46,7 @@ Output: ""
 
 1.如果这个字符数量大于等于其他的总和，那么其余所有字符只需依次插空 
 
-![](../.gitbook/assets/image%20%28131%29.png)
+![](../.gitbook/assets/image%20%28132%29.png)
 
 2.如果这个字符数量没有那么多，插到最末尾后，就重头开始循环插空 
 
@@ -1549,13 +1549,95 @@ class Solution {
 
 ### 原题
 
+Given a list of words, each word consists of English lowercase letters.
+
+Let's say `word1` is a predecessor of `word2` if and only if we can add exactly one letter anywhere in `word1` to make it equal to `word2`.  For example, `"abc"` is a predecessor of `"abac"`.
+
+A _word chain_ is a sequence of words `[word_1, word_2, ..., word_k]` with `k >= 1`, where `word_1` is a predecessor of `word_2`, `word_2` is a predecessor of `word_3`, and so on.
+
+Return the longest possible length of a word chain with words chosen from the given list of `words`.
+
+**Example 1:**
+
+```text
+Input: ["a","b","ba","bca","bda","bdca"]
+Output: 4
+Explanation: one of the longest word chain is "a","ba","bda","bdca".
+```
+
+**Note:**
+
+1. `1 <= words.length <= 1000`
+2. `1 <= words[i].length <= 16`
+3. `words[i]` only consists of English lowercase letters.
+
 ### 思路
 
+DFS暴力，升级为动态规划。
+
+ `dp[i]`表示从`words[0]`到`words[i]`最长的词链长度。
+
+将字母按字符长度字典序排序的代码：
+
+```java
+Arrays.sort(words, new Comparator<String>() {
+    @Override
+    public int compare(String o1, String o2) {
+        return o1.length() - o2.length();
+    }
+});
+```
+
+![](../.gitbook/assets/image%20%28131%29.png)
+
 ### 代码
+
+```java
+class Solution {
+    public int longestStrChain(String[] words) {
+        Arrays.sort(words, Comparator.comparingInt(String::length));
+        int n = words.length;
+        int[] dp = new int[n];
+        int res = 0;
+        for (int i = 0; i < n; i++) {
+            String a = words[i];
+            for (int j = i + 1; j < n; j++) {
+                String b = words[j];
+                if (isPredecessor(a, b)) {
+                    dp[j] = Math.max(dp[j], dp[i] + 1);
+                    res = Math.max(dp[j], res);
+                }
+            }
+        }
+        return res + 1;
+    }
+
+    /**
+     * 判断a是否是b的前身 是返回true 如 "bda" 是"bdca"的前身
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    private boolean isPredecessor(String a, String b) {
+        int i = 0, j = 0;
+        int m = a.length(), n = b.length();
+        if ((m + 1) != n) return false;
+        while (i < m && j < n) {
+            if (a.charAt(i) == b.charAt(j)) i++;
+            j++;
+        }
+        return i == m;
+    }
+
+}
+```
 
 ## 1423 Maximum Points You Can Obtain from Cards 
 
 ### 原题
+
+
 
 ### 思路
 
