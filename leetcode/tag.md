@@ -1827,19 +1827,132 @@ class Solution {
 
 ## 727 Minimum Window Subsequence 
 
-### 原题
-
-### 思路
-
-### 代码
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#727-minimum-window-subsequence](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#727-minimum-window-subsequence)
 
 ## 489 Robot Room Cleaner 
 
 ### 原题
 
+Given a robot cleaner in a room modeled as a grid.
+
+Each cell in the grid can be empty or blocked.
+
+The robot cleaner with 4 given APIs can move forward, turn left or turn right. Each turn it made is 90 degrees.
+
+When it tries to move into a blocked cell, its bumper sensor detects the obstacle and it stays on the current cell.
+
+Design an algorithm to clean the entire room using only the 4 given APIs shown below.
+
+```text
+interface Robot {
+  // returns true if next cell is open and robot moves into the cell.
+  // returns false if next cell is obstacle and robot stays on the current cell.
+  boolean move();
+
+  // Robot will stay on the same cell after calling turnLeft/turnRight.
+  // Each turn will be 90 degrees.
+  void turnLeft();
+  void turnRight();
+
+  // Clean the current cell.
+  void clean();
+}
+```
+
+**Example:**
+
+```text
+Input:
+room = [
+  [1,1,1,1,1,0,1,1],
+  [1,1,1,1,1,0,1,1],
+  [1,0,1,1,1,1,1,1],
+  [0,0,0,1,0,0,0,0],
+  [1,1,1,1,1,1,1,1]
+],
+row = 1,
+col = 3
+
+Explanation:
+All grids in the room are marked by either 0 or 1.
+0 means the cell is blocked, while 1 means the cell is accessible.
+The robot initially starts at the position of row=1, col=3.
+From the top left corner, its position is one row below and three columns right.
+```
+
+**Notes:**
+
+1. The input is only given to initialize the room and the robot's position internally. You must solve this problem "blindfolded". In other words, you must control the robot using only the mentioned 4 APIs, without knowing the room layout and the initial robot's position.
+2. The robot's initial position will always be in an accessible cell.
+3. The initial direction of the robot will be facing up.
+4. All accessible cells are connected, which means the all cells marked as 1 will be accessible by the robot.
+5. Assume all four edges of the grid are all surrounded by wall.
+
 ### 思路
 
+DFS + 回溯
+
+这道题既然是模拟扫地机器人，那么DFS其实是蛮直观的。可以用BFS做吗？不能。因为**BFS做是没法回到原点的**。 这道题大部分的实现都还是比较直观的，需要注意以下几点
+
+* 需要一个hashset记录访问过的坐标 
+* 给机器人定义的移动方向是需要有顺序的，要不然是顺时针要不然是逆时针。这里给的是顺时针的做法，上右下左。当机器人在某一个方向走到头的时候，需要让它原地180度掉头，回到初始位置，再去扫描下一个位置
+
 ### 代码
+
+```java
+/**
+ * // This is the robot's control interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface Robot {
+ *     // Returns true if the cell in front is open and robot moves into the cell.
+ *     // Returns false if the cell in front is blocked and robot stays in the current cell.
+ *     public boolean move();
+ *
+ *     // Robot will stay in the same cell after calling turnLeft/turnRight.
+ *     // Each turn will be 90 degrees.
+ *     public void turnLeft();
+ *     public void turnRight();
+ *
+ *     // Clean the current cell.
+ *     public void clean();
+ * }
+ */
+
+class Solution {
+    
+    private static final int[][] directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    
+    public void cleanRoom(Robot robot) {
+        clean(robot, 0, 0, 0, new HashSet<>());
+    }
+    
+    private void clean(Robot robot, int x, int y, int curDirection, Set<String> visited) {
+        // Cleans current cell.
+        robot.clean();
+        visited.add(x + " " + y);
+        
+        for (int nDirection = curDirection; 
+             nDirection < curDirection + 4; 
+             nDirection++) {
+            int nx = directions[nDirection % 4][0] + x;
+            int ny = directions[nDirection % 4][1] + y;
+            if (!visited.contains(nx + " " + ny) && robot.move()) {
+                clean(robot, nx, ny, nDirection % 4, visited);
+            }
+            // Changed orientation.
+            robot.turnRight();
+        }
+        
+        // Moves backward one step while maintaining the orientation.
+        robot.turnRight();
+        robot.turnRight();
+        robot.move();
+        robot.turnRight();
+        robot.turnRight();
+    }
+}
+
+```
 
 ## 346 Moving Average from Data Stream 
 

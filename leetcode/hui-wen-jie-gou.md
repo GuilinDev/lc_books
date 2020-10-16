@@ -44,8 +44,8 @@ class Solution {
             return intervals;
         }
 
-        //Java8的函数式编程
-        intervals.sort(Comparator.comparingInt(i -> i.start));
+        //Java8的lambda的comparator，把类匿名类作为参数
+        intervals.sort((i1, i2) -> Integer.compare(i1.start, i2.start));
 
         List<Interval> result = new LinkedList<>();//链表保持顺序
 
@@ -81,11 +81,11 @@ class Solution {
         }
 
         // Ascending order
-        Arrays.sort(intervals, Comparator.comparingInt(i0 -> i0[0]));
+        Arrays.sort(intervals, (i0, i1) -> Integer.compare(i0[0], i1[0]));
 
         List<int[]> result = new ArrayList<>();
         int[] newInterval = intervals[0]; // 把第一个记录来初始化,记录当前已经合并的区间
-        result.add(newInterval); // 每次都来检查结果集中的最后一个区间
+        result.add(newInterval);
 
         // 遍历每一个二维数组，比较已经合并的区间的尾和新遍历到的头
         for (int[] interval : intervals) {
