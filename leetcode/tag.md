@@ -1748,9 +1748,82 @@ class Solution {
 
 ### 原题
 
+Given two strings `str1` and `str2` of the same length, determine whether you can transform `str1` into `str2` by doing **zero or more** _conversions_.
+
+In one conversion you can convert **all** occurrences of one character in `str1` to **any** other lowercase English character.
+
+Return `true` if and only if you can transform `str1` into `str2`.
+
+**Example 1:**
+
+```text
+Input: str1 = "aabcc", str2 = "ccdee"
+Output: true
+Explanation: Convert 'c' to 'e' then 'b' to 'd' then 'a' to 'c'. Note that the order of conversions matter.
+```
+
+**Example 2:**
+
+```text
+Input: str1 = "leetcode", str2 = "codeleet"
+Output: false
+Explanation: There is no way to transform str1 to str2.
+```
+
+**Note:**
+
+1. `1 <= str1.length == str2.length <= 10^4`
+2. Both `str1` and `str2` contain only lowercase English letters.
+
 ### 思路
 
+题目判断的思路就是遍历字符串，如果在str1中位置i的某个字符前面有相同的字符（位置m），那么就判断str2中对应i位置的字符是否m位置的字符是否完全相等，否则就肯定不能转化
+
+两个特例处理下： 
+
+1、两个字符串完全相同 
+
+2、题目中：每一次转化时，将会一次性将 str1 中出现的 所有 相同字母变成其他 任何 小写英文字母（见示例）。 特别注意这个，表示str1某个字符转化时，转化后的字符在str2中不能存在，这个有些坑 最终判断时，只需要看str2中是否 a ~ z 26个字符都有的情况才不满足，否则总会找到某个特定顺序，满足要求的
+
 ### 代码
+
+```java
+class Solution {
+    public boolean canConvert(String str1, String str2) {
+        // 判断2个字符串是否相等
+        if (str1.equals(str2)) {
+            return true;
+        }
+
+        // 确认str2中是否包含 a - > z， 26个字符，如果str2中包含的话，那么str1肯定不满足能转换成"字符"，否则总是可能找到特定的转换顺序
+        if (containAllChar(str2)) {
+            return false;
+        }
+
+        HashMap<Character, Integer> str1Map = new HashMap<>();
+        for (int i = 0; i < str1.length(); i++) {
+            if (!str1Map.containsKey(str1.charAt(i))) {
+                str1Map.put(str1.charAt(i), i);
+            } else {
+                // 判断str2中，字符不与str1中对应字符不相等，那么肯定不能转化
+                if (str2.charAt(i) != str2.charAt(str1Map.get(str1.charAt(i)))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean containAllChar(String str1) {
+        for (int i = 0; i < 26; i++) {
+            if (str1.indexOf('a' + i) == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
 
 ## 727 Minimum Window Subsequence 
 
