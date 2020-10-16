@@ -85,7 +85,7 @@ class Solution {
 
         List<int[]> result = new ArrayList<>();
         int[] newInterval = intervals[0]; // 把第一个记录来初始化,记录当前已经合并的区间
-        result.add(newInterval);
+        result.add(newInterval); // 每次都来检查结果集中的最后一个区间
 
         // 遍历每一个二维数组，比较已经合并的区间的尾和新遍历到的头
         for (int[] interval : intervals) {
