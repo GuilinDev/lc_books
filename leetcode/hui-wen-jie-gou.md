@@ -81,7 +81,7 @@ class Solution {
         }
 
         // Ascending order
-        Arrays.sort(intervals, (i0, i1) -> Integer.compare(i0[0], i1[0]));
+        Arrays.sort(intervals, Comparator.comparingInt(i0 -> i0[0]));
 
         List<int[]> result = new ArrayList<>();
         int[] newInterval = intervals[0]; // 把第一个记录来初始化,记录当前已经合并的区间
