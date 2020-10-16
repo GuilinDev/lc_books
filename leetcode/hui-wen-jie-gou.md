@@ -44,8 +44,8 @@ class Solution {
             return intervals;
         }
 
-        //Java8的lambda的comparator，把类匿名类作为参数
-        intervals.sort((i1, i2) -> Integer.compare(i1.start, i2.start));
+        //Java8的函数式编程
+        intervals.sort(Comparator.comparingInt(i -> i.start));
 
         List<Interval> result = new LinkedList<>();//链表保持顺序
 
