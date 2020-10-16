@@ -2068,7 +2068,7 @@ DFS
 
 ![](../.gitbook/assets/image%20%28135%29.png)
 
-![](../.gitbook/assets/image%20%28139%29.png)
+![](../.gitbook/assets/image%20%28141%29.png)
 
 ![](../.gitbook/assets/image%20%28136%29.png)
 
@@ -2180,7 +2180,7 @@ We can't extend "helo" to get "heeellooo" because the group "ll" is not size 3 o
 
 ![](../.gitbook/assets/image%20%28134%29.png)
 
-![](../.gitbook/assets/image%20%28138%29.png)
+![](../.gitbook/assets/image%20%28139%29.png)
 
 ### 代码
 
@@ -2374,6 +2374,17 @@ Output: [[1,2,null,4],[6],[7]]
 
 删点成林，给出二叉树的根节点 root，树上每个节点都有一个不同的值。如果节点值在 to\_delete 中出现，我们就把该节点从树上删去，最后得到一个森林（一些不相交的树构成的集合）。返回森林中的每棵树。你可以按任意顺序组织答案。
 
+算法
+
+首先把to\_delete变成set，此处不多说； 
+
+节点进入结果当中，有2个条件：
+
+* 不被删除 
+* 父节点不存在 
+
+因此在遍历过程中，将parentExists标志传递给子节点，子递归就可以选择是否加入到结果。 另外，如果子节点被删除，父节点的left、right字段需要更新。
+
 ### 代码
 
 DFS做后序遍历
@@ -2427,65 +2438,882 @@ class Solution {
 
 ### 原题
 
+In a string composed of `'L'`, `'R'`, and `'X'` characters, like `"RXXLRXRXL"`, a move consists of either replacing one occurrence of `"XL"` with `"LX"`, or replacing one occurrence of `"RX"` with `"XR"`. Given the starting string `start` and the ending string `end`, return `True` if and only if there exists a sequence of moves to transform one string to the other.
+
+**Example 1:**
+
+```text
+Input: start = "RXXLRXRXL", end = "XRLXXRRLX"
+Output: true
+Explanation: We can transform start to end following these steps:
+RXXLRXRXL ->
+XRXLRXRXL ->
+XRLXRXRXL ->
+XRLXXRRXL ->
+XRLXXRRLX
+```
+
+**Example 2:**
+
+```text
+Input: start = "X", end = "L"
+Output: false
+```
+
+**Example 3:**
+
+```text
+Input: start = "LLR", end = "RRL"
+Output: false
+```
+
+**Example 4:**
+
+```text
+Input: start = "XL", end = "LX"
+Output: true
+```
+
+**Example 5:**
+
+```text
+Input: start = "XLLR", end = "LXLX"
+Output: false
+```
+
+**Constraints:**
+
+* `1 <= start.length <= 104`
+* `start.length == end.length`
+* Both `start` and `end` will only consist of characters in `'L'`, `'R'`, and `'X'`.
+
 ### 思路
 
+在一个由 'L' , 'R' 和 'X' 三个字符组成的字符串（例如"RXXLRXRXL"）中进行移动操作。一次移动操作指用一个"LX"替换一个"XL"，或者用一个"XR"替换一个"RX"。现给定起始字符串start和结束字符串end，请编写代码，当且仅当存在一系列移动操作使得start可以转换成end时， 返回True。
+
+可以用双指针来解决这个问题，对于 i， j 两个指针，分别让他们指向 start 和 end，且保证 start\[i\] != 'X'，end\[j\] != 'X'。接下来开始移动指针，如果 start\[i\] != end\[j\]，则不满足 转换不变性，如果 start\[i\] == 'L' 且 i &lt; j，则不满足 可到达性。
+
+* 时间复杂度：O\(N\)，其中NNN 为 `start` 和 `end` 的长度。
+* 空间复杂度：O\(1\)O\(1\)O\(1\)。
+
 ### 代码
+
+```java
+class Solution {
+    public boolean canTransform(String start, String end) {
+        int N = start.length();
+        char[] S = start.toCharArray(), T = end.toCharArray();
+        int i = -1, j = -1;
+        while (++i < N && ++j < N) {
+            while (i < N && S[i] == 'X') i++;
+            while (j < N && T[j] == 'X') j++;
+            /* At this point, i == N or S[i] != 'X',
+               and j == N or T[j] != 'X'.  i and j
+               are the indices representing the next
+               occurrences of non-X characters in S and T.
+            */
+
+            // If only one of i < N and j < N, then it isn't solid-
+            // there's more people in one of the strings.
+            if ((i < N) ^ (j < N)) return false;
+
+            if (i < N && j < N) {
+                // If the person isn't the same, it isn't solid.
+                // Or, if the person moved backwards, it isn't accessible.
+                if (S[i] != T[j] || (S[i] == 'L' && i < j) ||
+                        (S[i] == 'R' && i > j) )
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+```
 
 ## 659 Split Array into Consecutive Subsequences 
 
 ### 原题
 
+Given an array `nums` sorted in ascending order, return `true` if and only if you can split it into 1 or more subsequences such that each subsequence consists of consecutive integers and has length at least 3.
+
+**Example 1:**
+
+```text
+Input: [1,2,3,3,4,5]
+Output: True
+Explanation:
+You can split them into two consecutive subsequences : 
+1, 2, 3
+3, 4, 5
+```
+
+**Example 2:**
+
+```text
+Input: [1,2,3,3,4,4,5,5]
+Output: True
+Explanation:
+You can split them into two consecutive subsequences : 
+1, 2, 3, 4, 5
+3, 4, 5
+```
+
+**Example 3:**
+
+```text
+Input: [1,2,3,4,4,5]
+Output: False
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 10000`
+
 ### 思路
 
+贪心算法。
+
+**想法**
+
+我们把 3 个或更多的连续数字称作 chain。
+
+我们从左到右考虑每一个数字 x，如果 x 可以被添加到当前的 chain 中，我们将 x 添加到 chain 中，这一定会比创建一个新的 chain 要更好。
+
+为什么呢？如果我们以 x 为起点新创建一个 chain ，这条新创建更短的链是可以接在之前的链上的，这可能会帮助我们避免创建一个从 x 开始的长度为 1 或者 2 的短链。
+
+**算法**
+
+我们将每个数字的出现次数统计好，记 tails\[x\] 是恰好在 x 之前结束的链的数目。
+
+现在我们逐一考虑每个数字，如果有一个链恰好在 x 之前结束，我们将 x 加入此链中。否则，如果我们可以新建立一条链就新建。
+
+我们可以优化额外空间到 O\(1\)O\(1\)O\(1\)，因为我们可以像 方法 1 一样统计数字的出现次数，而且我们只需要知道最后 3 个数字的出现次数即可。
+
 ### 代码
+
+```java
+class Solution {
+    public boolean isPossible(int[] nums) {
+        Counter count = new Counter();
+        Counter tails = new Counter();
+        for (int x: nums) count.add(x, 1);
+
+        for (int x: nums) {
+            if (count.get(x) == 0) {
+                continue;
+            } else if (tails.get(x) > 0) {
+                tails.add(x, -1);
+                tails.add(x+1, 1);
+            } else if (count.get(x+1) > 0 && count.get(x+2) > 0) {
+                count.add(x+1, -1);
+                count.add(x+2, -1);
+                tails.add(x+3, 1);
+            } else {
+                return false;
+            }
+            count.add(x, -1);
+        }
+        return true;
+    }
+}
+
+class Counter extends HashMap<Integer, Integer> {
+    public int get(int k) {
+        return containsKey(k) ? super.get(k) : 0;
+    }
+
+    public void add(int k, int v) {
+        put(k, get(k) + v);
+    }
+}
+```
 
 ## 299 Bulls and Cows 
 
-### 原题
-
-### 思路
-
-### 代码
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#299-bulls-and-cows](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#299-bulls-and-cows)
 
 ## 1477 Find Two Non-overlapping Sub-arrays Each With Target Sum 
 
 ### 原题
 
+Given an array of integers `arr` and an integer `target`.
+
+You have to find **two non-overlapping sub-arrays** of `arr` each with sum equal `target`. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is **minimum**.
+
+Return _the minimum sum of the lengths_ of the two required sub-arrays, or return _**-1**_ if you cannot find such two sub-arrays.
+
+**Example 1:**
+
+```text
+Input: arr = [3,2,2,4,3], target = 3
+Output: 2
+Explanation: Only two sub-arrays have sum = 3 ([3] and [3]). The sum of their lengths is 2.
+```
+
+**Example 2:**
+
+```text
+Input: arr = [7,3,4,7], target = 7
+Output: 2
+Explanation: Although we have three non-overlapping sub-arrays of sum = 7 ([7], [3,4] and [7]), but we will choose the first and third sub-arrays as the sum of their lengths is 2.
+```
+
+**Example 3:**
+
+```text
+Input: arr = [4,3,2,6,2,3,4], target = 6
+Output: -1
+Explanation: We have only one sub-array of sum = 6.
+```
+
+**Example 4:**
+
+```text
+Input: arr = [5,5,4,4,5], target = 3
+Output: -1
+Explanation: We cannot find a sub-array of sum = 3.
+```
+
+**Example 5:**
+
+```text
+Input: arr = [3,1,1,1,5,1,2,1], target = 3
+Output: 3
+Explanation: Note that sub-arrays [1,2] and [2,1] cannot be an answer because they overlap.
+```
+
+**Constraints:**
+
+* `1 <= arr.length <= 10^5`
+* `1 <= arr[i] <= 1000`
+* `1 <= target <= 10^8`
+
 ### 思路
 
+![](../.gitbook/assets/image%20%28140%29.png)
+
+时间复杂度 O\(n\)，一次扫描
+
+空间复杂度 O\(n\)，用了一个dp数组
+
 ### 代码
+
+```java
+class Solution {
+    public int minSumOfLengths(int[] arr, int target) {
+        int n = arr.length;
+        int[] dp = new int[n];
+        // 注意不能设置为最大值，因为相加会溢出
+        Arrays.fill(dp, Integer.MAX_VALUE / 2);
+
+        int ans = Integer.MAX_VALUE;
+        for(int i = 0, j = 0, sum = 0; j < n; j++){
+            sum += arr[j];
+            while(i <= j && sum > target){
+                sum -= arr[i++];
+            }
+            // 找到满足条件的一个区间
+            if(sum == target){
+                dp[j] = j - i + 1;
+                if(i != 0){
+                    ans = Math.min(ans, dp[i-1] + j - i + 1);
+                }
+            }
+            if(j != 0)
+                dp[j] = Math.min(dp[j], dp[j-1]);
+        }
+
+        return ans > arr.length ? -1 : ans;
+    }
+}
+
+```
 
 ## 752 Open the Lock 
 
 ### 原题
 
+You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: `'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'`. The wheels can rotate freely and wrap around: for example we can turn `'9'` to be `'0'`, or `'0'` to be `'9'`. Each move consists of turning one wheel one slot.
+
+The lock initially starts at `'0000'`, a string representing the state of the 4 wheels.
+
+You are given a list of `deadends` dead ends, meaning if the lock displays any of these codes, the wheels of the lock will stop turning and you will be unable to open it.
+
+Given a `target` representing the value of the wheels that will unlock the lock, return the minimum total number of turns required to open the lock, or -1 if it is impossible.
+
+**Example 1:**
+
+```text
+Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202"
+Output: 6
+Explanation:
+A sequence of valid moves would be "0000" -> "1000" -> "1100" -> "1200" -> "1201" -> "1202" -> "0202".
+Note that a sequence like "0000" -> "0001" -> "0002" -> "0102" -> "0202" would be invalid,
+because the wheels of the lock become stuck after the display becomes the dead end "0102".
+```
+
+**Example 2:**
+
+```text
+Input: deadends = ["8888"], target = "0009"
+Output: 1
+Explanation:
+We can turn the last wheel in reverse to move from "0000" -> "0009".
+```
+
+**Example 3:**
+
+```text
+Input: deadends = ["8887","8889","8878","8898","8788","8988","7888","9888"], target = "8888"
+Output: -1
+Explanation:
+We can't reach the target without getting stuck.
+```
+
+**Example 4:**
+
+```text
+Input: deadends = ["0000"], target = "8888"
+Output: -1
+```
+
+**Constraints:**
+
+* `1 <= deadends.length <= 500`
+* `deadends[i].length == 4`
+* `target.length == 4`
+* target **will not be** in the list `deadends`.
+* `target` and `deadends[i]` consist of digits only.
+
 ### 思路
 
+BFS，类似111-求二叉树的最小深度。
+
+BFS可以求解最值问题，当每种密码锁每次都转动一次时，总共有8个相邻的密码值，当这8个中有target值时，步数+1并返回，可以理解为树的结构，每个结点都有8个子结点，当从子结点中找到target时，步数+1并返回。所以可以用BFS队列来求解最小次数
+
 ### 代码
+
+```java
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        //Set，用来判断密码值是否是死亡数组中的值，这样就不用for循环来遍历了
+        Set<String> deads = new HashSet<>();
+        for (String s : deadends) deads.add(s);
+        //Set，用来判断某一密码值相邻密码值是否重复出现，防止死循环
+        Set<String> visited = new HashSet<>();
+        //Queue，队列，BFS要用到的，就不用多说了吧
+        Queue<String> queue = new LinkedList();
+        queue.add("0000");
+        visited.add("0000");
+        //步数
+        int step = 0;
+
+        //当所有密码值的情况都到时结束
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+
+            //遍历队列中的密码值
+            for (int i = 0; i < len; i++) {
+                String s = queue.poll();
+                //如果死亡数组中包含当前密码值，跳过循环，因为这时密码值已经被锁定，不能进行下一步了
+                if (deads.contains(s)) continue;
+                if (s.equals(target)) return step;
+
+                //遍历当前密码值的相邻8个密码值并作判断是否重复出现
+                for (int j = 0; j < 4; j++) {
+                    String up = up(s, j);
+                    String down = down(s, j);
+                    if (!visited.contains(up)) {
+                        queue.add(up);
+                        visited.add(up);
+                    }
+                    if (!visited.contains(down)) {
+                        queue.add(down);
+                        visited.add(down);
+                    }
+
+                }
+            }
+            //当前树的一层遍历结束，步数+1
+            step++;
+        }
+        //无解，返回-1
+        return -1;
+    }
+
+    public String up (String s, int j) {
+        char[] c = s.toCharArray();
+        if (c[j] == '9') {
+            c[j] = '0';
+        } else {
+            c[j]++;
+        }
+        return new String(c);
+    }
+
+    public String down (String s, int j) {
+        char[] c = s.toCharArray();
+        if (c[j] == '0') {
+            c[j] = '9';
+        } else {
+            c[j]--;
+        }
+        return new String(c);
+    }
+}
+```
 
 ## 444 Sequence Reconstruction 
 
 ### 原题
 
+Check whether the original sequence `org` can be uniquely reconstructed from the sequences in `seqs`. The `org` sequence is a permutation of the integers from 1 to n, with 1 ≤ n ≤ 104. Reconstruction means building a shortest common supersequence of the sequences in `seqs` \(i.e., a shortest sequence so that all sequences in `seqs` are subsequences of it\). Determine whether there is only one sequence that can be reconstructed from `seqs` and it is the `org` sequence.
+
+**Example 1:**
+
+```text
+Input: org = [1,2,3], seqs = [[1,2],[1,3]]
+Output: false
+Explanation: [1,2,3] is not the only one sequence that can be reconstructed, because [1,3,2] is also a valid sequence that can be reconstructed.
+```
+
+**Example 2:**
+
+```text
+Input: org = [1,2,3], seqs = [[1,2]]
+Output: false
+Explanation: The reconstructed sequence can only be [1,2].
+```
+
+**Example 3:**
+
+```text
+Input: org = [1,2,3], seqs = [[1,2],[1,3],[2,3]]
+Output: true
+Explanation: The sequences [1,2], [1,3], and [2,3] can uniquely reconstruct the original sequence [1,2,3].
+```
+
+**Example 4:**
+
+```text
+Input: org = [4,1,5,2,6,3], seqs = [[5,2,6,3],[4,1,5,2]]
+Output: true
+```
+
+**Constraints:**
+
+* `1 <= n <= 10^4`
+* `org` is a permutation of {1,2,...,n}.
+* `1 <= segs[i].length <= 10^5`
+* `seqs[i][j]` fits in a 32-bit signed integer.
+
+**UPDATE \(2017/1/8\):**  
+ The seqs parameter had been changed to a list of list of strings \(instead of a 2d array of strings\). Please reload the code definition to get the latest changes.
+
 ### 思路
 
+思路比较简单，但是出错点实在太多了 基本思路
+
+1. 对输入做筛选 
+2. 拓扑排序，同时判断入度为0的是否大于1. 
+3. 根据排序结果，判断是否有环 
+4. 把排序结果和org比较，查看是否相等。
+
 ### 代码
+
+```java
+class Solution {
+    class EdgeNode {
+        public int vertex;
+        public List<Integer> next;
+
+        public EdgeNode(int vertex) {
+            this.vertex = vertex;
+            this.next = new ArrayList<>();
+        }
+    }
+    
+    public boolean sequenceReconstruction(int[] org, List<List<Integer>> seqs) {
+        if (seqs == null || seqs.size() == 0) return false;
+        // 先对输入做筛选
+        List<List<Integer>> seqq = new ArrayList<>();
+        for (List<Integer> list: seqs) {
+            List<Integer> l = new ArrayList<>();
+            for (int i : list) {
+               if (i>0&&i<=org.length){
+                   l.add(i);
+               }else {
+                   return false;
+               }
+            }
+            seqq.add(l);
+        }
+        seqs=seqq;
+        /**
+         * 标准的拓扑排序，判断入度为0的是否大于1.
+         */
+        int n = org.length;
+        EdgeNode[] edgeNodes = new EdgeNode[n + 1];
+        int[] inDegree = new int[n + 1];
+        Arrays.fill(inDegree, -1);
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (List<Integer> seq : seqs) {
+            if (seq.size()==1){
+                int t1 = seq.get(0);
+                if (t1>n) return false;
+                if (edgeNodes[t1] == null) edgeNodes[t1] = new EdgeNode(t1);
+                if (inDegree[t1] == -1) inDegree[t1] = 0;
+            }else {
+                for (int i = 1; i < seq.size(); i++) {
+                    int t1 = seq.get(i - 1);
+                    int t2 = seq.get(i);
+                    if (edgeNodes[t1] == null) edgeNodes[t1] = new EdgeNode(t1);
+                    if (edgeNodes[t2] == null) edgeNodes[t2] = new EdgeNode(t2);
+                    edgeNodes[t1].next.add(t2);
+                    if (inDegree[t1] == -1) inDegree[t1] = 0;
+                    if (inDegree[t2] == -1) inDegree[t2] = 0;
+                    inDegree[t2]++;
+                }
+            }
+        }
+        ArrayDeque<EdgeNode> deque = new ArrayDeque<>();
+        for (int i = 1; i < inDegree.length; i++) {
+            if (inDegree[i] == 0) {
+                deque.add(edgeNodes[i]);
+            }
+        }
+        int index = 0;//用来记录出队列的元素的个数
+        //用队列来判断
+        while (!deque.isEmpty()) {
+            int size = deque.size();
+            // 如果队列中同时存在大于1个的，说明这两个元素顺序可变，则返回失败
+            if (size > 1) return false;
+            for (int i = 0; i < size; i++) {
+                EdgeNode poll = deque.poll();
+                ans.add(poll.vertex);
+                index++;
+                for (int k : poll.next) {
+                    inDegree[k]--;
+                    if (inDegree[k] == 0) {
+                        if (edgeNodes[k] == null) System.out.println("k:" + k);
+                        if (edgeNodes[k] != null) deque.add(edgeNodes[k]);
+                    }
+                }
+            }
+        }
+        // 判断有没有环
+        if (index < n) return false;
+        for (int i = 0; i < org.length; i++) {
+            if (org[i]!=ans.get(i)) return false;
+        }
+        return true;
+    }
+}
+```
 
 ## 951 Flip Equivalent Binary Trees 
 
 ### 原题
 
+For a binary tree **T**, we can define a **flip operation** as follows: choose any node, and swap the left and right child subtrees.
+
+A binary tree **X** is _flip equivalent_ to a binary tree **Y** if and only if we can make **X** equal to **Y** after some number of flip operations.
+
+Given the roots of two binary trees `root1` and `root2`, return `true` if the two trees are flip equivelent or `false` otherwise.
+
+**Example 1:** ![Flipped Trees Diagram](https://assets.leetcode.com/uploads/2018/11/29/tree_ex.png)
+
+```text
+Input: root1 = [1,2,3,4,5,6,null,null,null,7,8], root2 = [1,3,2,null,6,4,5,null,null,null,null,8,7]
+Output: true
+Explanation: We flipped at nodes with values 1, 3, and 5.
+```
+
+**Example 2:**
+
+```text
+Input: root1 = [], root2 = []
+Output: true
+```
+
+**Example 3:**
+
+```text
+Input: root1 = [], root2 = [1]
+Output: false
+```
+
+**Example 4:**
+
+```text
+Input: root1 = [0,null,1], root2 = []
+Output: false
+```
+
+**Example 5:**
+
+```text
+Input: root1 = [0,null,1], root2 = [0,1]
+Output: true
+```
+
+**Constraints:**
+
+* The number of nodes in each tree is in the range `[0, 100]`.
+* Each tree will have **unique node values** in the range `[0, 99]`.
+
 ### 思路
 
+1）普通递归
+
+**思路**
+
+如果二叉树 root1，root2 根节点值相等，那么只需要检查他们的孩子是不是相等就可以了。
+
+**算法**
+
+存在三种情况：
+
+* 如果 root1 或者 root2 是 null，那么只有在他们都为 null 的情况下这两个二叉树才等价。 
+* 如果 root1，root2 的值不相等，那这两个二叉树的一定不等价。 
+* 如果以上条件都不满足，也就是当 root1 和 root2 的值相等的情况下，需要继续判断 root1 的孩子节点是不是跟 root2 的孩子节点相当。因为可以做翻转操作，所以这里有两种情况需要去判断。
+
+时间复杂度： O\(min\(N1,N2\)\)，其中 N1​，N2 分别是二叉树 root1，root2 的大小。
+
+空间复杂度： O\(min\(H1,H2\)\)，其中 H1，H2​ 分别是二叉树 root1， root2 的高度。
+
+2）标准态遍历
+
+让树中所有节点的左孩子都小于右孩子，如果当前不满足就翻转。我们把这种状态的二叉树称为 标准态。所有等价二叉树在转换成标准态后都是完全一样的。
+
+**算法**
+
+用深度优先遍历来对比这两棵树在标准态下是否完全一致。对于两颗等价树，在标准态下遍历的结果一定是一样的。
+
 ### 代码
+
+普通递归topdown
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+        if (root1 == root2)
+            return true;
+        if (root1 == null || root2 == null || root1.val != root2.val)
+            return false;
+
+        return (flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right) ||
+                flipEquiv(root1.left, root2.right) && flipEquiv(root1.right, root2.left));
+    }
+}
+
+```
+
+标准态
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+        List<Integer> vals1 = new ArrayList();
+        List<Integer> vals2 = new ArrayList();
+        dfs(root1, vals1);
+        dfs(root2, vals2);
+        return vals1.equals(vals2);
+    }
+
+    public void dfs(TreeNode node, List<Integer> vals) {
+        if (node != null) {
+            vals.add(node.val);
+            int L = node.left != null ? node.left.val : -1;
+            int R = node.right != null ? node.right.val : -1;
+
+            if (L < R) {
+                dfs(node.left, vals);
+                dfs(node.right, vals);
+            } else {
+                dfs(node.right, vals);
+                dfs(node.left, vals);
+            }
+
+            vals.add(null);
+        }
+    }
+}
+```
 
 ## 1376 Time Needed to Inform All Employees 
 
 ### 原题
 
+A company has `n` employees with a unique ID for each employee from `0` to `n - 1`. The head of the company has is the one with `headID`.
+
+Each employee has one direct manager given in the `manager` array where `manager[i]` is the direct manager of the `i-th` employee, `manager[headID] = -1`. Also it's guaranteed that the subordination relationships have a tree structure.
+
+The head of the company wants to inform all the employees of the company of an urgent piece of news. He will inform his direct subordinates and they will inform their subordinates and so on until all employees know about the urgent news.
+
+The `i-th` employee needs `informTime[i]` minutes to inform all of his direct subordinates \(i.e After informTime\[i\] minutes, all his direct subordinates can start spreading the news\).
+
+Return _the number of minutes_ needed to inform all the employees about the urgent news.
+
+**Example 1:**
+
+```text
+Input: n = 1, headID = 0, manager = [-1], informTime = [0]
+Output: 0
+Explanation: The head of the company is the only employee in the company.
+```
+
+**Example 2:** ![](https://assets.leetcode.com/uploads/2020/02/27/graph.png)
+
+```text
+Input: n = 6, headID = 2, manager = [2,2,-1,2,2,2], informTime = [0,0,1,0,0,0]
+Output: 1
+Explanation: The head of the company with id = 2 is the direct manager of all the employees in the company and needs 1 minute to inform them all.
+The tree structure of the employees in the company is shown.
+```
+
+**Example 3:** ![](https://assets.leetcode.com/uploads/2020/02/28/1730_example_3_5.PNG)
+
+```text
+Input: n = 7, headID = 6, manager = [1,2,3,4,5,6,-1], informTime = [0,6,5,4,3,2,1]
+Output: 21
+Explanation: The head has id = 6. He will inform employee with id = 5 in 1 minute.
+The employee with id = 5 will inform the employee with id = 4 in 2 minutes.
+The employee with id = 4 will inform the employee with id = 3 in 3 minutes.
+The employee with id = 3 will inform the employee with id = 2 in 4 minutes.
+The employee with id = 2 will inform the employee with id = 1 in 5 minutes.
+The employee with id = 1 will inform the employee with id = 0 in 6 minutes.
+Needed time = 1 + 2 + 3 + 4 + 5 + 6 = 21.
+```
+
+**Example 4:**
+
+```text
+Input: n = 15, headID = 0, manager = [-1,0,0,1,1,2,2,3,3,4,4,5,5,6,6], informTime = [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
+Output: 3
+Explanation: The first minute the head will inform employees 1 and 2.
+The second minute they will inform employees 3, 4, 5 and 6.
+The third minute they will inform the rest of employees.
+```
+
+**Example 5:**
+
+```text
+Input: n = 4, headID = 2, manager = [3,3,-1,2], informTime = [0,0,162,914]
+Output: 1076
+```
+
+**Constraints:**
+
+* `1 <= n <= 10^5`
+* `0 <= headID < n`
+* `manager.length == n`
+* `0 <= manager[i] < n`
+* `manager[headID] == -1`
+* `informTime.length == n`
+* `0 <= informTime[i] <= 1000`
+* `informTime[i] == 0` if employee `i` has no subordinates.
+* It is **guaranteed** that all the employees can be informed.
+
 ### 思路
 
+BFS或DFS自底向上。
+
 ### 代码
+
+朴素BFS
+
+```java
+class Solution {
+ 
+    //定义结点类，表示员工的id和被通知时的时间
+    class Node{
+        public int id;
+        public int time;
+        public Node(int i,int time){
+            this.id = i;
+            this.time = time;
+        }
+    }
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        int result=0;
+
+        //HashMap索引为员工编号，值为存放下属id的List
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for(int i=0;i<n;i++) {
+            List<Integer> ls = map.getOrDefault(manager[i],new ArrayList<Integer>());
+            ls.add(i);
+            map.put(manager[i],ls);
+        }
+
+        Queue<Node> q = new LinkedList<>();
+        q.offer(new Node(headID,0));
+        while(!q.isEmpty()) {
+            Node node= q.poll();
+            //遍历当前员工的HashMap，将下属的员工加入队列
+            for(Integer i:map.getOrDefault(node.id,new ArrayList<>())){
+                q.offer(new Node(i,node.time+informTime[node.id]));
+            }
+            Math.max(node.time,result);
+        }
+        return result;
+    }
+}
+```
+
+DFS Bottom up
+
+```java
+class Solution {
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        int[] arr=new int[n];
+        int ans=0;
+        // 从0开始遍历
+        for(int i=0;i<n;i++){
+            int index=i;
+            int sum=0;
+            if(informTime[index]==0)    //表明是叶子节点
+                while((index=manager[index])!=-1){  //循环往上找，直到头结点
+                    sum+=informTime[index];         //记录每次的和
+                    if(sum<=arr[index]) break;      //如果某个叶结点走到这个结点时和小于之前一个叶结点走到这里的和，那么接下来不用走了，因为肯定比之前的小（why? 因为这个类似相交链表，他们后面一段路都是一样的。都是同一个manager）
+                    arr[index]=sum;                 //否则就更新这个值
+                    ans=Math.max(sum,ans);          //记录这个数组的最大值
+                }
+        }
+        return ans;
+    }
+}
+```
 
 ## 715 Range Module 
 
@@ -2535,7 +3363,7 @@ class Solution {
 
 ### 代码
 
-## 1463Cherry Pickup II
+## 1463 Cherry Pickup II
 
 ### 原题
 
