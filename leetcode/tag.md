@@ -1956,35 +1956,393 @@ class Solution {
 
 ## 346 Moving Average from Data Stream 
 
-### 原题
-
-### 思路
-
-### 代码
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/queue\#346-moving-average-from-data-stream](https://app.gitbook.com/@guilindev/s/interview/leetcode/queue#346-moving-average-from-data-stream)
 
 ## 753 Cracking the Safe 
 
 ### 原题
 
+There is a box protected by a password. The password is a sequence of `n` digits where each digit can be one of the first `k` digits `0, 1, ..., k-1`.
+
+While entering a password, the last `n` digits entered will automatically be matched against the correct password.
+
+For example, assuming the correct password is `"345"`, if you type `"012345"`, the box will open because the correct password matches the suffix of the entered password.
+
+Return any password of **minimum length** that is guaranteed to open the box at some point of entering it.
+
+**Example 1:**
+
+```text
+Input: n = 1, k = 2
+Output: "01"
+Note: "10" will be accepted too.
+```
+
+**Example 2:**
+
+```text
+Input: n = 2, k = 2
+Output: "00110"
+Note: "01100", "10011", "11001" will be accepted too.
+```
+
+**Note:**
+
+1. `n` will be in the range `[1, 4]`.
+2. `k` will be in the range `[1, 10]`.
+3. `k^n` will be at most `4096`.
+
 ### 思路
 
+寻找欧拉回路\(Euler Circuit\)
+
+![](../.gitbook/assets/image%20%28133%29.png)
+
 ### 代码
+
+```java
+import java.util.Collections;
+import java.util.TreeSet;
+
+class Solution {
+    TreeSet<String> visited;
+    StringBuilder res;
+    public String crackSafe(int n, int k) {
+        if(n == 1 && k == 1) return "0";
+        visited = new TreeSet<>();
+        res = new StringBuilder();
+        //  从顶点 00..0 开始
+        String start = String.join("", Collections.nCopies(n-1, "0"));;
+        findEuler(start, k);
+
+        res.append(start); // 回路添加最后的end顶点，end 就是 start
+        return res.toString(); // return new String(res);
+    }
+    public void findEuler(String curv, int k){
+
+        for(int i = 0; i < k; i ++){
+            // 往顶点的 k 条出边检查，顶点加一条出边就是一种密码可能
+            String nextv = curv + i;
+            if(!visited.contains(nextv)){
+                visited.add(nextv);
+                findEuler(nextv.substring(1), k);
+                res.append(i);
+            }
+        }
+    }
+}
+```
+
+## 332 Reconstruct Itinerary
+
+### 原题
+
+Given a list of airline tickets represented by pairs of departure and arrival airports `[from, to]`, reconstruct the itinerary in order. All of the tickets belong to a man who departs from `JFK`. Thus, the itinerary must begin with `JFK`.
+
+**Note:**
+
+1. If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string. For example, the itinerary `["JFK", "LGA"]` has a smaller lexical order than `["JFK", "LGB"]`.
+2. All airports are represented by three capital letters \(IATA code\).
+3. You may assume all tickets form at least one valid itinerary.
+4. One must use all the tickets once and only once.
+
+**Example 1:**
+
+```text
+Input: [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+Output: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+```
+
+**Example 2:**
+
+```text
+Input: [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+Explanation: Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"].
+             But it is larger in lexical order.
+```
+
+### 思路
+
+DFS
+
+![](../.gitbook/assets/image%20%28135%29.png)
+
+![](../.gitbook/assets/image%20%28139%29.png)
+
+![](../.gitbook/assets/image%20%28136%29.png)
+
+### 代码
+
+```java
+import java.util.*;
+class Solution {
+    public List<String> findItinerary(List<List<String>> tickets) {
+        // 因为逆序插入，所以用链表
+        List<String> ans = new LinkedList<>();
+        if (tickets == null || tickets.size() == 0)
+            return ans;
+        Map<String, List<String>> graph = new HashMap<>();
+        for (List<String> pair : tickets) {
+            // 因为涉及删除操作，我们用链表
+            List<String> nbr = graph.computeIfAbsent(pair.get(0), k -> new LinkedList<>());
+            nbr.add(pair.get(1));
+        }
+        // 按目的顶点排序
+        graph.values().forEach(x -> x.sort(String::compareTo));
+        visit(graph, "JFK", ans);
+        return ans;
+    }
+    // DFS方式遍历图，当走到不能走为止，再将节点加入到答案
+    private void visit(Map<String, List<String>> graph, String src, List<String> ans) {
+        List<String> nbr = graph.get(src);
+        while (nbr != null && nbr.size() > 0) {
+            String dest = nbr.remove(0);
+            visit(graph, dest, ans);
+        }
+        ans.add(0, src); // 逆序插入
+    }
+}
+```
+
+也可以不对临接点排序，而是使用小顶堆（Java可以用优先队列）。这样我们删除边的操作和访问最小字典顺序顶点可以用出队操作代替，时间复杂度应该会比排序再删除要低一些。
+
+```java
+import java.util.*;
+class Solution {
+    public List<String> findItinerary(List<List<String>> tickets) {
+        // 因为逆序插入，所以用链表
+        List<String> ans = new LinkedList<>();
+        if (tickets == null || tickets.size() == 0)
+            return ans;
+        Map<String, PriorityQueue<String>> graph = new HashMap<>();
+        for (List<String> pair : tickets) {
+            // 因为涉及删除操作，我们用链表
+            PriorityQueue<String> nbr = graph.computeIfAbsent(pair.get(0), k -> new PriorityQueue<>());
+            nbr.add(pair.get(1));
+        }
+        visit(graph, "JFK", ans);
+        return ans;
+    }
+    // DFS方式遍历图，当走到不能走为止，再将节点加入到答案
+    private void visit(Map<String, PriorityQueue<String>> graph, String src, List<String> ans) {
+        PriorityQueue<String> nbr = graph.get(src);
+        while (nbr != null && nbr.size() > 0) {
+            String dest = nbr.poll();
+            visit(graph, dest, ans);
+        }
+        ans.add(0, src); // 逆序插入
+    }
+}
+```
 
 ## 809 Expressive Words 
 
 ### 原题
 
+Sometimes people repeat letters to represent extra feeling, such as "hello" -&gt; "heeellooo", "hi" -&gt; "hiiii".  In these strings like "heeellooo", we have _groups_ of adjacent letters that are all the same:  "h", "eee", "ll", "ooo".
+
+For some given string `S`, a query word is _stretchy_ if it can be made to be equal to `S` by any number of applications of the following _extension_ operation: choose a group consisting of characters `c`, and add some number of characters `c` to the group so that the size of the group is 3 or more.
+
+For example, starting with "hello", we could do an extension on the group "o" to get "hellooo", but we cannot get "helloo" since the group "oo" has size less than 3.  Also, we could do another extension like "ll" -&gt; "lllll" to get "helllllooo".  If `S = "helllllooo"`, then the query word "hello" would be stretchy because of these two extension operations: `query = "hello" -> "hellooo" -> "helllllooo" = S`.
+
+Given a list of query words, return the number of words that are stretchy. 
+
+```text
+Example:
+Input: 
+S = "heeellooo"
+words = ["hello", "hi", "helo"]
+Output: 1
+Explanation: 
+We can extend "e" and "o" in the word "hello" to get "heeellooo".
+We can't extend "helo" to get "heeellooo" because the group "ll" is not size 3 or more.
+```
+
+**Constraints:**
+
+* `0 <= len(S) <= 100`.
+* `0 <= len(words) <= 100`.
+* `0 <= len(words[i]) <= 100`.
+* `S` and all words in `words` consist only of lowercase letters
+
 ### 思路
 
+题意：
+
+有时候人们会用重复写一些字母来表示额外的感受，比如 "hello" -&gt; "heeellooo", "hi" -&gt; "hiii"。我们将相邻字母都相同的一串字符定义为相同字母组，例如："h", "eee", "ll", "ooo"。
+
+对于一个给定的字符串 S ，如果另一个单词能够通过将一些字母组扩张从而使其和 S 相同，我们将这个单词定义为可扩张的（stretchy）。扩张操作定义如下：选择一个字母组（包含字母 c ），然后往其中添加相同的字母 c 使其长度达到 3 或以上。
+
+例如，以 "hello" 为例，我们可以对字母组 "o" 扩张得到 "hellooo"，但是无法以同样的方法得到 "helloo" 因为字母组 "oo" 长度小于 3。此外，我们可以进行另一种扩张 "ll" -&gt; "lllll" 以获得 "helllllooo"。如果 S = "helllllooo"，那么查询词 "hello" 是可扩张的，因为可以对它执行这两种扩张操作使得 query = "hello" -&gt; "hellooo" -&gt; "helllllooo" = S。
+
+输入一组查询单词，输出其中可扩张的单词数量。
+
+![](../.gitbook/assets/image%20%28134%29.png)
+
+![](../.gitbook/assets/image%20%28138%29.png)
+
 ### 代码
+
+```java
+class Solution {
+    public int expressiveWords(String s, String[] words) {
+        List<Object[]> target = countWord(s);
+        int ans = 0;
+        for(String word : words){
+            List<Object[]> list = countWord(word);
+            // 如果两段不相等，跳过
+            if(list.size() != target.size())
+                continue;
+            int i = 0;
+            for(; i < target.size(); i++){
+                // 该段字符不同，break
+                if((char)target.get(i)[0] != (char)list.get(i)[0])
+                    break;
+                int t1 = (int)target.get(i)[1];
+                int t2 = (int)list.get(i)[1];
+                // 如果该段字母出现的次数比s还要大，无法扩张，若该条件不满足，此时t1 >= t2，
+                // 此时若两者不相等且t1小于3，则s无法通过word扩张得到
+                if(t1 < t2 || (t1 != t2 && t1 < 3))
+                    break;
+            }
+            // 如果i走到了最后，则word能够扩张得到s
+            if(i == target.size())
+                ans++;
+        }
+        return ans;
+    }
+
+    // 统计字符串每段字母及其出现的次数
+    // List中存储的是长度为2的数组,o[0]是该段的字母，o[1]是该段该字母出现的频次
+    List<Object[]> countWord(String s){
+        List<Object[]> list = new ArrayList<>();
+        int i = 0;
+        while(i < s.length()){
+            char c = s.charAt(i);
+            int count = 0;
+            while(i < s.length() && c == s.charAt(i)){
+                count++;
+                i++;
+            }
+            list.add(new Object[]{c, count});
+        }
+        return list;
+    }
+}
+
+```
 
 ## 471 Encode String with Shortest Length 
 
 ### 原题
 
+Given a **non-empty** string, encode the string such that its encoded length is the shortest.
+
+The encoding rule is: `k[encoded_string]`, where the `encoded_string` inside the square brackets is being repeated exactly `k` times.
+
+**Note:**
+
+1. `k` will be a positive integer.
+2. If an encoding process does not make the string shorter, then do not encode it. If there are several solutions, return **any of them**.
+
+**Example 1:**
+
+```text
+Input: s = "aaa"
+Output: "aaa"
+Explanation: There is no way to encode it such that it is shorter than the input string, so we do not encode it.
+```
+
+**Example 2:**
+
+```text
+Input: s = "aaaaa"
+Output: "5[a]"
+Explanation: "5[a]" is shorter than "aaaaa" by 1 character.
+```
+
+**Example 3:**
+
+```text
+Input: s = "aaaaaaaaaa"
+Output: "10[a]"
+Explanation: "a9[a]" or "9[a]a" are also valid solutions, both of them have the same length = 5, which is the same as "10[a]".
+```
+
+**Example 4:**
+
+```text
+Input: s = "aabcaabcd"
+Output: "2[aabc]d"
+Explanation: "aabc" occurs twice, so one answer can be "2[aabc]d".
+```
+
+**Example 5:**
+
+```text
+Input: s = "abbbabbbcabbbabbbc"
+Output: "2[2[abbb]c]"
+Explanation: "abbbabbbc" occurs twice, but "abbbabbbc" can also be encoded to "2[abbb]c", so one answer can be "2[2[abbb]c]".
+```
+
+**Constraints:**
+
+* `1 <= s.length <= 150`
+* `s` consists of only lowercase English letters.
+
 ### 思路
 
+给定一个 非空 字符串，将其编码为具有最短长度的字符串。编码规则是：k\[encoded\_string\]，其中在方括号 encoded\_string 中的内容重复 k 次。
+
+注：k 为正整数 如果编码的过程不能使字符串缩短，则不要对其进行编码。如果有多种编码方式，返回 任意一种 即可。
+
+![](../.gitbook/assets/image%20%28137%29.png)
+
 ### 代码
+
+区间型DP
+
+```java
+class Solution {
+    String[][] dp;
+    public String encode(String s){
+        int n = s.length();
+        dp = new String[n][n];
+        
+        for(int len = 1; len <= n; len++){
+            for(int i = 0; i + len - 1 < n; i++){
+                int j = i + len - 1;
+                dp[i][j] = lc459(s, i, j);
+                if(len > 4){
+                    for(int k = i; k < j; k++){
+                        String split = dp[i][k] + dp[k + 1][j];
+                        if(dp[i][j].length() > split.length()) dp[i][j] = split;
+                    }
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
+    /**
+     * 另 t = s + s, 从下标 1 的字符开始查找字符串s， 找到下标p，
+     * 如果p != n, 存在连续重复的子字符串ps = s.substring(0, p), 个数为 n / p
+     * 否则， 不存在连续重复子字符串， 无法进行编码
+     */
+    public String lc459(String s, int i, int j){
+        s = s.substring(i, j + 1);
+        if(s.length() < 5)  return s;
+        int p = (s + s).indexOf(s, 1);
+        if(p != s.length()){
+            int cnt = s.length() / p;
+            return cnt + "[" + dp[i][i + p - 1] + "]";
+        }
+        //否则， 无法进行编码
+        return s;
+    }
+}
+```
 
 ## 1110 Delete Nodes And Return Forest 
 
