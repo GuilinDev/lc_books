@@ -296,6 +296,79 @@ class Solution {
 }
 ```
 
+## 40 Combination Sum II
+
+### 题目
+
+Given a collection of candidate numbers \(`candidates`\) and a target number \(`target`\), find all unique combinations in `candidates` where the candidate numbers sums to `target`.
+
+Each number in `candidates` may only be used **once** in the combination.
+
+**Note:**
+
+* All numbers \(including `target`\) will be positive integers.
+* The solution set must not contain duplicate combinations.
+
+**Example 1:**
+
+```text
+Input: candidates = [10,1,2,7,6,1,5], target = 8,
+A solution set is:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+```
+
+**Example 2:**
+
+```text
+Input: candidates = [2,5,2,1,2], target = 5,
+A solution set is:
+[
+  [1,2,2],
+  [5]
+]
+```
+
+### 分析
+
+同39，有重复元素，必须排序和跳过重复元素。
+
+### 代码
+
+```java
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        Arrays.sort(candidates);
+        dfs(candidates, target, result, path, 0, 0);
+        return result;
+    }
+    private void dfs(int[] candidates, int target, List<List<Integer>> result, List<Integer> path, int sum, int index) {
+        if (sum == target) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        if (sum > target) {
+            return;
+        }
+        for (int i = index; i < candidates.length; i++) {
+            if (i > index && (candidates[i] == candidates[i - 1])) { //i > index，刚才取过的数字不用管，后面的重复不用取
+                continue;
+            }
+            path.add(candidates[i]);
+            //跟i比，这里换成i + 1，不能重复使用
+            dfs(candidates, target, result, path, sum + candidates[i], i + 1);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+```
+
 ## 46 Permutations
 
 ### 原题概述
