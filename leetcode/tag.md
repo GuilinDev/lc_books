@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28147%29.png)
 
-![](../.gitbook/assets/image%20%28142%29.png)
+![](../.gitbook/assets/image%20%28143%29.png)
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4172,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28143%29.png)
+![](../.gitbook/assets/image%20%28146%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4270,57 +4270,689 @@ class Solution {
 
 ### 原题
 
+You have one chocolate bar that consists of some chunks. Each chunk has its own sweetness given by the array `sweetness`.
+
+You want to share the chocolate with your `K` friends so you start cutting the chocolate bar into `K+1` pieces using `K` cuts, each piece consists of some **consecutive** chunks.
+
+Being generous, you will eat the piece with the **minimum total sweetness** and give the other pieces to your friends.
+
+Find the **maximum total sweetness** of the piece you can get by cutting the chocolate bar optimally.
+
+**Example 1:**
+
+```text
+Input: sweetness = [1,2,3,4,5,6,7,8,9], K = 5
+Output: 6
+Explanation: You can divide the chocolate to [1,2,3], [4,5], [6], [7], [8], [9]
+```
+
+**Example 2:**
+
+```text
+Input: sweetness = [5,6,7,8,9,1,2,3,4], K = 8
+Output: 1
+Explanation: There is only one way to cut the bar into 9 pieces.
+```
+
+**Example 3:**
+
+```text
+Input: sweetness = [1,2,2,1,2,2,1,2,2], K = 2
+Output: 5
+Explanation: You can divide the chocolate to [1,2,2], [1,2,2], [1,2,2]
+```
+
+**Constraints:**
+
+* `0 <= K < sweetness.length <= 10^4`
+* `1 <= sweetness[i] <= 10^5`
+
 ### 思路
 
+可以用二分来猜答案，每次试探一个总甜度,假设为x，如果可以找到一种分组方案可以让所有的分组的总甜度都不小于当前二分试探的这个总甜度x，那么就说明当前试探的总甜度x是一个可行解，而且很容易可以想到，所有小于x的甜度肯定也是满足要求的。因此当前x满足要求的话，说明可能还会存在更大的甜度，因此相当于二分中的从大于x的右半部分继续寻找。反之，如果当前总甜度x不满足要求（找不到一种分组方案使得所有的分组的总甜度都不小于x），则说明总甜度x太大了，那么我们就应该往小的找。 是的，这就是二分。
+
 ### 代码
+
+```java
+class Solution {
+    public int maximizeSweetness(int[] arr, int k) {
+        // 二分猜答案
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        for (int num : arr) {
+            sum += num;
+            min = Math.min(min, num);
+        }
+
+        int low = min;
+        int high = sum / (k + 1);
+        int ans = 0;
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            if (isOk(arr, k + 1, mid)) {
+                ans = mid;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+    private boolean isOk(int[] arr, int k, int lower) {
+        // 划分成k组，每组的和都必须大于lower
+        int sum = 0;
+        int count = 0;
+        for (int num : arr) {
+            sum += num;
+            if (sum >= lower) {
+                count++;
+                if (count == k) {
+                    return true;
+                }
+                sum = 0;
+            }
+        }
+        return count >= k;
+    }
+}
+```
 
 ## 1345 Jump Game IV
 
 ### 原题
 
+Given an array of integers `arr`, you are initially positioned at the first index of the array.
+
+In one step you can jump from index `i` to index:
+
+* `i + 1` where: `i + 1 < arr.length`.
+* `i - 1` where: `i - 1 >= 0`.
+* `j` where: `arr[i] == arr[j]` and `i != j`.
+
+Return _the minimum number of steps_ to reach the **last index** of the array.
+
+Notice that you can not jump outside of the array at any time.
+
+**Example 1:**
+
+```text
+Input: arr = [100,-23,-23,404,100,23,23,23,3,404]
+Output: 3
+Explanation: You need three jumps from index 0 --> 4 --> 3 --> 9. Note that index 9 is the last index of the array.
+```
+
+**Example 2:**
+
+```text
+Input: arr = [7]
+Output: 0
+Explanation: Start index is the last index. You don't need to jump.
+```
+
+**Example 3:**
+
+```text
+Input: arr = [7,6,9,6,9,6,9,7]
+Output: 1
+Explanation: You can jump directly from index 0 to index 7 which is last index of the array.
+```
+
+**Example 4:**
+
+```text
+Input: arr = [6,1,9]
+Output: 2
+```
+
+**Example 5:**
+
+```text
+Input: arr = [11,22,7,7,7,7,7,7,7,22,13]
+Output: 3
+```
+
+**Constraints:**
+
+* `1 <= arr.length <= 5 * 10^4`
+* `-10^8 <= arr[i] <= 10^8`
+
 ### 思路
 
-### 代码 
+**题意**： 给一个一维的数组，从下标0开始出发，有三种操作：每次可以向左，右移动一位，或者移动到与自己数值相同的位置。
+
+**思路**: 这类搜索求最短步数的解法是**典型的bfs**，注意这题数据的特殊性，**裸bfs会超时**。 这是因为第三个操作枚举所有相同数值的位置时候，如果出现很多 相同值的数值，光枚举相同值时间复杂度会近似O\(n\)，整体就变成O\(n^2\)。
+
+这一步枚举，可以把连续出现相同值的区间只保留左右两个端点，起到搜索剪枝的作用。
+
+### 代码
+
+```java
+class Solution {
+    final int MAX = Integer.MAX_VALUE;
+    public int minJumps(int[] arr) {
+        int n = arr.length;
+        Queue<Integer> queue = new LinkedList<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for(int i=0; i<n; i++){
+            int a = arr[i];
+            List<Integer> list = map.getOrDefault(a, new ArrayList<>());
+            list.add(i);
+            map.put(a, list);
+        }
+        int[] dis = new int[n]; //每个元素到最后一个元素的距离，用来存结果
+        Arrays.fill(dis, MAX);
+        dis[n-1] = 0;
+        queue.offer(n-1);
+        boolean[] visited = new boolean[n]; //记录元素是否被访问过，初始都是false
+        while(!queue.isEmpty()){
+            int x = queue.poll();
+            if(x-1>=0 && dis[x-1]==MAX){ //等于MAX说明x左边的元素还没有计算过
+                dis[x-1] = dis[x]+1;
+                queue.offer(x-1);
+            }
+            if(x+1<n && dis[x+1]==MAX){
+                dis[x+1] = dis[x]+1;
+                queue.offer(x+1);
+            }
+            if(!visited[x]){
+                for(int i: map.get(arr[x])){
+                    if(dis[i] == MAX){
+                        dis[i] = dis[x]+1;
+                        queue.offer(i);
+                        visited[i] = true;
+                    }     
+                }
+            }         
+        }
+        return dis[0];
+    }
+}
+```
 
 ## 1138 Alphabet Board Path 
 
 ### 原题
 
+On an alphabet board, we start at position `(0, 0)`, corresponding to character `board[0][0]`.
+
+Here, `board = ["abcde", "fghij", "klmno", "pqrst", "uvwxy", "z"]`, as shown in the diagram below.
+
+![](https://assets.leetcode.com/uploads/2019/07/28/azboard.png)
+
+We may make the following moves:
+
+* `'U'` moves our position up one row, if the position exists on the board;
+* `'D'` moves our position down one row, if the position exists on the board;
+* `'L'` moves our position left one column, if the position exists on the board;
+* `'R'` moves our position right one column, if the position exists on the board;
+* `'!'` adds the character `board[r][c]` at our current position `(r, c)` to the answer.
+
+\(Here, the only positions that exist on the board are positions with letters on them.\)
+
+Return a sequence of moves that makes our answer equal to `target` in the minimum number of moves.  You may return any path that does so.
+
+**Example 1:**
+
+```text
+Input: target = "leet"
+Output: "DDR!UURRR!!DDD!"
+```
+
+**Example 2:**
+
+```text
+Input: target = "code"
+Output: "RR!DDRR!UUL!R!"
+```
+
+**Constraints:**
+
+* `1 <= target.length <= 100`
+* `target` consists only of English lowercase letters.
+
 ### 思路
 
-### 代码 
+坐标计算，左 上 下 右
+
+### 代码
+
+```java
+class Solution {
+
+	public String alphabetBoardPath(String target) {
+		int x = 0, y = 0, nx = 0, ny = 0;
+		StringBuffer ans = new StringBuffer("");
+		for (int i = 0; i < target.length(); i++) {
+			int temp = target.charAt(i) - 'a' ;
+			if (i > 0 && target.charAt(i) == target.charAt(i - 1)) {
+				ans.append("!");
+			} else {
+				nx = temp / 5;
+				ny = temp % 5;
+				if (ny < y) {
+					for (int z = 0; z < y - ny; z++)
+						ans.append("L");
+				}
+				if (nx < x) {
+					for (int z = 0; z < x - nx; z++)
+						ans.append("U");
+				}
+				if (nx > x) {
+					for (int z = 0; z < nx - x; z++)
+						ans.append("D");
+				}
+				if (ny > y) {
+					for (int z = 0; z < ny - y; z++)
+						ans.append("R");
+				}
+				
+				ans.append("!");
+				x = nx;
+				y = ny;
+				
+			}
+		}
+		return ans.toString();
+	}
+}
+```
 
 ## 562 Longest Line of Consecutive One in Matrix 
 
 ### 原题
 
+ Given a 01 matrix **M**, find the longest line of consecutive one in the matrix. The line could be horizontal, vertical, diagonal or anti-diagonal.
+
+**Example:**  
+
+
+```text
+Input:
+[[0,1,1,0],
+ [0,1,1,0],
+ [0,0,0,1]]
+Output: 3
+```
+
+**Hint:** The number of elements in the given matrix will not exceed 10,000.
+
 ### 思路
+
+1）DFS+备忘录
+
+2）二维DP
+
+设 dp\[i\]\[j\] 代表以矩阵第 i 行，第 j 列结尾的连续 1 线段的长度。那么我们需要记录四个 dp 矩阵：横，竖，对角线，以及反对角线分别需要一个 dp 矩阵来记录。
+
+* 横向 dp 矩阵仅需要考虑其左边的连续 1 线段，即 dp\[i\]\[j - 1\]。 
+* 纵向 dp 矩阵仅需要考虑其上边的连续 1 线段，即 dp\[i - 1\]\[j\]。 
+* 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
+* 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
+
+![](../.gitbook/assets/image%20%28145%29.png)
+
+3\) 状态压缩为以为DP
+
+dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
+
+![](../.gitbook/assets/image%20%28148%29.png)
 
 ### 代码
 
+二维DP
+
+```java
+class Solution {
+    public int longestLine(int[][] M) {
+        if (M == null || M.length == 0 || M[0].length == 0)
+            return 0;
+        int ans = 0;
+        int[][] horizontal = new int[M.length][M[0].length];
+        int[][] vertical = new int[M.length][M[0].length];
+        int[][] diagonal = new int[M.length][M[0].length];
+        int[][] antidiagonal = new int[M.length][M[0].length];
+        for (int i = 0; i != M.length; ++i) {
+            for (int j = 0; j != M[0].length; ++j) {
+                if (M[i][j] == 0) {
+                    horizontal[i][j] = 0;
+                    vertical[i][j] = 0;
+                    diagonal[i][j] = 0;
+                    antidiagonal[i][j] = 0;
+                } else {
+                    horizontal[i][j] = j > 0 ? horizontal[i][j - 1] + 1 : 1;
+                    vertical[i][j] = i > 0 ? vertical[i - 1][j] + 1 : 1;
+                    diagonal[i][j] = i > 0 && j > 0 ? diagonal[i - 1][j - 1] + 1 : 1;
+                    antidiagonal[i][j] = i > 0 && j < M[0].length - 1 ? antidiagonal[i - 1][j + 1] + 1 : 1;
+                    ans = Math.max(ans, horizontal[i][j]);
+                    ans = Math.max(ans, vertical[i][j]);
+                    ans = Math.max(ans, diagonal[i][j]);
+                    ans = Math.max(ans, antidiagonal[i][j]);
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+```
+
+状态压缩为一维
+
+```java
+class Solution {
+    public int longestLine(int[][] M) {
+        if (M == null || M.length == 0 || M[0].length == 0)
+            return 0;
+        int ans = 0;
+        int[] horizontal = new int[M[0].length];
+        int[] vertical = new int[M[0].length];
+        int[] diagonal = new int[M[0].length];
+        int[] antidiagonal = new int[M[0].length];
+        for (int i = 0; i != M.length; ++i) {
+            int[] vertical_new = new int[M[0].length];
+            int[] diagonal_new = new int[M[0].length];
+            int[] antidiagonal_new = new int[M[0].length];
+            for (int j = 0; j != M[0].length; ++j) {
+                if (M[i][j] == 0) {
+                    horizontal[j] = 0;
+                    vertical_new[j] = 0;
+                    diagonal_new[j] = 0;
+                    antidiagonal_new[j] = 0;
+                } else {
+                    horizontal[j] = j > 0 ? horizontal[j - 1] + 1 : 1;
+                    vertical_new[j] = i > 0 ? vertical[j] + 1 : 1;
+                    diagonal_new[j] = i > 0 && j > 0 ? diagonal[j - 1] + 1 : 1;
+                    antidiagonal_new[j] = i > 0 && j < M[0].length - 1 ? antidiagonal[j + 1] + 1 : 1;
+                    ans = Math.max(ans, horizontal[j]);
+                    ans = Math.max(ans, vertical_new[j]);
+                    ans = Math.max(ans, diagonal_new[j]);
+                    ans = Math.max(ans, antidiagonal_new[j]);
+                }
+            }
+            vertical = vertical_new;
+            diagonal = diagonal_new;
+            antidiagonal = antidiagonal_new;
+        }
+        return ans;
+    }
+}
+```
+
 ## 690 Employee Importance
 
-## 原题
+### 原题
+
+You are given a data structure of employee information, which includes the employee's **unique id**, their **importance value** and their **direct** subordinates' id.
+
+For example, employee 1 is the leader of employee 2, and employee 2 is the leader of employee 3. They have importance value 15, 10 and 5, respectively. Then employee 1 has a data structure like \[1, 15, \[2\]\], and employee 2 has \[2, 10, \[3\]\], and employee 3 has \[3, 5, \[\]\]. Note that although employee 3 is also a subordinate of employee 1, the relationship is **not direct**.
+
+Now given the employee information of a company, and an employee id, you need to return the total importance value of this employee and all their subordinates.
+
+**Example 1:**
+
+```text
+Input: [[1, 5, [2, 3]], [2, 3, []], [3, 3, []]], 1
+Output: 11
+Explanation:
+Employee 1 has importance value 5, and he has two direct subordinates: employee 2 and employee 3. They both have importance value 3. So the total importance value of employee 1 is 5 + 3 + 3 = 11.
+```
+
+**Note:**
+
+1. One employee has at most one **direct** leader and may have several subordinates.
+2. The maximum number of employees won't exceed 2000.
 
 ### 思路
 
-### 代码 
+直观DFS
+
+* 让我们使用 emap = {employee.id -&gt; employee} 快速查询员工。 
+* 现在要找出一个员工的总重要性，它将是该员工的重要性，加上该员工每个下属的总重要性。这是一个简单的深度优先搜索。
+* 时间复杂度：O\(N\)。其中 N 是员工人数。我们可以在 `DFS` 中查询每个员工。
+* 空间复杂度：O\(N\)，计算 `DFS` 时隐式调用堆栈的大小。
+
+### 代码
+
+```java
+class Solution {
+    Map<Integer, Employee> emap;
+    public int getImportance(List<Employee> employees, int queryid) {
+        emap = new HashMap();
+        for (Employee e: employees) emap.put(e.id, e);
+        return dfs(queryid);
+    }
+    public int dfs(int eid) {
+        Employee employee = emap.get(eid);
+        int ans = employee.importance;
+        for (Integer subid: employee.subordinates)
+            ans += dfs(subid);
+        return ans;
+    }
+}
+```
 
 ## 900 RLE Iterator 
 
 ### 原题
 
+Write an iterator that iterates through a run-length encoded sequence.
+
+The iterator is initialized by `RLEIterator(int[] A)`, where `A` is a run-length encoding of some sequence.  More specifically, for all even `i`, `A[i]` tells us the number of times that the non-negative integer value `A[i+1]` is repeated in the sequence.
+
+The iterator supports one function: `next(int n)`, which exhausts the next `n` elements \(`n >= 1`\) and returns the last element exhausted in this way.  If there is no element left to exhaust, `next` returns `-1` instead.
+
+For example, we start with `A = [3,8,0,9,2,5]`, which is a run-length encoding of the sequence `[8,8,8,5,5]`.  This is because the sequence can be read as "three eights, zero nines, two fives".
+
+**Example 1:**
+
+```text
+Input: ["RLEIterator","next","next","next","next"], [[[3,8,0,9,2,5]],[2],[1],[1],[2]]
+Output: [null,8,8,5,-1]
+Explanation: 
+RLEIterator is initialized with RLEIterator([3,8,0,9,2,5]).
+This maps to the sequence [8,8,8,5,5].
+RLEIterator.next is then called 4 times:
+
+.next(2) exhausts 2 terms of the sequence, returning 8.  The remaining sequence is now [8, 5, 5].
+
+.next(1) exhausts 1 term of the sequence, returning 8.  The remaining sequence is now [5, 5].
+
+.next(1) exhausts 1 term of the sequence, returning 5.  The remaining sequence is now [5].
+
+.next(2) exhausts 2 terms, returning -1.  This is because the first term exhausted was 5,
+but the second term did not exist.  Since the last term exhausted does not exist, we return -1.
+
+```
+
+**Note:**
+
+1. `0 <= A.length <= 1000`
+2. `A.length` is an even integer.
+3. `0 <= A[i] <= 10^9`
+4. There are at most `1000` calls to `RLEIterator.next(int n)` per test case.
+5. Each call to `RLEIterator.next(int n)` will have `1 <= n <= 10^9`.
+
 ### 思路
 
+![](../.gitbook/assets/image%20%28144%29.png)
+
+* 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
+* 空间复杂度：O\(N\)。
+
 ### 代码
+
+```java
+class RLEIterator {
+    int[] A;
+    int i, q;
+
+    public RLEIterator(int[] A) {
+        this.A = A;
+        i = q = 0;
+    }
+
+    public int next(int n) {
+        while (i < A.length) {
+            if (q + n > A[i]) {
+                n -= A[i] - q;
+                q = 0;
+                i += 2;
+            } else {
+                q += n;
+                return A[i+1];
+            }
+        }
+
+        return -1;
+    }
+}
+
+/**
+ * Your RLEIterator object will be instantiated and called as such:
+ * RLEIterator obj = new RLEIterator(A);
+ * int param_1 = obj.next(n);
+ */
+```
+
+## 551 Student Attendance Record I
+
+### 原题
+
+ You are given a string representing an attendance record for a student. The record only contains the following three characters:
+
+1. **'A'** : Absent.
+2. **'L'** : Late.
+3. **'P'** : Present.
+
+A student could be rewarded if his attendance record doesn't contain **more than one 'A' \(absent\)** or **more than two continuous 'L' \(late\)**.
+
+You need to return whether the student could be rewarded according to his attendance record.
+
+**Example 1:**  
+
+
+```text
+Input: "PPALLP"
+Output: True
+```
+
+**Example 2:**  
+
+
+```text
+Input: "PPALLL"
+Output: False
+```
+
+### 思路
+
+解决这个问题最简单的方法就是同济字符串中 AA 的数目并检查 LLL 是否是给定字符串的一个子串。如果 A 的数目比 2 少且 LLL 不是给定字符串的一个子串，那么返回 true，否则返回 false。
+
+Java 中indexOf 方法可以用来检查一个串是否是另一个串的子串。如果找不到子串，那么返回 -1，否则返回这个字符串第一次出现的位置。
+
+```java
+public class Solution {
+    public boolean checkRecord(String s) {
+        int count=0;
+        for(int i=0;i<s.length() && count<2 ;i++)
+            if(s.charAt(i)=='A')
+                count++;
+        return count<2 && s.indexOf("LLL")<0; // 当 A 的数目有 22 个的时候就中断循环
+    }
+}
+```
+
+### 代码
+
+不需要 indexOf 的单遍循环方法，统计 AA 的数目并检查子字符串 LLL 是否是一个子串。
+
+```java
+public class Solution {
+    public boolean checkRecord(String s) {
+        int countA = 0;
+        for (int i = 0; i < s.length() && countA < 2; i++) {
+            if (s.charAt(i) == 'A')
+                countA++;
+            if (i <= s.length() - 3 && s.charAt(i) == 'L' && s.charAt(i + 1) == 'L' && s.charAt(i + 2) == 'L')
+                return false;
+        }
+        return countA < 2;
+    }
+}
+```
 
 ## 552 Student Attendance Record II
 
 ### 原题
 
+Given a positive integer **n**, return the number of all possible attendance records with length n, which will be regarded as rewardable. The answer may be very large, return it after mod 109 + 7.
+
+A student attendance record is a string that only contains the following three characters:
+
+1. **'A'** : Absent.
+2. **'L'** : Late.
+3. **'P'** : Present.
+
+A record is regarded as rewardable if it doesn't contain **more than one 'A' \(absent\)** or **more than two continuous 'L' \(late\)**.
+
+**Example 1:**  
+
+
+```text
+Input: n = 2
+Output: 8 
+Explanation:
+There are 8 records with length 2 will be regarded as rewardable:
+"PP" , "AP", "PA", "LP", "PL", "AL", "LA", "LL"
+Only "AA" won't be regarded as rewardable owing to more than one absent times. 
+```
+
+**Note:** The value of **n** won't exceed 100,000.
+
 ### 思路
 
+![](../.gitbook/assets/image%20%28142%29.png)
+
+![](../.gitbook/assets/image%20%28149%29.png)
+
 ### 代码
+
+```java
+class Solution {
+    public int checkRecord(int n) {
+        if(n==0)
+            return 0;
+        if(n==1)
+            return 3;
+        if(n==2)
+            return 8;
+        int max=1000000007;
+        long [][][] dp = new long[n+1][2][3];
+        //有两个数，且A个数为零，结尾不为L  --PP LP 
+        dp[2][0][0]=2;
+        //有两个数，且A的个数为1，结果不为L  AP 和PA LA
+        dp[2][1][0]=3;
+        //有两个数，没有A，且结尾为L  --PL
+        dp[2][0][1]=1;
+        //有两个数，一个A，且结尾为L -- AL
+        dp[2][1][1]=1;
+        //有两个数，结尾为两个L   ---LL
+        dp[2][0][2]=1;
+        //有两个数，结尾两个L，有一个A ---无
+        dp[2][1][2]=0;
+        for(int i=3;i<=n;i++){
+            dp[i][0][0]=(dp[i-1][0][0]+dp[i-1][0][2]+dp[i-1][0][1])%max;
+            dp[i][1][0]=(dp[i-1][0][0]+dp[i-1][0][1]+dp[i-1][1][1]+dp[i-1][0][2]+dp[i-1][1][2]+dp[i-1][1][0])%max;
+            dp[i][0][1]=dp[i-1][0][0]%max;
+            dp[i][1][1]=dp[i-1][1][0]%max;
+            dp[i][0][2]=dp[i-1][0][1]%max;
+            dp[i][1][2]=dp[i-1][1][1]%max;
+        }
+        return (int)((dp[n][0][0]+dp[n][1][0]+dp[n][0][1]+dp[n][1][1]+dp[n][0][2]+ dp[n][1][2])%max);
+    }
+}
+```
 
 ## 853 Car Fleet
 
