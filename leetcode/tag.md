@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28143%29.png)
+![](../.gitbook/assets/image%20%28144%29.png)
 
 ![](../.gitbook/assets/image%20%28142%29.png)
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28146%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28147%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28145%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4112,9 +4112,159 @@ class Solution {
 
 ### 原题
 
+Given a `rows * columns` matrix `mat` of ones and zeros, return how many **submatrices** have all ones.
+
+**Example 1:**
+
+```text
+Input: mat = [[1,0,1],
+              [1,1,0],
+              [1,1,0]]
+Output: 13
+Explanation:
+There are 6 rectangles of side 1x1.
+There are 2 rectangles of side 1x2.
+There are 3 rectangles of side 2x1.
+There is 1 rectangle of side 2x2. 
+There is 1 rectangle of side 3x1.
+Total number of rectangles = 6 + 2 + 3 + 1 + 1 = 13.
+```
+
+**Example 2:**
+
+```text
+Input: mat = [[0,1,1,0],
+              [0,1,1,1],
+              [1,1,1,0]]
+Output: 24
+Explanation:
+There are 8 rectangles of side 1x1.
+There are 5 rectangles of side 1x2.
+There are 2 rectangles of side 1x3. 
+There are 4 rectangles of side 2x1.
+There are 2 rectangles of side 2x2. 
+There are 2 rectangles of side 3x1. 
+There is 1 rectangle of side 3x2. 
+Total number of rectangles = 8 + 5 + 2 + 4 + 2 + 2 + 1 = 24.
+```
+
+**Example 3:**
+
+```text
+Input: mat = [[1,1,1,1,1,1]]
+Output: 21
+```
+
+**Example 4:**
+
+```text
+Input: mat = [[1,0,1],[0,1,0],[1,0,1]]
+Output: 5
+```
+
+**Constraints:**
+
+* `1 <= rows <= 150`
+* `1 <= columns <= 150`
+* `0 <= mat[i][j] <= 1`
+
 ### 思路
 
-### 代码 
+1）直观暴力枚举
+
+![](../.gitbook/assets/image%20%28143%29.png)
+
+时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
+
+空间复杂度：O\(nm\)。我们需要 O\(nm\) 的空间来存储 row 数组。
+
+2）单调栈
+
+1. 首先O\(n^2\)的预处理，left\[i\]\[j\]表示\(i,j\)为结束的元素，在一行中，最大能拓展的1的长度。（如其他题解） 
+2. 使用单调栈来将O\(m\*n^2\)降低到O\(mn\),可以参考代码中的注释和PPT动图理解。（关键点在与以\(i,j\)为右下角的矩阵构建条件（上一行有效的参与构建的情况，可以模拟一下）） 
+3. 为此，首先按列枚举，然后从上到下枚举行，在枚举行的时候，使用单调栈来维护之前已经参与构建矩阵的信息
+
+时间复杂度：O\(nm\)，其中 n 为矩阵行数，m 为矩阵列数。预处理 row 数组需要 O\(nm\) 的时间复杂度，计算答案的时候我们需要对 O\(m\) 列进行统计，每一列统计答案的时候单调栈的时间复杂度为 O\(n\)，因此总时间复杂度为 O\(nm\)。 
+
+空间复杂度：O\(n\)。单调栈最坏情况下需要 O\(n\)的空间。
+
+### 代码
+
+暴力枚举
+
+```java
+class Solution {
+    public int numSubmat(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        int[][] row = new int[n][m];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (j == 0) {
+                    row[i][j] = mat[i][j];
+                } else if (mat[i][j] != 0) {
+                    row[i][j] = row[i][j - 1] + 1;
+                } else {
+                    row[i][j] = 0;
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                int col = row[i][j];
+                for (int k = i; k >= 0 && col != 0; --k) {
+                    col = Math.min(col, row[k][j]);
+                    ans += col;
+                }
+            }
+        }
+        return ans;
+    }
+}
+```
+
+单调栈
+
+```java
+class Solution {
+    public int numSubmat(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        int[][] left = new int[n + 1][m + 1];
+        int res = 0;
+        for (int i = 1; i <= n; i++) {
+            int now = 0;
+            for (int j = 1; j <= m; j++) {
+                if (mat[i - 1][j - 1] == 1) now++;
+                else now = 0;
+                left[i][j] = now;
+            }
+        }
+        //首先按列枚举
+        for (int j = 1; j <= m; j++) {
+            int to_sum = 0;//每个顶点(i,j)为矩阵右下角的矩阵个数，动态更新。
+            //栈里元素int[]=<当前的栈顶元素的向左能过延伸的最长长度，被push进栈的元素中，大于栈顶元素的个数>
+            Stack<int[]> stack = new Stack<>();
+            for (int i = 1; i <= n; i++) {
+                int cnt = 0;//计算当前要被push进栈的left[i][j]之前，栈中有多少元素大于left[i][j]
+                while (!stack.isEmpty() && stack.peek()[0] > left[i][j]) {
+                    //把栈中永不会参与到(i,j)为右下角元素的构建那些矩阵单元去掉（参考PPT的动态）
+                    //去掉的过程相当于对栈中元素进行了修剪对齐（使之单调）（见ppT动图）
+                    to_sum -= (stack.peek()[1] + 1) * (stack.peek()[0] - left[i][j]);
+                    cnt +=stack.peek()[1]+1; // 大于当前left[i][j] 的栈中元素个数 计数
+                    stack.pop();
+                }
+                to_sum+=left[i][j];
+                res+=to_sum;
+                stack.push(new int[]{left[i][j],cnt});
+            }
+        }
+        return res;
+        
+    }
+}
+```
 
 ## 1231 Divide Chocolate 
 
