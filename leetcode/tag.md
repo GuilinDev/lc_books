@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
-![](../.gitbook/assets/image%20%28143%29.png)
+![](../.gitbook/assets/image%20%28144%29.png)
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28155%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4172,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28148%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4590,13 +4590,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28147%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28148%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 ### 代码
 
@@ -4775,7 +4775,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28146%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4914,7 +4914,7 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ![](../.gitbook/assets/image%20%28142%29.png)
 
-![](../.gitbook/assets/image%20%28149%29.png)
+![](../.gitbook/assets/image%20%28153%29.png)
 
 ### 代码
 
@@ -5043,4 +5043,813 @@ class Solution {
     }
 }
 ```
+
+## 1240 Tiling a Rectangle with the Fewest Squares
+
+### 原题
+
+Given a rectangle of size `n` x `m`, find the minimum number of integer-sided squares that tile the rectangle.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2019/10/17/sample_11_1592.png)
+
+```text
+Input: n = 2, m = 3
+Output: 3
+Explanation: 3 squares are necessary to cover the rectangle.
+2 (squares of 1x1)
+1 (square of 2x2)
+```
+
+**Example 2:**
+
+![](https://assets.leetcode.com/uploads/2019/10/17/sample_22_1592.png)
+
+```text
+Input: n = 5, m = 8
+Output: 5
+```
+
+**Example 3:**
+
+![](https://assets.leetcode.com/uploads/2019/10/17/sample_33_1592.png)
+
+```text
+Input: n = 11, m = 13
+Output: 6
+```
+
+**Constraints:**
+
+* `1 <= n <= 13`
+* `1 <= m <= 13`
+
+### 分析
+
+铺瓷砖，房子的客厅大小为 n x m，为保持极简的风格，需要使用尽可能少的 正方形 瓷砖来铺盖地面。
+
+假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
+
+![](../.gitbook/assets/image%20%28157%29.png)
+
+时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
+
+### 代码
+
+```java
+class Solution {
+    public int tilingRectangle(int n, int m) {
+        int INF = 0x3f3f3f3f;
+        int[][] dp = new int[n + 1][m + 1];
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= m; j++){
+                //如果是正方形
+                if(i == j){
+                    dp[i][j] = 1;
+                    continue;
+                }
+                dp[i][j] = INF;
+                //1.横切
+                for(int k = 1; k < i; k++){
+                    dp[i][j] = Math.min(dp[i][j], dp[k][j] + dp[i - k][j]);
+                }
+                //2.竖切
+                for(int k = 1; k < j; k++){
+                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[i][j - k]);
+                }
+                
+                //3.横竖切
+                for(int p = 1; p <= Math.min(i, j); p++){
+                    for(int k = 1; k <= p; k++){
+                        if(p - k <= 0 || j - p <= 0 || i - p + k <= 0 || j - p - k <= 0) continue;
+                        dp[i][j] = Math.min(dp[i][j], dp[p - k][j - p] + 
+                                                        dp[i - p + k][j - p - k] +
+                                                        dp[i - p][p + k] + 2);
+                    }
+                }
+            }
+        }
+        return dp[n][m];
+    }
+}
+```
+
+## 840 Magic Squares In Grid
+
+### 原题
+
+A `3 x 3` magic square is a `3 x 3` grid filled with distinct numbers **from** `1` **to** `9` such that each row, column, and both diagonals all have the same sum.
+
+Given a `row x col` `grid` of integers, how many `3 x 3` "magic square" subgrids are there?  \(Each subgrid is contiguous\).
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/09/11/magic_main.jpg)
+
+```text
+Input: grid = [[4,3,8,4],[9,5,1,9],[2,7,6,2]]
+Output: 1
+Explanation: 
+The following subgrid is a 3 x 3 magic square:
+
+while this one is not:
+
+In total, there is only one magic square inside the given grid.
+```
+
+**Example 2:**
+
+```text
+Input: grid = [[8]]
+Output: 0
+```
+
+**Example 3:**
+
+```text
+Input: grid = [[4,4],[3,3]]
+Output: 0
+```
+
+**Example 4:**
+
+```text
+Input: grid = [[4,7,8],[9,5,1],[2,3,6]]
+Output: 0
+```
+
+**Constraints:**
+
+* `row == grid.length`
+* `col == grid[i].length`
+* `1 <= row, col <= 10`
+* `0 <= grid[i][j] <= 15`
+
+### 分析
+
+3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
+
+![](../.gitbook/assets/image%20%28151%29.png)
+
+* 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
+* 空间复杂度：O\(1\)O\(1\)。
+
+### 代码
+
+```java
+class Solution {
+    public int numMagicSquaresInside(int[][] grid) {
+        int R = grid.length, C = grid[0].length;
+        int ans = 0;
+        for (int r = 0; r < R-2; ++r)
+            for (int c = 0; c < C-2; ++c) {
+                if (grid[r+1][c+1] != 5) continue;  // optional skip
+                if (magic(grid[r][c], grid[r][c+1], grid[r][c+2],
+                          grid[r+1][c], grid[r+1][c+1], grid[r+1][c+2],
+                          grid[r+2][c], grid[r+2][c+1], grid[r+2][c+2]))
+                    ans++;
+            }
+
+        return ans;
+    }
+
+    public boolean magic(int... vals) {
+        int[] count = new int[16];
+        for (int v: vals) count[v]++;
+        for (int v = 1; v <= 9; ++v)
+            if (count[v] != 1)
+                return false;
+
+        return (vals[0] + vals[1] + vals[2] == 15 &&
+                vals[3] + vals[4] + vals[5] == 15 &&
+                vals[6] + vals[7] + vals[8] == 15 &&
+                vals[0] + vals[3] + vals[6] == 15 &&
+                vals[1] + vals[4] + vals[7] == 15 &&
+                vals[2] + vals[5] + vals[8] == 15 &&
+                vals[0] + vals[4] + vals[8] == 15 &&
+                vals[2] + vals[4] + vals[6] == 15);
+    }
+}
+```
+
+## 527 Word Abbreviation
+
+### 原题
+
+Given an array of n distinct non-empty strings, you need to generate **minimal** possible abbreviations for every word following rules below.
+
+1. Begin with the first character and then the number of characters abbreviated, which followed by the last character.
+2. If there are any conflict, that is more than one words share the same abbreviation, a longer prefix is used instead of only the first character until making the map from word to abbreviation become unique. In other words, a final abbreviation cannot map to more than one original words.
+3. If the abbreviation doesn't make the word shorter, then keep it as original.
+
+**Example:**  
+
+
+```text
+Input: ["like", "god", "internal", "me", "internet", "interval", "intension", "face", "intrusion"]
+Output: ["l2e","god","internal","me","i6t","interval","inte4n","f2e","intr4n"]
+```
+
+**Note:**
+
+1. Both n and the length of each word will not exceed 400.
+2. The length of each word is greater than 1.
+3. The words consist of lowercase English letters only.
+4. The return answers should be **in the same order** as the original array.
+
+给定一个由n个不重复非空字符串组成的数组，你需要按照以下规则为每个单词生成最小的缩写。
+
+初始缩写由起始字母+省略字母的数量+结尾字母组成。 若存在冲突，亦即多于一个单词有同样的缩写，则使用更长的前缀代替首字母，直到从单词到缩写的映射唯一。换而言之，最终的缩写必须只能映射到一个单词。 若缩写并不比原单词更短，则保留原样。 示例:
+
+输入: \["like", "god", "internal", "me", "internet", "interval", "intension", "face", "intrusion"\] 
+
+输出: \["l2e","god","internal","me","i6t","interval","inte4n","f2e","intr4n"\]
+
+注意:
+
+n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 单词只由英文小写字母组成。 返回的答案需要和原数组保持同一顺序。
+
+### 分析
+
+单词缩写
+
+1\) 贪心
+
+![](../.gitbook/assets/image%20%28149%29.png)
+
+* 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
+* 空间复杂度：O\(C\)
+
+2）
+
+![](../.gitbook/assets/image%20%28145%29.png)
+
+* 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
+* 空间复杂度： O\(C\)
+
+3\) 
+
+![](../.gitbook/assets/image%20%28143%29.png)
+
+* 时间复杂度：O\(C\)，其中 C 是给定数组中所有单词的字符总数。
+* 空间复杂度：O\(C\)。
+
+### 代码
+
+1\) 贪心
+
+```java
+class Solution {
+    public List<String> wordsAbbreviation(List<String> words) {
+        int N = words.size();
+        String[] ans = new String[N];
+        int[] prefix = new int[N];
+
+        for (int i = 0; i < N; ++i)
+            ans[i] = abbrev(words.get(i), 0);
+
+        for (int i = 0; i < N; ++i) {
+            while (true) {
+                Set<Integer> dupes = new HashSet();
+                for (int j = i+1; j < N; ++j)
+                    if (ans[i].equals(ans[j]))
+                        dupes.add(j);
+
+                if (dupes.isEmpty()) break;
+                dupes.add(i);
+                for (int k: dupes)
+                    ans[k] = abbrev(words.get(k), ++prefix[k]);
+            }
+        }
+
+        return Arrays.asList(ans);
+    }
+
+    public String abbrev(String word, int i) {
+        int N = word.length();
+        if (N - i <= 3) return word;
+        return word.substring(0, i+1) + (N - i - 2) + word.charAt(N-1);
+    }
+}
+```
+
+2） 分组 + 最短公共前缀
+
+```java
+class Solution {
+    public List<String> wordsAbbreviation(List<String> words) {
+        Map<String, List<IndexedWord>> groups = new HashMap();
+        String[] ans = new String[words.size()];
+
+        int index = 0;
+        for (String word: words) {
+            String ab = abbrev(word, 0);
+            if (!groups.containsKey(ab))
+                groups.put(ab, new ArrayList());
+            groups.get(ab).add(new IndexedWord(word, index));
+            index++;
+        }
+
+        for (List<IndexedWord> group: groups.values()) {
+            Collections.sort(group, (a, b) -> a.word.compareTo(b.word));
+
+            int[] lcp = new int[group.size()];
+            for (int i = 1; i < group.size(); ++i) {
+                int p = longestCommonPrefix(group.get(i-1).word, group.get(i).word);
+                lcp[i] = p;
+                lcp[i-1] = Math.max(lcp[i-1], p);
+            }
+
+            for (int i = 0; i < group.size(); ++i)
+                ans[group.get(i).index] = abbrev(group.get(i).word, lcp[i]);
+        }
+
+        return Arrays.asList(ans);
+    }
+
+    public String abbrev(String word, int i) {
+        int N = word.length();
+        if (N - i <= 3) return word;
+        return word.substring(0, i+1) + (N - i - 2) + word.charAt(N-1);
+    }
+
+    public int longestCommonPrefix(String word1, String word2) {
+        int i = 0;
+        while (i < word1.length() && i < word2.length()
+                && word1.charAt(i) == word2.charAt(i))
+            i++;
+        return i;
+    }
+}
+
+class IndexedWord {
+    String word;
+    int index;
+    IndexedWord(String w, int i) {
+        word = w;
+        index = i;
+    }
+}
+```
+
+3） 分组 + Trie 树
+
+```java
+class Solution {
+    public List<String> wordsAbbreviation(List<String> words) {
+        Map<String, List<IndexedWord>> groups = new HashMap();
+        String[] ans = new String[words.size()];
+
+        int index = 0;
+        for (String word: words) {
+            String ab = abbrev(word, 0);
+            if (!groups.containsKey(ab))
+                groups.put(ab, new ArrayList());
+            groups.get(ab).add(new IndexedWord(word, index));
+            index++;
+        }
+
+        for (List<IndexedWord> group: groups.values()) {
+            TrieNode trie = new TrieNode();
+            for (IndexedWord iw: group) {
+                TrieNode cur = trie;
+                for (char letter: iw.word.substring(1).toCharArray()) {
+                    if (cur.children[letter - 'a'] == null)
+                        cur.children[letter - 'a'] = new TrieNode();
+                    cur.count++;
+                    cur = cur.children[letter - 'a'];
+                }
+            }
+
+            for (IndexedWord iw: group) {
+                TrieNode cur = trie;
+                int i = 1;
+                for (char letter: iw.word.substring(1).toCharArray()) {
+                    if (cur.count == 1) break;
+                    cur = cur.children[letter - 'a'];
+                    i++;
+                }
+                ans[iw.index] = abbrev(iw.word, i-1);
+            }
+        }
+
+        return Arrays.asList(ans);
+    }
+
+    public String abbrev(String word, int i) {
+        int N = word.length();
+        if (N - i <= 3) return word;
+        return word.substring(0, i+1) + (N - i - 2) + word.charAt(N-1);
+    }
+
+    public int longestCommonPrefix(String word1, String word2) {
+        int i = 0;
+        while (i < word1.length() && i < word2.length()
+                && word1.charAt(i) == word2.charAt(i))
+            i++;
+        return i;
+    }
+}
+
+class TrieNode {
+    TrieNode[] children;
+    int count;
+    TrieNode() {
+        children = new TrieNode[26];
+        count = 0;
+    }
+}
+class IndexedWord {
+    String word;
+    int index;
+    IndexedWord(String w, int i) {
+        word = w;
+        index = i;
+    }
+}
+
+```
+
+## 1368 Minimum Cost to Make at Least One Valid Path in a Grid
+
+### 原题
+
+ Given a _m_ x _n_ `grid`. Each cell of the `grid` has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of `grid[i][j]` can be:
+
+* **1** which means go to the cell to the right. \(i.e go from `grid[i][j]` to `grid[i][j + 1]`\)
+* **2** which means go to the cell to the left. \(i.e go from `grid[i][j]` to `grid[i][j - 1]`\)
+* **3** which means go to the lower cell. \(i.e go from `grid[i][j]` to `grid[i + 1][j]`\)
+* **4** which means go to the upper cell. \(i.e go from `grid[i][j]` to `grid[i - 1][j]`\)
+
+Notice that there could be some **invalid signs** on the cells of the `grid` which points outside the `grid`.
+
+You will initially start at the upper left cell `(0,0)`. A valid path in the grid is a path which starts from the upper left cell `(0,0)` and ends at the bottom-right cell `(m - 1, n - 1)` following the signs on the grid. The valid path **doesn't have to be the shortest**.
+
+You can modify the sign on a cell with `cost = 1`. You can modify the sign on a cell **one time only**.
+
+Return _the minimum cost_ to make the grid have at least one valid path.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/02/13/grid1.png)
+
+```text
+Input: grid = [[1,1,1,1],[2,2,2,2],[1,1,1,1],[2,2,2,2]]
+Output: 3
+Explanation: You will start at point (0, 0).
+The path to (3, 3) is as follows. (0, 0) --> (0, 1) --> (0, 2) --> (0, 3) change the arrow to down with cost = 1 --> (1, 3) --> (1, 2) --> (1, 1) --> (1, 0) change the arrow to down with cost = 1 --> (2, 0) --> (2, 1) --> (2, 2) --> (2, 3) change the arrow to down with cost = 1 --> (3, 3)
+The total cost = 3.
+```
+
+**Example 2:**![](https://assets.leetcode.com/uploads/2020/02/13/grid2.png)
+
+```text
+Input: grid = [[1,1,3],[3,2,2],[1,1,4]]
+Output: 0
+Explanation: You can follow the path from (0, 0) to (2, 2).
+```
+
+**Example 3:**![](https://assets.leetcode.com/uploads/2020/02/13/grid3.png)
+
+```text
+Input: grid = [[1,2],[4,3]]
+Output: 1
+```
+
+**Example 4:**
+
+```text
+Input: grid = [[2,2,2],[2,2,2]]
+Output: 3
+```
+
+**Example 5:**
+
+```text
+Input: grid = [[4]]
+Output: 0
+```
+
+**Constraints:**
+
+* `m == grid.length`
+* `n == grid[i].length`
+* `1 <= m, n <= 100`
+
+### 分析
+
+BFS+记忆搜索 
+
+这题是求最短距离的变种，按最短距离的bfs解法来写。 
+
+在这题中求的最小cost可以当作最短距离，只是这个cost的算法不太一样，当我们使用bfs时向上下左右四个方向扩展，向网络所指方向扩展则cost不变，往其他方向 则cost+1，遍历过程中使用二维数组dst来保存由\(0, 0\)到其他网格的最小花费。
+
+### 代码
+
+```java
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+
+    public int minCost(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        //由(0, 0)到其他网格的最小花费，为-1则表示待计算
+        int dst[][] = new int[n][m];
+        //用来保存待扩展的四个方向在纵轴和横轴上的增量，右-左-下-上
+        int d[][] = {{}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dst[i], -1);
+        }
+        //用来执行bfs的队列
+        Queue<int[]> queue = new LinkedList<>();
+        //int数组三个参数：纵轴、横轴、当前cost
+        queue.offer(new int[] {0, 0, 0});
+        while (!queue.isEmpty()) {
+            int x = queue.size();
+            for (int i = 0; i < x; i++) {
+                int q[] = queue.poll();
+                if (q[0] == n - 1 && q[1] == m - 1) {
+                    continue;
+                }
+                int val = grid[q[0]][q[1]];
+                for (int j = 1; j <= 4; j++) {
+                    int r = q[0] + d[j][0];
+                    int c = q[1] + d[j][1];
+                    if (r >= 0 && c >= 0 && r < n && c < m) {
+                        int add = j == val ? 0 : 1;
+                        if (dst[r][c] == -1 || dst[r][c] > q[2] + add) {
+                            dst[r][c] = q[2] + add;
+                            queue.offer(new int[] {r, c, dst[r][c]});
+                        }
+                    }
+                }
+            }
+        }
+        return Math.max(0, dst[n - 1][m - 1]);
+    }
+}
+```
+
+## 1444 Number of Ways of Cutting a Pizza
+
+### 原题
+
+给你一个 rows x cols 大小的矩形披萨和一个整数 k ，矩形包含两种字符： 'A' （表示苹果）和 '.' （表示空白格子）。你需要切披萨 k-1 次，得到 k 块披萨并送给别人。
+
+切披萨的每一刀，先要选择是向垂直还是水平方向切，再在矩形的边界上选一个切的位置，将披萨一分为二。如果垂直地切披萨，那么需要把左边的部分送给一个人，如果水平地切，那么需要把上面的部分送给一个人。在切完最后一刀后，需要把剩下来的一块送给最后一个人。
+
+请你返回确保每一块披萨包含 至少 一个苹果的切披萨方案数。由于答案可能是个很大的数字，请你返回它对 10^9 + 7 取余的结果。
+
+Given a rectangular pizza represented as a `rows x cols` matrix containing the following characters: `'A'` \(an apple\) and `'.'` \(empty cell\) and given the integer `k`. You have to cut the pizza into `k` pieces using `k-1` cuts. 
+
+For each cut you choose the direction: vertical or horizontal, then you choose a cut position at the cell boundary and cut the pizza into two pieces. If you cut the pizza vertically, give the left part of the pizza to a person. If you cut the pizza horizontally, give the upper part of the pizza to a person. Give the last piece of pizza to the last person.
+
+_Return the number of ways of cutting the pizza such that each piece contains **at least** one apple._ Since the answer can be a huge number, return this modulo 10^9 + 7.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2020/04/23/ways_to_cut_apple_1.png)
+
+```text
+Input: pizza = ["A..","AAA","..."], k = 3
+Output: 3 
+Explanation: The figure above shows the three ways to cut the pizza. Note that pieces must contain at least one apple.
+```
+
+**Example 2:**
+
+```text
+Input: pizza = ["A..","AA.","..."], k = 3
+Output: 1
+```
+
+**Example 3:**
+
+```text
+Input: pizza = ["A..","A..","..."], k = 1
+Output: 1
+```
+
+**Constraints:**
+
+* `1 <= rows, cols <= 50`
+* `rows == pizza.length`
+* `cols == pizza[i].length`
+* `1 <= k <= 10`
+* `pizza` consists of characters `'A'` and `'.'` only.
+
+### 分析
+
+DP
+
+想着最后总会剩下右下角的区域.. 而且能不能切开,还要判断一下切开的区域有没有水果. 所以先对处理出了一个map数组... map\[i\]\[j\] 表示从i,j开始到最后的区域里面 有多少的水果 map\[i\]\[j\] = map\[i + 1\]\[j\] + map\[i\]\[j+1\] - map\[i+1\]\[j+1\];
+
+然后就定义一个 dp\[k\]\[i\]\[j\] 切了k次 剩下 区域是 i,j 的可行方案有多少种 在方案能行的情况下 dp\[n\]\[i\]\[j\] 有2个来源.. 最后一道横着切 . 或者竖着切 也就是 i 不变 或者 j不变 只变 一个 横着切 dp\[n\]\[i\]\[j\] = \(dp\[n-1\]\[0\]\[j\] + dp\[n-1\]\[1\]\[j\] + dp\[n-1\]\[2\]\[j\] +...dp\[n-1\]\[i-1\]\[j\]\); 如果方案可行的话 同理竖着切....
+
+最后结果就是 dp\[k-1\]\[\]\[\] 的所有值...
+
+### 代码
+
+```java
+class Solution {
+    public final int MOD = 1000000007;
+
+    public int ways(String[] pizza, int k) {
+        int rol = pizza.length;
+        int col = pizza[0].length();
+        int[][] map = new int[rol + 1][col + 1];
+        for (int i = rol - 1; i >= 0; i--) {
+            for (int j = col - 1; j >= 0; j--) {
+                map[i][j] = map[i + 1][j] + map[i][j+1] - map[i+1][j+1];
+                if (pizza[i].charAt(j) == 'A') {
+                    map[i][j]++;
+                }
+            }
+        }
+        int[][][] dp = new int[k][rol][col];
+        dp[0][0][0] = 1;
+        for (int n = 1; n < k; n++) {   //切n次
+            for (int i = 0; i < rol; i++) {
+                for (int j = 0; j < col; j++) {
+                    //剩下i , j
+                    int count = 0;
+                    for (int l = 0; l < i; l++) {   //j不变
+                        int flag = map[l][j] - map[i][j];
+                        if (flag != 0 && map[i][j] != 0) {
+                            count += dp[n - 1][l][j];
+                            count %= MOD;
+                        }
+                    }
+                    for (int l = 0; l < j; l++) {
+                        int flag = map[i][l] - map[i][j];
+                        if (flag != 0 && map[i][j] != 0) {
+                            count += dp[n - 1][i][l];
+                            count %= MOD;
+                        }
+                    }
+                    dp[n][i][j] = count;
+                }
+            }
+        }
+        int res = 0;
+        for (int i = 0; i < rol; i++) {
+            for (int j = 0; j < col; j++) {
+                res += dp[k - 1][i][j];
+                res %= MOD;
+            }
+        }
+        return res;
+    }
+}
+```
+
+## 465 Optimal Account Balancing
+
+### 原题
+
+最优账单平衡，一群朋友在度假期间会相互借钱。比如说，小爱同学支付了小新同学的午餐共计 10 美元。如果小明同学支付了小爱同学的出租车钱共计 5 美元。我们可以用一个三元组 \(x, y, z\) 表示一次交易，表示 x 借给 y 共计 z 美元。用 0, 1, 2 表示小爱同学、小新同学和小明同学（0, 1, 2 为人的标号），上述交易可以表示为 \[\[0, 1, 10\], \[2, 0, 5\]\]。
+
+给定一群人之间的交易信息列表，计算能够还清所有债务的最小次数。
+
+注意：
+
+一次交易会以三元组 \(x, y, z\) 表示，并有 x ≠ y 且 z &gt; 0。 人的标号可能不是按顺序的，例如标号可能为 0, 1, 2 也可能为 0, 2, 6。
+
+A group of friends went on holiday and sometimes lent each other money. For example, Alice paid for Bill's lunch for $10. Then later Chris gave Alice $5 for a taxi ride. We can model each transaction as a tuple \(x, y, z\) which means person x gave person y $z. Assuming Alice, Bill, and Chris are person 0, 1, and 2 respectively \(0, 1, 2 are the person's ID\), the transactions can be represented as `[[0, 1, 10], [2, 0, 5]]`.
+
+Given a list of transactions between a group of people, return the minimum number of transactions required to settle the debt.
+
+**Note:**
+
+1. A transaction will be given as a tuple \(x, y, z\). Note that `x ≠ y` and `z > 0`.
+2. Person's IDs may not be linear, e.g. we could have the persons 0, 1, 2 or we could also have the persons 0, 2, 6.
+
+**Example 1:**
+
+```text
+Input:
+[[0,1,10], [2,0,5]]
+
+Output:
+2
+
+Explanation:
+Person #0 gave person #1 $10.
+Person #2 gave person #0 $5.
+
+Two transactions are needed. One way to settle the debt is person #1 pays person #0 and #2 $5 each.
+```
+
+**Example 2:**
+
+```text
+Input:
+[[0,1,10], [1,0,1], [1,2,5], [2,0,5]]
+
+Output:
+1
+
+Explanation:
+Person #0 gave person #1 $10.
+Person #1 gave person #0 $1.
+Person #1 gave person #2 $5.
+Person #2 gave person #0 $5.
+
+Therefore, person #1 only need to give person #0 $4, and all debt is settled.
+```
+
+### 分析
+
+DFS
+
+先把所有人的钱的正负都放到一个数组里。 然后从第一个人开始，找到钱数的正负和他不一样的人，试图把第一个人的钱都放到另外一个人身上。 然后for循环第二个人一直到第n个
+
+### 代码
+
+```java
+class Solution {
+    int[] acc;
+    int res = Integer.MAX_VALUE;
+    int n;
+    public int minTransfers(int[][] transactions) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < transactions.length; i ++) {
+            int first = transactions[i][0];
+            int second = transactions[i][1];
+            int amount = transactions[i][2];
+            map.put(first, map.getOrDefault(first, 0) - amount);
+            map.put(second, map.getOrDefault(second, 0) + amount);
+        }
+        acc = map.values().stream().mapToInt(i -> i).toArray();
+        this.n = acc.length;        
+        helper(0, 0);
+        return res;
+    }
+
+    void helper(int start, int cnt) {
+        while (start < n && acc[start] == 0) {
+            start ++;
+        }
+        if (start == n) {
+            res = Math.min(res, cnt);
+            return;
+        }
+        for (int i = start + 1; i < n; i ++) {
+            if (acc[i] < 0 && acc[start] > 0 || acc[start] < 0 && acc[i] > 0) {
+                acc[i] += acc[start];
+                helper(start + 1, cnt + 1);
+                acc[i] -= acc[start];
+            }
+        }
+    }
+}
+```
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
 
