@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28148%29.png)
 
-![](../.gitbook/assets/image%20%28165%29.png)
+![](../.gitbook/assets/image%20%28172%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28167%29.png)
+![](../.gitbook/assets/image%20%28174%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28164%29.png)
+![](../.gitbook/assets/image%20%28170%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4172,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28158%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4590,13 +4590,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28162%29.png)
+![](../.gitbook/assets/image%20%28168%29.png)
 
 ### 代码
 
@@ -4775,7 +4775,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4914,7 +4914,7 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ![](../.gitbook/assets/image%20%28143%29.png)
 
-![](../.gitbook/assets/image%20%28163%29.png)
+![](../.gitbook/assets/image%20%28169%29.png)
 
 ### 代码
 
@@ -5091,7 +5091,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28168%29.png)
+![](../.gitbook/assets/image%20%28175%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5188,7 +5188,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28158%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -5274,14 +5274,14 @@ n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 �
 
 1\) 贪心
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
 * 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
 * 空间复杂度：O\(C\)
 
 2）
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 * 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
 * 空间复杂度： O\(C\)
@@ -5949,7 +5949,7 @@ Output: 0.73278
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28149%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
 时间复杂度：O\(N - K + K\) ==&gt; O\(N\) 
 
@@ -6280,7 +6280,7 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28159%29.png)
+![](../.gitbook/assets/image%20%28164%29.png)
 
 * 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
 * 空间复杂度：O\(N\)
@@ -6448,9 +6448,9 @@ Output: "abccdcdcdxyz"
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28160%29.png)
+![](../.gitbook/assets/image%20%28166%29.png)
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28149%29.png)
 
 ### 代码
 
@@ -6650,9 +6650,9 @@ Output: [[1,7]]
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
-![](../.gitbook/assets/image%20%28161%29.png)
+![](../.gitbook/assets/image%20%28167%29.png)
 
 * 时间复杂度：\mathcal{O}\(N\)O\(N\)。我们只遍历了一次输入元素。
 * 空间复杂度：\mathcal{O}\(N\)O\(N\)，输出答案所使用的空间。
@@ -6852,7 +6852,7 @@ Explanation:  If Alex takes one pile at the beginning, Lee takes two piles, then
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28148%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
 对于piles = \[2,7,9,4,4\]，我们可以得到下图所示的dp数组，结果为dp\[0\]\[1\]
 
@@ -7354,9 +7354,9 @@ Explanation: The longest repeating substring is "aaaa", which occurs twice.
 
 3）Rabin-Karp 字符串哈希算法
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
-![](../.gitbook/assets/image%20%28166%29.png)
+![](../.gitbook/assets/image%20%28173%29.png)
 
 时间复杂度：O\(NlogN\)，二分查找的时间复杂度为 O\(logN\)，Rabin-Karp 字符串哈希的时间复杂度为 O\(N\)。
 
@@ -7761,7 +7761,10 @@ The worst case is that you pay $1.
 
 我们首先在\(1, n\)中任意挑选一个数字i， 假设i是错误的（最坏情况）， 我们需要用最小代价去 猜到需要的数字。那么在一次尝试后，答案要么在i的左边， 要么在i的右边， 为了考虑最差的情况，我们 需要考虑两者的较大值。 cost\(1,n\) = i + max\( cost\(1, i - 1\), cost\(i + 1\), n\)\)
 
-2）
+2）DP，从暴力解可以看出， 大区间的猜数字的成本求解， 可以由小区间计算出来。  
+时间复杂度： O\(N ^ 3\), 空间复杂度O\(N ^ 2\)
+
+![](../.gitbook/assets/image%20%28146%29.png)
 
 ### 代码
 
@@ -7784,63 +7787,1007 @@ class Solution {
 }
 ```
 
-2）DP从暴力解可以看出，大区间的猜数字的成本求解，可以由小区间计算出来，时间复杂度:O\(N^3\),空间复杂度O\(N ^ 2\)O,
+2）DP
 
-## 
+```java
+class Solution {
+        public int getMoneyAmount(int n){
+        int[][] dp = new int[n + 1][n + 1];
+        for(int len = 2; len <= n; len ++){
+            for(int i = 1; i + len - 1 <= n; i++){
+                int j = i + len - 1;
+                dp[i][j] = Integer.MAX_VALUE;
+                for(int k = i; k <= j; k++){
+                    dp[i][j] = Math.min(dp[i][j],
+                            k + Math.max(k <= 1 ? 0 : dp[i][k - 1],
+                                    k + 1 > j ? 0: dp[k + 1][j]));
+                }
+            }
+        }
+        return dp[1][n];
+    }
+}
+```
 
-### 原题
-
-### 分析
-
-### 代码
-
-## 
-
-### 原题
-
-### 分析
-
-### 代码
-
-## 
-
-### 原题
-
-### 分析
-
-### 代码
-
-## 
+## 1326 Minimum Number of Taps to Open to Water a Garden
 
 ### 原题
 
+在 x 轴上有一个一维的花园。花园长度为 n，从点 0 开始，到点 n 结束。
+
+花园里总共有 n + 1 个水龙头，分别位于 \[0, 1, ..., n\] 。
+
+给你一个整数 n 和一个长度为 n + 1 的整数数组 ranges ，其中 ranges\[i\] （下标从 0 开始）表示：如果打开点 i 处的水龙头，可以灌溉的区域为 \[i - ranges\[i\], i + ranges\[i\]\] 。
+
+请你返回可以灌溉整个花园的 最少水龙头数目 。如果花园始终存在无法灌溉到的地方，请你返回 -1 。
+
+There is a one-dimensional garden on the x-axis. The garden starts at the point `0` and ends at the point `n`. \(i.e The length of the garden is `n`\).
+
+There are `n + 1` taps located at points `[0, 1, ..., n]` in the garden.
+
+Given an integer `n` and an integer array `ranges` of length `n + 1` where `ranges[i]` \(0-indexed\) means the `i-th` tap can water the area `[i - ranges[i], i + ranges[i]]` if it was open.
+
+Return _the minimum number of taps_ that should be open to water the whole garden, If the garden cannot be watered return **-1**.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/01/16/1685_example_1.png)
+
+```text
+Input: n = 5, ranges = [3,4,1,1,0,0]
+Output: 1
+Explanation: The tap at point 0 can cover the interval [-3,3]
+The tap at point 1 can cover the interval [-3,5]
+The tap at point 2 can cover the interval [1,3]
+The tap at point 3 can cover the interval [2,4]
+The tap at point 4 can cover the interval [4,4]
+The tap at point 5 can cover the interval [5,5]
+Opening Only the second tap will water the whole garden [0,5]
+```
+
+**Example 2:**
+
+```text
+Input: n = 3, ranges = [0,0,0,0]
+Output: -1
+Explanation: Even if you activate all the four taps you cannot water the whole garden.
+```
+
+**Example 3:**
+
+```text
+Input: n = 7, ranges = [1,2,1,0,2,1,0,1]
+Output: 3
+```
+
+**Example 4:**
+
+```text
+Input: n = 8, ranges = [4,0,0,0,0,0,0,0,4]
+Output: 2
+```
+
+**Example 5:**
+
+```text
+Input: n = 8, ranges = [4,0,0,0,4,0,0,0,4]
+Output: 1
+```
+
+**Constraints:**
+
+* `1 <= n <= 10^4`
+* `ranges.length == n + 1`
+* `0 <= ranges[i] <= 100`
+
 ### 分析
+
+1）DP，O\(N ^ 2\)
+
+![](../.gitbook/assets/image%20%28147%29.png)
+
+2）DP小优化，`O(N * maxRange)`maxrange 为所有水龙头中最大的灌溉区域长度。
+
+![](../.gitbook/assets/image%20%28163%29.png)
+
+3）贪心
+
+可以将问题转换一下，水龙头浇灌的范围是一个区间，花园的范围也是一个区间。求最小水龙头数，实质上就是求能够覆盖花园整个区间的最小区间数。 那么我们就可以利用贪心来求解问题了。我们的目的是在能够覆盖当前最左范围的所有水龙头中选择灌溉最右范围最大的水龙头。
+
+1.将水龙头按照其能灌溉到的最右位置进行排序； 
+
+2.从后往前查找第一个能够灌溉到花园最左边的水龙头，就是我们第一个选择的水龙头\(因为我们是按照最右位置的大小排序的\) 
+
+3.更新左范围为当前所选水龙头最右位置，并删除当前水龙头之前的水龙头即可\(并不是真的删除，改一下可用水龙头的index即可\) 重复2，3即可。
+
+排序了，O\(nlogn\)
 
 ### 代码
 
-## 
+1）DP
+
+```java
+class Solution {
+
+    class Interval {
+        int start;
+        int end;
+        Interval(int start, int end){
+            this.start = start;
+            this.end = end;
+        }
+    }
+    
+    public int minTaps(int n, int[] ranges) {
+
+        List<Interval> intervals = new ArrayList<>();
+        int pos = 0;
+        // 得到所有灌溉区间。
+        for (int range: ranges){
+            intervals.add(new Interval(pos - range, pos + range));
+            pos += 1;
+        }
+        
+        int size = intervals.size();
+        // n + 1个点一共有 n 个区间。 dp矩阵表示前i个区间所需最小的taps
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        for (int i = 0; i < n; i++){
+            dp[i + 1] = Integer.MAX_VALUE;
+            // 枚举所有覆盖它的区间。 
+            for (int j =0; j < size; j++){
+                if (intervals.get(j).end < i + 1 || intervals.get(j).start > i){
+                    continue;
+                }
+                // 满足：intervals.get(j).start <= i &&  intervals.get(j).end >= i + 1                
+                int start = intervals.get(j).start >= 0 ? intervals.get(j).start : 0;
+                
+                if (dp[start] != Integer.MAX_VALUE){
+                    dp[i + 1] = Math.min(dp[i + 1], dp[start] + 1);
+                }
+
+            }
+        }
+        return dp[n] == Integer.MAX_VALUE ? -1 : dp[n];
+    }
+}
+```
+
+2）DP优化
+
+```java
+class Solution {
+
+    public int minTaps(int n, int[] ranges) {
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+
+        // dp[i] 表示为了覆盖区间 [0,i] 所需要 的最小taps 即前i个数为止的区间。
+        dp[0] = 0; 
+
+        // 遍历所有水龙头的位置
+        for (int i = 0; i <= n; i++){
+            // 找到当前处的tap能覆盖的最左和最右的位置
+            int left = Math.max(i- ranges[i], 0);
+            int right = Math.min(i + ranges[i], n);
+            for (int j = left + 1; j <= right;j++){
+                //查看如果用这个tap去覆盖这些位置,所用的水龙头的位置均为前【0，left】区间所需要的水龙头的数量 + 1
+                if (dp[left] != Integer.MAX_VALUE){
+                     dp[j] = Math.min(dp[j], dp[left] + 1);
+                }
+            }
+        }
+        return dp[n] == Integer.MAX_VALUE ? -1: dp[n];
+    }
+}
+```
+
+3）贪心
+
+```java
+class Solution {
+	//水龙头范围
+    class Range{
+        public Range(int l, int r) {
+        	this.l = l;
+        	this.r = r;
+        }
+        int l;
+        int r;
+    }
+	//计数君
+	class IntHolder{
+		int cnt = 0;
+	}
+
+	public int minTaps(int n, int[] ranges) {
+    	Range[] Ranges = new Range[ranges.length];
+    	for(int i = 0; i < ranges.length; i++) {
+    		Range ran = new Range(i-ranges[i], i+ranges[i]);
+    		Ranges[i] = ran;
+    	}
+    	
+	//将水龙头按最右位置排序
+    	Arrays.sort(Ranges, new Comparator<Range>() {
+    		@Override
+    		public int compare(Range r1, Range r2) {
+    			return r1.r-r2.r;
+    		}
+    	});
+    	
+    	IntHolder intholder = new IntHolder();
+    	
+    	boolean flag = match(0, n, 0, Ranges, intholder);
+    	
+    	if(flag) return intholder.cnt;
+    	return -1;
+    }
+    
+	/**
+     * 是否能够灌溉到当前左边界到右边界
+     * 
+     * @param lrange 左边界
+     * @param rlange 右边界
+     * @param lindex 可选水龙头的起始索引
+     * @param Ranges 水龙头范围数组
+     * @param intholder 计数君
+     * @return 是否能够灌溉到当前lrange-rlange
+     */
+    public boolean match(int lrange, int rlange, int lindex, Range[] Ranges, IntHolder intholder) {
+    	boolean isMatch = false;
+    	for(int i = Ranges.length-1; i >= lindex; i--) {
+    		//灌溉了整个区间
+    		if(Ranges[i].l <= lrange && Ranges[i].r >= rlange) {
+    			intholder.cnt++;
+    			return true;
+    		}
+    		//能灌溉到左边界
+    		if(Ranges[i].l <= lrange) {
+    			intholder.cnt++;
+    			isMatch = match(Ranges[i].r, rlange, i+1, Ranges, intholder);
+    			break;
+    		}
+    	}
+	//若不能灌溉到当前左边界，则返回false，能灌溉到则返回true
+    	return isMatch;
+    }
+}
+```
+
+## 871 Minimum Number of Refueling Stops
 
 ### 原题
 
+最低加油次数，汽车从起点出发驶向目的地，该目的地位于出发位置东面 target 英里处。
+
+沿途有加油站，每个 station\[i\] 代表一个加油站，它位于出发位置东面 station\[i\]\[0\] 英里处，并且有 station\[i\]\[1\] 升汽油。
+
+假设汽车油箱的容量是无限的，其中最初有 startFuel 升燃料。它每行驶 1 英里就会用掉 1 升汽油。
+
+当汽车到达加油站时，它可能停下来加油，将所有汽油从加油站转移到汽车中。
+
+为了到达目的地，汽车所必要的最低加油次数是多少？如果无法到达目的地，则返回 -1 。
+
+注意：如果汽车到达加油站时剩余燃料为 0，它仍然可以在那里加油。如果汽车到达目的地时剩余燃料为 0，仍然认为它已经到达目的地。
+
+A car travels from a starting position to a destination which is `target` miles east of the starting position.
+
+Along the way, there are gas stations.  Each `station[i]` represents a gas station that is `station[i][0]` miles east of the starting position, and has `station[i][1]` liters of gas.
+
+The car starts with an infinite tank of gas, which initially has `startFuel` liters of fuel in it.  It uses 1 liter of gas per 1 mile that it drives.
+
+When the car reaches a gas station, it may stop and refuel, transferring all the gas from the station into the car.
+
+What is the least number of refueling stops the car must make in order to reach its destination?  If it cannot reach the destination, return `-1`.
+
+Note that if the car reaches a gas station with 0 fuel left, the car can still refuel there.  If the car reaches the destination with 0 fuel left, it is still considered to have arrived.
+
+**Example 1:**
+
+```text
+Input: target = 1, startFuel = 1, stations = []
+Output: 0
+Explanation: We can reach the target without refueling.
+```
+
+**Example 2:**
+
+```text
+Input: target = 100, startFuel = 1, stations = [[10,100]]
+Output: -1
+Explanation: We can't reach the target (or even the first gas station).
+```
+
+**Example 3:**
+
+```text
+Input: target = 100, startFuel = 10, stations = [[10,60],[20,30],[30,30],[60,40]]
+Output: 2
+Explanation: 
+We start with 10 liters of fuel.
+We drive to position 10, expending 10 liters of fuel.  We refuel from 0 liters to 60 liters of gas.
+Then, we drive from position 10 to position 60 (expending 50 liters of fuel),
+and refuel from 10 liters to 50 liters of gas.  We then drive to and reach the target.
+We made 2 refueling stops along the way, so we return 2.
+```
+
+**Note:**
+
+1. `1 <= target, startFuel, stations[i][1] <= 10^9`
+2. `0 <= stations.length <= 500`
+3. `0 < stations[0][0] < stations[1][0] < ... < stations[stations.length-1][0] < target`
+
 ### 分析
+
+一开始看到这个题， 多各油站， 要么加油，要么不加油， 油量要大于等于0， 这TM不是01背包问题吗 结果， 这个油量的取值范围是1e9， 搞了半天， 弄个暴搜出来TLE了 最后无奈无看题解， 这集合划分也实在太给力点。。。确实想不出来。。。
+
+**思路**
+
+dp\[i\] 为加 i 次油能走的最远距离，需要满足 dp\[i\] &gt;= target 的最小 i。
+
+**算法**
+
+依次计算每个 dp\[i\]，对于 dp\[0\]，就只用初始的油量 startFuel 看能走多远。
+
+每多一个加油站 station\[i\] = \(location, capacity\)，如果之前可以通过加 t 次油到达这个加油站，现在就可以加 t+1 次油得到 capcity 的油量。
+
+举个例子，原本加一次油可以行驶的最远距离为 15，现在位置 10 有一个加油站，有 30 升油量储备，那么显然现在可以加两次油行驶 45 距离。
+
+![](../.gitbook/assets/image%20%28153%29.png)
+
+
+
+* 时间复杂度： O\(N^2\)，其中 N 为加油站的个数。
+* 空间复杂度： O\(N\)，`dp` 数组占用的空间。
 
 ### 代码
 
-## 
+```java
+class Solution {
+        public int minRefuelStops(int target, int startFuel, int[][] stations){
+        int n = stations.length;
+        if(n == 0) return startFuel >= target ? 0: -1;
+        int[] dp = new int[n + 1];
+        dp[0] = startFuel;
+        for(int i = 1; i <= n; i++){
+            int used = -1;
+            for(int k = 1; k <= n && stations[k - 1][0] <= dp[i - 1]; k++){
+                if(dp[i - 1] + stations[k - 1][1] > dp[i]){
+                    dp[i] = dp[i - 1] + stations[k - 1][1];
+                    used = k;
+                }
+            }
+            //如果这个加油站加过油了， 把油量置为0
+            if(used != -1)  stations[used - 1][1] = 0;
+        }
+        int ans = n + 10;
+        for(int i = 0; i <= n; i++){
+            if(dp[i] >= target) ans = Math.min(ans, i);
+        }
+        return ans == n + 10 ? -1: ans;
+    }
+}
+```
+
+```java
+class Solution {
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        int N = stations.length;
+        long[] dp = new long[N + 1];
+        dp[0] = startFuel;
+        for (int i = 0; i < N; ++i)
+            for (int t = i; t >= 0; --t)
+                if (dp[t] >= stations[i][0])
+                    dp[t+1] = Math.max(dp[t+1], dp[t] + (long) stations[i][1]);
+
+        for (int i = 0; i <= N; ++i)
+            if (dp[i] >= target) return i;
+        return -1;
+    }
+}
+```
+
+## 420 Strong Password Checker
 
 ### 原题
 
+一个强密码应满足以下所有条件：
+
+1. 由至少6个，至多20个字符组成。 
+2. 至少包含一个小写字母，一个大写字母，和一个数字。 
+3. 同一字符不能连续出现三次 \(比如 "...aaa..." 是不允许的, 但是 "...aa...a..." 是可以的\)。
+
+ 编写函数 strongPasswordChecker\(s\)，s 代表输入字符串，如果 s 已经符合强密码条件，则返回0；否则返回要将 s 修改为满足强密码条件的字符串所需要进行修改的最小步数。
+
+插入、删除、替换任一字符都算作一次修改。
+
+A password is considered strong if below conditions are all met:
+
+1. It has at least 6 characters and at most 20 characters.
+2. It must contain at least one lowercase letter, at least one uppercase letter, and at least one digit.
+3. It must NOT contain three repeating characters in a row \("...aaa..." is weak, but "...aa...a..." is strong, assuming other conditions are met\).
+
+Write a function strongPasswordChecker\(s\), that takes a string s as input, and return the **MINIMUM** change required to make s a strong password. If s is already strong, return 0.
+
+Insertion, deletion or replace of any one character are all considered as one change.
+
 ### 分析
+
+就是先把一段段连续的长度放进优先队列，队列以len % 3的大小判断优先级，然后根据原来长度是小于6还是6-20还是20以上分别讨论。用了优先队列可以避免一些复杂操作。
 
 ### 代码
 
-## 
+```java
+class Solution {
+    public int strongPasswordChecker(String s) {
+        int len = s.length();
+        if (len == 0) return 6;
+        char[] ss = s.toCharArray();
+
+        // 记录所需小写字母、大写字母和数字的个数
+        // cnt记录重复序列的字符计数
+        int low = 1, up = 1, num = 1, cnt = 1;
+        if (Character.isLowerCase(ss[0])) low = 0;
+        else if (Character.isUpperCase(ss[0])) up = 0;
+        else if (Character.isDigit(ss[0])) num = 0;
+
+        // 优先队列，x%3小的先出队，为方便需要删除操作时先处理段的序列
+        Queue<Integer> queue = new PriorityQueue<>((a, b) -> a % 3 - b % 3);
+
+        for (int i = 1; i < len; i ++) {
+            if (low == 1 && Character.isLowerCase(ss[i])) low = 0;
+            else if (up == 1 && Character.isUpperCase(ss[i])) up = 0;
+            else if (num == 1 && Character.isDigit(ss[i])) num = 0;
+
+            // 对连续相同的序列计数，并存入优先队列
+            if (ss[i] != ss[i - 1]) {
+                if (cnt >= 3) queue.add(cnt);
+                cnt = 1;
+            } else {
+                cnt ++;
+            }
+        }
+        if (cnt >= 3) queue.add(cnt);
+        
+        int ans = 0, all = low + up + num;
+
+        // 长度不足，则根据是否有重复序列进行替换、加添操作
+        if (len < 6) return Math.max(6 - len, all);
+
+        // 删除操作，从最短的连续序列开始处理
+        while (!queue.isEmpty() && len > 20) {
+            int cur = queue.remove();
+            ans ++;
+            len --;
+            if (-- cur >= 3) queue.add(cur);
+        }
+
+        // 解决完重复序列后，字符串仍然过长
+        if (len > 20) return ans + len - 20 + all;
+
+        // 未处理完重复序列就已经达到长度要求，继续处理重复序列
+        // 此时就只考虑替换操作就好了
+        int n = 0;
+        while (!queue.isEmpty()) {
+            n += queue.remove() / 3;
+        }
+
+        return ans + Math.max(n, all);
+    }
+
+}
+```
+
+## 609 Find Duplicate File in System
 
 ### 原题
 
+在系统中查找重复文件
+
+给定一个目录信息列表，包括目录路径，以及该目录中的所有包含内容的文件，您需要找到文件系统中的所有重复文件组的路径。一组重复的文件至少包括二个具有完全相同内容的文件。
+
+输入列表中的单个目录信息字符串的格式如下：
+
+"root/d1/d2/.../dm f1.txt\(f1\_content\) f2.txt\(f2\_content\) ... fn.txt\(fn\_content\)"
+
+这意味着有 n 个文件（f1.txt, f2.txt ... fn.txt 的内容分别是 f1\_content, f2\_content ... fn\_content）在目录 root/d1/d2/.../dm 下。注意：n&gt;=1 且 m&gt;=0。如果 m=0，则表示该目录是根目录。
+
+该输出是重复文件路径组的列表。对于每个组，它包含具有相同内容的文件的所有文件路径。文件路径是具有下列格式的字符串：
+
+"directory\_path/file\_name.txt"
+
+Given a list of directory info including directory path, and all the files with contents in this directory, you need to find out all the groups of duplicate files in the file system in terms of their paths.
+
+A group of duplicate files consists of at least **two** files that have exactly the same content.
+
+A single directory info string in the **input** list has the following format:
+
+`"root/d1/d2/.../dm f1.txt(f1_content) f2.txt(f2_content) ... fn.txt(fn_content)"`
+
+It means there are **n** files \(`f1.txt`, `f2.txt` ... `fn.txt` with content `f1_content`, `f2_content` ... `fn_content`, respectively\) in directory `root/d1/d2/.../dm`. Note that n &gt;= 1 and m &gt;= 0. If m = 0, it means the directory is just the root directory.
+
+The **output** is a list of group of duplicate file paths. For each group, it contains all the file paths of the files that have the same content. A file path is a string that has the following format:
+
+`"directory_path/file_name.txt"`
+
+**Example 1:**
+
+```text
+Input:
+["root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)", "root/c/d 4.txt(efgh)", "root 4.txt(efgh)"]
+Output:  
+[["root/a/2.txt","root/c/d/4.txt","root/4.txt"],["root/a/1.txt","root/c/3.txt"]]
+```
+
+**Note:**
+
+1. No order is required for the final output.
+2. You may assume the directory name, file name and file content only has letters and digits, and the length of file content is in the range of \[1,50\].
+3. The number of files given is in the range of \[1,20000\].
+4. You may assume no files or directories share the same name in the same directory.
+5. You may assume each given directory info represents a unique directory. Directory path and file info are separated by a single blank space.
+
+ **Follow-up beyond contest:**
+
+1. Imagine you are given a real file system, how will you search files? DFS or BFS?
+2. If the file content is very large \(GB level\), how will you modify your solution?
+3. If you can only read the file by 1kb each time, how will you modify your solution?
+4. What is the time complexity of your modified solution? What is the most time-consuming part and memory consuming part of it? How to optimize?
+5. How to make sure the duplicated files you find are not false positive?
+
 ### 分析
 
+哈希表 首先我们通过字符串操作获取目录路径、文件名和文件内容。我们使用哈希映射（HashMap）来寻找重复文件，哈希映射中的键（key）是文件内容，值（value）是存储路径和文件名的列表。
+
+我们遍历每一个文件，并把它加入哈希映射中。在这之后，我们遍历哈希映射，如果一个键对应的值列表的长度大于 1，说明我们找到了重复文件，可以把这个列表加入到答案中。
+
 ### 代码
+
+```java
+public class Solution {
+    public List<List<String>> findDuplicate(String[] paths) {
+        HashMap<String, List<String>> map = new HashMap<>();
+        for (String path : paths) {
+            String[] values = path.split(" ");
+            for (int i = 1; i < values.length; i++) {
+                String[] name_cont = values[i].split("\\(");
+                name_cont[1] = name_cont[1].replace(")", "");
+                List<String> list = map.getOrDefault(name_cont[1], new ArrayList<String>());
+                list.add(values[0] + "/" + name_cont[0]);
+                map.put(name_cont[1], list);
+            }
+        }
+        List<List<String>> res = new ArrayList<>();
+        for (String key : map.keySet()) {
+            if (map.get(key).size() > 1)
+                res.add(map.get(key));
+        }
+        return res;
+    }
+}
+```
+
+## 1292 Maximum Side Length of a Square with Sum Less than or Equal to Threshold
+
+### 原题
+
+给你一个大小为 m x n 的矩阵 mat 和一个整数阈值 threshold。
+
+请你返回元素总和小于或等于阈值的正方形区域的最大边长；如果没有这样的正方形区域，则返回 0 。
+
+Given a `m x n` matrix `mat` and an integer `threshold`. Return the maximum side-length of a square with a sum less than or equal to `threshold` or return **0** if there is no such square.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2019/12/05/e1.png)
+
+```text
+Input: mat = [[1,1,3,2,4,3,2],[1,1,3,2,4,3,2],[1,1,3,2,4,3,2]], threshold = 4
+Output: 2
+Explanation: The maximum side length of square with sum less than 4 is 2 as shown.
+```
+
+**Example 2:**
+
+```text
+Input: mat = [[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2]], threshold = 1
+Output: 0
+```
+
+**Example 3:**
+
+```text
+Input: mat = [[1,1,1,1],[1,0,0,0],[1,0,0,0],[1,0,0,0]], threshold = 6
+Output: 3
+```
+
+**Example 4:**
+
+```text
+Input: mat = [[18,70],[61,1],[25,85],[14,40],[11,96],[97,96],[63,45]], threshold = 40184
+Output: 2
+```
+
+**Constraints:**
+
+* `1 <= m, n <= 300`
+* `m == mat.length`
+* `n == mat[i].length`
+* `0 <= mat[i][j] <= 10000`
+* `0 <= threshold <= 10^5`
+
+### 分析
+
+1）时间复杂度：O\(min\(M, N\) \* M \* N\)，其中 M 为矩阵长度，N 为矩阵宽度。
+
+![](../.gitbook/assets/image%20%28155%29.png)
+
+2）时间复杂度：O\(log\(min\(M, N\)\) \* M \* N\)O\(log\(min\(M,N\)\)∗M∗N\)，其中 M 为矩阵长度，N 为矩阵宽度。
+
+![](../.gitbook/assets/image%20%28171%29.png)
+
+### 代码
+
+1）
+
+```java
+class Solution {
+    public int maxSideLength(int[][] mat, int threshold) {
+        int m = mat.length, n = mat[0].length;
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                dp[i][j] = mat[i - 1][j - 1] + dp[i - 1][j] + dp[i][j - 1] - dp[i - 1][j - 1];
+            }
+        }
+        int ans = 0;
+        for (int k = 1; k <= Math.min(m, n); k++) {
+            for (int i = 1; i <= m; i++) {
+                for (int j = 1; j <= n; j++) {
+                    if (i - k < 0 || j - k < 0) {
+                        continue;
+                    }
+                    int tmp = dp[i][j] - dp[i - k][j] - dp[i][j - k] + dp[i - k][j - k];
+                    if (tmp <= threshold) {
+                        ans = Math.max(ans, k);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
+```
+
+2）
+
+```java
+class Solution {
+    int m, n;
+    int[][] dp;
+    public int maxSideLength(int[][] mat, int threshold) {
+        m = mat.length;
+        n = mat[0].length;
+        dp = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                dp[i][j] = mat[i - 1][j - 1] + dp[i - 1][j] + dp[i][j - 1] - dp[i - 1][j - 1];
+            }
+        }
+        int l = 0, h = Math.min(m, n);
+        while (l <= h) {
+            int mid = l + (h - l) / 2;
+            if (l == h || l + 1 == h) {
+                break;
+            }
+            if (help(mid, threshold)) {
+                l = mid;
+            } else {
+                h = mid - 1;
+            }
+        }
+        if (help(h, threshold)) {
+            return h;
+        } else {
+            return l;
+        }
+    }
+    public boolean help(int k, int threshold) {
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (i - k < 0 || j - k < 0) {
+                    continue;
+                }
+                if (dp[i][j] - dp[i - k][j] - dp[i][j - k] + dp[i - k][j - k] <= threshold) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+```
+
+## 968 Binary Tree Cameras
+
+### 原题
+
+监控二叉树
+
+给定一个二叉树，我们在树的节点上安装摄像头。
+
+节点上的每个摄影头都可以监视**其父对象、自身及其直接子对象。**
+
+计算监控树的所有节点所需的最小摄像头数量。
+
+Given a binary tree, we install cameras on the nodes of the tree. 
+
+Each camera at a node can monitor **its parent, itself, and its immediate children**.
+
+Calculate the minimum number of cameras needed to monitor all nodes of the tree.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2018/12/29/bst_cameras_01.png)
+
+```text
+Input: [0,0,null,0,0]
+Output: 1
+Explanation: One camera is enough to monitor all nodes if placed as shown.
+```
+
+**Example 2:**![](https://assets.leetcode.com/uploads/2018/12/29/bst_cameras_02.png)
+
+```text
+Input: [0,0,null,0,null,0,null,null,0]
+Output: 2
+Explanation: At least two cameras are needed to monitor all nodes of the tree. The above image shows one of the valid configurations of camera placement.
+```
+
+  
+**Note:**
+
+1. The number of nodes in the given tree will be in the range `[1, 1000]`.
+2. **Every** node has value 0.
+
+### 分析
+
+DFS TopDown，叶子节点会返回1。如果一个节点的左右节点有叶子节点就会返回2，并且这个节点需要放camera，否则那个叶子节点就观测不到了。如果一个节点的左右节点有camera了，那么这个节点就返回0，然后继续从所谓的空节点开始。 需要注意的就是，叶子节点的左右子节点是空节点，返回0，左右子节点有camera的节点也返回0。
+
+### 代码
+
+DFS
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ * int val;
+ * TreeNode left;
+ * TreeNode right;
+ * TreeNode() {}
+ * TreeNode(int val) { this.val = val; }
+ * TreeNode(int val, TreeNode left, TreeNode right) {
+ * this.val = val;
+ * this.left = left;
+ * this.right = right;
+ * }
+ * }
+ */
+class Solution {
+    int result = 0;
+
+    public int minCameraCover(TreeNode root) {
+        if (dfs(root) == 1) {
+            result++;
+        }
+        return result;
+    }
+
+    //0:可被观测但无监控，上一层节点为1
+    //1：不可被观测到，上一层节点为2
+    //2：有摄像机，上一层节点为0
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftStatus = dfs(root.left), rightStatus = dfs(root.right);
+        if (leftStatus == 1 || rightStatus == 1) {
+            result++;
+            return 2;
+        } else if (leftStatus == 2 || rightStatus == 2) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+}
+```
+
+* 1，当前节点有相机
+* 2，当前节点不需要相机（子节点有相机把它给覆盖了）
+* 3，当前节点没有相机并且也没有被子节点给覆盖（那么他只能等他的父节点把它给覆盖了）
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ * int val;
+ * TreeNode left;
+ * TreeNode right;
+ * TreeNode() {}
+ * TreeNode(int val) { this.val = val; }
+ * TreeNode(int val, TreeNode left, TreeNode right) {
+ * this.val = val;
+ * this.left = left;
+ * this.right = right;
+ * }
+ * }
+ */
+class Solution {
+    //NO_CAMERA表示的是子节点没有相机，当前节点也没放相机
+    private final int NO_CAMERA = 0;
+    //HAS_CAMERA表示当前节点有一个相机
+    private final int HAS_CAMERA = 1;
+    //NO_NEEDED表示当前节点没有相机，但他的子节点有一个相机，把它给
+//覆盖了，所以它不需要了。或者他是一个空的节点也是不需要相机的
+    private final int NO_NEEDED = 2;
+
+    //全局的，统计有多少相机
+    int res = 0;
+
+    public int minCameraCover(TreeNode root) {
+        //边界条件判断
+        if (root == null)
+            return 0;
+        //如果最后返回的是NO_CAMERA，表示root节点的子节点也没有相机，
+        //所以root节点要添加一个相机
+        if (dfs(root) == NO_CAMERA)
+            res++;
+        //返回结果
+        return res;
+    }
+
+    public int dfs(TreeNode root) {
+        //如果是空的，就不需要相机了
+        if (root == null)
+            return NO_NEEDED;
+        int left = dfs(root.left), right = dfs(root.right);
+        //如果左右子节点有一个是NO_CAMERA，表示的是子节点既没相机，也没相机覆盖它，
+        //所以当前节点需要有一个相机
+        if (left == NO_CAMERA || right == NO_CAMERA) {
+            //在当前节点放一个相机，统计相机的个数
+            res++;
+            return HAS_CAMERA;
+        }
+        //如果左右子节点只要有一个有相机，那么当前节点就不需要相机了，否则返回一个没有相机的标记
+        return left == HAS_CAMERA || right == HAS_CAMERA ? NO_NEEDED : NO_CAMERA;
+    }
+}
+```
+
+## 347 Top K Frequent Elements
+
+### 原题
+
+ 给定一个非空的整数数组，返回其中出现频率前 _**k**_ 高的元素。
+
+Given a non-empty array of integers, return the **k** most frequent elements.
+
+**Example 1:**
+
+```text
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+```
+
+**Example 2:**
+
+```text
+Input: nums = [1], k = 1
+Output: [1]
+```
+
+**Note:**
+
+* You may assume k is always valid, 1 ≤ k ≤ number of unique elements.
+* Your algorithm's time complexity **must be** better than O\(n log n\), where n is the array's size.
+* It's guaranteed that the answer is unique, in other words the set of the top k frequent elements is unique.
+* You can return the answer in any order.
+
+### 分析
+
+排序就是暴力法
+
+1）首先遍历整个数组，并使用哈希表记录每个数字出现的次数，并形成一个「出现次数数组」。找出原数组的前 kk 个高频元素，就相当于找出「出现次数数组」的前 kk 大的值。
+
+最简单的做法是给「出现次数数组」排序。但由于可能有 O\(N\)O\(N\) 个不同的出现次数（其中 NN 为原数组长度），故总的算法复杂度会达到 O\(N\log N\)O\(NlogN\)，不满足题目的要求。
+
+在这里，我们可以利用堆的思想：建立一个小顶堆，然后遍历「出现次数数组」：
+
+如果堆的元素个数小于 kk，就可以直接插入堆中。 如果堆的元素个数等于 kk，则检查堆顶与当前出现次数的大小。如果堆顶更大，说明至少有 kk 个数字的出现次数比当前值大，故舍弃当前值；否则，就弹出堆顶，并将当前值插入堆中。 遍历完成后，堆中的元素就代表了「出现次数数组」中前 kk 大的值。
+
+2）
+
+### 代码
+
+1
+
+```java
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> occurrences = new HashMap<Integer, Integer>();
+        for (int num : nums) {
+            occurrences.put(num, occurrences.getOrDefault(num, 0) + 1);
+        }
+
+        // int[] 的第一个元素代表数组的值，第二个元素代表了该值出现的次数
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            public int compare(int[] m, int[] n) {
+                return m[1] - n[1];
+            }
+        });
+        for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+            int num = entry.getKey(), count = entry.getValue();
+            if (queue.size() == k) {
+                if (queue.peek()[1] < count) {
+                    queue.poll();
+                    queue.offer(new int[]{num, count});
+                }
+            } else {
+                queue.offer(new int[]{num, count});
+            }
+        }
+        int[] ret = new int[k];
+        for (int i = 0; i < k; ++i) {
+            ret[i] = queue.poll()[0];
+        }
+        return ret;
+    }
+}基于快速排序
+```
+
+2
+
+```java
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> occurrences = new HashMap<Integer, Integer>();
+        for (int num : nums) {
+            occurrences.put(num, occurrences.getOrDefault(num, 0) + 1);
+        }
+
+        List<int[]> values = new ArrayList<int[]>();
+        for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+            int num = entry.getKey(), count = entry.getValue();
+            values.add(new int[]{num, count});
+        }
+        int[] ret = new int[k];
+        qsort(values, 0, values.size() - 1, ret, 0, k);
+        return ret;
+    }
+
+    public void qsort(List<int[]> values, int start, int end, int[] ret, int retIndex, int k) {
+        int picked = (int) (Math.random() * (end - start + 1)) + start;
+        Collections.swap(values, picked, start);
+        
+        int pivot = values.get(start)[1];
+        int index = start;
+        for (int i = start + 1; i <= end; i++) {
+            if (values.get(i)[1] >= pivot) {
+                Collections.swap(values, index + 1, i);
+                index++;
+            }
+        }
+        Collections.swap(values, start, index);
+
+        if (k <= index - start) {
+            qsort(values, start, index - 1, ret, retIndex, k);
+        } else {
+            for (int i = start; i <= index; i++) {
+                ret[retIndex++] = values.get(i)[0];
+            }
+            if (k > index - start + 1) {
+                qsort(values, index + 1, end, ret, retIndex, k - (index - start + 1));
+            }
+        }
+    }
+}
+```
 
 ## 
 
