@@ -6415,13 +6415,9 @@ class Solution {
 }
 ```
 
-## 
+## 315 Count of Smaller Numbers After Self
 
-### 原题
 
-### 分析
-
-### 代码
 
 ## 
 
