@@ -3425,49 +3425,688 @@ class Interval implements Comparable<Interval>{
 
 ### 原题
 
+To some string `S`, we will perform some replacement operations that replace groups of letters with new ones \(not necessarily the same size\).
+
+Each replacement operation has `3` parameters: a starting index `i`, a source word `x` and a target word `y`.  The rule is that if `x` starts at position `i` in the **original** **string** **`S`**, then we will replace that occurrence of `x` with `y`.  If not, we do nothing.
+
+For example, if we have `S = "abcd"` and we have some replacement operation `i = 2, x = "cd", y = "ffff"`, then because `"cd"` starts at position `2` in the original string `S`, we will replace it with `"ffff"`.
+
+Using another example on `S = "abcd"`, if we have both the replacement operation `i = 0, x = "ab", y = "eee"`, as well as another replacement operation `i = 2, x = "ec", y = "ffff"`, this second operation does nothing because in the original string `S[2] = 'c'`, which doesn't match `x[0] = 'e'`.
+
+All these operations occur simultaneously.  It's guaranteed that there won't be any overlap in replacement: for example, `S = "abc", indexes = [0, 1], sources = ["ab","bc"]` is not a valid test case.
+
+**Example 1:**
+
+```text
+Input: S = "abcd", indexes = [0,2], sources = ["a","cd"], targets = ["eee","ffff"]
+Output: "eeebffff"
+Explanation: "a" starts at index 0 in S, so it's replaced by "eee".
+"cd" starts at index 2 in S, so it's replaced by "ffff".
+```
+
+**Example 2:**
+
+```text
+Input: S = "abcd", indexes = [0,2], sources = ["ab","ec"], targets = ["eee","ffff"]
+Output: "eeecd"
+Explanation: "ab" starts at index 0 in S, so it's replaced by "eee". 
+"ec" doesn't starts at index 2 in the original S, so we do nothing.
+```
+
+Notes:
+
+1. `0 <= indexes.length = sources.length = targets.length <= 100`
+2. `0 < indexes[i] < S.length <= 1000`
+3. All characters in given inputs are lowercase letters.
+
 ### 思路
 
-### 代码 
+直接模拟过程。
+
+在 Java 的代码中，我们根据替换操作得到数组 match，其中 match\[ix\] = j 表示字符串 S 从第 ix 位开始和 sources\[j\] 匹配，并且会被替换成 target\[j\]，也就是说 sources\[j\] 是字符串 S\[ix:\] 的前缀。在得到 match 数组后，我们对 S 从左到右进行扫描，对于每个位置 ix，如果 match\[ix\] 有值 j，那么在 ans 尾部添加字符串 targets\[j\]，并将 ix 增加 sources\[j\].length\(\)；否则在 ans 尾部添加字符 S\[ix\]，并将 ix 增加 1。
+
+时间复杂度：O\(NQ\)，其中 NN 是字符串 S 的长度，QQ 是替换操作的数量。
+
+空间复杂度：O\(N\)，我们认为 sources 和 targets 中的字符串长度均为常数。
+
+### 代码
+
+```java
+class Solution {
+    public String findReplaceString(String S, int[] indexes, String[] sources, String[] targets) {
+        int N = S.length();
+        int[] match = new int[N];
+        Arrays.fill(match, -1);
+
+        for (int i = 0; i < indexes.length; ++i) {
+            int ix = indexes[i];
+            if (S.substring(ix, ix + sources[i].length()).equals(sources[i]))
+                match[ix] = i;
+        }
+
+        StringBuilder ans = new StringBuilder();
+        int ix = 0;
+        while (ix < N) {
+            if (match[ix] >= 0) {
+                ans.append(targets[match[ix]]);
+                ix += sources[match[ix]].length();
+            } else {
+                ans.append(S.charAt(ix++));
+            }
+        }
+        return ans.toString();
+    }
+}
+
+```
 
 ## 652 Find Duplicate Subtrees
 
 ### 原题
 
+Given the `root` of a binary tree, return all **duplicate subtrees**.
+
+For each kind of duplicate subtrees, you only need to return the root node of any **one** of them.
+
+Two trees are **duplicate** if they have the **same structure** with the **same node values**.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/08/16/e1.jpg)
+
+```text
+Input: root = [1,2,3,4,null,2,4,null,null,4]
+Output: [[2,4],[4]]
+```
+
+**Example 2:**![](https://assets.leetcode.com/uploads/2020/08/16/e2.jpg)
+
+```text
+Input: root = [2,1,1]
+Output: [[1]]
+```
+
+**Example 3:**![](https://assets.leetcode.com/uploads/2020/08/16/e33.jpg)
+
+```text
+Input: root = [2,2,2,3,null,3,null]
+Output: [[2,3],[3]]
+```
+
+**Constraints:**
+
+* The number of the nodes in the tree will be in the range `[1, 10^4]`
+* `-200 <= Node.val <= 200`
+
 ### 思路
 
-### 代码 
+![](../.gitbook/assets/image%20%28143%29.png)
+
+![](../.gitbook/assets/image%20%28142%29.png)
+
+![](../.gitbook/assets/image%20%28145%29.png)
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+import java.util.LinkedList;
+class Solution {
+    public LinkedList<TreeNode> result = new LinkedList<>();
+    public HashMap<String,Integer> map = new HashMap<>();
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        if(root == null){
+            return result;
+        }
+        serialize(root);
+        return result;
+    }
+
+    public String serialize(TreeNode root){
+        if(root == null){
+            return "null";
+        }
+        //序列化以当前节点为根节点的二叉树
+        String str = serialize(root.left) + ","+ root.val + ","+ serialize(root.right);
+        //使用一个HashMap来记录所有的子树的序列
+        map.put(str,map.getOrDefault(str,0)+1);
+        //当其value为2时，则表示出现了重复结构，将这个子树的根节点放入到结果当中。
+        if(map.get(str) == 2){
+            result.add(root);
+        }
+        return str;
+    }
+}
+```
 
 ## 846 Hand of Straights
 
-### 原题
-
-### 思路
-
-### 代码 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#846-hand-of-straights](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#846-hand-of-straights)
 
 ## 1296 Divide Array in Sets of K Consecutive Numbers
 
 ### 原题
 
+Given an array of integers `nums` and a positive integer `k`, find whether it's possible to divide this array into sets of `k` consecutive numbers  
+Return `True` if its possible ****otherwise return `False`.
+
+**Example 1:**
+
+```text
+Input: nums = [1,2,3,3,4,4,5,6], k = 4
+Output: true
+Explanation: Array can be divided into [1,2,3,4] and [3,4,5,6].
+```
+
+**Example 2:**
+
+```text
+Input: nums = [3,2,1,2,3,4,3,4,5,9,10,11], k = 3
+Output: true
+Explanation: Array can be divided into [1,2,3] , [2,3,4] , [3,4,5] and [9,10,11].
+```
+
+**Example 3:**
+
+```text
+Input: nums = [3,3,2,2,1,1], k = 3
+Output: true
+```
+
+**Example 4:**
+
+```text
+Input: nums = [1,2,3,4], k = 3
+Output: false
+Explanation: Each array should be divided in subarrays of size 3.
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 10^5`
+* `1 <= nums[i] <= 10^9`
+* `1 <= k <= nums.length`
+
+**Note:** This question is the same as 846: [https://leetcode.com/problems/hand-of-straights/](https://leetcode.com/problems/hand-of-straights/)
+
 ### 思路
 
-### 代码 
+解法同846 Hand of Straights。
+
+1. 如果数组个数len不是k的倍数，说明不可能划分； 
+2. 拿一个Map统计每个元素出现的次数，然后从小到大遍历数组，每次拿第一个count不能0（遍历过程中，若元素被归到前面集合，count要更新的）的元素为起点，看看后面是否能构成k个连续的集合。若一发现不能构成k个连续集合，就立马reture false。 
+3. 为了更加快速的结束，可以定义一个集合数，总的需要划分的集合数为 len / klen/k，如果遍历过程中的集合数达到这个总的集合数，就可以立马结束。
+
+### 代码
+
+```java
+class Solution {
+ public boolean isPossibleDivide(int[] nums, int k) {
+        int len = nums.length;
+
+        if (len % k != 0) {
+            return false;
+        }
+
+        Arrays.sort(nums);
+        Map<Integer, Integer> countMap = new HashMap<>();
+        for (int num : nums) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+
+        int needKSetCount = len / k;  // 需要的集合数（每个集合个数为k）
+        int kCount = 0;   // 以下遍历过程集合数
+        for (int num: nums) {
+            int curNumCount = countMap.get(num);
+            if (curNumCount == 0) {
+                // 等于0说明被归到前面集合中了
+                continue;
+            }
+
+            countMap.put(num, curNumCount - 1);
+            for (int i = 1; i < k; i++) {
+                int count = countMap.getOrDefault(num + i, 0);
+                if (count == 0) {
+                    // 等于0就说明以当前num为起点，找不到k个大小的连续集合
+                    return false;
+                }
+
+                countMap.put(num + i, count - 1);
+            }
+
+            kCount++;
+            // 当集合数已经达到需要的集合数，说明已经成功了
+            if (kCount == needKSetCount) {
+                return true;
+            }
+        }
+
+        return true;
+    }
+}
+```
 
 ## 1548 The Most Similar Path in a Graph 
 
 ### 原题
 
+We have `n` cities and `m` bi-directional `roads` where `roads[i] = [ai, bi]` connects city `ai` with city `bi`. Each city has a name consisting of exactly 3 upper-case English letters given in the string array `names`. Starting at any city `x`, you can reach any city `y` where `y != x` \(i.e. the cities and the roads are forming an undirected connected graph\).
+
+You will be given a string array `targetPath`. You should find a path in the graph of the **same length** and with the **minimum edit distance** to `targetPath`.
+
+You need to return _the order of the nodes in the path with the minimum edit distance_, The path should be of the same length of `targetPath` and should be valid \(i.e. there should be a direct road between `ans[i]` and `ans[i + 1]`\). If there are multiple answers return any one of them.
+
+The **edit distance** is defined as follows:
+
+![](https://assets.leetcode.com/uploads/2020/08/08/edit.jpg)
+
+**Follow-up:** If each node can be visited only once in the path, What should you change in your solution?
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/08/08/e1.jpg)
+
+```text
+Input: n = 5, roads = [[0,2],[0,3],[1,2],[1,3],[1,4],[2,4]], names = ["ATL","PEK","LAX","DXB","HND"], targetPath = ["ATL","DXB","HND","LAX"]
+Output: [0,2,4,2]
+Explanation: [0,2,4,2], [0,3,0,2] and [0,3,1,2] are accepted answers.
+[0,2,4,2] is equivalent to ["ATL","LAX","HND","LAX"] which has edit distance = 1 with targetPath.
+[0,3,0,2] is equivalent to ["ATL","DXB","ATL","LAX"] which has edit distance = 1 with targetPath.
+[0,3,1,2] is equivalent to ["ATL","DXB","PEK","LAX"] which has edit distance = 1 with targetPath.
+```
+
+**Example 2:**![](https://assets.leetcode.com/uploads/2020/08/08/e2.jpg)
+
+```text
+Input: n = 4, roads = [[1,0],[2,0],[3,0],[2,1],[3,1],[3,2]], names = ["ATL","PEK","LAX","DXB"], targetPath = ["ABC","DEF","GHI","JKL","MNO","PQR","STU","VWX"]
+Output: [0,1,0,1,0,1,0,1]
+Explanation: Any path in this graph has edit distance = 8 with targetPath.
+```
+
+**Example 3:**
+
+![](https://assets.leetcode.com/uploads/2020/08/09/e3.jpg)
+
+```text
+Input: n = 6, roads = [[0,1],[1,2],[2,3],[3,4],[4,5]], names = ["ATL","PEK","LAX","ATL","DXB","HND"], targetPath = ["ATL","DXB","HND","DXB","ATL","LAX","PEK"]
+Output: [3,4,5,4,3,2,1]
+Explanation: [3,4,5,4,3,2,1] is the only path with edit distance = 0 with targetPath.
+It's equivalent to ["ATL","DXB","HND","DXB","ATL","LAX","PEK"]
+```
+
+**Constraints:**
+
+* `2 <= n <= 100`
+* `m == roads.length`
+* `n - 1 <= m <= (n * (n - 1) / 2)`
+* `0 <= ai, bi <= n - 1`
+* `ai != bi` 
+* The graph is guaranteed to be **connected** and each pair of nodes may have **at most one** direct road.
+* `names.length == n`
+* `names[i].length == 3`
+* `names[i]` consists of upper-case English letters.
+* There can be two cities with **the same** name.
+* `1 <= targetPath.length <= 100`
+* `targetPath[i].length == 3`
+* `targetPath[i]` consists of upper-case English letters.
+
 ### 思路
 
+DFS + memoization
+
 ### 代码
+
+```java
+class Solution {
+    List<List<Integer>> adjMatrix;
+    String[] names;
+    String[] targetPath;
+    int[][] visited;
+    int[][] nextChoiceForMin;
+    public List<Integer> mostSimilar(int n, int[][] roads, String[] names, String[] targetPath) {
+        // INITIALIZE VARIABLES
+        this.visited = new int[names.length][targetPath.length];
+        this.nextChoiceForMin = new int[names.length][targetPath.length];
+        this.targetPath = targetPath;
+        this.names = names;
+        this.adjMatrix = new ArrayList<List<Integer>>();
+       
+        for (int[] x : visited) Arrays.fill(x, -1);
+        
+        // BUILD ADJACENCY MATRIX
+        for (int i = 0;i < n; i++) adjMatrix.add(new ArrayList<Integer>());
+        for (int[] road : roads) {
+            adjMatrix.get(road[0]).add(road[1]);
+            adjMatrix.get(road[1]).add(road[0]);
+        }
+        
+        // FROM EACH NODE, CALCULATE MIN COST AND THE CITY THAT GAVE THE MIN COST
+        int min = Integer.MAX_VALUE;
+        int start = 0;
+        for (int i = 0;i < names.length; i++) {
+            int resp = dfs(i, 0);
+            if (resp < min) {
+                min = resp;
+                start = i;
+            }
+        }
+        
+        // BUILD THE ANSWER BASED ON WHATS THE BEST NEXT CHOICE 
+        List<Integer> ans = new ArrayList<Integer>();
+        while (ans.size() < targetPath.length) {
+            ans.add(start);
+            start = nextChoiceForMin[start][ans.size()-1];
+        }
+        return ans;
+    }
+    
+    public int dfs(int namesIdx, int currPathIdx) {
+        // IF WE VISITED IT ALREADY, RETURN THE PREVIOUS COUNT
+        if (visited[namesIdx][currPathIdx] != -1) return visited[namesIdx][currPathIdx];
+        
+        // IF ITS DIFFERENT, ADD 1 ELSE ADD 0.
+        int editDist = (names[namesIdx].equals(targetPath[currPathIdx])) ? 0 : 1;
+        
+        // IF WE FILLED UP THE PATH, WE'RE DONE
+        if (currPathIdx == targetPath.length-1) return editDist;
+        
+        // FROM EACH NEIGHBOR, CALCULATE MIN COST AND SAVE THE CITY THAT GAVE THE MIN COST  
+        int min = Integer.MAX_VALUE;
+        for (int neighbor : adjMatrix.get(namesIdx)) {
+            int neighborCost = dfs(neighbor, currPathIdx+1);
+            if (neighborCost < min) {
+                min = neighborCost;
+                nextChoiceForMin[namesIdx][currPathIdx] = neighbor; // HERE IS WHERE WE SAVE
+            }
+        }
+        
+        
+        editDist += min; // UPDATE OUR EDIT DISTANCE
+        visited[namesIdx][currPathIdx] = editDist; // SAVE OUR EDIT DISTANCE
+        return editDist; // RETURN OUR EDIT DISTANCE
+    }
+}    
+
+/*
+                0.     1.   2.   3.   4
+  names         [ATL, PEK, LAX, DXB, HND]
+    
+                           0.      1.         2.         3
+   targetPath   ["ATL","DXB","HND","LAX"]
+    
+    DO THIS STARTING AT EVERY NODE
+    ATL at idx = 0 is it different? no, so add to cost + 0 = 0
+        3
+        DXB at idx = 1 is it different? no, so add to cost + 0 = 0 
+            ATL at idx = 2 is it different? yes, so add to cost + 1 = 1
+                DXB at idx = 3 is it different? yes, so add to cost + 1 AND RETURN = 2
+                LAX at idx = 3 is it different? no, so add to cost + 0 AND RETURN = 1
+            PEK at idx = 2 is it different? yes, so add to cost + 1 = 1
+                DXB at idx = 3 SOLVED ALREADY RETURN PREV   RETURN 
+                LAX at idx = 3 SOLVED ALREADY RETURN PREV
+                HND at idx = 3 is it different? yes, so add to cost + 1 AND RETURN
+        LAX at idx = 1 is it different? yes, so add to cost + 1
+            ATL at idx = 2, SOLVED ALREADY RETURN PREV
+            PEK at idx = 2, SOLVED ALREADY RETURN PREV
+            HND at idx = 2 is it different? no, so addto cost + 0
+                PEK at idx = 3 is it diffferent? yes, so add to cost + 
+                LAX at idx = 3 SOLVED ALREADY RETURN PREV
+    */
+```
+
+## 741 Cherry Pickup
+
+### 题目
+
+In a N x N `grid` representing a field of cherries, each cell is one of three possible integers.
+
+* 0 means the cell is empty, so you can pass through;
+* 1 means the cell contains a cherry, that you can pick up and pass through;
+* -1 means the cell contains a thorn that blocks your way.
+
+Your task is to collect maximum number of cherries possible by following the rules below:
+
+* Starting at the position \(0, 0\) and reaching \(N-1, N-1\) by moving right or down through valid path cells \(cells with value 0 or 1\);
+* After reaching \(N-1, N-1\), returning to \(0, 0\) by moving left or up through valid path cells;
+* When passing through a path cell containing a cherry, you pick it up and the cell becomes an empty cell \(0\);
+* If there is no valid path between \(0, 0\) and \(N-1, N-1\), then no cherries can be collected.
+
+**Example 1:**
+
+```text
+Input: grid =
+[[0, 1, -1],
+ [1, 0, -1],
+ [1, 1,  1]]
+Output: 5
+Explanation: 
+The player started at (0, 0) and went down, down, right right to reach (2, 2).
+4 cherries were picked up during this single trip, and the matrix becomes [[0,1,-1],[0,0,-1],[0,0,0]].
+Then, the player went left, up, up, left to return home, picking up one more cherry.
+The total number of cherries picked up is 5, and this is the maximum possible.
+```
+
+**Note:**
+
+* `grid` is an `N` by `N` 2D array, with `1 <= N <= 50`.
+* Each `grid[i][j]` is an integer in the set `{-1, 0, 1}`.
+* It is guaranteed that grid\[0\]\[0\] and grid\[N-1\]\[N-1\] are not -1.
+
+### 分析
+
+自己摘樱桃。DP 
+
+### 代码
+
+topdown
+
+![](../.gitbook/assets/image%20%28146%29.png)
+
+时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
+
+空间复杂度：O\(N^3\)，memo 所使用的空间。
+
+```java
+class Solution {
+    int[][][] memo;
+    int[][] grid;
+    int N;
+    public int cherryPickup(int[][] grid) {
+        this.grid = grid;
+        N = grid.length;
+        memo = new int[N][N][N];
+        for (int[][] layer: memo)
+            for (int[] row: layer)
+                Arrays.fill(row, Integer.MIN_VALUE);
+        return Math.max(0, dp(0, 0, 0));
+    }
+    public int dp(int r1, int c1, int c2) {
+        int r2 = r1 + c1 - c2;
+        if (N == r1 || N == r2 || N == c1 || N == c2 ||
+                grid[r1][c1] == -1 || grid[r2][c2] == -1) {
+            return -999999;        
+        } else if (r1 == N-1 && c1 == N-1) {
+            return grid[r1][c1];
+        } else if (memo[r1][c1][c2] != Integer.MIN_VALUE) {
+            return memo[r1][c1][c2];
+        } else {
+            int ans = grid[r1][c1];
+            if (c1 != c2) ans += grid[r2][c2];
+            ans += Math.max(Math.max(dp(r1, c1+1, c2+1), dp(r1+1, c1, c2+1)),
+                            Math.max(dp(r1, c1+1, c2), dp(r1+1, c1, c2)));
+            memo[r1][c1][c2] = ans;
+            return ans;
+        }
+    }
+}
+```
+
+bottom up
+
+![](../.gitbook/assets/image%20%28144%29.png)
+
+* 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
+* 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
+
+```java
+class Solution {
+    public int cherryPickup(int[][] grid) {
+        int N = grid.length;
+        int[][] dp = new int[N][N];
+        for (int[] row: dp) Arrays.fill(row, Integer.MIN_VALUE);
+        dp[0][0] = grid[0][0];
+
+        for (int t = 1; t <= 2*N - 2; ++t) {
+            int[][] dp2 = new int[N][N];
+            for (int[] row: dp2) Arrays.fill(row, Integer.MIN_VALUE);
+
+            for (int i = Math.max(0, t-(N-1)); i <= Math.min(N-1, t); ++i) {
+                for (int j = Math.max(0, t-(N-1)); j <= Math.min(N-1, t); ++j) {
+                    if (grid[i][t-i] == -1 || grid[j][t-j] == -1) continue;
+                    int val = grid[i][t-i];
+                    if (i != j) val += grid[j][t-j];
+                    for (int pi = i-1; pi <= i; ++pi)
+                        for (int pj = j-1; pj <= j; ++pj)
+                            if (pi >= 0 && pj >= 0)
+                                dp2[i][j] = Math.max(dp2[i][j], dp[pi][pj] + val);
+                }
+            }
+            dp = dp2;
+        }
+        return Math.max(0, dp[N-1][N-1]);
+    }
+}
+```
 
 ## 1463 Cherry Pickup II
 
 ### 原题
 
+Given a `rows x cols` matrix `grid` representing a field of cherries. Each cell in `grid` represents the number of cherries that you can collect.
+
+You have two robots that can collect cherries for you, Robot \#1 is located at the top-left corner \(0,0\) , and Robot \#2 is located at the top-right corner \(0, cols-1\) of the grid.
+
+Return the maximum number of cherries collection using both robots  by following the rules below:
+
+* From a cell \(i,j\), robots can move to cell \(i+1, j-1\) , \(i+1, j\) or \(i+1, j+1\).
+* When any robot is passing through a cell, It picks it up all cherries, and the cell becomes an empty cell \(0\).
+* When both robots stay on the same cell, only one of them takes the cherries.
+* Both robots cannot move outside of the grid at any moment.
+* Both robots should reach the bottom row in the `grid`.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2020/04/29/sample_1_1802.png)
+
+```text
+Input: grid = [[3,1,1],[2,5,1],[1,5,5],[2,1,1]]
+Output: 24
+Explanation: Path of robot #1 and #2 are described in color green and blue respectively.
+Cherries taken by Robot #1, (3 + 2 + 5 + 2) = 12.
+Cherries taken by Robot #2, (1 + 5 + 5 + 1) = 12.
+Total of cherries: 12 + 12 = 24.
+```
+
+**Example 2:**
+
+![](https://assets.leetcode.com/uploads/2020/04/23/sample_2_1802.png)
+
+```text
+Input: grid = [[1,0,0,0,0,0,1],[2,0,0,0,0,3,0],[2,0,9,0,0,0,0],[0,3,0,5,4,0,0],[1,0,2,3,0,0,6]]
+Output: 28
+Explanation: Path of robot #1 and #2 are described in color green and blue respectively.
+Cherries taken by Robot #1, (1 + 9 + 5 + 2) = 17.
+Cherries taken by Robot #2, (1 + 3 + 4 + 3) = 11.
+Total of cherries: 17 + 11 = 28.
+```
+
+**Example 3:**
+
+```text
+Input: grid = [[1,0,0,3],[0,0,0,3],[0,0,3,3],[9,0,3,3]]
+Output: 22
+```
+
+**Example 4:**
+
+```text
+Input: grid = [[1,1],[1,1]]
+Output: 4
+```
+
+**Constraints:**
+
+* `rows == grid.length`
+* `cols == grid[i].length`
+* `2 <= rows, cols <= 70`
+* `0 <= grid[i][j] <= 100` 
+
 ### 思路
 
+两个机器人摘樱桃
+
+DP
+
 ### 代码
+
+```java
+
+
+class Solution {
+    public int cherryPickup(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        // dp[i][j][p]表示当前到达第i行，机器人1在第j列，机器人2在第p列时得最大值
+        // 其中：j<=i && p>=m-1-i && j<p 
+        // j<=i && p>=m-1-i的原因：比如第0行的中间部分，机器人无法到达
+        // j<p 为了让机器人1的路径始终在机器人2的左边。万一有交叉呢？那就把交叉部分互换，反正两个机器人不分你我
+        // 使用滚动数组优化
+        int[][][] dp = new int[2][m][m];
+        dp[0][0][m - 1] = grid[0][0] + grid[0][m - 1];
+        int now = 0;
+        int[] f = {-1, 0, 1};
+        for (int i = 1; i < n; i++) {
+            now ^= 1;
+            for (int j = 0; j <= i && j < m; j++) {
+                for (int p = m - 1; p > j && p >= m - 1 - i; p--) {
+                    dp[now][j][p] = 0;
+                    int val = grid[i][j] + grid[i][p];
+                    for (int x = 0; x < 3; x++) {
+                        int fj = j + f[x];
+                        if (fj < 0 || fj >= m) {
+                            continue;
+                        }
+                        for (int y = 0; y < 3; y++) {
+                            int fp = p + f[y];
+                            if (fp < m && fj < fp) {
+                                dp[now][j][p] = Math.max(dp[now][j][p], dp[now ^ 1][fj][fp] + val);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        for (int j = 0; j < m; j++) {
+            for (int p = j + 1; p < m; p++) {
+                ans = Math.max(ans, dp[now][j][p]);
+            }
+        }
+        return ans;
+    }
+}
+
+```
 
 ## 1504 Count Submatrices With All Ones 
 
