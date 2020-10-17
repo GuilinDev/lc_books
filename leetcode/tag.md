@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28146%29.png)
 
-![](../.gitbook/assets/image%20%28162%29.png)
+![](../.gitbook/assets/image%20%28164%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28163%29.png)
+![](../.gitbook/assets/image%20%28165%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28161%29.png)
+![](../.gitbook/assets/image%20%28163%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4172,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28153%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4590,13 +4590,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28159%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
 ### 代码
 
@@ -4775,7 +4775,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28149%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4912,9 +4912,9 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28142%29.png)
+![](../.gitbook/assets/image%20%28143%29.png)
 
-![](../.gitbook/assets/image%20%28160%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
 ### 代码
 
@@ -5091,7 +5091,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28164%29.png)
+![](../.gitbook/assets/image%20%28166%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5188,7 +5188,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -5274,21 +5274,21 @@ n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 �
 
 1\) 贪心
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 * 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
 * 空间复杂度：O\(C\)
 
 2）
 
-![](../.gitbook/assets/image%20%28148%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
 * 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
 * 空间复杂度： O\(C\)
 
 3\) 
 
-![](../.gitbook/assets/image%20%28143%29.png)
+![](../.gitbook/assets/image%20%28144%29.png)
 
 * 时间复杂度：O\(C\)，其中 C 是给定数组中所有单词的字符总数。
 * 空间复杂度：O\(C\)。
@@ -5949,7 +5949,7 @@ Output: 0.73278
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28149%29.png)
 
 时间复杂度：O\(N - K + K\) ==&gt; O\(N\) 
 
@@ -6280,12 +6280,12 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28158%29.png)
 
 * 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
 * 空间复杂度：O\(N\)
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28145%29.png)
 
 * 时间复杂度：O\(N+QlogN\)，其中 N 是选票个数，Q 是询问个数。
 * 空间复杂度：O\(N\)
@@ -6448,9 +6448,9 @@ Output: "abccdcdcdxyz"
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28147%29.png)
 
 ### 代码
 
@@ -6650,9 +6650,9 @@ Output: [[1,7]]
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28155%29.png)
 
-![](../.gitbook/assets/image%20%28158%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
 * 时间复杂度：\mathcal{O}\(N\)O\(N\)。我们只遍历了一次输入元素。
 * 空间复杂度：\mathcal{O}\(N\)O\(N\)，输出答案所使用的空间。
@@ -6813,13 +6813,147 @@ class Solution {
 }
 ```
 
-## 
+## 1140 Stone Game II
 
 ### 原题
 
+亚历克斯和李继续他们的石子游戏。许多堆石子 排成一行，每堆都有正整数颗石子 piles\[i\]。游戏以谁手中的石子最多来决出胜负。
+
+亚历克斯和李轮流进行，亚历克斯先开始。最初，M = 1。
+
+在每个玩家的回合中，该玩家可以拿走剩下的 前 X 堆的所有石子，其中 1 &lt;= X &lt;= 2M。然后，令 M = max\(M, X\)。
+
+游戏一直持续到所有石子都被拿走。
+
+假设亚历克斯和李都发挥出最佳水平，返回亚历克斯可以得到的最大数量的石头。
+
+Alex and Lee continue their games with piles of stones.  There are a number of piles **arranged in a row**, and each pile has a positive integer number of stones `piles[i]`.  The objective of the game is to end with the most stones. 
+
+Alex and Lee take turns, with Alex starting first.  Initially, `M = 1`.
+
+On each player's turn, that player can take **all the stones** in the **first** `X` remaining piles, where `1 <= X <= 2M`.  Then, we set `M = max(M, X)`.
+
+The game continues until all the stones have been taken.
+
+Assuming Alex and Lee play optimally, return the maximum number of stones Alex can get.
+
+**Example 1:**
+
+```text
+Input: piles = [2,7,9,4,4]
+Output: 10
+Explanation:  If Alex takes one pile at the beginning, Lee takes two piles, then Alex takes 2 piles again. Alex can get 2 + 4 + 4 = 10 piles in total. If Alex takes two piles at the beginning, then Lee can take all three piles left. In this case, Alex get 2 + 7 = 9 piles in total. So we return 10 since it's larger. 
+```
+
+**Constraints:**
+
+* `1 <= piles.length <= 100`
+* `1 <= piles[i] <= 10 ^ 4`
+
 ### 分析
 
+![](../.gitbook/assets/image%20%28148%29.png)
+
+对于piles = \[2,7,9,4,4\]，我们可以得到下图所示的dp数组，结果为dp\[0\]\[1\]
+
+![](../.gitbook/assets/image%20%28142%29.png)
+
 ### 代码
+
+```java
+class Solution {
+    public int stoneGameII(int[] piles) {
+        int len = piles.length, sum = 0;
+        int[][] dp = new int[len][len + 1];
+        for (int i = len - 1; i >= 0; i--) {
+            sum += piles[i];
+            for (int M = 1; M <= len; M++) {
+                if (i + 2 * M >= len) {
+                    dp[i][M] = sum;
+                } else {
+                    for (int x = 1; x <= 2 * M; x++) {
+                        dp[i][M] = Math.max(dp[i][M], sum - dp[i + x][Math.max(M, x)]);
+                    }
+                }
+            }
+        }
+        return dp[0][1];
+    }
+}
+```
+
+记忆化递归
+
+我们是这样设计状态的（很重要，这样的状态设计会给转移带来一定方便）：当前做决策的人，拿石子的时候得分为正，留给下一轮队手选择的时候，得分为负，因此定义的分数是 相对分数； 这一轮可以选择的石子堆数，与上一轮相关，因此需要设置一个参数 MM（和题目中的 MM 意思一样），表示当前可以选择的石子堆数； 从叶子结点开始向上每一步进行选择和比较，这样的做法才叫做「假设亚历克斯和李都发挥出最佳水平」，即每个人都让自己的利益最大化，等价于「让他人利益最小化」，这是因为石子的总数是固定的。
+
+由于拿的都是左边的连续的石子堆，需要先计算一下前缀和，然后计算区间和； 当前区间（或者说由左边界 begin 决定的剩下的区间，右边界一定是 len - 1）里的石子堆数小于等于 2M2M 的时候，全部拿走，是使得自己获利最多的做法； 否则的话，就需要枚举拿 1 堆、2 堆、3 堆的时候，选出一个当对手利益最大化的时候，自己利益最大化的选择； 由于 memo 或者说 dfs 定义的是「相对分数」，因此输出的时候，还要做一个小的转化。
+
+```java
+public class Solution {
+
+    // 一开始把这道题和区间 dp 联系在一起，是不对的
+
+    public int stoneGameII(int[] piles) {
+        int len = piles.length;
+        int[][] memo = new int[len][len + 1];
+
+        // [i, j] 的前缀和 preSum[j + 1] - preSum[i]
+        int[] preSum = new int[len + 1];
+        for (int i = 0; i < len; i++) {
+            preSum[i + 1] = preSum[i] + piles[i];
+        }
+//        x + y = preSum[len];
+//        x - y = res;
+        int res = dfs(piles, 0, 1, preSum, memo);
+        // 由于得到的是相对分数，需要转换成为绝对分数
+        return (preSum[len] + res) / 2;
+    }
+
+    /**
+     * @param piles
+     * @param begin 定义石子堆的起始下标，即在 [start, len - 1] 这个区间里取石子
+     * @param M     当前先手可以拿 [1, 2 * M] 堆石子（如果石子数够的话）
+     * @param memo
+     * @return 当前玩家在区间 [start, len - 1] 这个区间里取石子，得到的「相对分数」
+     */
+    private int dfs(int[] piles, int begin, int M, int[] preSum, int[][] memo) {
+        int len = piles.length;
+        if (begin >= len) {
+            return 0;
+        }
+
+        if (memo[begin][M] != 0) {
+            return memo[begin][M];
+        }
+        // 当前区间 [begin, len - 1] 的元素个数 len - begin <= 2M 的时候，
+        // 全部拿走是利益最大的，这是因为 1 <= piles[i] <= 10 ^ 4
+        if (len - begin <= 2 * M) {
+            memo[begin][M] = preSum[len] - preSum[begin];
+            return preSum[len] - preSum[begin];
+        }
+
+        // 走到这里，可以取的石子堆数 1 <= X <= 2M
+        // 区间 [begin, j] 的长度 j - begin + 1 >= 2 * M
+        int minLen = Math.min(2 * M, len - begin);
+        // 这个初始化很重要，因为有可能是负分，所以不能初始化为 0
+        int res = Integer.MIN_VALUE;
+        for (int X = 1; X <= minLen; X++) {
+            // 区间 [begin, begin + X - 1] 的前缀和 = preSum[begin + X] - preSum[begin - 1]
+            int chooseLeft = preSum[begin + X] - preSum[begin];
+            res = Math.max(res, chooseLeft - dfs(piles, begin + X, Math.max(M, X), preSum, memo));
+        }
+        memo[begin][M] = res;
+        return res;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] piles = new int[]{2, 7, 9, 4, 4};
+        int res = solution.stoneGameII(piles);
+        System.out.println(res);
+    }
+}
+```
 
 ## 
 
