@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28153%29.png)
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28145%29.png)
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4172,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28148%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4590,13 +4590,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 ### 代码
 
@@ -4775,7 +4775,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28149%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4914,7 +4914,7 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ![](../.gitbook/assets/image%20%28142%29.png)
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28158%29.png)
 
 ### 代码
 
@@ -5091,7 +5091,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5188,7 +5188,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -5274,14 +5274,14 @@ n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 �
 
 1\) 贪心
 
-![](../.gitbook/assets/image%20%28149%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 * 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
 * 空间复杂度：O\(C\)
 
 2）
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28148%29.png)
 
 * 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
 * 空间复杂度： O\(C\)
@@ -5805,6 +5805,616 @@ class Solution {
 }
 ```
 
+## 837 New 21 Game
+
+### 原题
+
+Alice plays the following game, loosely based on the card game "21".
+
+Alice starts with `0` points, and draws numbers while she has less than `K` points.  During each draw, she gains an integer number of points randomly from the range `[1, W]`, where `W` is an integer.  Each draw is independent and the outcomes have equal probabilities.
+
+Alice stops drawing numbers when she gets `K` or more points.  What is the probability that she has `N` or less points?
+
+**Example 1:**
+
+```text
+Input: N = 10, K = 1, W = 10
+Output: 1.00000
+Explanation:  Alice gets a single card, then stops.
+```
+
+**Example 2:**
+
+```text
+Input: N = 6, K = 1, W = 10
+Output: 0.60000
+Explanation:  Alice gets a single card, then stops.
+In 6 out of W = 10 possibilities, she is at or below N = 6 points.
+```
+
+**Example 3:**
+
+```text
+Input: N = 21, K = 17, W = 10
+Output: 0.73278
+```
+
+**Note:**
+
+1. `0 <= K <= N <= 10000`
+2. `1 <= W <= 10000`
+3. Answers will be accepted as correct if they are within `10^-5` of the correct answer.
+4. The judging time limit has been reduced for this question.
+
+### 分析
+
+![](../.gitbook/assets/image%20%28147%29.png)
+
+时间复杂度：O\(N - K + K\) ==&gt; O\(N\) 
+
+空间复杂度：O\(K + W\)
+
+### 代码
+
+```java
+class Solution {
+    public double new21Game(int N, int K, int W) {
+        // 先判断 K - 1 + W 是否在 N 的里面，如果在的话，说明肯定能赢得游戏，返回 1.0，也就是 100%
+        if (N - K + 1 >= W) {
+            return 1.0;
+        }
+        double[] dp = new double[K + W];
+        // 将能赢得游戏的点数的概率设置为 1
+        for (int i = K; i <= N; i++) {
+            dp[i] = 1.0;
+        }
+        // 计算K + W 这几个点数的概率和
+        double sumProb = N - K + 1;
+        // 从 K - 1 开始计算，
+        for (int i = K - 1; i >= 0; i--) {
+            // 点数为 i 的赢得游戏的概率为 i + 1 ~ i + W 的概率和除以 W 
+            dp[i] = sumProb / W;
+            sumProb = sumProb - dp[i + W] + dp[i];
+        }
+
+        return dp[0];
+    }
+}
+```
+
+## \* 1057 Campus Bikes
+
+### 原题
+
+在由 2D 网格表示的校园里有 n 位工人（worker）和 m 辆自行车（bike），n &lt;= m。所有工人和自行车的位置都用网格上的 2D 坐标表示。
+
+我们需要为每位工人分配一辆自行车。在所有可用的自行车和工人中，我们选取彼此之间曼哈顿距离最短的工人自行车对 \(worker, bike\) ，并将其中的自行车分配給工人。如果有多个 \(worker, bike\) 对之间的曼哈顿距离相同，那么我们选择工人索引最小的那对。类似地，如果有多种不同的分配方法，则选择自行车索引最小的一对。不断重复这一过程，直到所有工人都分配到自行车为止。
+
+给定两点 p1 和 p2 之间的曼哈顿距离为 Manhattan\(p1, p2\) = \|p1.x - p2.x\| + \|p1.y - p2.y\|。
+
+返回长度为 n 的向量 ans，其中 a\[i\] 是第 i 位工人分配到的自行车的索引（从 0 开始）。
+
+On a campus represented as a 2D grid, there are `N` workers and `M` bikes, with `N <= M`. Each worker and bike is a 2D coordinate on this grid.
+
+Our goal is to assign a bike to each worker. Among the available bikes and workers, we choose the \(worker, bike\) pair with the shortest Manhattan distance between each other, and assign the bike to that worker. \(If there are multiple \(worker, bike\) pairs with the same shortest Manhattan distance, we choose the pair with the smallest worker index; if there are multiple ways to do that, we choose the pair with the smallest bike index\). We repeat this process until there are no available workers.
+
+The Manhattan distance between two points `p1` and `p2` is `Manhattan(p1, p2) = |p1.x - p2.x| + |p1.y - p2.y|`.
+
+Return a vector `ans` of length `N`, where `ans[i]` is the index \(0-indexed\) of the bike that the `i`-th worker is assigned to.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2019/03/06/1261_example_1_v2.png)
+
+```text
+Input: workers = [[0,0],[2,1]], bikes = [[1,2],[3,3]]
+Output: [1,0]
+Explanation: 
+Worker 1 grabs Bike 0 as they are closest (without ties), and Worker 0 is assigned Bike 1. So the output is [1, 0].
+```
+
+**Example 2:**
+
+![](https://assets.leetcode.com/uploads/2019/03/06/1261_example_2_v2.png)
+
+```text
+Input: workers = [[0,0],[1,1],[2,0]], bikes = [[1,0],[2,2],[2,1]]
+Output: [0,2,1]
+Explanation: 
+Worker 0 grabs Bike 0 at first. Worker 1 and Worker 2 share the same distance to Bike 2, thus Worker 1 is assigned to Bike 2, and Worker 2 will take Bike 1. So the output is [0,2,1].
+```
+
+**Note:**
+
+1. `0 <= workers[i][j], bikes[i][j] < 1000`
+2. All worker and bike locations are distinct.
+3. `1 <= workers.length <= bikes.length <= 1000`
+
+### 分析
+
+就是排序，利用pq取出曼哈顿距离。
+
+### 代码
+
+```java
+class Solution {
+
+    public int[] assignBikes(int[][] workers, int[][] bikes) {
+        PriorityQueue<Manhattan> pQueue = new PriorityQueue<>();
+        for (int i = 0; i < workers.length; i++) {
+            for (int j = 0; j < bikes.length; j++) {
+                int manhattanDis = Math.abs(workers[i][0] - bikes[j][0]) + Math.abs(workers[i][1] - bikes[j][1]);
+                pQueue.offer(new Manhattan(i, j, manhattanDis));
+            }
+        }
+        int[] ans = new int[workers.length];
+        boolean[] visit = new boolean[workers.length];
+        boolean[] bikeVisit = new boolean[bikes.length];
+        int workerCount = 0;
+        while (!pQueue.isEmpty() && workerCount <= workers.length) {
+            Manhattan temp = pQueue.poll();
+            if (!visit[temp.workerNum] && !bikeVisit[temp.bikeNum]) {
+                ans[temp.workerNum] = temp.bikeNum;
+                visit[temp.workerNum] = true;
+                bikeVisit[temp.bikeNum] = true;
+                workerCount++;
+            }
+        }
+        return ans;
+    }
+}
+
+class Manhattan implements Comparable<Manhattan> {
+    int workerNum;
+    int bikeNum;
+    int manhatDistance;
+
+    Manhattan(int workerNum, int bikeNum, int manhatDistance) {
+        this.workerNum = workerNum;
+        this.bikeNum = bikeNum;
+        this.manhatDistance = manhatDistance;
+    }
+
+    @Override
+    public int compareTo(Manhattan o) {
+        if (this.manhatDistance == o.manhatDistance) {
+            if (this.workerNum == o.workerNum) {
+                return this.bikeNum - o.bikeNum;
+            } else {
+                return this.workerNum - o.workerNum;
+            }
+        } else {
+            return this.manhatDistance - o.manhatDistance;
+        }
+    }
+}
+```
+
+## 1066 Campus Bikes II
+
+### 原题
+
+在由 2D 网格表示的校园里有 n 位工人（worker）和 m 辆自行车（bike），n &lt;= m。所有工人和自行车的位置都用网格上的 2D 坐标表示。
+
+我们为每一位工人分配一辆专属自行车，使每个工人与其分配到的自行车之间的曼哈顿距离最小化。
+
+p1 和 p2 之间的曼哈顿距离为 Manhattan\(p1, p2\) = \|p1.x - p2.x\| + \|p1.y - p2.y\|。
+
+返回每个工人与分配到的自行车之间的曼哈顿距离的最小可能总和。
+
+On a campus represented as a 2D grid, there are `N` workers and `M` bikes, with `N <= M`. Each worker and bike is a 2D coordinate on this grid.
+
+We assign one unique bike to each worker so that the sum of the Manhattan distances between each worker and their assigned bike is minimized.
+
+The Manhattan distance between two points `p1` and `p2` is `Manhattan(p1, p2) = |p1.x - p2.x| + |p1.y - p2.y|`.
+
+Return _the minimum possible sum of Manhattan distances between each worker and their assigned bike_.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2019/03/06/1261_example_1_v2.png)
+
+```text
+Input: workers = [[0,0],[2,1]], bikes = [[1,2],[3,3]]
+Output: 6
+Explanation: 
+We assign bike 0 to worker 0, bike 1 to worker 1. The Manhattan distance of both assignments is 3, so the output is 6.
+```
+
+**Example 2:**![](https://assets.leetcode.com/uploads/2019/03/06/1261_example_2_v2.png)
+
+```text
+Input: workers = [[0,0],[1,1],[2,0]], bikes = [[1,0],[2,2],[2,1]]
+Output: 4
+Explanation: 
+We first assign bike 0 to worker 0, then assign bike 1 to worker 1 or worker 2, bike 2 to worker 2 or worker 1. Both assignments lead to sum of the Manhattan distances as 4.
+```
+
+**Example 3:**
+
+```text
+Input: workers = [[0,0],[1,0],[2,0],[3,0],[4,0]], bikes = [[0,999],[1,999],[2,999],[3,999],[4,999]]
+Output: 4995
+```
+
+**Constraints:**
+
+* `N == workers.length`
+* `M == bikes.length`
+* `1 <= N <= M <= 10`
+* `workers[i].length == 2`
+* `bikes[i].length == 2`
+* `0 <= workers[i][0], workers[i][1], bikes[i][0], bikes[i][1] < 1000`
+* All the workers and the bikes locations are **unique**.
+
+### 分析
+
+1）DFS 暴力回溯，The DFS solution is pretty straight forward, try assign each bike to each worker.  
+Time Complexy: O\(n \* m !\), n is number of workers, m is number of bikes
+
+Ususally, when input size &lt;= 10, O\(n!\) can be accepeted. When input size &lt;= 12, we probably need do some pruning. if the test case is not strong, or problem designer wants to allow this techonolgy \(dfs + pruning\) to pass. we can luckly get a AC.\(For my experenice in LeetCode, when problem is tagged as Medium, this kind solution can be passed\)
+
+2）BFS，用PQ计算最短距离
+
+3\) 匈牙利算法+二分图匹配
+
+### 代码
+
+1）DFS
+
+```java
+class Solution {
+    public int assignBikes(int[][] workers, int[][] bikes) {
+        int n = workers.length;
+        int m = bikes.length;
+        int[][] dp = new int[n + 1][1 << m];
+        for (int[] d : dp) {
+            Arrays.fill(d, Integer.MAX_VALUE / 2);
+        }
+        dp[0][0] = 0;
+        int min = Integer.MAX_VALUE;
+        for (int i = 1; i <= n; i++) {
+            for (int s = 1; s < (1 << m); s++) {
+                for (int j = 0; j < m; j++) {
+                    if ((s & (1 << j)) == 0) {
+                        continue;
+                    }
+                    int prev = s ^ (1 << j);
+                    dp[i][s] = Math.min(dp[i - 1][prev] + dis(workers[i - 1], bikes[j]), dp[i][s]) ;
+                    if (i == n) {
+                        min = Math.min(min, dp[i][s]);
+                    }
+                }
+            }
+        }
+        return min;
+    }
+  
+    public int dis(int[] p1, int[] p2) {
+        return Math.abs(p1[0] - p2[0]) + Math.abs(p1[1] - p2[1]);
+    }
+}
+```
+
+2）BFS with PQ
+
+```java
+class Solution {
+    public int assignBikes(int[][] workers, int[][] bikes) {
+        Queue<Node> pq = new PriorityQueue<>(1,(a,b)->(a.cost-b.cost));
+        Set<String> seen = new HashSet<>();
+        pq.offer(new Node(0,0,0));
+        while (!pq.isEmpty()){
+            Node curr = pq.poll();
+            String key = "$"+curr.worker+"$"+curr.mask;
+            // reason - you can skip if you have already seen this mask
+            // is because this is a PQ - and lower cost has already been seen
+            // with this exact mask (i.e., those bikes used in some order)
+            // then there is no point to consider a higher cost one 
+            if (seen.contains(key))
+                continue;
+            seen.add(key);
+            // all workers have a bike if this is true
+            if (curr.worker == workers.length)
+                return curr.cost;
+            // scan all bikes - and create new nodes into the PQ for next worker.
+            for(int j = 0; j < bikes.length; j++){
+                if ( (curr.mask & (1<<j)) == 0){
+                    pq.offer( new Node(curr.worker+1, curr.mask | (1 << j), 
+                                       curr.cost + getDist(bikes[j], workers[curr.worker]) ));
+                }
+            }
+        }
+        return -1;
+    }
+    private int getDist(int[] bikepos,int[] wpos){
+        return Math.abs(bikepos[0]-wpos[0]) + Math.abs(bikepos[1]-wpos[1]);
+    }
+    static class Node {
+        int worker;
+        int mask;
+        int cost;
+        public Node(int w,int m,int cost){
+            this.worker = w;
+            this.mask = m;
+            this.cost = cost;
+        }
+    }
+}
+```
+
+## 911 Online Election
+
+### 原题
+
+在选举中，第 i 张票是在时间为 times\[i\] 时投给 persons\[i\] 的。
+
+现在，我们想要实现下面的查询函数： TopVotedCandidate.q\(int t\) 将返回在 t 时刻主导选举的候选人的编号。
+
+在 t 时刻投出的选票也将被计入我们的查询之中。在平局的情况下，最近获得投票的候选人将会获胜。
+
+In an election, the `i`-th vote was cast for `persons[i]` at time `times[i]`.
+
+Now, we would like to implement the following query function: `TopVotedCandidate.q(int t)` will return the number of the person that was leading the election at time `t`.  
+
+Votes cast at time `t` will count towards our query.  In the case of a tie, the most recent vote \(among tied candidates\) wins.
+
+**Example 1:**
+
+```text
+Input: ["TopVotedCandidate","q","q","q","q","q","q"], [[[0,1,1,0,0,1,0],[0,5,10,15,20,25,30]],[3],[12],[25],[15],[24],[8]]
+Output: [null,0,1,1,0,0,1]
+Explanation: 
+At time 3, the votes are [0], and 0 is leading.
+At time 12, the votes are [0,1,1], and 1 is leading.
+At time 25, the votes are [0,1,1,0,0,1], and 1 is leading (as ties go to the most recent vote.)
+This continues for 3 more queries at time 15, 24, and 8.
+```
+
+**Note:**
+
+1. `1 <= persons.length = times.length <= 5000`
+2. `0 <= persons[i] <= persons.length`
+3. `times` is a strictly increasing array with all elements in `[0, 10^9]`.
+4. `TopVotedCandidate.q` is called at most `10000` times per test case.
+5. `TopVotedCandidate.q(int t)` is always called with `t >= times[0]`.
+
+### 分析
+
+![](../.gitbook/assets/image%20%28155%29.png)
+
+* 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
+* 空间复杂度：O\(N\)
+
+![](../.gitbook/assets/image%20%28144%29.png)
+
+* 时间复杂度：O\(N+QlogN\)，其中 N 是选票个数，Q 是询问个数。
+* 空间复杂度：O\(N\)
+
+### 代码
+
+1\)
+
+```java
+class TopVotedCandidate {
+    List<List<Vote>> A;
+    public TopVotedCandidate(int[] persons, int[] times) {
+        A = new ArrayList();
+        Map<Integer, Integer> count = new HashMap();
+        for (int i = 0; i < persons.length; ++i) {
+            int p = persons[i], t = times[i];
+            int c = count.getOrDefault(p, 0) + 1;
+
+            count.put(p, c);
+            while (A.size() <= c)
+                A.add(new ArrayList<Vote>());
+            A.get(c).add(new Vote(p, t));
+        }
+    }
+
+    public int q(int t) {
+        // Binary search on A[i][0].time for smallest i
+        // such that A[i][0].time > t
+        int lo = 1, hi = A.size();
+        while (lo < hi) {
+            int mi = lo + (hi - lo) / 2;
+            if (A.get(mi).get(0).time <= t)
+                lo = mi + 1;
+            else
+                hi = mi;
+        }
+        int i = lo - 1;
+
+        // Binary search on A[i][j].time for smallest j
+        // such that A[i][j].time > t
+        lo = 0; hi = A.get(i).size();
+        while (lo < hi) {
+            int mi = lo + (hi - lo) / 2;
+            if (A.get(i).get(mi).time <= t)
+                lo = mi + 1;
+            else
+                hi = mi;
+        }
+        int j = Math.max(lo-1, 0);
+        return A.get(i).get(j).person;
+    }
+}
+
+class Vote {
+    int person, time;
+    Vote(int p, int t) {
+        person = p;
+        time = t;
+    }
+}
+```
+
+2\)
+
+```java
+class TopVotedCandidate {
+    List<Vote> A;
+    public TopVotedCandidate(int[] persons, int[] times) {
+        A = new ArrayList();
+        Map<Integer, Integer> count = new HashMap();
+        int leader = -1;  // current leader
+        int m = 0;  // current number of votes for leader
+
+        for (int i = 0; i < persons.length; ++i) {
+            int p = persons[i], t = times[i];
+            int c = count.getOrDefault(p, 0) + 1;
+            count.put(p, c);
+
+            if (c >= m) {
+                if (p != leader) {  // lead change
+                    leader = p;
+                    A.add(new Vote(leader, t));
+                }
+
+                if (c > m) m = c;
+            }
+        }
+    }
+
+    public int q(int t) {
+        int lo = 1, hi = A.size();
+        while (lo < hi) {
+            int mi = lo + (hi - lo) / 2;
+            if (A.get(mi).time <= t)
+                lo = mi + 1;
+            else
+                hi = mi;
+        }
+
+        return A.get(lo - 1).person;
+    }
+}
+
+class Vote {
+    int person, time;
+    Vote(int p, int t) {
+        person = p;
+        time = t;
+    }
+}
+```
+
+## 394 Decode String
+
+### 原题
+
+给定一个经过编码的字符串，返回它解码后的字符串。
+
+编码规则为: k\[encoded\_string\]，表示其中方括号内部的 encoded\_string 正好重复 k 次。注意 k 保证为正整数。
+
+你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+
+此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2\[4\] 的输入。
+
+Given an encoded string, return its decoded string.
+
+The encoding rule is: `k[encoded_string]`, where the encoded\_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+
+You may assume that the input string is always valid; No extra white spaces, square brackets are well-formed, etc.
+
+Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there won't be input like `3a` or `2[4]`.
+
+**Example 1:**
+
+```text
+Input: s = "3[a]2[bc]"
+Output: "aaabcbc"
+```
+
+**Example 2:**
+
+```text
+Input: s = "3[a2[c]]"
+Output: "accaccacc"
+```
+
+**Example 3:**
+
+```text
+Input: s = "2[abc]3[cd]ef"
+Output: "abcabccdcdcdef"
+```
+
+**Example 4:**
+
+```text
+Input: s = "abc3[cd]xyz"
+Output: "abccdcdcdxyz"
+```
+
+### 分析
+
+![](../.gitbook/assets/image%20%28156%29.png)
+
+![](../.gitbook/assets/image%20%28146%29.png)
+
+### 代码
+
+1\)
+
+```java
+class Solution {
+    public String decodeString(String s) {
+        StringBuilder res = new StringBuilder();
+        int multi = 0;
+        LinkedList<Integer> stack_multi = new LinkedList<>();
+        LinkedList<String> stack_res = new LinkedList<>();
+        for(Character c : s.toCharArray()) {
+            if(c == '[') {
+                stack_multi.addLast(multi);
+                stack_res.addLast(res.toString());
+                multi = 0;
+                res = new StringBuilder();
+            }
+            else if(c == ']') {
+                StringBuilder tmp = new StringBuilder();
+                int cur_multi = stack_multi.removeLast();
+                for(int i = 0; i < cur_multi; i++) tmp.append(res);
+                res = new StringBuilder(stack_res.removeLast() + tmp);
+            }
+            else if(c >= '0' && c <= '9') multi = multi * 10 + Integer.parseInt(c + "");
+            else res.append(c);
+        }
+        return res.toString();
+    }
+}
+```
+
+2\)
+
+```java
+class Solution {
+    public String decodeString(String s) {
+        return dfs(s, 0)[0];
+    }
+    private String[] dfs(String s, int i) {
+        StringBuilder res = new StringBuilder();
+        int multi = 0;
+        while(i < s.length()) {
+            if(s.charAt(i) >= '0' && s.charAt(i) <= '9') 
+                multi = multi * 10 + Integer.parseInt(String.valueOf(s.charAt(i))); 
+            else if(s.charAt(i) == '[') {
+                String[] tmp = dfs(s, i + 1);
+                i = Integer.parseInt(tmp[0]);
+                while(multi > 0) {
+                    res.append(tmp[1]);
+                    multi--;
+                }
+            }
+            else if(s.charAt(i) == ']') 
+                return new String[] { String.valueOf(i), res.toString() };
+            else 
+                res.append(String.valueOf(s.charAt(i)));
+            i++;
+        }
+        return new String[] { res.toString() };
+    } 
+}
+```
+
 ## 
 
 ### 原题
@@ -5852,4 +6462,54 @@ class Solution {
 ### 分析
 
 ### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+
 
