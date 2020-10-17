@@ -3544,11 +3544,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28161%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
-![](../.gitbook/assets/image%20%28148%29.png)
+![](../.gitbook/assets/image%20%28149%29.png)
 
-![](../.gitbook/assets/image%20%28172%29.png)
+![](../.gitbook/assets/image%20%28174%29.png)
 
 ### 代码
 
@@ -3916,7 +3916,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28174%29.png)
+![](../.gitbook/assets/image%20%28176%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3959,7 +3959,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28170%29.png)
+![](../.gitbook/assets/image%20%28172%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4178,7 +4178,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28158%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4596,13 +4596,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28158%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28168%29.png)
+![](../.gitbook/assets/image%20%28170%29.png)
 
 ### 代码
 
@@ -4781,7 +4781,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4918,9 +4918,9 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28143%29.png)
+![](../.gitbook/assets/image%20%28144%29.png)
 
-![](../.gitbook/assets/image%20%28169%29.png)
+![](../.gitbook/assets/image%20%28171%29.png)
 
 ### 代码
 
@@ -5097,7 +5097,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28175%29.png)
+![](../.gitbook/assets/image%20%28177%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5194,7 +5194,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28162%29.png)
+![](../.gitbook/assets/image%20%28163%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -5280,21 +5280,21 @@ n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 �
 
 1\) 贪心
 
-![](../.gitbook/assets/image%20%28159%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
 * 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
 * 空间复杂度：O\(C\)
 
 2）
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28155%29.png)
 
 * 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
 * 空间复杂度： O\(C\)
 
 3\) 
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28145%29.png)
 
 * 时间复杂度：O\(C\)，其中 C 是给定数组中所有单词的字符总数。
 * 空间复杂度：O\(C\)。
@@ -5955,7 +5955,7 @@ Output: 0.73278
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 时间复杂度：O\(N - K + K\) ==&gt; O\(N\) 
 
@@ -6286,12 +6286,12 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28164%29.png)
+![](../.gitbook/assets/image%20%28166%29.png)
 
 * 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
 * 空间复杂度：O\(N\)
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28146%29.png)
 
 * 时间复杂度：O\(N+QlogN\)，其中 N 是选票个数，Q 是询问个数。
 * 空间复杂度：O\(N\)
@@ -6454,9 +6454,9 @@ Output: "abccdcdcdxyz"
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28166%29.png)
+![](../.gitbook/assets/image%20%28168%29.png)
 
-![](../.gitbook/assets/image%20%28149%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
 ### 代码
 
@@ -6656,9 +6656,9 @@ Output: [[1,7]]
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28160%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
-![](../.gitbook/assets/image%20%28167%29.png)
+![](../.gitbook/assets/image%20%28169%29.png)
 
 * 时间复杂度：\mathcal{O}\(N\)O\(N\)。我们只遍历了一次输入元素。
 * 空间复杂度：\mathcal{O}\(N\)O\(N\)，输出答案所使用的空间。
@@ -6858,11 +6858,11 @@ Explanation:  If Alex takes one pile at the beginning, Lee takes two piles, then
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
 对于piles = \[2,7,9,4,4\]，我们可以得到下图所示的dp数组，结果为dp\[0\]\[1\]
 
-![](../.gitbook/assets/image%20%28142%29.png)
+![](../.gitbook/assets/image%20%28143%29.png)
 
 ### 代码
 
@@ -7360,9 +7360,9 @@ Explanation: The longest repeating substring is "aaaa", which occurs twice.
 
 3）Rabin-Karp 字符串哈希算法
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28153%29.png)
 
-![](../.gitbook/assets/image%20%28173%29.png)
+![](../.gitbook/assets/image%20%28175%29.png)
 
 时间复杂度：O\(NlogN\)，二分查找的时间复杂度为 O\(logN\)，Rabin-Karp 字符串哈希的时间复杂度为 O\(N\)。
 
@@ -7770,7 +7770,7 @@ The worst case is that you pay $1.
 2）DP，从暴力解可以看出， 大区间的猜数字的成本求解， 可以由小区间计算出来。  
 时间复杂度： O\(N ^ 3\), 空间复杂度O\(N ^ 2\)
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28147%29.png)
 
 ### 代码
 
@@ -7888,11 +7888,11 @@ Output: 1
 
 1）DP，O\(N ^ 2\)
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28148%29.png)
 
 2）DP小优化，`O(N * maxRange)`maxrange 为所有水龙头中最大的灌溉区域长度。
 
-![](../.gitbook/assets/image%20%28163%29.png)
+![](../.gitbook/assets/image%20%28165%29.png)
 
 3）贪心
 
@@ -8137,7 +8137,7 @@ dp\[i\] 为加 i 次油能走的最远距离，需要满足 dp\[i\] &gt;= target
 
 举个例子，原本加一次油可以行驶的最远距离为 15，现在位置 10 有一个加油站，有 30 升油量储备，那么显然现在可以加两次油行驶 45 距离。
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 
 
@@ -8422,11 +8422,11 @@ Output: 2
 
 1）时间复杂度：O\(min\(M, N\) \* M \* N\)，其中 M 为矩阵长度，N 为矩阵宽度。
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
 2）时间复杂度：O\(log\(min\(M, N\)\) \* M \* N\)O\(log\(min\(M,N\)\)∗M∗N\)，其中 M 为矩阵长度，N 为矩阵宽度。
 
-![](../.gitbook/assets/image%20%28171%29.png)
+![](../.gitbook/assets/image%20%28173%29.png)
 
 ### 代码
 
@@ -8699,7 +8699,9 @@ Output: [1]
 
 排序就是暴力法
 
-1）首先遍历整个数组，并使用哈希表记录每个数字出现的次数，并形成一个「出现次数数组」。找出原数组的前 kk 个高频元素，就相当于找出「出现次数数组」的前 kk 大的值。
+1）堆排序，时间复杂度：O\(Nlogk\)，堆的大小至多为 k；空间复杂度：O\(N\)O\(N\)。哈希表的大小为 O\(N\)，而堆的大小为 O\(k\)，共计为 O\(N\)。
+
+首先遍历整个数组，并使用哈希表记录每个数字出现的次数，并形成一个「出现次数数组」。找出原数组的前 kk 个高频元素，就相当于找出「出现次数数组」的前 kk 大的值。
 
 最简单的做法是给「出现次数数组」排序。但由于可能有 O\(N\)O\(N\) 个不同的出现次数（其中 NN 为原数组长度），故总的算法复杂度会达到 O\(N\log N\)O\(NlogN\)，不满足题目的要求。
 
@@ -8707,7 +8709,9 @@ Output: [1]
 
 如果堆的元素个数小于 kk，就可以直接插入堆中。 如果堆的元素个数等于 kk，则检查堆顶与当前出现次数的大小。如果堆顶更大，说明至少有 kk 个数字的出现次数比当前值大，故舍弃当前值；否则，就弹出堆顶，并将当前值插入堆中。 遍历完成后，堆中的元素就代表了「出现次数数组」中前 kk 大的值。
 
-2）
+2）基于快速排序，时间复杂度：时间复杂度：最坏O\(N^2\)，空间复杂度：O\(N\)O\(N\)
+
+3）桶排序也可以， **时间复杂度**：O\(n\)， **空间复杂度**O\(n\)
 
 ### 代码
 
@@ -8795,21 +8799,312 @@ class Solution {
 }
 ```
 
-## 
+3 桶排序，注意方法的singature不一样
+
+```java
+//基于桶排序求解「前 K 个高频元素」
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        List<Integer> res = new ArrayList();
+        // 使用字典，统计每个元素出现的次数，元素为键，元素出现的次数为值
+        HashMap<Integer,Integer> map = new HashMap();
+        for(int num : nums){
+            if (map.containsKey(num)) {
+               map.put(num, map.get(num) + 1);
+             } else {
+                map.put(num, 1);
+             }
+        }
+        
+        //桶排序
+        //将频率作为数组下标，对于出现频率不同的数字集合，存入对应的数组下标
+        List<Integer>[] list = new List[nums.length+1];
+        for(int key : map.keySet()){
+            // 获取出现的次数作为下标
+            int i = map.get(key);
+            if(list[i] == null){
+               list[i] = new ArrayList();
+            } 
+            list[i].add(key);
+        }
+        
+        // 倒序遍历数组获取出现顺序从大到小的排列
+        for(int i = list.length - 1;i >= 0 && res.size() < k;i--){
+            if(list[i] == null) continue;
+            res.addAll(list[i]);
+        }
+        return res;
+    }
+}
+```
+
+## 1146 Snapshot Array
 
 ### 原题
 
+实现支持下列接口的「快照数组」- SnapshotArray：
+
+* SnapshotArray\(int length\) - 初始化一个与指定长度相等的 类数组 的数据结构。初始时，每个元素都等于 0。 
+* void set\(index, val\) - 会将指定索引 index 处的元素设置为 val。 
+* int snap\(\) - 获取该数组的快照，并返回快照的编号 snap\_id（快照号是调用 snap\(\) 的总次数减去 1）。 
+* int get\(index, snap\_id\) - 根据指定的 snap\_id 选择快照，并返回该快照指定索引 index 的值。
+
+Implement a SnapshotArray that supports the following interface:
+
+* `SnapshotArray(int length)` initializes an array-like data structure with the given length.  **Initially, each element equals 0**.
+* `void set(index, val)` sets the element at the given `index` to be equal to `val`.
+* `int snap()` takes a snapshot of the array and returns the `snap_id`: the total number of times we called `snap()` minus `1`.
+* `int get(index, snap_id)` returns the value at the given `index`, at the time we took the snapshot with the given `snap_id`
+
+**Example 1:**
+
+```text
+Input: ["SnapshotArray","set","snap","set","get"]
+[[3],[0,5],[],[0,6],[0,0]]
+Output: [null,null,0,null,5]
+Explanation: 
+SnapshotArray snapshotArr = new SnapshotArray(3); // set the length to be 3
+snapshotArr.set(0,5);  // Set array[0] = 5
+snapshotArr.snap();  // Take a snapshot, return snap_id = 0
+snapshotArr.set(0,6);
+snapshotArr.get(0,0);  // Get the value of array[0] with snap_id = 0, return 5
+```
+
+**Constraints:**
+
+* `1 <= length <= 50000`
+* At most `50000` calls will be made to `set`, `snap`, and `get`.
+* `0 <= index < length`
+* `0 <= snap_id <` \(the total number of times we call `snap()`\)
+* `0 <= val <= 10^9`
+
 ### 分析
+
+1）利用treemap记录snapid对应的list中保存此snapid的索引
+
+2）List&lt;Map&lt;Integer,Integer&gt;&gt;，题意是要构建一个带有不同版本信息的数组，一种方法是每个版本都保存一个数组，但是这样显然产生了太多的冗余 只需要记录每个版本之间有区别的值即可
 
 ### 代码
 
-## 
+```java
+class SnapshotArray {
+
+    Node[] arr;
+    int snapTimes;
+
+    public SnapshotArray(int length) {
+        this.arr = new Node[length];
+        this.snapTimes = 0;
+        for(int i = 0; i < length; ++i) 
+            arr[i] = new Node(0);
+    }
+    
+    public void set(int index, int val) {
+        Node cur = arr[index];
+        if(cur.snapId == snapTimes) {
+            cur.val = val;
+            cur.vals.set(cur.idx, val);
+        } else {
+            cur.val = val;
+            cur.vals.add(val);
+            cur.idx++;
+            cur.snapId = snapTimes;
+            cur.map.put(snapTimes, cur.idx);
+        }
+        return;
+    }
+    
+    public int snap() {
+        snapTimes++;
+        return snapTimes - 1;
+    }
+    
+    public int get(int index, int snap_id) {
+        Node cur = arr[index];
+        if(cur.map.containsKey(snap_id)) {
+            int idx = cur.map.get(snap_id);
+            return cur.vals.get(idx);
+        } else {
+            int key = cur.map.lowerKey(snap_id);
+            return cur.vals.get(cur.map.get(key));
+        }
+    }
+}
+
+class Node {
+    int val;
+    int idx;
+    int snapId;
+    List<Integer> vals;
+    TreeMap<Integer, Integer> map;
+
+    Node(int v) {
+        this.val = v;
+        this.vals = new ArrayList();
+        this.idx = 0;
+        this.snapId = 0;
+        this.map = new TreeMap();
+        vals.add(v);
+        
+        map.put(0, idx);
+    }
+}
+
+/**
+ * Your SnapshotArray object will be instantiated and called as such:
+ * SnapshotArray obj = new SnapshotArray(length);
+ * obj.set(index,val);
+ * int param_2 = obj.snap();
+ * int param_3 = obj.get(index,snap_id);
+ */
+
+```
+
+```java
+class SnapshotArray {
+    
+    //list.get(index)应为数组下标为index处的值
+    //每一个Map记录的是当前下标位置的值的变动，<版本号，新值>
+    private List<Map<Integer,Integer>> list;
+    private int snapId;
+
+    public SnapshotArray(int length) {
+        list = new ArrayList<>();
+        for(int i = 0; i < length; i++){
+            list.add(new HashMap<Integer,Integer>());
+        }
+        snapId = 0;
+    }
+    
+    public void set(int index, int val) {
+        //在index处放入此次版本更新的值
+        list.get(index).put(this.snapId,val);
+    }
+    
+    public int snap() {
+        return snapId++;
+    }
+    
+    public int get(int index, int snap_id) {
+        //寻找snap_id版本前，最后一次更新的值
+        for(int i = snap_id; i >= 0; i--) {
+            if (list.get(index).containsKey(snap_id)) {
+                return list.get(index).get(snap_id);
+            }
+            --snap_id;
+        }
+        return 0;
+    }
+}
+
+/**
+ * Your SnapshotArray object will be instantiated and called as such:
+ * SnapshotArray obj = new SnapshotArray(length);
+ * obj.set(index,val);
+ * int param_2 = obj.snap();
+ * int param_3 = obj.get(index,snap_id);
+ */
+```
+
+## 1223 Dice Roll Simulation
 
 ### 原题
 
+有一个骰子模拟器会每次投掷的时候生成一个 1 到 6 的随机数。
+
+不过我们在使用它时有个约束，就是使得投掷骰子时，连续 掷出数字 i 的次数不能超过 rollMax\[i\]（i 从 1 开始编号）。
+
+现在，给你一个整数数组 rollMax 和一个整数 n，请你来计算掷 n 次骰子可得到的不同点数序列的数量。
+
+假如两个序列中至少存在一个元素不同，就认为这两个序列是不同的。由于答案可能很大，所以请返回 模 10^9 + 7 之后的结果。
+
+A die simulator generates a random number from 1 to 6 for each roll. You introduced a constraint to the generator such that it cannot roll the number `i` more than `rollMax[i]` \(1-indexed\) **consecutive** times. 
+
+Given an array of integers `rollMax` and an integer `n`, return the number of distinct sequences that can be obtained with exact `n` rolls.
+
+Two sequences are considered different if at least one element differs from each other. Since the answer may be too large, return it modulo `10^9 + 7`.
+
+**Example 1:**
+
+```text
+Input: n = 2, rollMax = [1,1,2,2,2,3]
+Output: 34
+Explanation: There will be 2 rolls of die, if there are no constraints on the die, there are 6 * 6 = 36 possible combinations. In this case, looking at rollMax array, the numbers 1 and 2 appear at most once consecutively, therefore sequences (1,1) and (2,2) cannot occur, so the final answer is 36-2 = 34.
+```
+
+**Example 2:**
+
+```text
+Input: n = 2, rollMax = [1,1,1,1,1,1]
+Output: 30
+```
+
+**Example 3:**
+
+```text
+Input: n = 3, rollMax = [1,1,1,2,2,3]
+Output: 181
+```
+
+**Constraints:**
+
+* `1 <= n <= 5000`
+* `rollMax.length == 6`
+* `1 <= rollMax[i] <= 15`
+
 ### 分析
 
+DP
+
 ### 代码
+
+![](../.gitbook/assets/image%20%28164%29.png)
+
+```java
+class Solution {
+    public int dieSimulator(int n) {
+        int[][] dp = new int[n][6];
+        // init, roll once, only one sequence end up by every number
+        for (int i = 0; i < 6; i++) dp[0][i] = 1;
+        // start dp
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < 6; j++) {
+                dp[i][j] = Arrays.stream(dp[i-1]).sum();
+            }
+        }
+        return Arrays.stream(dp[n-1]).sum();
+    }
+}
+```
+
+![](../.gitbook/assets/image%20%28142%29.png)
+
+```java
+class Solution {
+    
+    private static int MOD = 1000000007;
+    
+    public int dieSimulator(int n, int[] rollMax) {
+        int[][] dp = new int[n][6];
+        for (int i = 0; i < 6; i++) dp[0][i] = 1;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < 6; j++) {
+                dp[i][j] = Arrays.stream(dp[i-1]).reduce(0, (a, b) -> (a + b) % MOD);
+                // 参见算法部分第2条
+                if (i == rollMax[j]) dp[i][j]--;
+                else if (i > rollMax[j]) {
+                    for (int k = 0; k < 6; k++) {
+                        if (j != k) dp[i][j] = (dp[i][j] - dp[i - rollMax[j] - 1][k] + MOD) % MOD;
+                    }
+                }
+            }
+        }
+        return Arrays.stream(dp[n-1]).reduce(0, (a, b) -> (a + b) % MOD);
+    }
+}
+
+
+```
 
 ## 
 
