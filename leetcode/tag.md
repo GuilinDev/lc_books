@@ -7496,21 +7496,295 @@ class Solution {
 }
 ```
 
-## 
+## 1377 Frog Position After T Seconds
 
 ### 原题
 
+T 秒后青蛙的位置
+
+给你一棵由 n 个顶点组成的无向树，顶点编号从 1 到 n。青蛙从 顶点 1 开始起跳。规则如下：
+
+* 在一秒内，青蛙从它所在的当前顶点跳到另一个 未访问 过的顶点（如果它们直接相连）。 
+* 青蛙无法跳回已经访问过的顶点。 
+* 如果青蛙可以跳到多个不同顶点，那么它跳到其中任意一个顶点上的机率都相同。 
+* 如果青蛙不能跳到任何未访问过的顶点上，那么它每次跳跃都会停留在原地。 无向树的边用数组 edges 描述，其中 edges\[i\] = \[fromi, toi\] 意味着存在一条直接连通 fromi 和 toi 两个顶点的边。
+
+返回青蛙在 t 秒后位于目标顶点 target 上的概率。
+
+Given an undirected tree consisting of `n` vertices numbered from 1 to `n`. A frog starts jumping from the **vertex 1**. In one second, the frog jumps from its current vertex to another **unvisited** vertex if they are directly connected. The frog can not jump back to a visited vertex. In case the frog can jump to several vertices it jumps randomly to one of them with the same probability, otherwise, when the frog can not jump to any unvisited vertex it jumps forever on the same vertex. 
+
+The edges of the undirected tree are given in the array `edges`, where `edges[i] = [fromi, toi]` means that exists an edge connecting directly the vertices `fromi` and `toi`.
+
+_Return the probability that after `t` seconds the frog is on the vertex `target`._
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2020/02/20/frog_2.png)
+
+```text
+Input: n = 7, edges = [[1,2],[1,3],[1,7],[2,4],[2,6],[3,5]], t = 2, target = 4
+Output: 0.16666666666666666 
+Explanation: The figure above shows the given graph. The frog starts at vertex 1, jumping with 1/3 probability to the vertex 2 after second 1 and then jumping with 1/2 probability to vertex 4 after second 2. Thus the probability for the frog is on the vertex 4 after 2 seconds is 1/3 * 1/2 = 1/6 = 0.16666666666666666. 
+```
+
+**Example 2:**
+
+![](https://assets.leetcode.com/uploads/2020/02/20/frog_3.png)
+
+```text
+Input: n = 7, edges = [[1,2],[1,3],[1,7],[2,4],[2,6],[3,5]], t = 1, target = 7
+Output: 0.3333333333333333
+Explanation: The figure above shows the given graph. The frog starts at vertex 1, jumping with 1/3 = 0.3333333333333333 probability to the vertex 7 after second 1. 
+```
+
+**Example 3:**
+
+```text
+Input: n = 7, edges = [[1,2],[1,3],[1,7],[2,4],[2,6],[3,5]], t = 20, target = 6
+Output: 0.16666666666666666
+```
+
+**Constraints:**
+
+* `1 <= n <= 100`
+* `edges.length == n-1`
+* `edges[i].length == 2`
+* `1 <= edges[i][0], edges[i][1] <= n`
+* `1 <= t <= 50`
+* `1 <= target <= n`
+* Answers within `10^-5` of the actual value will be accepted as correct.
+
 ### 分析
+
+先建立树
+
+1）BFS，注意到达目标点后还有时间和节点会让概率置0
+
+2）DFS回溯，注意选择下一步时减去相应的概率，就会让跳过的点概率归0
 
 ### 代码
 
-## 
+BFS
+
+```java
+class Solution {
+    HashMap<Integer, List<Integer>> map = new HashMap<>();
+
+    public double frogPosition(int n, int[][] edges, int t, int target) {
+        for (int i = 0; i < edges.length; i++) {
+            if (map.containsKey(edges[i][0])) {
+                map.get(edges[i][0]).add(edges[i][1]);
+            } else {
+                List<Integer> ls = new ArrayList<>();
+                ls.add(edges[i][1]);
+                map.put(edges[i][0], ls);
+            }
+            if (map.containsKey(edges[i][1])) {
+                map.get(edges[i][1]).add(edges[i][0]);
+            } else {
+                List<Integer> ls = new ArrayList<>();
+                ls.add(edges[i][0]);
+                map.put(edges[i][1], ls);
+            }
+        }
+        int[] flag = new int[n + 1];
+
+        Queue<Integer> queue = new LinkedList<>();
+        double[] res = new double[n + 1];
+        res[1] = 1.0;
+        flag[1] = 1;
+        queue.offer(1);
+        while (!queue.isEmpty()) {
+            if (res[target] != 0 || t == 0) {
+                break;
+            }
+            int num = queue.size();
+            for (int i = 0; i < num; i++) {
+                int cur = queue.poll();
+                List<Integer> ls = map.get(cur);
+                if (ls != null) {
+                    for (int x : ls) {
+                        if (flag[x] == 0) {
+                            if (cur != 1) {
+                                res[x] = res[cur] * 1.0 / (double) (ls.size() - 1);
+                            } else {
+                                res[x] = res[cur] * 1.0 / (double) (ls.size());
+                            }
+                            flag[x] = 1;
+                            queue.offer(x);
+                        }
+                    }
+                }
+            }
+            t--;
+        }
+        if (t > 0) {
+            List<Integer> ls = map.get(target);
+            if (ls != null) {
+                for (int m : ls) {
+                    if (flag[m] == 0) {
+                        return 0.0;
+                    }
+                }
+            }
+        }
+        return res[target];
+    }
+}
+```
+
+DFS
+
+```java
+class Solution {
+
+    int[] visited = new int[105];
+    double[] res = new double[105];
+    HashMap<Integer, List<Integer>> map = new HashMap<>();
+
+    public double frogPosition(int n, int[][] edges, int t, int target) {
+
+        for (int i = 0; i < edges.length; i++) {
+            if (map.containsKey(edges[i][0])) {
+                map.get(edges[i][0]).add(edges[i][1]);
+            } else {
+                List<Integer> ls = new ArrayList<>();
+                ls.add(edges[i][1]);
+                map.put(edges[i][0], ls);
+            }
+            if (map.containsKey(edges[i][1])) {
+                map.get(edges[i][1]).add(edges[i][0]);
+            } else {
+                List<Integer> ls = new ArrayList<>();
+                ls.add(edges[i][0]);
+                map.put(edges[i][1], ls);
+            }
+        }
+        visited[1] = 1;
+        res[1] = 1.0;
+        dfs(1, t);
+        return res[target];
+    }
+
+    public void dfs(int i, int t) {
+        if (t == 0) return;
+        List<Integer> ls = map.get(i);
+        if (ls == null) return;
+        double p = i == 1 ? res[i] / ls.size() : res[i] / (ls.size() - 1);
+        for (int next : ls) {
+            if (visited[next] != 1) {
+                visited[next] = 1;
+                res[i] -= p;
+                res[next] += p;
+                dfs(next, t - 1);
+                visited[next] = 0;
+            }
+        }
+
+    }
+}
+```
+
+## 375 Guess Number Higher or Lower II
 
 ### 原题
 
+我们正在玩一个猜数游戏，游戏规则如下：
+
+我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。
+
+每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。
+
+然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。
+
+We are playing the Guessing Game. The game will work as follows:
+
+1. I pick a number between `1` and `n`.
+2. You guess a number.
+3. If you guess the right number, **you win the game**.
+4. If you guess the wrong number, then I will tell you whether the number I picked is **higher or lower**, and you will continue guessing.
+5. Every time you guess a wrong number `x`, you will pay `x` dollars. If you run out of money, **you lose the game**.
+
+Given a particular `n`, return _the minimum amount of money you need to **guarantee a win regardless of what number I pick**_.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/09/10/graph.png)
+
+```text
+Input: n = 10
+Output: 16
+Explanation: The winning strategy is as follows:
+- The range is [1,10]. Guess 7.
+    - If this is my number, your total is $0. Otherwise, you pay $7.
+    - If my number is higher, the range is [8,10]. Guess 9.
+        - If this is my number, your total is $7. Otherwise, you pay $9.
+        - If my number is higher, it must be 10. Guess 10. Your total is $7 + $9 = $16.
+        - If my number is lower, it must be 8. Guess 8. Your total is $7 + $9 = $16.
+    - If my number is lower, the range is [1,6]. Guess 3.
+        - If this is my number, your total is $7. Otherwise, you pay $3.
+        - If my number is higher, the range is [4,6]. Guess 5.
+            - If this is my number, your total is $7 + $3 = $10. Otherwise, you pay $5.
+            - If my number is higher, it must be 6. Guess 6. Your total is $7 + $3 + $5 = $15.
+            - If my number is lower, it must be 4. Guess 4. Your total is $7 + $3 + $5 = $15.
+        - If my number is lower, the range is [1,2]. Guess 1.
+            - If this is my number, your total is $7 + $3 = $10. Otherwise, you pay $1.
+            - If my number is higher, it must be 2. Guess 2. Your total is $7 + $3 + $1 = $11.
+The worst case in all these scenarios is that you pay $16. Hence, you only need $16 to guarantee a win.
+```
+
+**Example 2:**
+
+```text
+Input: n = 1
+Output: 0
+Explanation: There is only one possible number, so you can guess 1 and not have to pay anything.
+```
+
+**Example 3:**
+
+```text
+Input: n = 2
+Output: 1
+Explanation: There are two possible numbers, 1 and 2.
+- Guess 1.
+    - If this is my number, your total is $0. Otherwise, you pay $1.
+    - If my number is higher, it must be 2. Guess 2. Your total is $1.
+The worst case is that you pay $1.
+```
+
+**Constraints:**
+
+* `1 <= n <= 200`
+
 ### 分析
 
+1）暴力解（TLE） 时间复杂度: O\(N!\) 空间复杂度： O\(N\) 
+
+我们首先在\(1, n\)中任意挑选一个数字i， 假设i是错误的（最坏情况）， 我们需要用最小代价去 猜到需要的数字。那么在一次尝试后，答案要么在i的左边， 要么在i的右边， 为了考虑最差的情况，我们 需要考虑两者的较大值。 cost\(1,n\) = i + max\( cost\(1, i - 1\), cost\(i + 1\), n\)\)
+
+2）
+
 ### 代码
+
+1）暴力
+
+```java
+class Solution {
+    public int getMoneyAmount(int n){
+        return cost(1, n);
+    }
+    public int cost(int l, int r){
+        if(l >= r)  return 0;
+        int min = Integer.MAX_VALUE;
+        for(int i = l; i <= r; i++){
+            int res = i + Math.max(cost(l, i - 1), cost(i + 1, r));
+            min = Math.min(min, res);
+        }
+        return min;
+    }
+}
+```
+
+2）DP从暴力解可以看出，大区间的猜数字的成本求解，可以由小区间计算出来，时间复杂度:O\(N^3\),
 
 ## 
 
