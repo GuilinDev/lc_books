@@ -1,11 +1,5 @@
 # 9 Tag
 
-
-
-
-
-## 
-
 ##    1 Two Sum 
 
 [https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum\#1-2sum](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum#1-2sum)
@@ -3544,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28162%29.png)
+![](../.gitbook/assets/image%20%28164%29.png)
 
-![](../.gitbook/assets/image%20%28149%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
-![](../.gitbook/assets/image%20%28174%29.png)
+![](../.gitbook/assets/image%20%28176%29.png)
 
 ### 代码
 
@@ -3916,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28176%29.png)
+![](../.gitbook/assets/image%20%28178%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3959,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28172%29.png)
+![](../.gitbook/assets/image%20%28174%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4178,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28159%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4596,13 +4590,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28158%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28170%29.png)
+![](../.gitbook/assets/image%20%28172%29.png)
 
 ### 代码
 
@@ -4781,7 +4775,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4918,9 +4912,9 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28145%29.png)
 
-![](../.gitbook/assets/image%20%28171%29.png)
+![](../.gitbook/assets/image%20%28173%29.png)
 
 ### 代码
 
@@ -5097,7 +5091,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28177%29.png)
+![](../.gitbook/assets/image%20%28179%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5194,7 +5188,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28163%29.png)
+![](../.gitbook/assets/image%20%28165%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -5280,21 +5274,21 @@ n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 �
 
 1\) 贪心
 
-![](../.gitbook/assets/image%20%28160%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
 * 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
 * 空间复杂度：O\(C\)
 
 2）
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 * 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
 * 空间复杂度： O\(C\)
 
 3\) 
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28146%29.png)
 
 * 时间复杂度：O\(C\)，其中 C 是给定数组中所有单词的字符总数。
 * 空间复杂度：O\(C\)。
@@ -5955,7 +5949,7 @@ Output: 0.73278
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 时间复杂度：O\(N - K + K\) ==&gt; O\(N\) 
 
@@ -6286,12 +6280,12 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28166%29.png)
+![](../.gitbook/assets/image%20%28168%29.png)
 
 * 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
 * 空间复杂度：O\(N\)
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28147%29.png)
 
 * 时间复杂度：O\(N+QlogN\)，其中 N 是选票个数，Q 是询问个数。
 * 空间复杂度：O\(N\)
@@ -6454,9 +6448,9 @@ Output: "abccdcdcdxyz"
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28168%29.png)
+![](../.gitbook/assets/image%20%28170%29.png)
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
 ### 代码
 
@@ -6656,9 +6650,9 @@ Output: [[1,7]]
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28161%29.png)
+![](../.gitbook/assets/image%20%28163%29.png)
 
-![](../.gitbook/assets/image%20%28169%29.png)
+![](../.gitbook/assets/image%20%28171%29.png)
 
 * 时间复杂度：\mathcal{O}\(N\)O\(N\)。我们只遍历了一次输入元素。
 * 空间复杂度：\mathcal{O}\(N\)O\(N\)，输出答案所使用的空间。
@@ -6858,11 +6852,11 @@ Explanation:  If Alex takes one pile at the beginning, Lee takes two piles, then
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 对于piles = \[2,7,9,4,4\]，我们可以得到下图所示的dp数组，结果为dp\[0\]\[1\]
 
-![](../.gitbook/assets/image%20%28143%29.png)
+![](../.gitbook/assets/image%20%28144%29.png)
 
 ### 代码
 
@@ -7360,9 +7354,9 @@ Explanation: The longest repeating substring is "aaaa", which occurs twice.
 
 3）Rabin-Karp 字符串哈希算法
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28155%29.png)
 
-![](../.gitbook/assets/image%20%28175%29.png)
+![](../.gitbook/assets/image%20%28177%29.png)
 
 时间复杂度：O\(NlogN\)，二分查找的时间复杂度为 O\(logN\)，Rabin-Karp 字符串哈希的时间复杂度为 O\(N\)。
 
@@ -7770,7 +7764,7 @@ The worst case is that you pay $1.
 2）DP，从暴力解可以看出， 大区间的猜数字的成本求解， 可以由小区间计算出来。  
 时间复杂度： O\(N ^ 3\), 空间复杂度O\(N ^ 2\)
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28148%29.png)
 
 ### 代码
 
@@ -7888,11 +7882,11 @@ Output: 1
 
 1）DP，O\(N ^ 2\)
 
-![](../.gitbook/assets/image%20%28148%29.png)
+![](../.gitbook/assets/image%20%28149%29.png)
 
 2）DP小优化，`O(N * maxRange)`maxrange 为所有水龙头中最大的灌溉区域长度。
 
-![](../.gitbook/assets/image%20%28165%29.png)
+![](../.gitbook/assets/image%20%28167%29.png)
 
 3）贪心
 
@@ -8137,7 +8131,7 @@ dp\[i\] 为加 i 次油能走的最远距离，需要满足 dp\[i\] &gt;= target
 
 举个例子，原本加一次油可以行驶的最远距离为 15，现在位置 10 有一个加油站，有 30 升油量储备，那么显然现在可以加两次油行驶 45 距离。
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
 
 
@@ -8422,11 +8416,11 @@ Output: 2
 
 1）时间复杂度：O\(min\(M, N\) \* M \* N\)，其中 M 为矩阵长度，N 为矩阵宽度。
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28158%29.png)
 
 2）时间复杂度：O\(log\(min\(M, N\)\) \* M \* N\)O\(log\(min\(M,N\)\)∗M∗N\)，其中 M 为矩阵长度，N 为矩阵宽度。
 
-![](../.gitbook/assets/image%20%28173%29.png)
+![](../.gitbook/assets/image%20%28175%29.png)
 
 ### 代码
 
@@ -9058,7 +9052,7 @@ DP
 
 ### 代码
 
-![](../.gitbook/assets/image%20%28164%29.png)
+![](../.gitbook/assets/image%20%28166%29.png)
 
 ```java
 class Solution {
@@ -9106,35 +9100,339 @@ class Solution {
 
 ```
 
-## 
+## 1088 Confusing Number II
 
 ### 原题
 
+本题我们会将数字旋转 180° 来生成一个新的数字。
+
+比如 0、1、6、8、9 旋转 180° 以后，我们得到的新数字分别为 0、1、9、8、6。
+
+2、3、4、5、7 旋转 180° 后，是 无法 得到任何数字的。
+
+易混淆数（Confusing Number）指的是一个数字在整体旋转 180° 以后，能够得到一个和原来 不同 的数，且新数字的每一位都应该是有效的。（请注意，旋转后得到的新数字可能大于原数字）
+
+给出正整数 N，请你返回 1 到 N 之间易混淆数字的数量。
+
+We can rotate digits by 180 degrees to form new digits. When 0, 1, 6, 8, 9 are rotated 180 degrees, they become 0, 1, 9, 8, 6 respectively. When 2, 3, 4, 5 and 7 are rotated 180 degrees, they become invalid.
+
+A _confusing number_ is a number that when rotated 180 degrees becomes a **different** number with each digit valid.\(Note that the rotated number can be greater than the original number.\)
+
+Given a positive integer `N`, return the number of confusing numbers between `1` and `N` inclusive.
+
+**Example 1:**
+
+```text
+Input: 20
+Output: 6
+Explanation: 
+The confusing numbers are [6,9,10,16,18,19].
+6 converts to 9.
+9 converts to 6.
+10 converts to 01 which is just 1.
+16 converts to 91.
+18 converts to 81.
+19 converts to 61.
+```
+
+**Example 2:**
+
+```text
+Input: 100
+Output: 19
+Explanation: 
+The confusing numbers are [6,9,10,16,18,19,60,61,66,68,80,81,86,89,90,91,98,99,100].
+```
+
+**Note:**
+
+1. `1 <= N <= 10^9`
+
 ### 分析
+
+DFS，一个问题，int值不要越界
 
 ### 代码
 
-## 
+```java
+class Solution {
+    int[] a = new int[]{0, 1, 6, 8, 9};
+
+    int[] change = new int[]{0, 1, 2, 3, 4, 5, 9, 7, 8, 6};
+    int res = 0;
+
+    public int confusingNumberII(int N) {
+        for (int i = 1; i < 5 && a[i] <= N; i++) {
+            dfs(N, a[i], 1, depth(N));
+        }
+        return res;
+    }
+
+    private void dfs(int N, int cur, int dep, int max) {
+        if (max < dep) {
+            return;
+        }
+        if (cur > N) {
+            return;
+        }
+        if (check(cur)) {
+            res++;
+        }
+        for (int i = 0; i < 5; i++) {
+            if (cur > Integer.MAX_VALUE / 10) {
+                continue;
+            }
+            dfs(N, cur * 10 + a[i], dep + 1, max);
+        }
+    }
+
+    private int depth(int x) {
+        int res = 0;
+        while (x != 0) {
+            x /= 10;
+            res++;
+        }
+        return res;
+    }
+
+    private boolean check(int x) {
+        if (x == 0 || x == 1 || x == 8) {
+            return false;
+        }
+        int pre = x;
+        int y = 0;
+        while (x != 0) {
+            y = y * 10 + change[x % 10];
+            x /= 10;
+        }
+        return pre != y;
+    }
+}
+```
+
+## 351 Android Unlock Patterns
 
 ### 原题
 
+我们都知道安卓有个手势解锁的界面，是一个 3 x 3 的点所绘制出来的网格。
+
+给你两个整数，分别为 ​​m 和 n，其中 1 ≤ m ≤ n ≤ 9，那么请你统计一下有多少种解锁手势，是至少需要经过 m 个点，但是最多经过不超过 n 个点的。
+
+先来了解下什么是一个有效的安卓解锁手势:
+
+1. 每一个解锁手势必须至少经过 m 个点、最多经过 n 个点。 
+2. 解锁手势里不能设置经过重复的点。 
+3. 假如手势中有两个点是顺序经过的，那么这两个点的手势轨迹之间是绝对不能跨过任何未被经过的点。 
+4. 经过点的顺序不同则表示为不同的解锁手势。
+
+Given an Android **3x3** key lock screen and two integers **m** and **n**, where 1 ≤ m ≤ n ≤ 9, count the total number of unlock patterns of the Android lock screen, which consist of minimum of **m** keys and maximum **n** keys.
+
+**Rules for a valid pattern:**
+
+1. Each pattern must connect at least **m** keys and at most **n** keys.
+2. All the keys must be distinct.
+3. If the line connecting two consecutive keys in the pattern passes through any other keys, the other keys must have previously selected in the pattern. No jumps through non selected key is allowed.
+4. The order of keys used matters.
+
+```text
+
+```
+
+**Explanation:**
+
+```text
+| 1 | 2 | 3 |
+| 4 | 5 | 6 |
+| 7 | 8 | 9 |
+```
+
+**Invalid move:** `4 - 1 - 3 - 6`  
+Line 1 - 3 passes through key 2 which had not been selected in the pattern.
+
+**Invalid move:** `4 - 1 - 9 - 2`  
+Line 1 - 9 passes through key 5 which had not been selected in the pattern.
+
+**Valid move:** `2 - 4 - 1 - 3 - 6`  
+Line 1 - 3 is valid because it passes through key 2, which had been selected in the pattern
+
+**Valid move:** `6 - 5 - 4 - 1 - 9 - 2`  
+Line 1 - 9 is valid because it passes through key 5, which had been selected in the pattern.
+
+**Example:**
+
+```text
+Input: m = 1, n = 1
+Output: 9
+```
+
 ### 分析
+
+DFS回溯
+
+![](../.gitbook/assets/image%20%28143%29.png)
+
+时间复杂度：O\(n!\)，空间复杂度：O\(n\)
 
 ### 代码
 
-## 
+```java
+public class Solution {
+
+    private boolean used[] = new boolean[9];
+
+    public int numberOfPatterns(int m, int n) {
+        int res = 0;
+        for (int len = m; len <= n; len++) {
+            res += calcPatterns(-1, len);
+            for (int i = 0; i < 9; i++) {
+                used[i] = false;
+            }
+        }
+        return res;
+    }
+
+    private boolean isValid(int index, int last) {
+        if (used[index])
+            return false;
+        // first digit of the pattern    
+        if (last == -1)
+            return true;
+        // knight moves or adjacent cells (in a row or in a column)	       
+        if ((index + last) % 2 == 1)
+            return true;
+        // indexes are at both end of the diagonals for example 0,0, and 8,8          
+        int mid = (index + last) / 2;
+        if (mid == 4)
+            return used[mid];
+        // adjacent cells on diagonal  - for example 0,0 and 1,0 or 2,0 and //1,1
+        if ((index % 3 != last % 3) && (index / 3 != last / 3)) {
+            return true;
+        }
+        // all other cells which are not adjacent
+        return used[mid];
+    }
+
+    private int calcPatterns(int last, int len) {
+        if (len == 0)
+            return 1;
+        int sum = 0;
+        for (int i = 0; i < 9; i++) {
+            if (isValid(i, last)) {
+                used[i] = true;
+                sum += calcPatterns(i, len - 1);
+                used[i] = false;
+            }
+        }
+        return sum;
+    }
+}
+```
+
+## 1218 Longest Arithmetic Subsequence of Given Difference
 
 ### 原题
 
+最长定差子序列，给你一个整数数组 arr 和一个整数 difference，请你找出 arr 中所有相邻元素之间的差等于给定 difference 的等差子序列，并返回其中最长的等差子序列的长度。
+
+Given an integer array `arr` and an integer `difference`, return the length of the longest subsequence in `arr` which is an arithmetic sequence such that the difference between adjacent elements in the subsequence equals `difference`.
+
+**Example 1:**
+
+```text
+Input: arr = [1,2,3,4], difference = 1
+Output: 4
+Explanation: The longest arithmetic subsequence is [1,2,3,4].
+```
+
+**Example 2:**
+
+```text
+Input: arr = [1,3,5,7], difference = 1
+Output: 1
+Explanation: The longest arithmetic subsequence is any single element.
+```
+
+**Example 3:**
+
+```text
+Input: arr = [1,5,7,8,5,3,4,2,1], difference = -2
+Output: 4
+Explanation: The longest arithmetic subsequence is [7,5,3,1].
+```
+
+**Constraints:**
+
+* `1 <= arr.length <= 10^5`
+* `-10^4 <= arr[i], difference <= 10^4`
+
 ### 分析
+
+![](../.gitbook/assets/image%20%28153%29.png)
 
 ### 代码
 
-## 
+```java
+class Solution {
+    public int longestSubsequence(int[] arr, int difference) {
+        int ans = 1;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i: arr) {
+            int temp = map.getOrDefault(i - difference, 0) + 1;
+            map.put(i, temp);
+            ans = Math.max(ans, temp);
+        }
+        return ans;
+    }
+}
+```
+
+## 1125 Smallest Sufficient Team
 
 ### 原题
 
+最小的必要团队，作为项目经理，你规划了一份需求的技能清单 req\_skills，并打算从备选人员名单 people 中选出些人组成一个「必要团队」（ 编号为 i 的备选人员 people\[i\] 含有一份该备选人员掌握的技能列表）。
+
+所谓「必要团队」，就是在这个团队中，对于所需求的技能列表 req\_skills 中列出的每项技能，团队中至少有一名成员已经掌握。
+
+我们可以用每个人的编号来表示团队中的成员：例如，团队 team = \[0, 1, 3\] 表示掌握技能分别为 people\[0\]，people\[1\]，和 people\[3\] 的备选人员。
+
+请你返回 任一 规模最小的必要团队，团队成员用人员编号表示。你可以按任意顺序返回答案，本题保证答案存在。
+
+In a project, you have a list of required skills `req_skills`, and a list of `people`.  The i-th person `people[i]` contains a list of skills that person has.
+
+Consider a _sufficient team_: a set of people such that for every required skill in `req_skills`, there is at least one person in the team who has that skill.  We can represent these teams by the index of each person: for example, `team = [0, 1, 3]` represents the people with skills `people[0]`, `people[1]`, and `people[3]`.
+
+Return **any** sufficient team of the smallest possible size, represented by the index of each person.
+
+You may return the answer in any order.  It is guaranteed an answer exists.
+
+**Example 1:**
+
+```text
+Input: req_skills = ["java","nodejs","reactjs"], people = [["java"],["nodejs"],["nodejs","reactjs"]]
+Output: [0,2]
+```
+
+**Example 2:**
+
+```text
+Input: req_skills = ["algorithms","math","java","reactjs","csharp","aws"], people = [["algorithms","math","java"],["algorithms","math","reactjs"],["java","csharp","aws"],["reactjs","csharp"],["csharp","math"],["aws","java"]]
+Output: [1,2]
+```
+
+**Constraints:**
+
+* `1 <= req_skills.length <= 16`
+* `1 <= people.length <= 60`
+* `1 <= people[i].length, req_skills[i].length, people[i][j].length <= 16`
+* Elements of `req_skills` and `people[i]` are \(respectively\) distinct.
+* `req_skills[i][j], people[i][j][k]` are lowercase English letters.
+* Every skill in `people[i]` is a skill in `req_skills`.
+* It is guaranteed a sufficient team exists.
+
 ### 分析
+
+DFS，回溯 + a 
 
 ### 代码
 
