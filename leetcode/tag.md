@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28164%29.png)
+![](../.gitbook/assets/image%20%28165%29.png)
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
-![](../.gitbook/assets/image%20%28176%29.png)
+![](../.gitbook/assets/image%20%28177%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28178%29.png)
+![](../.gitbook/assets/image%20%28179%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28174%29.png)
+![](../.gitbook/assets/image%20%28175%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4172,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28161%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4590,13 +4590,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28160%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28172%29.png)
+![](../.gitbook/assets/image%20%28173%29.png)
 
 ### 代码
 
@@ -4775,7 +4775,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28159%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4912,9 +4912,9 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28145%29.png)
+![](../.gitbook/assets/image%20%28146%29.png)
 
-![](../.gitbook/assets/image%20%28173%29.png)
+![](../.gitbook/assets/image%20%28174%29.png)
 
 ### 代码
 
@@ -5091,7 +5091,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28179%29.png)
+![](../.gitbook/assets/image%20%28180%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5188,7 +5188,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28165%29.png)
+![](../.gitbook/assets/image%20%28166%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -5274,21 +5274,21 @@ n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 �
 
 1\) 贪心
 
-![](../.gitbook/assets/image%20%28162%29.png)
+![](../.gitbook/assets/image%20%28163%29.png)
 
 * 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
 * 空间复杂度：O\(C\)
 
 2）
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28158%29.png)
 
 * 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
 * 空间复杂度： O\(C\)
 
 3\) 
 
-![](../.gitbook/assets/image%20%28146%29.png)
+![](../.gitbook/assets/image%20%28147%29.png)
 
 * 时间复杂度：O\(C\)，其中 C 是给定数组中所有单词的字符总数。
 * 空间复杂度：O\(C\)。
@@ -5949,7 +5949,7 @@ Output: 0.73278
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28155%29.png)
 
 时间复杂度：O\(N - K + K\) ==&gt; O\(N\) 
 
@@ -6280,12 +6280,12 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28168%29.png)
+![](../.gitbook/assets/image%20%28169%29.png)
 
 * 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
 * 空间复杂度：O\(N\)
 
-![](../.gitbook/assets/image%20%28147%29.png)
+![](../.gitbook/assets/image%20%28148%29.png)
 
 * 时间复杂度：O\(N+QlogN\)，其中 N 是选票个数，Q 是询问个数。
 * 空间复杂度：O\(N\)
@@ -6448,9 +6448,9 @@ Output: "abccdcdcdxyz"
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28170%29.png)
+![](../.gitbook/assets/image%20%28171%29.png)
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 ### 代码
 
@@ -6650,9 +6650,9 @@ Output: [[1,7]]
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28163%29.png)
+![](../.gitbook/assets/image%20%28164%29.png)
 
-![](../.gitbook/assets/image%20%28171%29.png)
+![](../.gitbook/assets/image%20%28172%29.png)
 
 * 时间复杂度：\mathcal{O}\(N\)O\(N\)。我们只遍历了一次输入元素。
 * 空间复杂度：\mathcal{O}\(N\)O\(N\)，输出答案所使用的空间。
@@ -6852,11 +6852,11 @@ Explanation:  If Alex takes one pile at the beginning, Lee takes two piles, then
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28153%29.png)
 
 对于piles = \[2,7,9,4,4\]，我们可以得到下图所示的dp数组，结果为dp\[0\]\[1\]
 
-![](../.gitbook/assets/image%20%28144%29.png)
+![](../.gitbook/assets/image%20%28145%29.png)
 
 ### 代码
 
@@ -7354,9 +7354,9 @@ Explanation: The longest repeating substring is "aaaa", which occurs twice.
 
 3）Rabin-Karp 字符串哈希算法
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
-![](../.gitbook/assets/image%20%28177%29.png)
+![](../.gitbook/assets/image%20%28178%29.png)
 
 时间复杂度：O\(NlogN\)，二分查找的时间复杂度为 O\(logN\)，Rabin-Karp 字符串哈希的时间复杂度为 O\(N\)。
 
@@ -7764,7 +7764,7 @@ The worst case is that you pay $1.
 2）DP，从暴力解可以看出， 大区间的猜数字的成本求解， 可以由小区间计算出来。  
 时间复杂度： O\(N ^ 3\), 空间复杂度O\(N ^ 2\)
 
-![](../.gitbook/assets/image%20%28148%29.png)
+![](../.gitbook/assets/image%20%28149%29.png)
 
 ### 代码
 
@@ -7882,11 +7882,11 @@ Output: 1
 
 1）DP，O\(N ^ 2\)
 
-![](../.gitbook/assets/image%20%28149%29.png)
+![](../.gitbook/assets/image%20%28150%29.png)
 
 2）DP小优化，`O(N * maxRange)`maxrange 为所有水龙头中最大的灌溉区域长度。
 
-![](../.gitbook/assets/image%20%28167%29.png)
+![](../.gitbook/assets/image%20%28168%29.png)
 
 3）贪心
 
@@ -8131,7 +8131,7 @@ dp\[i\] 为加 i 次油能走的最远距离，需要满足 dp\[i\] &gt;= target
 
 举个例子，原本加一次油可以行驶的最远距离为 15，现在位置 10 有一个加油站，有 30 升油量储备，那么显然现在可以加两次油行驶 45 距离。
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 
 
@@ -8416,11 +8416,11 @@ Output: 2
 
 1）时间复杂度：O\(min\(M, N\) \* M \* N\)，其中 M 为矩阵长度，N 为矩阵宽度。
 
-![](../.gitbook/assets/image%20%28158%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
 2）时间复杂度：O\(log\(min\(M, N\)\) \* M \* N\)O\(log\(min\(M,N\)\)∗M∗N\)，其中 M 为矩阵长度，N 为矩阵宽度。
 
-![](../.gitbook/assets/image%20%28175%29.png)
+![](../.gitbook/assets/image%20%28176%29.png)
 
 ### 代码
 
@@ -9052,7 +9052,7 @@ DP
 
 ### 代码
 
-![](../.gitbook/assets/image%20%28166%29.png)
+![](../.gitbook/assets/image%20%28167%29.png)
 
 ```java
 class Solution {
@@ -9071,7 +9071,7 @@ class Solution {
 }
 ```
 
-![](../.gitbook/assets/image%20%28142%29.png)
+![](../.gitbook/assets/image%20%28143%29.png)
 
 ```java
 class Solution {
@@ -9269,7 +9269,7 @@ Output: 9
 
 DFS回溯
 
-![](../.gitbook/assets/image%20%28143%29.png)
+![](../.gitbook/assets/image%20%28144%29.png)
 
 时间复杂度：O\(n!\)，空间复杂度：O\(n\)
 
@@ -9367,7 +9367,7 @@ Explanation: The longest arithmetic subsequence is [7,5,3,1].
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 ### 代码
 
@@ -9432,9 +9432,260 @@ Output: [1,2]
 
 ### 分析
 
-DFS，回溯 + a 
+DFS，回溯 + 剪枝
+
+看到这个问题的时候，第一想法就是回溯，奈何一直超时，然后一路调试优化，从超时到2000+ms再到18ms最后到5ms，最终优化的逻辑如下 
+
+1.由于技能req\_skills最多16个，则可以用二进制1，10，100...来表示从第一个到最后一个技能，由此可以将员工技能转换为对应第数字。 
+
+2.若存在两个员工技能重复可以去重，或者一员工技能是另外员工技能真子集，则该员工必不在最优解中，去除该员工，从而提高回溯效率 
+
+3.如果该员工集合中存在无交集员工（和其他所有员工技能不重复），那么该员工一定在最终解中，则可以得出无交集员工集合作为解的子集。 
+
+4.判断无交集员工技能是否是解，若是，则肯定是最优解，否则说明还缺少其他员工，则可以根据该集合员工数量+1来作为最小回溯深度来进行回溯，从而降低回溯深度。 
+
+5.对员工技能数peopleSkillNums进行排序，为了加快查找速度（主要为了对员工技能逐个匹配，例如匹配下一个技能员工时，只要已匹配技能中没有包含该技能，则添加） 
+
+6.从最小回溯深度开始回溯，对技能数进行或运算，若有解，则肯定是最优解，直接结束，若无解，则回溯深度+1，继续回溯
 
 ### 代码
+
+```java
+class Solution {
+    //成员技能对应二进制数字都数组下标
+    private int[] peopleSubscript;
+
+    //当前递归深度
+    private int currentDepth = 0;
+
+    public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+        int[] result = null;
+        int skillLen = req_skills.length, mustSkill = (1 << skillLen) - 1, peopleSize = people.size();
+        //技能对应二进制，用1，10，100来表示
+        Map<String, Integer> skillMap = new HashMap<String, Integer>(skillLen << 1);
+        for (int i = 0; i < skillLen; i++) {
+            skillMap.put(req_skills[i], 1 << i);
+        }
+        //员工技能对应二进制数
+        int[] peopleSkillNums = new int[peopleSize];
+        peopleSubscript = new int[1 << skillLen];
+        for (int i = 0; i < people.size(); i++) {
+            int skillNum = 0;
+            List<String> skills = people.get(i);
+            for (String skill : skills) {
+                skillNum += skillMap.get(skill);
+            }
+            peopleSkillNums[i] = skillNum;
+            peopleSubscript[skillNum] = i;
+        }
+        //技能或运算结果
+        int comSkills = 0;
+        //和其他所有员工没交集对应员工数量
+        int aloneCount = 0;
+        //和其他所有员工没交集对应员工数组下标
+        int[] noIntersectionArr = new int[skillLen];
+        for (int i = 0; i < peopleSize; i++) {
+            if (peopleSkillNums[i] == 0) {
+                continue;
+            }
+            //是否无交集
+            boolean isNoIntersection = true;
+            for (int j = 0; j < peopleSize; j++) {
+                if (peopleSkillNums[j] == 0 || i == j) {
+                    continue;
+                }
+                //重复的，去重
+                if (peopleSkillNums[i] == peopleSkillNums[j]) {
+                    peopleSkillNums[j] = 0;
+                    continue;
+                }
+                //若一个员工技能是另外一个员工子集，则必定不在最优解中，去除
+                if ((peopleSkillNums[i] | peopleSkillNums[j]) == peopleSkillNums[j]) {
+                    peopleSkillNums[i] = 0;
+                    isNoIntersection = false;
+                    break;
+                } else if ((peopleSkillNums[i] | peopleSkillNums[j]) == peopleSkillNums[i]) {
+                    peopleSkillNums[j] = 0;
+                    continue;
+                }
+                if ((peopleSkillNums[i] & peopleSkillNums[j]) != 0) {
+                    isNoIntersection = false;
+                    break;
+                }
+            }
+            //无交集员工提前保存，方便之后回溯（降低后续回溯深度）
+            if (isNoIntersection) {
+                comSkills |= peopleSkillNums[i];
+                noIntersectionArr[aloneCount] = peopleSubscript[peopleSkillNums[i]];
+                peopleSkillNums[i] = 0;
+                aloneCount++;
+            }
+        }
+        //员工技能数字排序
+        Arrays.sort(peopleSkillNums);
+        //最小回溯深度，由小到大，则第一个得到结果就为最优解
+        int minDepth = aloneCount;
+        //若无交集员工技能组成等于必须技能，则输出结果，否则开始回溯深度+1
+        if (comSkills == mustSkill) {
+            result = new int[aloneCount];
+            System.arraycopy(noIntersectionArr, 0, result, 0, aloneCount);
+            return result;
+        } else {
+            minDepth++;
+        }
+        //从minDepth回溯深度开始回溯，noIntersectionArr肯定在该结果中，回溯深度从无交集员工数量开始
+        for (int i = minDepth; i < skillLen; i++) {
+            currentDepth = i;
+            result = new int[i];
+            System.arraycopy(noIntersectionArr, 0, result, 0, aloneCount);
+            if (addNextPeople(mustSkill, comSkills, result, peopleSkillNums, aloneCount)) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    private boolean addNextPeople(int mustSkill, int comSkills, int[] result, int[] peopleSkillNums, int count) {
+        //判断是否为解
+        if (mustSkill == comSkills) {
+            return true;
+        }
+        //大于回溯深度，则不存在
+        if (count >= currentDepth) {
+            return false;
+        }
+        for (int i = peopleSkillNums.length - 1; i >= 0; i--) {
+            int skillNum = peopleSkillNums[i];
+            //由于排序，则技能为0则后续都为0，直接结束
+            if (skillNum == 0) {
+                break;
+            }
+            //组合技能已包含该技能，则跳过
+            if ((comSkills | skillNum) == comSkills) {
+                continue;
+            }
+            result[count] = peopleSubscript[peopleSkillNums[i]];
+            peopleSkillNums[i] = 0;
+            if (addNextPeople(mustSkill, comSkills | skillNum, result, peopleSkillNums, count + 1)) {
+                return true;
+            }
+            peopleSkillNums[i] = skillNum;
+        }
+        return false;
+    }
+}
+```
+
+## 1466 Reorder Routes to Make All Paths Lead to the City Zero
+
+### 原题
+
+n 座城市，从 0 到 n-1 编号，其间共有 n-1 条路线。因此，要想在两座不同城市之间旅行只有唯一一条路线可供选择（路线网形成一颗树）。去年，交通运输部决定重新规划路线，以改变交通拥堵的状况。
+
+路线用 connections 表示，其中 connections\[i\] = \[a, b\] 表示从城市 a 到 b 的一条有向路线。
+
+今年，城市 0 将会举办一场大型比赛，很多游客都想前往城市 0 。
+
+请你帮助重新规划路线方向，使每个城市都可以访问城市 0 。返回需要变更方向的最小路线数。
+
+题目数据 保证 每个城市在重新规划路线方向后都能到达城市 0 。
+
+There are `n` cities numbered from `0` to `n-1` and `n-1` roads such that there is only one way to travel between two different cities \(this network form a tree\). Last year, The ministry of transport decided to orient the roads in one direction because they are too narrow.
+
+Roads are represented by `connections` where `connections[i] = [a, b]` represents a road from city `a` to `b`.
+
+This year, there will be a big event in the capital \(city 0\), and many people want to travel to this city.
+
+Your task consists of reorienting some roads such that each city can visit the city 0. Return the **minimum** number of edges changed.
+
+It's **guaranteed** that each city can reach the city 0 after reorder.
+
+**Example 1:**
+
+![](https://assets.leetcode.com/uploads/2020/05/13/sample_1_1819.png)
+
+```text
+Input: n = 6, connections = [[0,1],[1,3],[2,3],[4,0],[4,5]]
+Output: 3
+Explanation: Change the direction of edges show in red such that each node can reach the node 0 (capital).
+```
+
+**Example 2:**
+
+![](https://assets.leetcode.com/uploads/2020/05/13/sample_2_1819.png)
+
+```text
+Input: n = 5, connections = [[1,0],[1,2],[3,2],[3,4]]
+Output: 2
+Explanation: Change the direction of edges show in red such that each node can reach the node 0 (capital).
+```
+
+**Example 3:**
+
+```text
+Input: n = 3, connections = [[1,0],[2,0]]
+Output: 0
+```
+
+**Constraints:**
+
+* `2 <= n <= 5 * 10^4`
+* `connections.length == n-1`
+* `connections[i].length == 2`
+* `0 <= connections[i][0], connections[i][1] <= n-1`
+* `connections[i][0] != connections[i][1]`
+
+### 分析
+
+BFS
+
+1. 同课程安排这个题，我们也是用HashMap的临接表形式存储图，也同样是用BFS来遍历。
+2. 使用BFS的话，这道问题的关键就变成了保存一个无向图，而用其他方式来保存方向以计算。
+3. 所以我们构建HashMap的时候，就一下子保存两个方向，因为我们是“忽略了”方向的，所以在邻接表中需要统计两个方向。（如果感觉绕的话……不妨看一下无向图的邻接表方法） 但是我们又不能真的忽略方向，因为这样BFS就没法计算需要变更的线路，所以我对反方向取了个负数。最后即可得出一个邻接表
+4. 此时我们再进行bfs，该有的队列，访问数组依然都有，因为map中保存了可达路径，所以只要有关联，不管方向，都可以被遍历到。重点在于如果发现正数，我们就要调换方向（也就是让ans++）。
+
+补邻接表： 可以看到无向图其实就是一种特殊的有向图，只不过相连的两个节点中有两个箭头指向 那么在本题中，如果考虑方向，就如左上及左下图所示。不考虑方向，就需要如右上及右下所示，能加的箭头都加上。
+
+![](../.gitbook/assets/image%20%28142%29.png)
+
+### 代码
+
+```java
+class Solution {
+    public int minReorder(int n, int[][] connections) {
+        //遍历整个数组,构建一个可达图，这里的可达的定义为联通即可，不在乎方向（但是这里我用负数代表了反方向，方便后续统计）
+        HashMap<Integer, HashSet<Integer>> map = new HashMap<>();
+        for (int[] val : connections) {
+            HashSet<Integer> set = map.containsKey(val[0]) ? map.get(val[0]) : new HashSet<>();
+            set.add(val[1]);
+            map.put(val[0], set);
+            HashSet<Integer> setReverse = map.containsKey(val[1]) ? map.get(val[1]) : new HashSet<>();
+            setReverse.add(val[0] * -1);
+            map.put(val[1], setReverse);
+        }
+        return mybfs(map, n);
+    }
+
+    private int mybfs(HashMap<Integer, HashSet<Integer>> map, int n) {
+        boolean[] tBool = new boolean[n];
+        LinkedList<Integer> queue = new LinkedList<>();
+        int ans = 0;
+        queue.offerLast(0);
+        tBool[0] = true;
+        while (!queue.isEmpty()) {
+            for (Integer i : map.get(queue.pollFirst())) {
+                //访问之后禁止再访问
+                if (tBool[Math.abs(i)]) continue;
+                //前面说到，我们用负数代表了反方向，这里就用作统计了，如果是正数，就说明方向需要调整，建议仔细品味下
+                if (i > 0) ans++;
+                tBool[Math.abs(i)] = true;
+                queue.offerLast(Math.abs(i));
+            }
+        }
+        return ans;
+    }
+}
+```
 
 ## 
 
@@ -9454,27 +9705,7 @@ DFS，回溯 + a
 
 ## 
 
-### 原题
 
-### 分析
-
-### 代码
-
-## 
-
-### 原题
-
-### 分析
-
-### 代码
-
-## 
-
-### 原题
-
-### 分析
-
-### 代码
 
 
 
