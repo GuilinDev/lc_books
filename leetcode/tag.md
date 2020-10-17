@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 ![](../.gitbook/assets/image%20%28145%29.png)
 
-![](../.gitbook/assets/image%20%28160%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28161%29.png)
+![](../.gitbook/assets/image%20%28163%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28159%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4596,7 +4596,7 @@ Output: 3
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
 ### 代码
 
@@ -4914,7 +4914,7 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ![](../.gitbook/assets/image%20%28142%29.png)
 
-![](../.gitbook/assets/image%20%28158%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
 ### 代码
 
@@ -5091,7 +5091,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28162%29.png)
+![](../.gitbook/assets/image%20%28164%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5188,7 +5188,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28155%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -6179,7 +6179,7 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
 * 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
 * 空间复杂度：O\(N\)
@@ -6347,7 +6347,7 @@ Output: "abccdcdcdxyz"
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 ![](../.gitbook/assets/image%20%28146%29.png)
 
@@ -6427,29 +6427,290 @@ class Solution {
 
 [https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/array/zi-shu-zu-subarray\#53-maximum-subarray](https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/array/zi-shu-zu-subarray#53-maximum-subarray)
 
-## 
+## 688 Knight Probability in Chessboard
 
 ### 原题
 
+On an `N`x`N` chessboard, a knight starts at the `r`-th row and `c`-th column and attempts to make exactly `K` moves. The rows and columns are 0 indexed, so the top-left square is `(0, 0)`, and the bottom-right square is `(N-1, N-1)`.
+
+A chess knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, then one square in an orthogonal direction.
+
+![](https://assets.leetcode.com/uploads/2018/10/12/knight.png)
+
+Each time the knight is to move, it chooses one of eight possible moves uniformly at random \(even if the piece would go off the chessboard\) and moves there.
+
+The knight continues moving until it has made exactly `K` moves or has moved off the chessboard. Return the probability that the knight remains on the board after it has stopped moving.
+
+**Example:**
+
+```text
+Input: 3, 2, 0, 0
+Output: 0.0625
+Explanation: There are two moves (to (1,2), (2,1)) that will keep the knight on the board.
+From each of those positions, there are also two moves that will keep the knight on the board.
+The total probability the knight stays on the board is 0.0625.
+```
+
+**Note:**
+
+* `N` will be between 1 and 25.
+* `K` will be between 0 and 100.
+* The knight always initially starts on the board.
+
 ### 分析
+
+BFS
 
 ### 代码
 
-## 
+```java
+class Solution {
+    /*
+    这道题给了一个大小为NxN国际象棋棋盘，上面有个骑士，相当于中国象棋中的马，能走‘日’字，给了我们一个起始位置，然后说允许我们走K步，问走完K步之后还能留在棋盘上的概率是多少。
+    */
+    int[][] moves = {{1,2}, {1,-2},{2,1},{2,-1},{-1,2},{-1,-2},{-2,1},{-2,-1}};
+    public double knightProbability(int N, int K, int r, int c) {
+        int len = N;
+        double dp0[][] = new double[len][len];
+        for (double[] row : dp0) {
+            Arrays.fill(row, 1);
+        }
+        for (int l = 0; l < K; l++) {
+            double[][] dp1 = new double[len][len];
+            for (int i = 0; i < len; i++) {
+                for (int j = 0; j < len; j++) {
+                    for (int[] move : moves) {
+                        int row = i + move[0];
+                        int col = j + move[1];
+                        if (isLegal(row, col, len)) {
+                            dp1[i][j] += dp0[row][col];
+                        }
+                    }
+                }
+            }
+            dp0 = dp1;
+        }
+        return dp0[r][c]/Math.pow(8, K);
+    }
+    
+    private boolean isLegal(int r, int c, int len) {
+        return r >= 0 && r < len && c >= 0 && c < len;
+    }
+}
+```
+
+## 57 Insert Interval
 
 ### 原题
 
+给出一个_无重叠的 ，_按照区间起始端点排序的区间列表。
+
+在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+
+Given a set of _non-overlapping_ intervals, insert a new interval into the intervals \(merge if necessary\).
+
+You may assume that the intervals were initially sorted according to their start times.
+
+**Example 1:**
+
+```text
+Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+Output: [[1,5],[6,9]]
+```
+
+**Example 2:**
+
+```text
+Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+Output: [[1,2],[3,10],[12,16]]
+Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
+```
+
+**Example 3:**
+
+```text
+Input: intervals = [], newInterval = [5,7]
+Output: [[5,7]]
+```
+
+**Example 4:**
+
+```text
+Input: intervals = [[1,5]], newInterval = [2,3]
+Output: [[1,5]]
+```
+
+**Example 5:**
+
+```text
+Input: intervals = [[1,5]], newInterval = [2,7]
+Output: [[1,7]]
+```
+
 ### 分析
+
+![](../.gitbook/assets/image%20%28153%29.png)
+
+![](../.gitbook/assets/image%20%28158%29.png)
+
+* 时间复杂度：\mathcal{O}\(N\)O\(N\)。我们只遍历了一次输入元素。
+* 空间复杂度：\mathcal{O}\(N\)O\(N\)，输出答案所使用的空间。
 
 ### 代码
 
-## 
+```java
+class Solution {
+  public int[][] insert(int[][] intervals, int[] newInterval) {
+    // init data
+    int newStart = newInterval[0], newEnd = newInterval[1];
+    int idx = 0, n = intervals.length;
+    LinkedList<int[]> output = new LinkedList<int[]>();
+
+    // add all intervals starting before newInterval
+    while (idx < n && newStart > intervals[idx][0])
+      output.add(intervals[idx++]);
+
+    // add newInterval
+    int[] interval = new int[2];
+    // if there is no overlap, just add the interval
+    if (output.isEmpty() || output.getLast()[1] < newStart)
+      output.add(newInterval);
+    // if there is an overlap, merge with the last interval
+    else {
+      interval = output.removeLast();
+      interval[1] = Math.max(interval[1], newEnd);
+      output.add(interval);
+    }
+
+    // add next intervals, merge with newInterval if needed
+    while (idx < n) {
+      interval = intervals[idx++];
+      int start = interval[0], end = interval[1];
+      // if there is no overlap, just add an interval
+      if (output.getLast()[1] < start) output.add(interval);
+      // if there is an overlap, merge with the last interval
+      else {
+        interval = output.removeLast();
+        interval[1] = Math.max(interval[1], end);
+        output.add(interval);
+      }
+    }
+    return output.toArray(new int[output.size()][2]);
+  }
+}
+```
+
+## 174 Dungeon Game
 
 ### 原题
 
+一些恶魔抓住了公主（P）并将她关在了地下城的右下角。地下城是由 M x N 个房间组成的二维网格。我们英勇的骑士（K）最初被安置在左上角的房间里，他必须穿过地下城并通过对抗恶魔来拯救公主。
+
+骑士的初始健康点数为一个正整数。如果他的健康点数在某一时刻降至 0 或以下，他会立即死亡。
+
+有些房间由恶魔守卫，因此骑士在进入这些房间时会失去健康点数（若房间里的值为负整数，则表示骑士将损失健康点数）；其他房间要么是空的（房间里的值为 0），要么包含增加骑士健康点数的魔法球（若房间里的值为正整数，则表示骑士将增加健康点数）。
+
+为了尽快到达公主，骑士决定每次只向右或向下移动一步。
+
+编写一个函数来计算确保骑士能够拯救到公主所需的最低初始健康点数。
+
+例如，考虑到如下布局的地下城，如果骑士遵循最佳路径 右 -&gt; 右 -&gt; 下 -&gt; 下，则骑士的初始健康点数至少为 7。
+
+The demons had captured the princess \(**P**\) and imprisoned her in the bottom-right corner of a dungeon. The dungeon consists of M x N rooms laid out in a 2D grid. Our valiant knight \(**K**\) was initially positioned in the top-left room and must fight his way through the dungeon to rescue the princess.
+
+The knight has an initial health point represented by a positive integer. If at any point his health point drops to 0 or below, he dies immediately.
+
+Some of the rooms are guarded by demons, so the knight loses health \(_negative_ integers\) upon entering these rooms; other rooms are either empty \(_0's_\) or contain magic orbs that increase the knight's health \(_positive_ integers\).
+
+In order to reach the princess as quickly as possible, the knight decides to move only rightward or downward in each step.
+
+**Write a function to determine the knight's minimum initial health so that he is able to rescue the princess.**
+
+For example, given the dungeon below, the initial health of the knight must be at least **7** if he follows the optimal path `RIGHT-> RIGHT -> DOWN -> DOWN`.
+
+| -2 \(K\) | -3 | 3 |
+| :--- | :--- | :--- |
+| -5 | -10 | 1 |
+| 10 | 30 | -5 \(P\) |
+
+**Note:**
+
+* The knight's health has no upper bound.
+* Any room can contain threats or power-ups, even the first room the knight enters and the bottom-right room where the princess is imprisoned.
+
 ### 分析
 
+DFS + memoinization
+
+时间复杂度：_O\(m∗n\)，_m,n 为 dungeon 的行数和列数。
+
+空间复杂度：O\(m∗n\)，m,n 为 dungeon 的行数和列数。
+
 ### 代码
+
+朴素DFS
+
+```java
+class Solution {
+
+    public int calculateMinimumHP(int[][] dungeon) {
+        return dfs(dungeon, dungeon.length, dungeon[0].length, 0, 0);
+    }
+
+    private int dfs(int[][] dungeon, int m, int n, int i, int j) {
+        // 到达终点，递归终止。
+        if (i == m - 1 && j == n - 1) {
+            return Math.max(1 - dungeon[i][j], 1);
+        }
+        // 最后一行，只能向右搜索。
+        if (i == m - 1) {
+            return Math.max(dfs(dungeon, m, n, i, j + 1) - dungeon[i][j], 1);
+        }
+        // 最后一列，只能向下搜索。
+        if (j == n - 1) {
+           return Math.max(dfs(dungeon, m, n, i + 1, j) - dungeon[i][j], 1);
+        }
+        // 向下搜索 + 向右搜索，得到(i, j)点的后续路径所要求的最低血量 Math.min(dfs(i + 1, j), dfs(i, j + 1))，
+        // 又因为(i, j)点本身提供血量dungeon[i][j], 因此从(i, j)开始所需的最低血量为 Math.min(dfs(i + 1, j), dfs(i, j + 1)) - dungeon[i][j]
+        // 因为骑士的血量不能小于1，因此要和1取个max。
+        return Math.max(Math.min(dfs(dungeon, m, n, i + 1, j), dfs(dungeon, m, n, i, j + 1)) - dungeon[i][j], 1);
+    }
+}
+```
+
+DFS + memoinization
+
+```java
+class Solution {
+    int[][] memo; // 定义记忆化数组
+    public int calculateMinimumHP(int[][] dungeon) {
+        memo = new int[dungeon.length][dungeon[0].length];
+        return dfs(dungeon, dungeon.length, dungeon[0].length, 0, 0);
+    }
+
+    private int dfs(int[][] dungeon, int m, int n, int i, int j) {
+        // 到达终点，递归终止。
+        if (i == m - 1 && j == n - 1) {
+            return Math.max(1 - dungeon[i][j], 1);
+        }
+        // 如果memo数组中有值，直接取出并返回，不进行后续的搜索。
+        if (memo[i][j] > 0) {
+            return memo[i][j];
+        }
+        // 同解法一，向右搜+向下搜
+        int minRes = 0;
+        if (i == m - 1) {
+            minRes =  Math.max(dfs(dungeon, m, n, i, j + 1) - dungeon[i][j], 1);
+        } else if (j == n - 1) {
+            minRes = Math.max(dfs(dungeon, m, n, i + 1, j) - dungeon[i][j], 1);
+        } else {
+            minRes = Math.max(Math.min(dfs(dungeon, m, n, i + 1, j), dfs(dungeon, m, n, i, j + 1)) - dungeon[i][j], 1);
+        }
+        // 将结果存入memo数组
+        return memo[i][j] = minRes;
+    }
+}
+```
 
 ## 
 
