@@ -3538,11 +3538,11 @@ Output: [[2,3],[3]]
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28156%29.png)
+![](../.gitbook/assets/image%20%28157%29.png)
 
 ![](../.gitbook/assets/image%20%28146%29.png)
 
-![](../.gitbook/assets/image%20%28164%29.png)
+![](../.gitbook/assets/image%20%28165%29.png)
 
 ### 代码
 
@@ -3910,7 +3910,7 @@ The total number of cherries picked up is 5, and this is the maximum possible.
 
 topdown
 
-![](../.gitbook/assets/image%20%28165%29.png)
+![](../.gitbook/assets/image%20%28167%29.png)
 
 时间复杂度：O\(N^3\)。其中 NN 是 grid 的长度，动态规划有 O\(N^3\)O\(N 3 \) 的状态 
 
@@ -3953,7 +3953,7 @@ class Solution {
 
 bottom up
 
-![](../.gitbook/assets/image%20%28163%29.png)
+![](../.gitbook/assets/image%20%28164%29.png)
 
 * 时间复杂度：O\(N^3\)。其中 NN 是 `grid` 的长度。
 * 空间复杂度：O\(N^2\)，`dp` 和 `dp2` 所使用的空间
@@ -4172,7 +4172,7 @@ Output: 5
 
 1）直观暴力枚举
 
-![](../.gitbook/assets/image%20%28153%29.png)
+![](../.gitbook/assets/image%20%28154%29.png)
 
 时间复杂度：O\(n^2m\)，其中 nn 为矩阵行数，mm 为矩阵列数。我们预处理 row 数组需要 O\(nm\) 的时间，统计答案的时候一共需要枚举 O\(nm\)个位置，每次枚举的时候需要 O\(n\) 的时间计算，因此时间复杂度为 O\(n^2m\)，故总时间复杂度为 O\(nm+n^2m\)=O\(n^2m\)。 
 
@@ -4590,13 +4590,13 @@ Output: 3
 * 对角线方向 dp 矩阵仅需要考虑其左上的连续 1 线段，即 dp\[i - 1\]\[j - 1\]。 
 * 反对角线方向 dp 矩阵仅需要考虑其右上的连续 1 线段，即 dp\[i - 1\]\[j + 1\]。
 
-![](../.gitbook/assets/image%20%28152%29.png)
+![](../.gitbook/assets/image%20%28153%29.png)
 
 3\) 状态压缩为以为DP
 
 dp 数组中的每一个位置的值只依赖于上一行。因此不需要将整个矩阵的结果全部存储，只需要保留上一行的结果即可。而对于横向的 dp 数组，由于其不依赖于上一行，上一行的结果也可以不存储。这样可以达到节省空间的效果。
 
-![](../.gitbook/assets/image%20%28161%29.png)
+![](../.gitbook/assets/image%20%28162%29.png)
 
 ### 代码
 
@@ -4775,7 +4775,7 @@ but the second term did not exist.  Since the last term exhausted does not exist
 
 ### 思路
 
-![](../.gitbook/assets/image%20%28151%29.png)
+![](../.gitbook/assets/image%20%28152%29.png)
 
 * 时间复杂度：O\(N + Q\)，其中 NN 是数组 `A` 的长度，QQ 是调用函数 `next()` 的次数。
 * 空间复杂度：O\(N\)。
@@ -4914,7 +4914,7 @@ Only "AA" won't be regarded as rewardable owing to more than one absent times.
 
 ![](../.gitbook/assets/image%20%28143%29.png)
 
-![](../.gitbook/assets/image%20%28162%29.png)
+![](../.gitbook/assets/image%20%28163%29.png)
 
 ### 代码
 
@@ -5091,7 +5091,7 @@ Output: 6
 
 假设正方形瓷砖的规格不限，边长都是整数。最少需要用到多少块方形瓷砖？
 
-![](../.gitbook/assets/image%20%28166%29.png)
+![](../.gitbook/assets/image%20%28168%29.png)
 
 时间复杂度： O\(N ^ 4\), 空间复杂度： O\(N ^ 2\)
 
@@ -5188,7 +5188,7 @@ Output: 0
 
 3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
-![](../.gitbook/assets/image%20%28157%29.png)
+![](../.gitbook/assets/image%20%28158%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
 * 空间复杂度：O\(1\)O\(1\)。
@@ -5274,14 +5274,14 @@ n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 �
 
 1\) 贪心
 
-![](../.gitbook/assets/image%20%28154%29.png)
+![](../.gitbook/assets/image%20%28155%29.png)
 
 * 时间复杂度：O\(C^2\)。其中 C 是给定数组中所有字符串的字符总数目。
 * 空间复杂度：O\(C\)
 
 2）
 
-![](../.gitbook/assets/image%20%28150%29.png)
+![](../.gitbook/assets/image%20%28151%29.png)
 
 * 时间复杂度： O\(ClogC\)，其中 C 是给定数组所有单词的总字符数。该算法时间主要耗费在排序上。
 * 空间复杂度： O\(C\)
@@ -6280,7 +6280,7 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28158%29.png)
+![](../.gitbook/assets/image%20%28159%29.png)
 
 * 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
 * 空间复杂度：O\(N\)
@@ -6448,7 +6448,7 @@ Output: "abccdcdcdxyz"
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28159%29.png)
+![](../.gitbook/assets/image%20%28160%29.png)
 
 ![](../.gitbook/assets/image%20%28147%29.png)
 
@@ -6650,9 +6650,9 @@ Output: [[1,7]]
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28155%29.png)
+![](../.gitbook/assets/image%20%28156%29.png)
 
-![](../.gitbook/assets/image%20%28160%29.png)
+![](../.gitbook/assets/image%20%28161%29.png)
 
 * 时间复杂度：\mathcal{O}\(N\)O\(N\)。我们只遍历了一次输入元素。
 * 空间复杂度：\mathcal{O}\(N\)O\(N\)，输出答案所使用的空间。
@@ -6954,6 +6954,587 @@ public class Solution {
     }
 }
 ```
+
+## 1255 Maximum Score Words Formed by Letters
+
+### 原题
+
+你将会得到一份单词表 words，一个字母表 letters （可能会有重复字母），以及每个字母对应的得分情况表 score。
+
+请你帮忙计算玩家在单词拼写游戏中所能获得的「最高得分」：能够由 letters 里的字母拼写出的 任意 属于 words 单词子集中，分数最高的单词集合的得分。
+
+单词拼写游戏的规则概述如下：
+
+* 玩家需要用字母表 letters 里的字母来拼写单词表 words 中的单词。 
+* 可以只使用字母表 letters 中的部分字母，但是每个字母最多被使用一次。 
+* 单词表 words 中每个单词只能计分（使用）一次。 
+* 根据字母得分情况表score，字母 'a', 'b', 'c', ... , 'z' 对应的得分分别为 score\[0\], score\[1\], ..., score\[25\]。 
+* 本场游戏的「得分」是指：玩家所拼写出的单词集合里包含的所有字母的得分之和。
+
+Given a list of `words`, list of  single `letters` \(might be repeating\) and `score` of every character.
+
+Return the maximum score of **any** valid set of words formed by using the given letters \(`words[i]` cannot be used two or more times\).
+
+It is not necessary to use all characters in `letters` and each letter can only be used once. Score of letters `'a'`, `'b'`, `'c'`, ... ,`'z'` is given by `score[0]`, `score[1]`, ... , `score[25]` respectively.
+
+**Example 1:**
+
+```text
+Input: words = ["dog","cat","dad","good"], letters = ["a","a","c","d","d","d","g","o","o"], score = [1,0,9,5,0,0,3,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0]
+Output: 23
+Explanation:
+Score  a=1, c=9, d=5, g=3, o=2
+Given letters, we can form the words "dad" (5+1+5) and "good" (3+2+2+5) with a score of 23.
+Words "dad" and "dog" only get a score of 21.
+```
+
+**Example 2:**
+
+```text
+Input: words = ["xxxz","ax","bx","cx"], letters = ["z","a","b","c","x","x","x"], score = [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,10]
+Output: 27
+Explanation:
+Score  a=4, b=4, c=4, x=5, z=10
+Given letters, we can form the words "ax" (4+5), "bx" (4+5) and "cx" (4+5) with a score of 27.
+Word "xxxz" only get a score of 25.
+```
+
+**Example 3:**
+
+```text
+Input: words = ["leetcode"], letters = ["l","e","t","c","o","d"], score = [0,0,1,1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0]
+Output: 0
+Explanation:
+Letter "e" can only be used once.
+```
+
+**Constraints:**
+
+* `1 <= words.length <= 14`
+* `1 <= words[i].length <= 15`
+* `1 <= letters.length <= 100`
+* `letters[i].length == 1`
+* `score.length == 26`
+* `0 <= score[i] <= 10`
+* `words[i]`, `letters[i]` contains only lower case English letters.
+
+### 分析
+
+DFS
+
+1、再maxmaxScorewords方法当中对字母的数组进行一个数量的统计 定义一个int\[26\] 数组通过int\[c-'a'\]++ （c-'a'是字母表当中对应位置字母的索引）来存储字母的个数 
+
+2、将统计了字母个数的数组传入另外一个数组（设置了单词索引，成立单词的值，数组）， 
+
+3、在DFS数组当中对单词索引的大小和单词数组长度做一个判断避免索引越界 
+
+4、将单词words\[index\]变成字符串数组，增强for循环遍历数组，然后同样通过 -'a'来得到索引，判断在字母个数数组当中该字符的个数是否大于00 
+
+5、大于零则计算对应的socre值，小于0说明该单词没有，直接重新递归当前方法 
+
+6、若一个成立则继续往下执行，将单词的值给成员方法sum 
+
+7、单词有四个，可知没有遍历完单词 
+
+8、再次递归DFS方法，num=num+sum0，传递上一个单词的值。 9、收尾
+
+### 代码
+
+```java
+class Solution {
+    int sum;
+    String[] words;
+    int[] score;
+
+    public int maxScoreWords(String[] words, char[] letters, int[] score) {
+        this.words = words;
+        this.score = score;
+        int[] charNum = new int[score.length];
+        for (char ch : letters) {
+            charNum[ch - 'a']++;
+        }
+        DFS(0, 0, charNum);
+        return sum;
+    }
+
+    public void DFS(int index, int num, int[] charNum) {
+        if (index >= words.length) {
+            return;
+        }
+        int[] charNum0 = charNum.clone();//复制数组
+        int sum0 = 0;
+        for (char c : words[index].toCharArray()) {
+            if (charNum[c - 'a'] > 0) {
+                sum0 = sum0 + score[c - 'a'];
+                charNum[c - 'a']--;//减去可以组成单词的字母
+            } else {
+                DFS(index + 1, num, charNum0);
+                return;
+            }
+        }
+        //计算一个值
+        sum = Integer.max(sum, num + sum0);
+        //sum=sum>num+sum0?sum:num+sum0;
+        //System.out.println(num);
+
+        //上面只能计算出一个单词的和
+        DFS(index + 1, num + sum0, charNum);
+        DFS(index + 1, num, charNum0);
+
+
+    }
+}
+```
+
+## 1499 Max Value of Equation
+
+### 原题
+
+满足不等式的最大值，给你一个数组 points 和一个整数 k 。数组中每个元素都表示二维平面上的点的坐标，并按照横坐标 x 的值从小到大排序。也就是说 points\[i\] = \[xi, yi\] ，并且在 1 &lt;= i &lt; j &lt;= points.length 的前提下， xi &lt; xj 总成立。
+
+请你找出 yi + yj + \|xi - xj\| 的 最大值，其中 \|xi - xj\| &lt;= k 且 1 &lt;= i &lt; j &lt;= points.length。
+
+题目测试数据保证至少存在一对能够满足 \|xi - xj\| &lt;= k 的点。
+
+Given an array `points` containing the coordinates of points on a 2D plane, sorted by the x-values, where `points[i] = [xi, yi]` such that `xi < xj` for all `1 <= i < j <= points.length`. You are also given an integer `k`.
+
+Find the _maximum value of the equation_ `yi + yj + |xi - xj|` where `|xi - xj| <= k` and `1 <= i < j <= points.length`. It is guaranteed that there exists at least one pair of points that satisfy the constraint `|xi - xj| <= k`.
+
+**Example 1:**
+
+```text
+Input: points = [[1,3],[2,0],[5,10],[6,-10]], k = 1
+Output: 4
+Explanation: The first two points satisfy the condition |xi - xj| <= 1 and if we calculate the equation we get 3 + 0 + |1 - 2| = 4. Third and fourth points also satisfy the condition and give a value of 10 + -10 + |5 - 6| = 1.
+No other pairs satisfy the condition, so we return the max of 4 and 1.
+```
+
+**Example 2:**
+
+```text
+Input: points = [[0,0],[3,0],[9,2]], k = 3
+Output: 3
+Explanation: Only the first two points have an absolute difference of 3 or less in the x-values, and give the value of 0 + 0 + |0 - 3| = 3.
+```
+
+**Constraints:**
+
+* `2 <= points.length <= 10^5`
+* `points[i].length == 2`
+* `-10^8 <= points[i][0], points[i][1] <= 10^8`
+* `0 <= k <= 2 * 10^8`
+* `points[i][0] < points[j][0]` for all `1 <= i < j <= points.length`
+* `xi` form a strictly increasing sequence.
+
+### 分析
+
+线段树，优先队列，红黑树，单调队列，四种解法，本质一样
+
+使用双端队列，首先将原表达式化为yi-xi+yj+xj的形式，其中i&gt;j且xi-xj&lt;=k，我们在固定j的值后，问题就变成了寻找区间内的最大值，我们从大到小遍历j，那么区间就是一个滑动窗口，我们参考滑动窗口中的最大值中使用双端队列的解法，由于每个元素最多进一次和出一次队列，所以时间复杂度为O\(n\)。
+
+### 代码
+
+```java
+class Solution {
+    int deque[];
+    int head, rear, res;
+
+    public void push_que(int p, int[][] points) {
+        while (head != rear && points[deque[rear - 1]][1] - points[deque[rear - 1]][0] < points[p][1] - points[p][0]) {
+            rear--;
+        }
+        deque[rear++] = p;
+    }
+
+    public void delete_que(int p) {
+        if (head != rear && p == deque[head]) head++;
+    }
+
+    public int get_max(int[][] points) {
+        return points[deque[head]][1] - points[deque[head]][0];
+    }
+
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        deque = new int[100004];
+        head = 0;
+        rear = 0;
+        res = -Integer.MAX_VALUE;
+        int n = points.length - 1, now = n - 1;
+        for (int i = n; i > 0; i--) {
+            delete_que(i);
+            int j = i - 1;
+            while (j > now && points[i][0] - points[j][0] > k) {
+                delete_que(j);
+                j--;
+            }
+            if (now >= i) now = i - 1;
+            while (now >= 0 && points[i][0] - points[now][0] <= k) {
+                push_que(now, points);
+                now--;
+            }
+            //System.out.println(deque[head]==i);
+            if (rear != head) res = Math.max(res, get_max(points) + points[i][0] + points[i][1]);
+        }
+        return res;
+    }
+}
+```
+
+## 815 Bus Route
+
+### 原题
+
+我们有一系列公交路线。每一条路线 routes\[i\] 上都有一辆公交车在上面循环行驶。例如，有一条路线 routes\[0\] = \[1, 5, 7\]，表示第一辆 \(下标为0\) 公交车会一直按照 1-&gt;5-&gt;7-&gt;1-&gt;5-&gt;7-&gt;1-&gt;... 的车站路线行驶。
+
+假设我们从 S 车站开始（初始时不在公交车上），要去往 T 站。 期间仅可乘坐公交车，求出最少乘坐的公交车数量。返回 -1 表示不可能到达终点车站。
+
+We have a list of bus routes. Each `routes[i]` is a bus route that the i-th bus repeats forever. For example if `routes[0] = [1, 5, 7]`, this means that the first bus \(0-th indexed\) travels in the sequence 1-&gt;5-&gt;7-&gt;1-&gt;5-&gt;7-&gt;1-&gt;... forever.
+
+We start at bus stop `S` \(initially not on a bus\), and we want to go to bus stop `T`. Travelling by buses only, what is the least number of buses we must take to reach our destination? Return -1 if it is not possible.
+
+```text
+Example:
+Input: 
+routes = [[1, 2, 7], [3, 6, 7]]
+S = 1
+T = 6
+Output: 2
+Explanation: 
+The best strategy is take the first bus to the bus stop 7, then take the second bus to the bus stop 6.
+```
+
+**Constraints:**
+
+* `1 <= routes.length <= 500`.
+* `1 <= routes[i].length <= 10^5`.
+* `0 <= routes[i][j] < 10 ^ 6`.
+
+### 分析
+
+构建图，BFS
+
+我们将每一条公交路线（而不是每一个车站）看成图中的一个点，如果两条公交路线有交集，那么它们在图中对应的点之间就有一条边。此外，起点站 S 和终点站 T 也分别是图中的一个点，如果一条公交路线包含了 S 或 T，那么也需要和 S 或 T 对应的点连一条边。此时，在这个图上从 S 到 T 的最短路径长度即为答案，我们可以用广度优先搜索来找出最短路径。
+
+在计算两条公交路线是否有交集时，可以用的方法有很多种。例如将公交路线放在集合中，检查两个集合的交集是否为空；或者将公交路线中的车站进行递增排序，并使用双指针的方法检查是否有相同的车站。
+
+时间复杂度：设 N 为公交路线的总数，b\_i为第 i 条公交路线中的车站数目，在建图时，我们的时间集中在判断两条公交路线是否有交集上。在广度优先搜索时，包含 N 个点的图的边数最大可以达到 O\(N^2\)，因此时间复杂度为 O\(N^2\)。
+
+空间复杂度：O\(N^2\)，用来存储图。
+
+### 代码
+
+```java
+class Solution {
+    public int numBusesToDestination(int[][] routes, int S, int T) {
+        if (S == T) return 0;
+        int N = routes.length;
+
+        List<List<Integer>> graph = new ArrayList();
+        for (int i = 0; i < N; ++i) {
+            Arrays.sort(routes[i]);
+            graph.add(new ArrayList());
+        }
+        Set<Integer> seen = new HashSet();
+        Set<Integer> targets = new HashSet();
+        Queue<Point> queue = new ArrayDeque();
+
+        // Build the graph.  Two buses are connected if
+        // they share at least one bus stop.
+        for (int i = 0; i < N; ++i)
+            for (int j = i + 1; j < N; ++j)
+                if (intersect(routes[i], routes[j])) {
+                    graph.get(i).add(j);
+                    graph.get(j).add(i);
+                }
+
+        // Initialize seen, queue, targets.
+        // seen represents whether a node has ever been enqueued to queue.
+        // queue handles our breadth first search.
+        // targets is the set of goal states we have.
+        for (int i = 0; i < N; ++i) {
+            if (Arrays.binarySearch(routes[i], S) >= 0) {
+                seen.add(i);
+                queue.offer(new Point(i, 0));
+            }
+            if (Arrays.binarySearch(routes[i], T) >= 0)
+                targets.add(i);
+        }
+
+        while (!queue.isEmpty()) {
+            Point info = queue.poll();
+            int node = info.x, depth = info.y;
+            if (targets.contains(node)) return depth + 1;
+            for (Integer nei : graph.get(node)) {
+                if (!seen.contains(nei)) {
+                    seen.add(nei);
+                    queue.offer(new Point(nei, depth + 1));
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public boolean intersect(int[] A, int[] B) {
+        int i = 0, j = 0;
+        while (i < A.length && j < B.length) {
+            if (A[i] == B[j]) return true;
+            if (A[i] < B[j]) i++;
+            else j++;
+        }
+        return false;
+    }
+}
+```
+
+## 1062 Longest Repeating Substring
+
+### 原题
+
+ 给定字符串 `S`，找出最长重复子串的长度。如果不存在重复子串就返回 `0`。
+
+Given a string `S`, find out the length of the longest repeating substring\(s\). Return `0` if no repeating substring exists.
+
+**Example 1:**
+
+```text
+Input: S = "abcd"
+Output: 0
+Explanation: There is no repeating substring.
+```
+
+**Example 2:**
+
+```text
+Input: S = "abbaba"
+Output: 2
+Explanation: The longest repeating substrings are "ab" and "ba", each of which occurs twice.
+```
+
+**Example 3:**
+
+```text
+Input: S = "aabcaabdaab"
+Output: 3
+Explanation: The longest repeating substring is "aab", which occurs 3 times.
+```
+
+**Example 4:**
+
+```text
+Input: S = "aaaaa"
+Output: 4
+Explanation: The longest repeating substring is "aaaa", which occurs twice.
+```
+
+**Constraints:**
+
+* The string `S` consists of only lowercase English letters from `'a'` - `'z'`.
+* `1 <= S.length <= 1500`
+
+### 分析
+
+由于数据范围的限制，我们必须找到一个时间复杂度低于暴力 O\(N^2\) 的方法。
+
+1）包含子串的哈希集合
+
+这种方法实现起来非常直接：
+
+使用滑动窗口来遍历所有长度为 L 的子串； 检查当前子串是否已经出现在集合中： 如果已经出现，就说明找到了长度为 L 的重复子串； 如果没有出现，我们将当前子串加入集合中
+
+缺点也很显然，直接将字符串存储在集合中会占用大量的空间
+
+时间复杂度：在平均情况下，为 O\(NlogN\)，最坏情况下，L 为 N/2，可以达到 O\(N^2\)。
+
+空间复杂度：O\(N^2\)，为哈希集合占用的空间。
+
+2）包含子串哈希值的哈希集合
+
+为了减少方法一中的空间复杂度，我们可以在哈希集合中存储字符串的哈希值，而不是字符串的本身，别的都一样。
+
+3）Rabin-Karp 字符串哈希算法
+
+![](../.gitbook/assets/image%20%28150%29.png)
+
+![](../.gitbook/assets/image%20%28166%29.png)
+
+时间复杂度：O\(NlogN\)，二分查找的时间复杂度为 O\(logN\)，Rabin-Karp 字符串哈希的时间复杂度为 O\(N\)。
+
+空间复杂度：O\(N\)，为哈希集合占用的空间。
+
+### 代码
+
+1）包含子串的哈希集合
+
+```java
+class Solution {
+    /*
+        Search a substring of given length
+        that occurs at least 2 times.
+        Return start position if the substring exits and -1 otherwise.
+    */
+    public int search(int L, int n, String S) {
+        HashSet<String> seen = new HashSet();
+        String tmp;
+        for (int start = 0; start < n - L + 1; ++start) {
+            tmp = S.substring(start, start + L);
+            if (seen.contains(tmp)) return start;
+            seen.add(tmp);
+        }
+        return -1;
+    }
+
+    public int longestRepeatingSubstring(String S) {
+        int n = S.length();
+        // binary search, L = repeating string length
+        int left = 1, right = n;
+        int L;
+        while (left <= right) {
+            L = left + (right - left) / 2;
+            if (search(L, n, S) != -1) left = L + 1;
+            else right = L - 1;
+        }
+
+        return left - 1;
+    }
+}
+```
+
+2）包含子串哈希值的哈希集合
+
+```java
+class Solution {
+    /*
+        Search a substring of given length
+        that occurs at least 2 times.
+        Return start position if the substring exits and -1 otherwise.
+    */
+    public int search(int L, int n, String S) {
+        HashSet<Integer> seen = new HashSet();
+        String tmp;
+        int h;
+        for (int start = 0; start < n - L + 1; ++start) {
+            tmp = S.substring(start, start + L);
+            h = tmp.hashCode();
+            if (seen.contains(h)) return start;
+            seen.add(h);
+        }
+        return -1;
+    }
+
+    public int longestRepeatingSubstring(String S) {
+        int n = S.length();
+        // binary search, L = repeating string length
+        int left = 1, right = n;
+        int L;
+        while (left <= right) {
+            L = left + (right - left) / 2;
+            if (search(L, n, S) != -1) left = L + 1;
+            else right = L - 1;
+        }
+
+        return left - 1;
+    }
+}
+```
+
+3）Rabin-Karp 字符串哈希算法
+
+```java
+class Solution {
+    /*
+      Rabin-Karp with polynomial rolling hash.
+      Search a substring of given length
+      that occurs at least 2 times.
+      Return start position if the substring exits and -1 otherwise.
+    */
+
+    public int search(int L, int a, long modulus, int n, int[] nums) {
+        // compute the hash of string S[:L]
+        long h = 0;
+        for (int i = 0; i < L; ++i) h = (h * a + nums[i]) % modulus;
+
+        // already seen hashes of strings of length L
+        HashSet<Long> seen = new HashSet();
+        seen.add(h);
+        // const value to be used often : a**L % modulus
+        long aL = 1;
+        for (int i = 1; i <= L; ++i) aL = (aL * a) % modulus;
+
+        for(int start = 1; start < n - L + 1; ++start) {
+            // compute rolling hash in O(1) time
+            h = (h * a - nums[start - 1] * aL % modulus + modulus) % modulus;
+            h = (h + nums[start + L - 1]) % modulus;
+            if (seen.contains(h)) return start;
+            seen.add(h);
+        }
+        return -1;
+    }
+
+    public int longestRepeatingSubstring(String S) {
+        int n = S.length();
+        // convert string to array of integers
+        // to implement constant time slice
+        int[] nums = new int[n];
+        for (int i = 0; i < n; ++i) nums[i] = (int)S.charAt(i) - (int)'a';
+        // base value for the rolling hash function
+        int a = 26;
+        // modulus value for the rolling hash function to avoid overflow
+        long modulus = (long)Math.pow(2, 24);
+
+        // binary search, L = repeating string length
+        int left = 1, right = n;
+        int L;
+        while (left <= right) {
+            L = left + (right - left) / 2;
+            if (search(L, a, modulus, n, nums) != -1) left = L + 1;
+            else right = L - 1;
+        }
+
+        return left - 1;
+    }
+}
+```
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
+
+## 
+
+### 原题
+
+### 分析
+
+### 代码
 
 ## 
 
