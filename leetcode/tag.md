@@ -9687,13 +9687,102 @@ class Solution {
 }
 ```
 
-## 
+## 855 Exam Room
 
 ### 原题
 
+在考场里，一排有 N 个座位，分别编号为 0, 1, 2, ..., N-1 。
+
+当学生进入考场后，他必须坐在能够使他与离他最近的人之间的距离达到最大化的座位上。如果有多个这样的座位，他会坐在编号最小的座位上。\(另外，如果考场里没有人，那么学生就坐在 0 号座位上。\)
+
+返回 ExamRoom\(int N\) 类，它有两个公开的函数：其中，函数 ExamRoom.seat\(\) 会返回一个 int （整型数据），代表学生坐的位置；函数 ExamRoom.leave\(int p\) 代表坐在座位 p 上的学生现在离开了考场。每次调用 ExamRoom.leave\(p\) 时都保证有学生坐在座位 p 上。
+
+In an exam room, there are `N` seats in a single row, numbered `0, 1, 2, ..., N-1`.
+
+When a student enters the room, they must sit in the seat that maximizes the distance to the closest person.  If there are multiple such seats, they sit in the seat with the lowest number.  \(Also, if no one is in the room, then the student sits at seat number 0.\)
+
+Return a class `ExamRoom(int N)` that exposes two functions: `ExamRoom.seat()` returning an `int` representing what seat the student sat in, and `ExamRoom.leave(int p)` representing that the student in seat number `p` now leaves the room.  It is guaranteed that any calls to `ExamRoom.leave(p)` have a student sitting in seat `p`.
+
+**Example 1:**
+
+```text
+Input: ["ExamRoom","seat","seat","seat","seat","leave","seat"], [[10],[],[],[],[],[4],[]]
+Output: [null,0,9,4,2,null,5]
+Explanation:
+ExamRoom(10) -> null
+seat() -> 0, no one is in the room, then the student sits at seat number 0.
+seat() -> 9, the student sits at the last seat number 9.
+seat() -> 4, the student sits at the last seat number 4.
+seat() -> 2, the student sits at the last seat number 2.
+leave(4) -> null
+seat() -> 5, the student sits at the last seat number 5.
+```
+
+​​​​​​​
+
+**Note:**
+
+1. `1 <= N <= 10^9`
+2. `ExamRoom.seat()` and `ExamRoom.leave()` will be called at most `10^4` times across all test cases.
+3. Calls to `ExamRoom.leave(p)` are guaranteed to have a student currently sitting in seat number `p`.
+
 ### 分析
 
+维护有序的座位编号 
+
+我们可以用有序集合（Java 中 TreeSet，C++ 中的 set）存储目前有学生的座位编号。当我们要调用 leave\(p\) 函数时，我们只需要把有序集合中的 p 移除即可。当我们要调用 seat\(\) 函数时，我们遍历这个有序集合，对于相邻的两个座位 i 和 j，如果选择在这两个座位之间入座，那么最近的距离 d 为 \(j - i\) / 2，选择的座位为 i + d。除此之外，我们还需要考虑坐在最左侧 0 和最右侧 N - 1 的情况。
+
 ### 代码
+
+```java
+class ExamRoom {
+    int N;
+    TreeSet<Integer> students;
+
+    public ExamRoom(int N) {
+        this.N = N;
+        students = new TreeSet();
+    }
+
+    public int seat() {
+        //Let's determine student, the position of the next
+        //student to sit down.
+        int student = 0;
+        if (students.size() > 0) {
+            //Tenatively, dist is the distance to the closest student,
+            //which is achieved by sitting in the position 'student'.
+            //We start by considering the left-most seat.
+            int dist = students.first();
+            Integer prev = null;
+            for (Integer s: students) {
+                if (prev != null) {
+                    //For each pair of adjacent students in positions (prev, s),
+                    //d is the distance to the closest student;
+                    //achieved at position prev + d.
+                    int d = (s - prev) / 2;
+                    if (d > dist) {
+                        dist = d;
+                        student = prev + d;
+                    }
+                }
+                prev = s;
+            }
+
+            //Considering the right-most seat.
+            if (N - 1 - students.last() > dist)
+                student = N - 1;
+        }
+
+        //Add the student to our sorted TreeSet of positions.
+        students.add(student);
+        return student;
+    }
+
+    public void leave(int p) {
+        students.remove(p);
+    }
+}
+```
 
 ## 
 
