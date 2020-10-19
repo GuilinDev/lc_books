@@ -1072,6 +1072,8 @@ class MyQueue {
 
 ### 题目
 
+验证栈序列，给定 pushed 和 popped 两个序列，每个序列中的 值都不重复，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop 操作序列的结果时，返回 true；否则，返回 false 。
+
 Given two sequences `pushed` and `popped` **with distinct values**, return `true` if and only if this could have been the result of a sequence of push and pop operations on an initially empty stack.
 
 **Example 1:**
@@ -1100,8 +1102,6 @@ Explanation: 1 cannot be popped before 2.
 * `pushed` and `popped` have distinct values.
 
 ### 分析
-
-给定 pushed 和 popped 两个数组，两个序列都不含有相同的数字，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop 操作序列的结果时，返回 true；否则，返回 false 。
 
 做法是开一个栈直接模拟过程，每次都 push 进一个新元素，然后和 pop 序列不断比对，如果发现一致，则出队。 最后如果 pop 序列都遍历完，则证明合法。这也是贪心的思想。
 
