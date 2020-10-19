@@ -56,6 +56,7 @@
   * [9 Tag](leetcode/tag.md)
   * [tag0](leetcode/tag0.md)
   * [tag1](leetcode/tag1.md)
+  * [tag2](leetcode/tag2.md)
 * [System Design](untitled.md)
 * [Behavior Questions](untitled-1.md)
 * [基础知识拾遗](ji-chu-zhi-shi/README.md)
