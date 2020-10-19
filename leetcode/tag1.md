@@ -701,6 +701,18 @@ class Counter extends HashMap<Integer, Integer> {
 
 ### 原题
 
+给你一个整数数组 arr 和一个整数值 target 。
+
+请你在 arr 中找 两个互不重叠的子数组 且它们的和都等于 target 。可能会有多种方案，请你返回满足要求的两个子数组长度和的 最小值 。
+
+请返回满足要求的最小长度和，如果无法找到这样的两个子数组，请返回 -1 。
+
+给你一个整数数组 arr 和一个整数值 target 。
+
+请你在 arr 中找 两个互不重叠的子数组 且它们的和都等于 target 。可能会有多种方案，请你返回满足要求的两个子数组长度和的 最小值 。
+
+请返回满足要求的最小长度和，如果无法找到这样的两个子数组，请返回 -1 。
+
 Given an array of integers `arr` and an integer `target`.
 
 You have to find **two non-overlapping sub-arrays** of `arr` each with sum equal `target`. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is **minimum**.
@@ -797,6 +809,14 @@ class Solution {
 ## 752 Open the Lock 
 
 ### 原题
+
+你有一个带有四个圆形拨轮的转盘锁。每个拨轮都有10个数字： '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' 。每个拨轮可以自由旋转：例如把 '9' 变为 '0'，'0' 变为 '9' 。每次旋转都只能旋转一个拨轮的一位数字。
+
+锁的初始数字为 '0000' ，一个代表四个拨轮的数字的字符串。
+
+列表 deadends 包含了一组死亡数字，一旦拨轮的数字和列表里的任何一个元素相同，这个锁将会被永久锁定，无法再被旋转。
+
+字符串 target 代表可以解锁的数字，你需要给出最小的旋转次数，如果无论如何不能解锁，返回 -1。
 
 You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: `'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'`. The wheels can rotate freely and wrap around: for example we can turn `'9'` to be `'0'`, or `'0'` to be `'9'`. Each move consists of turning one wheel one slot.
 
@@ -931,6 +951,8 @@ class Solution {
 ## 444 Sequence Reconstruction 
 
 ### 原题
+
+验证原始的序列 org 是否可以从序列集 seqs 中唯一地重建。序列 org 是 1 到 n 整数的排列，其中 1 ≤ n ≤ 104。重建是指在序列集 seqs 中构建最短的公共超序列。（即使得所有 seqs 中的序列都是该最短序列的子序列）。确定是否只可以从 seqs 重建唯一的序列，且该序列就是 org 。
 
 Check whether the original sequence `org` can be uniquely reconstructed from the sequences in `seqs`. The `org` sequence is a permutation of the integers from 1 to n, with 1 ≤ n ≤ 104. Reconstruction means building a shortest common supersequence of the sequences in `seqs` \(i.e., a shortest sequence so that all sequences in `seqs` are subsequences of it\). Determine whether there is only one sequence that can be reconstructed from `seqs` and it is the `org` sequence.
 
@@ -1079,6 +1101,12 @@ class Solution {
 ## 951 Flip Equivalent Binary Trees 
 
 ### 原题
+
+反转等价二叉树，我们可以为二叉树 T 定义一个翻转操作，如下所示：选择任意节点，然后交换它的左子树和右子树。
+
+只要经过一定次数的翻转操作后，能使 X 等于 Y，我们就称二叉树 X 翻转等价于二叉树 Y。
+
+编写一个判断两个二叉树是否是翻转等价的函数。这些树由根节点 root1 和 root2 给出。
 
 For a binary tree **T**, we can define a **flip operation** as follows: choose any node, and swap the left and right child subtrees.
 
@@ -1240,6 +1268,16 @@ class Solution {
 
 ### 原题
 
+公司里有 n 名员工，每个员工的 ID 都是独一无二的，编号从 0 到 n - 1。公司的总负责人通过 headID 进行标识。
+
+在 manager 数组中，每个员工都有一个直属负责人，其中 manager\[i\] 是第 i 名员工的直属负责人。对于总负责人，manager\[headID\] = -1。题目保证从属关系可以用树结构显示。
+
+公司总负责人想要向公司所有员工通告一条紧急消息。他将会首先通知他的直属下属们，然后由这些下属通知他们的下属，直到所有的员工都得知这条紧急消息。
+
+第 i 名员工需要 informTime\[i\] 分钟来通知它的所有直属下属（也就是说在 informTime\[i\] 分钟后，他的所有直属下属都可以开始传播这一消息）。
+
+返回通知所有员工这一紧急消息所需要的 分钟数 。
+
 A company has `n` employees with a unique ID for each employee from `0` to `n - 1`. The head of the company has is the one with `headID`.
 
 Each employee has one direct manager given in the `manager` array where `manager[i]` is the direct manager of the `i-th` employee, `manager[headID] = -1`. Also it's guaranteed that the subordination relationships have a tree structure.
@@ -1384,6 +1422,12 @@ class Solution {
 
 ### 原题
 
+Range模块，Range 模块是跟踪数字范围的模块。你的任务是以一种有效的方式设计和实现以下接口。
+
+* addRange\(int left, int right\) 添加半开区间 \[left, right\)，跟踪该区间中的每个实数。添加与当前跟踪的数字部分重叠的区间时，应当添加在区间 \[left, right\) 中尚未跟踪的任何数字到该区间中。 
+* queryRange\(int left, int right\) 只有在当前正在跟踪区间 \[left, right\) 中的每一个实数时，才返回 true。 
+* removeRange\(int left, int right\) 停止跟踪区间 \[left, right\) 中当前正在跟踪的每个实数。
+
 A Range Module is a module that tracks ranges of numbers. Your task is to design and implement the following interfaces in an efficient manner.
 
 `addRange(int left, int right)` Adds the half-open interval `[left, right)`, tracking every real number in that interval. Adding an interval that partially overlaps with currently tracked numbers should add any numbers in the interval `[left, right)` that are not already tracked.
@@ -1490,6 +1534,18 @@ class Interval implements Comparable<Interval>{
 
 ### 原题
 
+字符串中的查找和替换
+
+对于某些字符串 S，我们将执行一些替换操作，用新的字母组替换原有的字母组（不一定大小相同）。
+
+每个替换操作具有 3 个参数：起始索引 i，源字 x 和目标字 y。规则是如果 x 从原始字符串 S 中的位置 i 开始，那么我们将用 y 替换出现的 x。如果没有，我们什么都不做。
+
+举个例子，如果我们有 S = “abcd” 并且我们有一些替换操作 i = 2，x = “cd”，y = “ffff”，那么因为 “cd” 从原始字符串 S 中的位置 2 开始，我们将用 “ffff” 替换它。
+
+再来看 S = “abcd” 上的另一个例子，如果我们有替换操作 i = 0，x = “ab”，y = “eee”，以及另一个替换操作 i = 2，x = “ec”，y = “ffff”，那么第二个操作将不执行任何操作，因为原始字符串中 S\[2\] = 'c'，与 x\[0\] = 'e' 不匹配。
+
+所有这些操作同时发生。保证在替换时不会有任何重叠： S = "abc", indexes = \[0, 1\], sources = \["ab","bc"\] 不是有效的测试用例。
+
 To some string `S`, we will perform some replacement operations that replace groups of letters with new ones \(not necessarily the same size\).
 
 Each replacement operation has `3` parameters: a starting index `i`, a source word `x` and a target word `y`.  The rule is that if `x` starts at position `i` in the **original** **string** **`S`**, then we will replace that occurrence of `x` with `y`.  If not, we do nothing.
@@ -1530,7 +1586,7 @@ Notes:
 
 在 Java 的代码中，我们根据替换操作得到数组 match，其中 match\[ix\] = j 表示字符串 S 从第 ix 位开始和 sources\[j\] 匹配，并且会被替换成 target\[j\]，也就是说 sources\[j\] 是字符串 S\[ix:\] 的前缀。在得到 match 数组后，我们对 S 从左到右进行扫描，对于每个位置 ix，如果 match\[ix\] 有值 j，那么在 ans 尾部添加字符串 targets\[j\]，并将 ix 增加 sources\[j\].length\(\)；否则在 ans 尾部添加字符 S\[ix\]，并将 ix 增加 1。
 
-时间复杂度：O\(NQ\)，其中 NN 是字符串 S 的长度，QQ 是替换操作的数量。
+时间复杂度：O\(NQ\)，其中 NN 是字符串 S 的长度，Q 是替换操作的数量。
 
 空间复杂度：O\(N\)，我们认为 sources 和 targets 中的字符串长度均为常数。
 
