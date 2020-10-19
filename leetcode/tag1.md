@@ -409,6 +409,8 @@ class Solution {
 
 ### 原题
 
+删点成林，给出二叉树的根节点 root，树上每个节点都有一个不同的值。如果节点值在 to\_delete 中出现，我们就把该节点从树上删去，最后得到一个森林（一些不相交的树构成的集合）。返回森林中的每棵树。你可以按任意顺序组织答案。
+
 Given the `root` of a binary tree, each node in the tree has a distinct value.
 
 After deleting all nodes with a value in `to_delete`, we are left with a forest \(a disjoint union of trees\).
@@ -432,8 +434,6 @@ Output: [[1,2,null,4],[6],[7]]
 * `to_delete` contains distinct values between `1` and `1000`.
 
 ### 思路
-
-删点成林，给出二叉树的根节点 root，树上每个节点都有一个不同的值。如果节点值在 to\_delete 中出现，我们就把该节点从树上删去，最后得到一个森林（一些不相交的树构成的集合）。返回森林中的每棵树。你可以按任意顺序组织答案。
 
 算法
 
@@ -499,6 +499,8 @@ class Solution {
 
 ### 原题
 
+在一个由 'L' , 'R' 和 'X' 三个字符组成的字符串（例如"RXXLRXRXL"）中进行移动操作。一次移动操作指用一个"LX"替换一个"XL"，或者用一个"XR"替换一个"RX"。现给定起始字符串start和结束字符串end，请编写代码，当且仅当存在一系列移动操作使得start可以转换成end时， 返回True。
+
 In a string composed of `'L'`, `'R'`, and `'X'` characters, like `"RXXLRXRXL"`, a move consists of either replacing one occurrence of `"XL"` with `"LX"`, or replacing one occurrence of `"RX"` with `"XR"`. Given the starting string `start` and the ending string `end`, return `True` if and only if there exists a sequence of moves to transform one string to the other.
 
 **Example 1:**
@@ -550,8 +552,6 @@ Output: false
 
 ### 思路
 
-在一个由 'L' , 'R' 和 'X' 三个字符组成的字符串（例如"RXXLRXRXL"）中进行移动操作。一次移动操作指用一个"LX"替换一个"XL"，或者用一个"XR"替换一个"RX"。现给定起始字符串start和结束字符串end，请编写代码，当且仅当存在一系列移动操作使得start可以转换成end时， 返回True。
-
 可以用双指针来解决这个问题，对于 i， j 两个指针，分别让他们指向 start 和 end，且保证 start\[i\] != 'X'，end\[j\] != 'X'。接下来开始移动指针，如果 start\[i\] != end\[j\]，则不满足 转换不变性，如果 start\[i\] == 'L' 且 i &lt; j，则不满足 可到达性。
 
 * 时间复杂度：O\(N\)，其中NNN 为 `start` 和 `end` 的长度。
@@ -594,6 +594,10 @@ class Solution {
 ## 659 Split Array into Consecutive Subsequences 
 
 ### 原题
+
+给你一个按升序排序的整数数组 num（可能包含重复数字），请你将它们分割成一个或多个子序列，其中每个子序列都由连续整数组成且长度至少为 3 。
+
+如果可以完成上述分割，则返回 true ；否则，返回 false 。
 
 Given an array `nums` sorted in ascending order, return `true` if and only if you can split it into 1 or more subsequences such that each subsequence consists of consecutive integers and has length at least 3.
 
