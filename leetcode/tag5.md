@@ -477,5 +477,250 @@ class Solution {
 }
 ```
 
-## 
+## 1273 Delete Tree Node
+
+给你一棵以节点 0 为根节点的树，定义如下： 
+
+* 节点的总数为 nodes 个；
+*  第 i 个节点的值为 value\[i\] ； 
+* 第 i 个节点的父节点是 parent\[i\] 。 
+
+请你删除节点值之和为 0 的每一棵子树。 在完成所有删除之后，返回树中剩余节点的数目。
+
+A tree rooted at node 0 is given as follows:
+
+* The number of nodes is `nodes`;
+* The value of the `i`-th node is `value[i]`;
+* The parent of the `i`-th node is `parent[i]`.
+
+Remove every subtree whose sum of values of nodes is zero.
+
+After doing so, return the number of nodes remaining in the tree.
+
+**Example 1:** ![](https://assets.leetcode.com/uploads/2019/07/02/1421_sample_1.PNG)
+
+```text
+Input: nodes = 7, parent = [-1,0,0,1,2,2,2], value = [1,-2,4,0,-2,-1,-1]
+Output: 2
+```
+
+**Example 2:**
+
+```text
+Input: nodes = 7, parent = [-1,0,0,1,2,2,2], value = [1,-2,4,0,-2,-1,-2]
+Output: 6
+```
+
+**Example 3:**
+
+```text
+Input: nodes = 5, parent = [-1,0,1,0,0], value = [-672,441,18,728,378]
+Output: 5
+```
+
+**Example 4:**
+
+```text
+Input: nodes = 5, parent = [-1,0,0,1,1], value = [-686,-842,616,-739,-746]
+Output: 5
+```
+
+**Constraints:**
+
+* `1 <= nodes <= 10^4`
+* `parent.length == nodes`
+* `0 <= parent[i] <= nodes - 1`
+* `parent[0] == -1` which indicates that `0` is the root.
+* `value.length == nodes`
+* `-10^5 <= value[i] <= 10^5`
+* The given input is **guaranteed** to represent a **valid tree**.
+
+### 分析
+
+![](../.gitbook/assets/image%20%28192%29.png)
+
+### 代码
+
+```java
+class Solution {
+
+    /**
+     * @param nodes  节点的总数为 nodes 个
+     * @param parent 第 i 个节点的值为 value[i]
+     * @param value  第 i 个节点的父节点是 parent[i]
+     * @return 删除节点值之和为 0 的每一棵子树。在完成所有删除之后，返回树中剩余节点的数目。
+     */
+    public int deleteTreeNodes(int nodes, int[] parent, int[] value) {
+        TreeNode root = null;
+        TreeNode[] treeArr = new TreeNode[nodes];
+
+        // 创建节点对象
+        for (int i = 0; i < nodes; i++) {
+            treeArr[i] = new TreeNode(value[i]);
+            if (parent[i] == -1) root = treeArr[i];
+        }
+        // 给每个节点构造子结点
+        for (int i = 0; i < nodes; i++) {
+            if (parent[i] != -1) {
+                // 第 i 个节点的父节点是 parent[i]
+                treeArr[parent[i]].addTreeNode(treeArr[i]);
+            }
+        }
+        // 计算每个子树的节点数量和总和值
+        computeTree(root);
+
+        if (root.sum == 0) return 0;
+        // return nodes - removeZeroTreeNode(treeArr);
+        return nodes - removeZeroTreeNode(root);
+    }
+
+    // 递归计算该及其孩子节点的“节点总数”和“值的加和”
+    public void computeTree(TreeNode node) {
+        node.sum = node.value;
+        node.num = 1;
+        for (TreeNode child : node.children) {
+            computeTree(child);
+            node.sum += child.sum;
+            node.num += child.num;
+        }
+    }
+
+    // 计算该节点及其孩子节点会被移除的节点总数
+    public int removeZeroTreeNode(TreeNode node) {
+        int removeNum = 0;  // 统计子树和为 0 的节点个数
+        // 因为已经有了节点数组，所以不用 BFS，直接数即可
+        for (int i = 0; i < node.children.size(); i++) {
+            TreeNode child = node.children.get(i);
+            if (child.sum == 0) {
+                removeNum += child.num;
+            } else {
+                removeNum += removeZeroTreeNode(child);
+            }
+        }
+        return removeNum;
+    }
+
+    /**
+     * 多叉树的结点类
+     */
+    class TreeNode {
+        int value;  // 节点权值
+        int sum;    // 子树和
+        int num;    // 子树的节点数量
+        List<TreeNode> children;    // 子结点
+
+        public TreeNode() {
+            this.children = new ArrayList<TreeNode>();
+        }
+
+        public TreeNode(int value) {
+            this.value = value;
+            this.children = new ArrayList<TreeNode>();
+        }
+
+        /**
+         * 添加子结点
+         *
+         * @param treeNode
+         */
+        public void addTreeNode(TreeNode treeNode) {
+            this.children.add(treeNode);
+        }
+    }
+}
+
+```
+
+## 1612 Check If Two Expression Trees are Equivalent
+
+二叉表达式树是一种表达算术表达式的二叉树。二叉表达式树中的每一个节点都有零个或两个子节点。 叶节点（有 0 个子节点的节点）表示操作数，非叶节点（有 2 个子节点的节点）表示运算符。在本题中，我们只考虑 '+' 运算符（即加法）。
+
+给定两棵二叉表达式树的根节点 root1 和 root2 。如果两棵二叉表达式树等价，返回 true ，否则返回 false 。
+
+当两棵二叉搜索树中的变量取任意值，分别求得的值都相等时，我们称这两棵二叉表达式树是等价的。
+
+进阶：当你的答案需同时支持 '-' 运算符（减法）时，你该如何修改你的答案？
+
+A [**binary expression tree**](https://en.wikipedia.org/wiki/Binary_expression_tree) is a kind of binary tree used to represent arithmetic expressions. Each node of a binary expression tree has either zero or two children. Leaf nodes \(nodes with 0 children\) correspond to operands \(variables\), and internal nodes \(nodes with two children\) correspond to the operators. In this problem, we only consider the `'+'` operator \(i.e. addition\).
+
+You are given the roots of two binary expression trees, `root1` and `root2`. Return `true` _if the two binary expression trees are equivalent_. Otherwise, return `false`.
+
+Two binary expression trees are equivalent if they **evaluate to the same value** regardless of what the variables are set to.
+
+**Follow up:** What will you change in your solution if the tree also supports the `'-'` operator \(i.e. subtraction\)?
+
+**Example 1:**
+
+```text
+Input: root1 = [x], root2 = [x]
+Output: true
+```
+
+**Example 2:**
+
+![](https://assets.leetcode.com/uploads/2020/10/04/tree1.png)
+
+```text
+Input: root1 = [+,a,+,null,null,b,c], root2 = [+,+,b,c,a]
+Output: true
+Explaination: a + (b + c) == (b + c) + a
+```
+
+**Example 3:**
+
+![](https://assets.leetcode.com/uploads/2020/10/04/tree2.png)
+
+```text
+Input: root1 = [+,a,+,null,null,b,c], root2 = [+,+,b,d,a]
+Output: false
+Explaination: a + (b + c) != (b + d) + a
+```
+
+**Constraints:**
+
+* The number of nodes in both trees are equal, odd and, in the range `[1, 4999]`.
+* `Node.val` is `'+'` or a lower-case English letter.
+* It's **guaranteed** that the tree given is a valid binary expression tree.
+
+### 分析
+
+* 由于表达树只有加法操作，且操作数都在叶节点上，表达树的计算简化为统计叶节点的字符变量；
+* 两个表达树是否相等就是最后变量的数目是否一致。
+
+### 代码
+
+```java
+/**
+ * Definition for a binary tree node.
+ * class Node {
+ *     char val;
+ *     Node left;
+ *     Node right;
+ *     Node() {this.val = ' ';}
+ *     Node(char val) { this.val = val; }
+ *     Node(char val, Node left, Node right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean checkEquivalence(Node root1, Node root2) {
+        int[] c1 = new int[26], c2 = new int[26];
+        dfs(root1, c1);
+        dfs(root2, c2);
+        return Arrays.equals(c1, c2);
+    }
+
+    private void dfs(Node root, int[] counter) {
+        if (root.left == null) counter[root.val - 'a']++;
+        else {
+            dfs(root.left, counter);
+            dfs(root.right, counter);
+        }
+    }
+}
+
+```
 
