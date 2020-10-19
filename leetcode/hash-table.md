@@ -2100,6 +2100,12 @@ class WordDistance {
 
 ### 原题
 
+一手顺子，爱丽丝有一手（hand）由整数数组给定的牌。
+
+现在她想把牌重新排列成组，使得每个组的大小都是 W，且由 W 张连续的牌组成。
+
+如果她可以完成分组就返回 true，否则返回 false。
+
 Alice has a `hand` of cards, given as an array of integers.
 
 Now she wants to rearrange the cards into groups so that each group is size `W`, and consists of `W` consecutive cards.
