@@ -1579,3 +1579,88 @@ class Solution {
 
 ```
 
+## 1312 Minimum Insertion Steps to Make a String Palindrome
+
+让字符串成为回文串的最少插入次数，
+
+Given a string `s`. In one step you can insert any character at any index of the string.
+
+Return _the minimum number of steps_ to make `s` palindrome.
+
+A **Palindrome String** is one that reads the same backward as well as forward.
+
+**Example 1:**
+
+```text
+Input: s = "zzazz"
+Output: 0
+Explanation: The string "zzazz" is already palindrome we don't need any insertions.
+```
+
+**Example 2:**
+
+```text
+Input: s = "mbadm"
+Output: 2
+Explanation: String can be "mbdadbm" or "mdbabdm".
+```
+
+**Example 3:**
+
+```text
+Input: s = "leetcode"
+Output: 5
+Explanation: Inserting 5 characters the string becomes "leetcodocteel".
+```
+
+**Example 4:**
+
+```text
+Input: s = "g"
+Output: 0
+```
+
+**Example 5:**
+
+```text
+Input: s = "no"
+Output: 1
+```
+
+**Constraints:**
+
+* `1 <= s.length <= 500`
+* All characters of `s` are lower case English letters.
+
+区间动态规划，二维数组保存dp状态，dp\[i\]\[j\]表示下标i到下标j的字符串的最少插入次数
+
+dp分两种情况： 
+
+1、s.charAt\(i\)==s.charAt\(j\) 此时不需要计算，取其内部字符串的值就行 
+
+2、s.charAt\(i\)！=s.charAt\(j\) 分两种情况，去较小值 此时要么是右边添加字符s.charAt\(i\) dp\[i+1\]\[j\] + 1, 要么左边添加字符s.charAt\(j\) dp\[i\]\[j-1\]+1
+
+```java
+class Solution {
+    public int minInsertions(String s) {
+        int len = s.length();
+        int[][] dp = new int[len][len];
+        
+        for(int i=len-1 ; i>=0 ; i--){
+            for(int j=i+1; j<len ; j++){
+                if(s.charAt(i)==s.charAt(j)){
+                    dp[i][j] = dp[i+1][j-1];
+                } else{
+                    dp[i][j] = Math.min(dp[i+1][j],dp[i][j-1])+1;
+                }
+            }
+        }
+        
+        return dp[0][len-1];
+    }
+}
+
+```
+
+
+
