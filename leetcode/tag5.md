@@ -251,7 +251,7 @@ Explanation: There are three words in words that are a subsequence of S: "a", "a
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28190%29.png)
+![](../.gitbook/assets/image%20%28191%29.png)
 
 ![](../.gitbook/assets/image%20%28187%29.png)
 
