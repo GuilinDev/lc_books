@@ -1477,5 +1477,105 @@ class Solution {
 }
 ```
 
-## 
+## 1007 Minimum Domino Rotations For Equal Row
+
+### 题目
+
+行相等的最少多米诺旋转
+
+在一排多米诺骨牌中，A\[i\] 和 B\[i\] 分别代表第 i 个多米诺骨牌的上半部分和下半部分。（一个多米诺是两个从 1 到 6 的数字同列平铺形成的 —— 该平铺的每一半上都有一个数字。）
+
+我们可以旋转第 i 张多米诺，使得 A\[i\] 和 B\[i\] 的值交换。
+
+返回能使 A 中所有值或者 B 中所有值都相同的最小旋转次数。
+
+如果无法做到，返回 -1.
+
+In a row of dominoes, `A[i]` and `B[i]` represent the top and bottom halves of the `ith` domino.  \(A domino is a tile with two numbers from 1 to 6 - one on each half of the tile.\)
+
+We may rotate the `ith` domino, so that `A[i]` and `B[i]` swap values.
+
+Return the minimum number of rotations so that all the values in `A` are the same, or all the values in `B` are the same.
+
+If it cannot be done, return `-1`.
+
+**Example 1:** ![](https://assets.leetcode.com/uploads/2019/03/08/domino.png)
+
+```text
+Input: A = [2,1,2,4,2,2], B = [5,2,6,2,3,2]
+Output: 2
+Explanation: 
+The first figure represents the dominoes as given by A and B: before we do any rotations.
+If we rotate the second and fourth dominoes, we can make every value in the top row equal to 2, as indicated by the second figure.
+```
+
+**Example 2:**
+
+```text
+Input: A = [3,5,1,2,3], B = [3,6,3,3,4]
+Output: -1
+Explanation: 
+In this case, it is not possible to rotate the dominoes to make one row of values equal.
+```
+
+**Constraints:**
+
+* `2 <= A.length == B.length <= 2 * 104`
+* `1 <= A[i], B[i] <= 6`
+
+### 分析
+
+![](../.gitbook/assets/image%20%28184%29.png)
+
+![](../.gitbook/assets/image%20%28183%29.png)
+
+算法
+
+* 选择第一块多米诺骨牌，它包含两个数字 A\[0\] 和 B\[0\]；
+* 检查其余的多米诺骨牌中是否出现过 A\[0\]。如果都出现过，则求出最少的翻转次数，其为将 A\[0\] 全部翻到 A 和全部翻到 B 中的较少的次数。
+* 检查其余的多米诺骨牌中是否出现过 B\[0\]。如果都出现过，则求出最少的翻转次数，其为将 B\[0\] 全部翻到 A 和全部翻到 B 中的较少的次数。
+* 如果上述两次检查都失败，则返回 -1。
+
+时间复杂度：O\(N\)O\(N\)O\(N\)。我们只会遍历所有的数组最多两次。
+
+空间复杂度：O\(1\)O\(1\)O\(1\)。
+
+### 代码
+
+```java
+class Solution {
+    /*
+    Return min number of rotations 
+    if one could make all elements in A or B equal to x.
+    Else return -1.
+    */
+    public int check(int x, int[] A, int[] B, int n) {
+        // how many rotations should be done
+        // to have all elements in A equal to x
+        // and to have all elements in B equal to x
+        int rotations_a = 0, rotations_b = 0;
+        for (int i = 0; i < n; i++) {
+            // rotations coudn't be done
+            if (A[i] != x && B[i] != x) return -1;
+            // A[i] != x and B[i] == x
+            else if (A[i] != x) rotations_a++;
+            // A[i] == x and B[i] != x    
+            else if (B[i] != x) rotations_b++;
+        }
+        // min number of rotations to have all
+        // elements equal to x in A or B
+        return Math.min(rotations_a, rotations_b);
+    }
+
+    public int minDominoRotations(int[] A, int[] B) {
+        int n = A.length;
+        int rotations = check(A[0], B, A, n);
+        // If one could make all elements in A or B equal to A[0]
+        if (rotations != -1 || A[0] == B[0]) return rotations;
+        // If one could make all elements in A or B equal to B[0]
+        else return check(B[0], B, A, n);
+    }
+}
+
+```
 
