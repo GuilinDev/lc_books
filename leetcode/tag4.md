@@ -1525,7 +1525,7 @@ In this case, it is not possible to rotate the dominoes to make one row of value
 
 ### 分析
 
-![](../.gitbook/assets/image%20%28184%29.png)
+![](../.gitbook/assets/image%20%28189%29.png)
 
 ![](../.gitbook/assets/image%20%28183%29.png)
 

@@ -1,0 +1,370 @@
+# tag5
+
+## 418 Sentence Screen Fitting
+
+屏幕可显示句子的数量
+
+给你一个 rows x cols 的屏幕和一个用 非空 的单词列表组成的句子，请你计算出给定句子可以在屏幕上完整显示的次数。
+
+注意：
+
+* 一个单词不能拆分成两行。 
+* 单词在句子中的顺序必须保持不变。 
+* 在一行中 的两个连续单词必须用一个空格符分隔。 
+* 句子中的单词总量不会超过 100。 
+* 每个单词的长度大于 0 且不会超过 10。 
+* 1 ≤ rows, cols ≤ 20,000.
+
+Given a `rows x cols` screen and a sentence represented by a list of **non-empty** words, find **how many times** the given sentence can be fitted on the screen.
+
+**Note:**
+
+1. A word cannot be split into two lines.
+2. The order of words in the sentence must remain unchanged.
+3. Two consecutive words **in a line** must be separated by a single space.
+4. Total words in the sentence won't exceed 100.
+5. Length of each word is greater than 0 and won't exceed 10.
+6. 1 ≤ rows, cols ≤ 20,000.
+
+ **Example 1:**
+
+```text
+Input:
+rows = 2, cols = 8, sentence = ["hello", "world"]
+
+Output: 
+1
+
+Explanation:
+hello---
+world---
+
+The character '-' signifies an empty space on the screen.
+```
+
+ **Example 2:**
+
+```text
+Input:
+rows = 3, cols = 6, sentence = ["a", "bcd", "e"]
+
+Output: 
+2
+
+Explanation:
+a-bcd- 
+e-a---
+bcd-e-
+
+The character '-' signifies an empty space on the screen.
+```
+
+ **Example 3:**
+
+```text
+Input:
+rows = 4, cols = 5, sentence = ["I", "had", "apple", "pie"]
+
+Output: 
+1
+
+Explanation:
+I-had
+apple
+pie-I
+had--
+
+The character '-' signifies an empty space on the screen.
+```
+
+### 分析
+
+滑动窗口
+
+1）计算以每个单词开始时，每一行可以装下多少个单词。使用滑动窗口的思想 
+
+2）考虑cols特别长，而sentence比较短的情况：每一行都会出现很多句子，可以先去掉每行整句话所占用的长度，只填充剩下的屏幕。即使用newCol计算。 
+
+3）计算屏幕中，可以装下的单词总数，即sum。
+
+ 4）结果 = sum/n + rows\*\(每一行整句话的个数\)
+
+### 代码
+
+```java
+class Solution {
+    public int wordsTyping(String[] sentence, int rows, int cols) {
+        int n = sentence.length;
+        int totalLen = 0; //length of sentence
+        for(int i=0; i<n; i++) {
+            //A word cannot be split into two lines.
+            if(sentence[i].length() > cols) return 0;
+            totalLen += sentence[i].length();
+        }
+        if(totalLen > rows*cols) return 0;
+
+        totalLen += n-1;
+        if(cols == totalLen) return rows;
+        //in case that cols is very long
+        int newCol = cols%(totalLen+1);
+        //cnts[i]: start with sentence[i], there are cnt[i] words in this row
+        int[] cnts = new int[n];
+        //count: the number of words in the area
+        //end: length of all counted words, start from sentence[cur] to sentence[cur+count-1]
+        //cur: the index of cnts that is calculating
+        int count=0, end=0, cur=0;
+        for(int i=0; i<2*n; i++) {
+            end += sentence[i%n].length() + 1; // add word and space
+            count++;
+            //more than one row, calculate cnts[cur], seems like slide window
+            while(end >= newCol && cur < n) {
+                //whether the last word contains
+                cnts[cur] = end <= newCol +1 ? count : count-1;  
+                //delete the first word [slide the left border of the window]          
+                end -= sentence[cur].length() + 1;
+                count--;    
+                cur++;
+               // System.out.println((cur-1) + "," + cnts[cur-1] +","+ count + "," + end);
+            }
+            if(cur >= n) break;
+        }
+        //the number of words in the screen 
+        int sum = 0;
+        cur = 0; //the first word in each row
+        for(int i=0; i<rows; i++) {
+            sum += cnts[cur];
+            cur = (cnts[cur] + cur)%n;
+          //  System.out.println(cur + "," + sum);
+        }
+        return rows*(cols/(totalLen+1)) + sum/n;
+    }
+}
+```
+
+模拟
+
+设置当前行数r、当前行占用的列c、当前单词的index等几个变量，模拟输出单词的过程。同时，当发现一个完整的sentence输出完成，同时当前行无法再次放置一个单词的时候，表示出现了循环节（意味着下一行会重复输出一个新的sentence，此时我们直接计算所需的行数以及输出的sentence次数，再讲行数r定位到最后一个循环节的开头，加上最后的几次就得到最后的答案。
+
+```java
+class Solution {
+    public int wordsTyping(String[] sentence, int rows, int cols) {
+        int times = 0, i = 0, r = 1, c = 0;  //r从1开始计数，方便后序计算循环节
+        while(r<=rows){
+            int len = sentence[i].length();
+            if (c+len > cols){  //当前行无法输出单词
+                r++;
+                c = 0;
+            }else{
+                c += len + 1;   //加上单词的长度包括空格
+                i++;
+                if (i==sentence.length){   //输出完一个完整句子
+                    times++;
+                    i = 0;
+                    if (sentence[0].length() > cols-c){   //出现循环节
+                        times = rows / r * times;         //**rows / r**计算完整循环节的个数，**times**是当前的句子数目也就是一个循环节中输出的句子数
+                        r = rows - (rows % r) + 1;        //定位到最后一个**非完整**循环节的开头
+                        c = 0;
+                    }
+                }
+            }
+        }
+        return times;
+    }
+}
+
+```
+
+## 247 Strobogrammatic Number II
+
+中心对称数是指一个数字在旋转了 180 度之后看起来依旧相同的数字（或者上下颠倒地看）。
+
+找到所有长度为 n 的中心对称数。
+
+A strobogrammatic number is a number that looks the same when rotated 180 degrees \(looked at upside down\).
+
+Find all strobogrammatic numbers that are of length = n.
+
+**Example:**
+
+```text
+Input:  n = 2
+Output: ["11","69","88","96"]
+```
+
+### 分析
+
+![](../.gitbook/assets/image%20%28184%29.png)
+
+### 代码
+
+```java
+import java.util.*;
+class Solution {
+    public List<String> findStrobogrammatic(int n) {
+        if (n <= 0) return new ArrayList<>();
+        if (n == 1) return Arrays.asList("0", "1", "8");
+        if (n == 2) return Arrays.asList("11", "69", "88", "96");
+        // arr[n] 表示长度为 n 的所有中心对称数
+        List<String>[] arr = new List[n + 1];
+        arr[1] = Arrays.asList("0", "1", "8");
+        arr[2] = Arrays.asList("00","11", "69", "88", "96");
+        for (int i = 3; i <= n; i++) {
+            // 随着 i 不断地增长，我们只需要在长度为 i-2 的中心对称数两边添加 11，69，88，96 即可。
+            List<String> tmpList = new ArrayList<>();
+            for (String s : arr[i - 2]) {
+                if (i != n) {
+                    tmpList.add("0" + s + "0");
+                }
+                tmpList.add("1" + s + "1");
+                tmpList.add("6" + s + "9");
+                tmpList.add("8" + s + "8");
+                tmpList.add("9" + s + "6");
+            }
+            arr[i] = tmpList;
+        }
+        return arr[n];
+    }
+}
+```
+
+## 792 Number of Matching Subsequences
+
+ 给定字符串 `S` 和单词字典 `words`, 求 `words[i]` 中是 `S` 的子序列的单词个数。
+
+Given string `S` and a dictionary of words `words`, find the number of `words[i]` that is a subsequence of `S`.
+
+```text
+Example :
+Input: 
+S = "abcde"
+words = ["a", "bb", "acd", "ace"]
+Output: 3
+Explanation: There are three words in words that are a subsequence of S: "a", "acd", "ace".
+```
+
+**Note:**
+
+* All words in `words` and `S` will only consists of lowercase letters.
+* The length of `S` will be in the range of `[1, 50000]`.
+* The length of `words` will be in the range of `[1, 5000]`.
+* The length of `words[i]` will be in the range of `[1, 50]`.
+
+### 分析
+
+![](../.gitbook/assets/image%20%28190%29.png)
+
+![](../.gitbook/assets/image%20%28187%29.png)
+
+![](../.gitbook/assets/image%20%28188%29.png)
+
+### 代码
+
+```java
+class Solution {
+    public int numMatchingSubseq(String S, String[] words) {
+        int ans = 0;
+        ArrayList<Node>[] heads = new ArrayList[26];
+        for (int i = 0; i < 26; ++i)
+            heads[i] = new ArrayList<Node>();
+
+        for (String word: words)
+            heads[word.charAt(0) - 'a'].add(new Node(word, 0));
+
+        for (char c: S.toCharArray()) {
+            ArrayList<Node> old_bucket = heads[c - 'a'];
+            heads[c - 'a'] = new ArrayList<Node>();
+
+            for (Node node: old_bucket) {
+                node.index++;
+                if (node.index == node.word.length()) {
+                    ans++;
+                } else {
+                    heads[node.word.charAt(node.index) - 'a'].add(node);
+                }
+            }
+            old_bucket.clear();
+        }
+        return ans;
+    }
+
+}
+
+class Node {
+    String word;
+    int index;
+    public Node(String w, int i) {
+        word = w;
+        index = i;
+    }
+}
+```
+
+## 995 Minimum Number of K Consecutive Bit Flips
+
+In an array `A` containing only 0s and 1s, a `K`-bit flip consists of choosing a \(contiguous\) subarray of length `K` and simultaneously changing every 0 in the subarray to 1, and every 1 in the subarray to 0.
+
+Return the minimum number of `K`-bit flips required so that there is no 0 in the array.  If it is not possible, return `-1`.
+
+**Example 1:**
+
+```text
+Input: A = [0,1,0], K = 1
+Output: 2
+Explanation: Flip A[0], then flip A[2].
+```
+
+**Example 2:**
+
+```text
+Input: A = [1,1,0], K = 2
+Output: -1
+Explanation: No matter how we flip subarrays of size 2, we can't make the array become [1,1,1].
+```
+
+**Example 3:**
+
+```text
+Input: A = [0,0,0,1,0,1,1,0], K = 3
+Output: 3
+Explanation:
+Flip A[0],A[1],A[2]: A becomes [1,1,1,1,0,1,1,0]
+Flip A[4],A[5],A[6]: A becomes [1,1,1,1,1,0,0,0]
+Flip A[5],A[6],A[7]: A becomes [1,1,1,1,1,1,1,1]
+```
+
+**Note:**
+
+1. `1 <= A.length <= 30000`
+2. `1 <= K <= A.length`
+
+### 分析
+
+![](../.gitbook/assets/image%20%28186%29.png)
+
+![](../.gitbook/assets/image%20%28185%29.png)
+
+### 代码
+
+```java
+public int minKBitFlips(int[] A, int K) {
+        int cur = 0, res = 0, n = A.length;
+        for (int i = 0; i < n; ++i) {
+            if (i >= K && A[i - K] > 1) {
+                cur--;
+                A[i - K] -= 2;
+            }
+            if (cur % 2 == A[i]) {
+                if (i + K > n) return -1;
+                A[i] += 2;
+                cur++;
+                res++;
+            }
+        }
+        return res;
+    }
+```
+
+
+
+## 
+
