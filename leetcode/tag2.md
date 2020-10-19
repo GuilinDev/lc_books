@@ -4,6 +4,19 @@
 
 ### 题目
 
+一个N x N的网格\(grid\) 代表了一块樱桃地，每个格子由以下三种数字的一种来表示：
+
+* 0 表示这个格子是空的，所以你可以穿过它。 
+* 1 表示这个格子里装着一个樱桃，你可以摘到樱桃然后穿过它。 
+* -1 表示这个格子里有荆棘，挡着你的路。
+
+你的任务是在遵守下列规则的情况下，尽可能的摘到最多樱桃：
+
+* 从位置 \(0, 0\) 出发，最后到达 \(N-1, N-1\) ，只能向下或向右走，并且只能穿越有效的格子（即只可以穿过值为0或者1的格子）； 
+* 当到达 \(N-1, N-1\) 后，你要继续走，直到返回到 \(0, 0\) ，只能向上或向左走，并且只能穿越有效的格子； 
+* 当你经过一个格子且这个格子包含一个樱桃时，你将摘到樱桃并且这个格子会变成空的（值变为0）； 
+* 如果在 \(0, 0\) 和 \(N-1, N-1\) 之间不存在一条可经过的路径，则没有任何一个樱桃能被摘到。
+
 In a N x N `grid` representing a field of cherries, each cell is one of three possible integers.
 
 * 0 means the cell is empty, so you can pass through;
@@ -127,6 +140,18 @@ class Solution {
 ## 1463 Cherry Pickup II
 
 ### 原题
+
+给你一个 rows x cols 的矩阵 grid 来表示一块樱桃地。 grid 中每个格子的数字表示你能获得的樱桃数目。
+
+你有两个机器人帮你收集樱桃，机器人 1 从左上角格子 \(0,0\) 出发，机器人 2 从右上角格子 \(0, cols-1\) 出发。
+
+请你按照如下规则，返回两个机器人能收集的最多樱桃数目：
+
+* 从格子 \(i,j\) 出发，机器人可以移动到格子 \(i+1, j-1\)，\(i+1, j\) 或者 \(i+1, j+1\) 。 
+* 当一个机器人经过某个格子时，它会把该格子内所有的樱桃都摘走，然后这个位置会变成空格子，即没有樱桃的格子。 
+* 当两个机器人同时到达同一个格子时，它们中只有一个可以摘到樱桃。 
+* 两个机器人在任意时刻都不能移动到 grid 外面。 
+* 两个机器人最后都要到达 grid 最底下一行。
 
 Given a `rows x cols` matrix `grid` representing a field of cherries. Each cell in `grid` represents the number of cherries that you can collect.
 
@@ -405,6 +430,14 @@ class Solution {
 ## 1231 Divide Chocolate 
 
 ### 原题
+
+你有一大块巧克力，它由一些甜度不完全相同的小块组成。我们用数组 sweetness 来表示每一小块的甜度。
+
+你打算和 K 名朋友一起分享这块巧克力，所以你需要将切割 K 次才能得到 K+1 块，每一块都由一些 连续 的小块组成。
+
+为了表现出你的慷慨，你将会吃掉 总甜度最小 的一块，并将其余几块分给你的朋友们。
+
+请找出一个最佳的切割策略，使得你所分得的巧克力 总甜度最大，并返回这个 最大总甜度。
 
 You have one chocolate bar that consists of some chunks. Each chunk has its own sweetness given by the array `sweetness`.
 
