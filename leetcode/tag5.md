@@ -724,3 +724,79 @@ class Solution {
 
 ```
 
+## 360 Sort Tramsformed Array
+
+有序转化数组，给你一个已经 排好序 的整数数组 nums 和整数 a、b、c。对于数组中的每一个数 x，计算函数值 f\(x\) = ax2 + bx + c，请将函数值产生的数组返回。
+
+要注意，返回的这个数组必须按照 升序排列，并且我们所期望的解法时间复杂度为 O\(n\)。
+
+Given a **sorted** array of integers nums and integer values a, b and c. Apply a quadratic function of the form f\(x\) = ax2 + bx + c to each element x in the array.
+
+The returned array must be in **sorted order**.
+
+Expected time complexity: **O\(n\)**
+
+**Example 1:**
+
+```text
+Input: nums = [-4,-2,2,4], a = 1, b = 3, c = 5
+Output: [3,9,15,33]
+```
+
+**Example 2:**
+
+```text
+Input: nums = [-4,-2,2,4], a = -1, b = 3, c = 5
+Output: [-23,-5,1,7]
+```
+
+### 分析
+
+The idea is simple: 
+
+For a parabola,
+
+* if a &gt;= 0, the min value is at its vertex. So our our sorting should goes from two end points towards the vertex, high to low. 
+* if a &lt; 0, the max value is at its vertex. So our sort goes the opposite way.
+
+### 代码
+
+```java
+public class Solution {
+    public int[] sortTransformedArray(int[] nums, int a, int b, int c) {
+        int[] res = new int[nums.length];
+        int start = 0;
+        int end = nums.length - 1;
+        int i = a >= 0 ? nums.length - 1 : 0;
+        while(start <= end) {
+            int startNum = getNum(nums[start], a, b, c);
+            int endNum = getNum(nums[end], a, b, c);
+            if(a >= 0) {
+                if(startNum >= endNum) {
+                    res[i--] = startNum;
+                    start++;
+                }
+                else{
+                    res[i--] = endNum;
+                    end--;
+                }
+            }
+            else{
+                if(startNum <= endNum) {
+                    res[i++] = startNum;
+                    start++;
+                }
+                else{
+                    res[i++] = endNum;
+                    end--;
+                }
+            }
+        }
+        return res;
+    }
+    public int getNum(int x, int a, int b, int c) {
+        return a * x * x + b * x + c;
+    }
+}
+```
+
