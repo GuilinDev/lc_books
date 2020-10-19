@@ -848,9 +848,54 @@ class Solution {
 }
 ```
 
+DFS O（M^2 \* N^2）
+
+```java
+public class Solution {
+    public int longestLine(int[][] M) {
+        if(M == null) return 0;
+        int res = 0;
+        for(int i =0;i<M.length;i++){
+            for(int j = 0;j<M[0].length;j++){
+                if(M[i][j] == 1){
+                    res = Math.max(res,getMaxOneLine(M, i, j));
+                }
+            }
+        }
+        return res;
+    }
+    final int [][] dirs = new int[][]{{1,0},{0,1},{1,1},{1,-1}};
+    private int getMaxOneLine(int [][] M, int x, int y){
+        int res = 1;
+        for(int [] dir:dirs){
+            int i = x+dir[0];
+            int j = y+dir[1];
+            int count = 1;
+            while(isValidPosition(M, i, j) && M[i][j] == 1){
+                i+=dir[0];
+                j+=dir[1];
+                count++;
+            }
+            res = Math.max(count,res);
+        }
+        return res;
+    }
+    
+    private boolean isValidPosition(int M[][], int i, int j){
+        return (i<M.length && j<M[0].length && i>=0 && j>=0);
+    }
+}
+```
+
 ## 690 Employee Importance
 
 ### 原题
+
+给定一个保存员工信息的数据结构，它包含了员工唯一的id，重要度 和 直系下属的id。
+
+比如，员工1是员工2的领导，员工2是员工3的领导。他们相应的重要度为15, 10, 5。那么员工1的数据结构是\[1, 15, \[2\]\]，员工2的数据结构是\[2, 10, \[3\]\]，员工3的数据结构是\[3, 5, \[\]\]。注意虽然员工3也是员工1的一个下属，但是由于并不是直系下属，因此没有体现在员工1的数据结构中。
+
+现在输入一个公司的所有员工信息，以及单个员工id，返回这个员工和他所有下属的重要度之和。
 
 You are given a data structure of employee information, which includes the employee's **unique id**, their **importance value** and their **direct** subordinates' id.
 
@@ -904,6 +949,14 @@ class Solution {
 ## 900 RLE Iterator 
 
 ### 原题
+
+编写一个遍历游程编码序列的迭代器。
+
+迭代器由 RLEIterator\(int\[\] A\) 初始化，其中 A 是某个序列的游程编码。更具体地，对于所有偶数 i，A\[i\] 告诉我们在序列中重复非负整数值 A\[i + 1\] 的次数。
+
+迭代器支持一个函数：next\(int n\)，它耗尽接下来的 n 个元素（n &gt;= 1）并返回以这种方式耗去的最后一个元素。如果没有剩余的元素可供耗尽，则 next 返回 -1 。
+
+例如，我们以 A = \[3,8,0,9,2,5\] 开始，这是序列 \[8,8,8,5,5\] 的游程编码。这是因为该序列可以读作 “三个八，零个九，两个五”。
 
 Write an iterator that iterates through a run-length encoded sequence.
 
@@ -1269,7 +1322,7 @@ Output: 6
 ```java
 class Solution {
     public int tilingRectangle(int n, int m) {
-        int INF = 0x3f3f3f3f;
+        int INF = 0x3f3f3f3f; // Integer.MAX_VALUE
         int[][] dp = new int[n + 1][m + 1];
         for(int i = 1; i <= n; i++){
             for(int j = 1; j <= m; j++){
@@ -1307,6 +1360,8 @@ class Solution {
 ## 840 Magic Squares In Grid
 
 ### 原题
+
+3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
 
 A `3 x 3` magic square is a `3 x 3` grid filled with distinct numbers **from** `1` **to** `9` such that each row, column, and both diagonals all have the same sum.
 
@@ -1355,8 +1410,6 @@ Output: 0
 
 ### 分析
 
-3 x 3 的幻方是一个填充有从 1 到 9 的不同数字的 3 x 3 矩阵，其中每行，每列以及两条对角线上的各数之和都相等。给定一个由整数组成的 grid，其中有多少个 3 × 3 的 “幻方” 子矩阵？（每个子矩阵都是连续的）。
-
 ![](../.gitbook/assets/image%20%28166%29.png)
 
 * 时间复杂度：O\(R\*C\)O\(R∗C\)。其中 R, CR,C 指的是给定 `grid` 的行和列。
@@ -1404,6 +1457,20 @@ class Solution {
 
 ### 原题
 
+给定一个由n个不重复非空字符串组成的数组，你需要按照以下规则为每个单词生成最小的缩写。
+
+1. 初始缩写由起始字母+省略字母的数量+结尾字母组成。 
+2. 若存在冲突，亦即多于一个单词有同样的缩写，则使用更长的前缀代替首字母，直到从单词到缩写的映射唯一。换而言之，最终的缩写必须只能映射到一个单词。 
+3. 若缩写并不比原单词更短，则保留原样。
+
+输入: \["like", "god", "internal", "me", "internet", "interval", "intension", "face", "intrusion"\] 
+
+输出: \["l2e","god","internal","me","i6t","interval","inte4n","f2e","intr4n"\]
+
+注意:
+
+n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 单词只由英文小写字母组成。 返回的答案需要和原数组保持同一顺序。
+
 Given an array of n distinct non-empty strings, you need to generate **minimal** possible abbreviations for every word following rules below.
 
 1. Begin with the first character and then the number of characters abbreviated, which followed by the last character.
@@ -1425,21 +1492,9 @@ Output: ["l2e","god","internal","me","i6t","interval","inte4n","f2e","intr4n"]
 3. The words consist of lowercase English letters only.
 4. The return answers should be **in the same order** as the original array.
 
-给定一个由n个不重复非空字符串组成的数组，你需要按照以下规则为每个单词生成最小的缩写。
-
-初始缩写由起始字母+省略字母的数量+结尾字母组成。 若存在冲突，亦即多于一个单词有同样的缩写，则使用更长的前缀代替首字母，直到从单词到缩写的映射唯一。换而言之，最终的缩写必须只能映射到一个单词。 若缩写并不比原单词更短，则保留原样。 示例:
-
-输入: \["like", "god", "internal", "me", "internet", "interval", "intension", "face", "intrusion"\] 
-
-输出: \["l2e","god","internal","me","i6t","interval","inte4n","f2e","intr4n"\]
-
-注意:
-
-n和每个单词的长度均不超过 400。 每个单词的长度大于 1。 单词只由英文小写字母组成。 返回的答案需要和原数组保持同一顺序。
-
 ### 分析
 
-单词缩写
+单词缩写，这道题求单词的缩写形式，就是首尾字母加上中间字符的个数组成的新字符串，但是要求是不能有重复的缩写字符串，而且说明如果缩写字符串的长度并没有减小的话就保留原来的字符串，比如 god，缩写成 g1d 也没啥用，所以仍是 god。在研究题目中给的例子的时候有些疑惑，虽然知道 internal 和 interval 的缩写形式都是 i6l，会冲突，刚开始不明白的是，为什么不能一个是 i6l，一个是 in5l，这样不就不冲突了么，而题目中的缩写形式居然都是原字符串。后来才搞清楚题目原来是说只要有冲突的都不能用，而 internal 和 interval 是典型的死杠上的一对，i6l，in5l，int4l，inte3l，inter2l，统统冲突，而再往后的缩写长度就和原字符串一样了，所以二者就都保留了原样
 
 1\) 贪心
 
@@ -1641,6 +1696,21 @@ class IndexedWord {
 ## 1368 Minimum Cost to Make at Least One Valid Path in a Grid
 
 ### 原题
+
+给你一个 m x n 的网格图 grid 。 grid 中每个格子都有一个数字，对应着从该格子出发下一步走的方向。 grid\[i\]\[j\] 中的数字可能为以下几种情况：
+
+1. 下一步往右走，也就是你会从 grid\[i\]\[j\] 走到 grid\[i\]\[j + 1\] 
+2. 下一步往左走，也就是你会从 grid\[i\]\[j\] 走到 grid\[i\]\[j - 1\] 
+3. 下一步往下走，也就是你会从 grid\[i\]\[j\] 走到 grid\[i + 1\]\[j\] 
+4. 下一步往上走，也就是你会从 grid\[i\]\[j\] 走到 grid\[i - 1\]\[j\]
+
+注意网格图中可能会有 无效数字 ，因为它们可能指向 grid 以外的区域。
+
+一开始，你会从最左上角的格子 \(0,0\) 出发。我们定义一条 有效路径 为从格子 \(0,0\) 出发，每一步都顺着数字对应方向走，最终在最右下角的格子 \(m - 1, n - 1\) 结束的路径。有效路径 不需要是最短路径 。
+
+你可以花费 cost = 1 的代价修改一个格子中的数字，但每个格子中的数字 只能修改一次 。
+
+请你返回让网格图至少有一条有效路径的最小代价。
 
  Given a _m_ x _n_ `grid`. Each cell of the `grid` has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of `grid[i][j]` can be:
 
