@@ -301,6 +301,10 @@ class Node {
 
 ## 995 Minimum Number of K Consecutive Bit Flips
 
+在仅包含 0 和 1 的数组 A 中，一次 K 位翻转包括选择一个长度为 K 的（连续）子数组，同时将子数组中的每个 0 更改为 1，而每个 1 更改为 0。
+
+返回所需的 K 位翻转的次数，以便数组没有值为 0 的元素。如果不可能，返回 -1。
+
 In an array `A` containing only 0s and 1s, a `K`-bit flip consists of choosing a \(contiguous\) subarray of length `K` and simultaneously changing every 0 in the subarray to 1, and every 1 in the subarray to 0.
 
 Return the minimum number of `K`-bit flips required so that there is no 0 in the array.  If it is not possible, return `-1`.
