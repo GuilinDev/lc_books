@@ -1404,6 +1404,10 @@ class Logger {
 
 ### 原题
 
+网格中的最短路径，给你一个 m \* n 的网格，其中每个单元格不是 0（空）就是 1（障碍物）。每一步，您都可以在空白单元格中上、下、左、右移动。
+
+如果您 最多 可以消除 k 个障碍物，请找出从左上角 \(0, 0\) 到右下角 \(m-1, n-1\) 的最短路径，并返回通过该路径所需的步数。如果找不到这样的路径，则返回 -1。
+
 Given a `m * n` grid, where each cell is either `0` \(empty\) or `1` \(obstacle\). In one step, you can move up, down, left or right from and to an empty cell.
 
 Return the minimum number of steps to walk from the upper left corner `(0, 0)` to the lower right corner `(m-1, n-1)` given that you can eliminate **at most** `k` obstacles. If it is not possible to find such walk return -1.
@@ -1681,6 +1685,14 @@ class Solution {
 
 ### 原题
 
+最长字符串链，给出一个单词列表，其中每个单词都由小写英文字母组成。
+
+如果我们可以在 word1 的任何地方添加一个字母使其变成 word2，那么我们认为 word1 是 word2 的前身。例如，"abc" 是 "abac" 的前身。
+
+词链是单词 \[word\_1, word\_2, ..., word\_k\] 组成的序列，k &gt;= 1，其中 word\_1 是 word\_2 的前身，word\_2 是 word\_3 的前身，依此类推。
+
+从给定单词列表 words 中选择单词组成词链，返回词链的最长可能长度。
+
 Given a list of words, each word consists of English lowercase letters.
 
 Let's say `word1` is a predecessor of `word2` if and only if we can add exactly one letter anywhere in `word1` to make it equal to `word2`.  For example, `"abc"` is a predecessor of `"abac"`.
@@ -1769,6 +1781,14 @@ class Solution {
 
 ### 原题
 
+几张卡牌 排成一行，每张卡牌都有一个对应的点数。点数由整数数组 cardPoints 给出。
+
+每次行动，你可以从行的开头或者末尾拿一张卡牌，最终你必须正好拿 k 张卡牌。
+
+你的点数就是你拿到手中的所有卡牌的点数之和。
+
+给你一个整数数组 cardPoints 和整数 k，请你返回可以获得的最大点数。
+
 There are several cards **arranged in a row**, and each card has an associated number of points The points are given in the integer array `cardPoints`.
 
 In one step, you can take one card from the beginning or from the end of the row. You have to take exactly `k` cards.
@@ -1824,7 +1844,7 @@ Output: 202
 
 ### 思路
 
-暴力法DFS，升级前缀和或滑动窗口。
+暴力法DFS，优化用前缀和或滑动窗口。
 
 1）先求个前缀和，再求left\(0-k\) + right\(k-i\) 区间最大解即可
 
