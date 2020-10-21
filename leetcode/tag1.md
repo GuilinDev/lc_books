@@ -1586,7 +1586,7 @@ Notes:
 
 在 Java 的代码中，我们根据替换操作得到数组 match，其中 match\[ix\] = j 表示字符串 S 从第 ix 位开始和 sources\[j\] 匹配，并且会被替换成 target\[j\]，也就是说 sources\[j\] 是字符串 S\[ix:\] 的前缀。在得到 match 数组后，我们对 S 从左到右进行扫描，对于每个位置 ix，如果 match\[ix\] 有值 j，那么在 ans 尾部添加字符串 targets\[j\]，并将 ix 增加 sources\[j\].length\(\)；否则在 ans 尾部添加字符 S\[ix\]，并将 ix 增加 1。
 
-时间复杂度：O\(NQ\)，其中 NN 是字符串 S 的长度，Q 是替换操作的数量。
+时间复杂度：O\(NQ\)，其中 N 是字符串 S 的长度，Q 是替换操作的数量。
 
 空间复杂度：O\(N\)，我们认为 sources 和 targets 中的字符串长度均为常数。
 
