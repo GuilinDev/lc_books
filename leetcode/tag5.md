@@ -758,7 +758,7 @@ Output: [-23,-5,1,7]
 
 The idea is simple: 
 
-For a parabola,
+For a parabola抛物线,
 
 * if a &gt;= 0, the min value is at its vertex. So our our sorting should goes from two end points towards the vertex, high to low. 
 * if a &lt; 0, the max value is at its vertex. So our sort goes the opposite way.
