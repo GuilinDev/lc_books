@@ -579,7 +579,7 @@ This continues for 3 more queries at time 15, 24, and 8.
 
 ![](../.gitbook/assets/image%20%28169%29.png)
 
-* 时间复杂度：O\(N + Q \log^2 N\)，其中 N 是选票的个数，QQ 是询问的个数。
+* 时间复杂度：O\(N + Q log^2 N\)，其中 N 是选票的个数，Q 是询问的个数。
 * 空间复杂度：O\(N\)
 
 ![](../.gitbook/assets/image%20%28148%29.png)
