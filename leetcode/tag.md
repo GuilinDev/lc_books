@@ -2616,8 +2616,6 @@ class ExamRoom {
 
 返回一条可以删去的边，使得结果图是一个有着N个节点的树。如果有多个答案，则返回二维数组中最后出现的边。答案边 \[u, v\] 应满足相同的格式 u &lt; v。
 
-来源：力扣（LeetCode） 链接：[https://leetcode-cn.com/problems/redundant-connection](https://leetcode-cn.com/problems/redundant-connection) 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-
 In this problem, a tree is an **undirected** graph that is connected and has no cycles.
 
 The given input is a graph that started as a tree with N nodes \(with distinct values 1, 2, ..., N\), with one additional edge added. The added edge has two different vertices chosen from 1 to N, and was not an edge that already existed.
@@ -2707,11 +2705,6 @@ class Solution {
     }
 
 }
-
-作者：luma730
-链接：https://leetcode-cn.com/problems/redundant-connection/solution/java-bing-cha-ji-by-luma730/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 ## 685 Redundant Connection II
@@ -2725,8 +2718,6 @@ class Solution {
 结果图是一个以边组成的二维数组。 每一个边 的元素是一对 \[u, v\]，用以表示有向图中连接顶点 u 和顶点 v 的边，其中 u 是 v 的一个父节点。
 
 返回一条能删除的边，使得剩下的图是有N个节点的有根树。若有多个答案，返回最后出现在给定二维数组的答案。
-
-来源：力扣（LeetCode） 链接：[https://leetcode-cn.com/problems/redundant-connection-ii](https://leetcode-cn.com/problems/redundant-connection-ii) 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 In this problem, a rooted tree is a **directed** graph such that, there is exactly one node \(the root\) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
 
