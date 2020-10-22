@@ -319,3 +319,31 @@ class Solution {
 }
 ```
 
+反过来做
+
+```java
+public class Test {
+
+    public static void main(String[] args) {
+        int[] smaller = {0, 1, 2, 1, 0};
+        int n = 5;
+        List<Integer> temp = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            temp.add(i);
+        }
+        // temp :[1,2,3,4,5]: put  n - smaller[i] - i of temp into resut
+        int[] result = new int[n];
+        for (int i = 0; i < n; i++) {
+            int k = n - smaller[i] - i;
+            result[i] = temp.get(k);
+
+            temp.remove(k);
+        }
+
+        for (int r : result) {
+            System.out.println(r);
+        }
+    }
+}
+```
+
