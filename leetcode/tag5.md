@@ -1072,3 +1072,44 @@ static class Node{
 }
 ```
 
+## 890 word pattern match
+
+题目描述： 
+
+给一个word list和一个pattern，返回list中所有和pattern相match的单词 此处的match为能在pattern和word之间找到一个双射函数，和LC Isomorphic String中的双射函数 一样 思路： 1. 用两个map，用putIfAbsent存互相的对应关系，然后再查一遍对应 2. 单map把string转换成pattern array，用map.put\(char, map.size\(\)\)存不存在的char 这道题目本质是LC205 参考代码： 
+
+Method 1: Two Maps 
+
+```java
+class Solution {
+    public List findAndReplacePattern(String[] words, String pattern) {
+        List result = new LinkedList<>();
+        for (String word : words) {
+            if (match(word, pattern)) {
+                result.add(word);
+            }
+        }
+        return result;
+    }
+
+    private boolean match(String s, String p) {
+        Map map1 = new HashMap<>();
+        Map map2 = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c1 = s.charAt(i);
+            char c2 = p.charAt(i);
+            if (!map1.containsKey(c1)) {
+                map1.put(c1, c2);
+            }
+            if (!map2.containsKey(c2)) {
+                map2.put(c2, c1);
+            }
+            if (map1.get(c1).equals(c2) || map2.get(c2).equals(c1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
