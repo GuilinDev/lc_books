@@ -880,7 +880,7 @@ BFS可以求解最值问题，当每种密码锁每次都转动一次时，总�
 
 ```java
 class Solution {
-        public int openLock(String[] deadends, String target) {
+    public int openLock(String[] deadends, String target) {
         //当前处理的转盘字符
         Queue<String> queue = new LinkedList<>();
         //死亡转盘字符
