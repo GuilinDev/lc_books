@@ -3049,13 +3049,13 @@ class Solution {
 }
 ```
 
-Hash表掌握
+Hash表\(掌握\)
 
 ```java
 class Solution {
     HashMap<Integer, Integer> map;
-    public TreeNode buildTree(int[] postorder, int[] inorder) {
-        if (postorder== null || postorder.length == 0 || inorder == null || inorder.length == 0 || preorder.length != inorder.length) {
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        if (postorder == null || postorder.length == 0 || inorder == null || inorder.length == 0 || postorder.length != inorder.length) {
             return null;
         }
         map = new HashMap<Integer, Integer>();
@@ -3071,9 +3071,9 @@ class Solution {
             return null;
         }
 
-        // 1.根据后序当前的右边结点是root的特性重建根结点
+        // 1.根据后序当前的"右"边结点是root的特性重建根结点
         int value = postorder[pRight];
-        TreeNode current = new TreeNode();
+        TreeNode current = new TreeNode(value);
 
         // 2.在中序中寻找重建的根结点的值
         int index = map.get(value);
