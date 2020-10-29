@@ -2898,7 +2898,7 @@ class Solution {
 }
 ```
 
-优化一下在中序数组中查找root位置的代码使用Hashmap来空间换时间
+优化一下在中序数组中查找root位置的代码使用Hashmap来空间换时间\(掌握这个\)
 
 ```java
 class Solution {
@@ -2921,17 +2921,19 @@ class Solution {
         }
 
         // 1.根据先序当前的左边结点是root的特性重建根结点
-        TreeNode current = new TreeNode(preorder[pLeft]);
+        int value = preorder[pLeft];
+        TreeNode current = new TreeNode();
 
         // 2.在中序中寻找重建的根结点的值
-        int index = map.get(preorder[pLeft]);
+        int index = map.get(value);
 
         // 3.根据在中序中找到的root的左边是左子树，root的右边是右子树的特性，递归重建左右子树
+        int leftCount = index - iLeft;
 
         // 左子树，前序的左边不算root，到index处；中序的左边一直到找到的root（不含）处
-        current.left = buildTree(preorder, pLeft + 1, pLeft + index - iLeft, inorder, iLeft, index - 1);
+        current.left = buildTree(preorder, pLeft + 1, pLeft + leftCount, inorder, iLeft, index - 1);
         // 右子树，从index到最右边
-        current.right = buildTree(preorder, pLeft + index - iLeft + 1, pRight, inorder, index + 1, iRight);
+        current.right = buildTree(preorder, pLeft + leftCount + 1, pRight, inorder, index + 1, iRight);
 
         return current;
     }
