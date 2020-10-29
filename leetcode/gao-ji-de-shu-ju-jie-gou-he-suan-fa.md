@@ -895,6 +895,62 @@ Union Find
 ```java
 class Solution {
     public int findCircleNum(int[][] M) {
+        if (M == null || M.length == 0 || M[0].length == 0) {
+            return 0;
+        }
+        int len = M.length;
+        
+        UnionFind uf = new UnionFind(len);
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (M[i][j] == 1) {
+                    uf.union(i, j);
+                }
+            }
+        }
+        int[] father = uf.father;
+        int count = 0;
+        for (int i = 0; i < len; i++) {
+            if (father[i] == i) { // 查找有多少个老大，如果自己到顶点了，自增1
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    // 并查集模板
+    class UnionFind {
+        private int[] father = null;
+
+        public UnionFind(int n) {
+            father = new int[n];
+            for(int i = 0; i < n; ++i) {
+                father[i] = i;
+            }
+        }
+
+        public int find(int x) {
+            // 路径压缩
+            return father[x] == x ? x : ( father[x] = find(father[x]) );
+        }
+
+        public void union(int a,int b) {
+            int root_a = find(a);
+            int root_b = find(b);
+            if(root_a != root_b) {
+                father[root_a] = root_b;
+            }
+        }
+    }
+}
+```
+
+```java
+class Solution {
+    public int findCircleNum(int[][] M) {
         int len = M.length;
         if (len == 0) {
             return 0;
