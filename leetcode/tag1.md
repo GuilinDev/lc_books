@@ -881,69 +881,72 @@ BFS可以求解最值问题，当每种密码锁每次都转动一次时，总�
 ```java
 class Solution {
     public int openLock(String[] deadends, String target) {
-        //Set，用来判断密码值是否是死亡数组中的值，这样就不用for循环来遍历了
+        //当前处理的转盘字符
+        Queue<String> queue = new LinkedList<>();
+        //死亡转盘字符
         Set<String> deads = new HashSet<>();
-        for (String s : deadends) deads.add(s);
-        //Set，用来判断某一密码值相邻密码值是否重复出现，防止死循环
-        Set<String> visited = new HashSet<>();
-        //Queue，队列，BFS要用到的，就不用多说了吧
-        Queue<String> queue = new LinkedList();
-        queue.add("0000");
-        visited.add("0000");
-        //步数
-        int step = 0;
-
-        //当所有密码值的情况都到时结束
+        //字符被访问过的列表
+        Set<String> vis = new HashSet<>();
+        for (String d : deadends) deads.add(d);
+        //单个源点触发
+        queue.offer("0000");
+        vis.add("0000");
+        int dist = 0;
         while (!queue.isEmpty()) {
-            int len = queue.size();
-
-            //遍历队列中的密码值
-            for (int i = 0; i < len; i++) {
-                String s = queue.poll();
-                //如果死亡数组中包含当前密码值，跳过循环，因为这时密码值已经被锁定，不能进行下一步了
-                if (deads.contains(s)) continue;
-                if (s.equals(target)) return step;
-
-                //遍历当前密码值的相邻8个密码值并作判断是否重复出现
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String curr = queue.poll();
+                //跳过死亡转盘字符
+                if (deads.contains(curr)) continue;
+                //找到了
+                if (target.equals(curr)) {
+                    return dist;
+                }
+                //四个数每个位置两种选择up down 4*2 =8 种
                 for (int j = 0; j < 4; j++) {
-                    String up = up(s, j);
-                    String down = down(s, j);
-                    if (!visited.contains(up)) {
-                        queue.add(up);
-                        visited.add(up);
+                    String up = getUp(curr, j);
+                    //要没被访问过的
+                    if (!vis.contains(up)) {
+                        queue.offer(up);
+                        vis.add(up);
                     }
-                    if (!visited.contains(down)) {
-                        queue.add(down);
-                        visited.add(down);
+                    String down = getDown(curr, j);
+                    if (!vis.contains(down)) {
+                        queue.offer(down);
+                        vis.add(down);
                     }
-
                 }
             }
-            //当前树的一层遍历结束，步数+1
-            step++;
+            //层数+1，当前层结束
+            dist++;
         }
-        //无解，返回-1
         return -1;
     }
 
-    public String up (String s, int j) {
-        char[] c = s.toCharArray();
-        if (c[j] == '9') {
-            c[j] = '0';
-        } else {
-            c[j]++;
-        }
-        return new String(c);
+    /**
+     * 生成当前字符往上递增的字符 如 9000-->1000  2000->3000
+     * @param base
+     * @param idx
+     * @return
+     */
+    private String getUp(String base, int idx) {
+        char[] chas = base.toCharArray();
+        if (chas[idx] == '9') chas[idx] = '0';
+        else chas[idx]++;
+        return String.valueOf(chas);
     }
 
-    public String down (String s, int j) {
-        char[] c = s.toCharArray();
-        if (c[j] == '0') {
-            c[j] = '9';
-        } else {
-            c[j]--;
-        }
-        return new String(c);
+    /**
+     * 生成当前字符往下递增的字符 如 9000-->8000  1000->9000
+     * @param base
+     * @param idx
+     * @return
+     */
+    private String getDown(String base, int idx) {
+        char[] chas = base.toCharArray();
+        if (chas[idx] == '0') chas[idx] = '9';
+        else chas[idx]--;
+        return String.valueOf(chas);
     }
 }
 ```
