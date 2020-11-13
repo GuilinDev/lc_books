@@ -983,7 +983,7 @@ class Solution {
         boolean dcResult = checkPalindrome(node.next); //头递归一直递归到最后一个结点后面的null，返回后到最后一个结点
         if (ref.val != node.val) {//对比第一个结点和最后一个结点，每次递归将ref往后移动与递归本身同步
             return false;
-        } else {
+        } else { // 当前对比相等，继续比较下一个元素
             ref = ref.next;
         }
         
