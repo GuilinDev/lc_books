@@ -2255,7 +2255,7 @@ class Solution {
 
         while (fast.next != null) {//相当于从dummy.next开始
             if (fast.next.val < x) {
-                if (slow != fast) {//开始把结点插入到前面
+                if (slow != fast) {//开始把结点插入到前面(slow后面)
                     ListNode next = fast.next.next;//先记住fast.next的下一位
                     fast.next.next = slow.next;
                     slow.next = fast.next;
