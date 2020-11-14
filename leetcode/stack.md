@@ -163,7 +163,7 @@ class MinStack {
         // if (stack2.peek() == stack1.peek()) stack2.pop();
         // stack1.pop();
 
-        //如果两个栈的顶部元素相等，那都要弹出，最小值不能留在第二个栈里面
+        //如果两个栈的顶部元素相等，那都要弹出，最小值不能只留在第二个栈里面
         int x = stack1.pop();
         if (stack2.peek() == x) {
             stack2.pop(); // 仔细想想，只要stack1中还有元素，stack2中的最小值就不会pop完
