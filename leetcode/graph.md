@@ -248,7 +248,7 @@ Explanation: There are a total of 2 courses to take.
 ```java
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        // HashMap来记录课程和该课程的出度课程
+        // HashMap来记录课程和该课程的出度课程的顶点
         HashMap<Integer, HashSet<Integer>> map = new HashMap<>();
         // 数组记录每个课程的入度
         int[] inDegrees = new int[numCourses];
