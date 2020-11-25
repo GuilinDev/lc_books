@@ -1077,19 +1077,16 @@ Explanation: The root node's value is 5 but its right child's value is 4.
  */
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        if (root == null || (root.left == null && root.right == null)) {
-            return true;
-        }
-        return dfs(root, Long.MIN_VALUE, Long.MAX_VALUE);
+        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
     }
-    private boolean dfs (TreeNode node, long min, long max) {
+    private boolean isValidBST(TreeNode node, long min, long max) {
         if (node == null) {
             return true;
         }
-        if (node.val <= min || node.val >= max) { // 严格大于或小于
+        if (node.val <= min || node.val >= max) {
             return false;
         }
-        return dfs(node.left, min, node.val) && dfs(node.right, node.val, max); // int -> long autobox
+        return isValidBST(node.left, min, node.val) && isValidBST(node.right, node.val, max);
     }
 }
 ```
