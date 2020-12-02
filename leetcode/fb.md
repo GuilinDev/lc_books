@@ -144,3 +144,41 @@ class Solution {
 
 
 
+
+
+
+
+
+
+## 540 Single Element in a Sorted Array
+
+找出只出现一次的元素，别的都是出现两次，二分查找
+
+```java
+class Solution {
+    /**
+    [1,1,2,3,3,4,4,8,8]
+    */
+    public int singleNonDuplicate(int[] nums) {
+        int start = 0, end = nums.length - 1;
+        while (start < end) {
+            // We want the first element of the middle pair,
+            // which should be at an even index if the left part is sorted.
+            int mid = start + (end - start)/2;
+            if (mid % 2 == 1) {
+                mid--;
+            }
+            
+            if (nums[mid] != nums[mid+1]) {//didn't find a pair. The single element must be on the left.
+                end = mid;
+            } else {// found a pair. The single element must be on the right.
+                start = mid + 2;
+            }
+        }
+        // 'start' should always be at the beginning of a pair.
+        // When 'start > end', start must be the single element.
+        return nums[start];
+    }
+}
+```
+
