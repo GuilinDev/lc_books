@@ -85,3 +85,62 @@ class Solution {
 }
 ```
 
+## 1428 Leftmost Column with at Least a One
+
+对所有行进行遍历，对每一行最左边出现的1的位置进行记录（找1的过程利用二分搜索），最后返回所有行中最左边1的列数。
+
+```java
+/**
+ * // This is the BinaryMatrix's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface BinaryMatrix {
+ *     public int get(int row, int col) {}
+ *     public List<Integer> dimensions {}
+ * };
+ */
+
+class Solution {
+    public int leftMostColumnWithOne(BinaryMatrix binaryMatrix) {
+        int rows = binaryMatrix.dimensions().get(0);
+        int cols = binaryMatrix.dimensions().get(1);
+        System.out.println(rows);
+        
+        int smallestIndex = Integer.MAX_VALUE;
+        
+        for (int i = 0; i < rows; i++) {
+            int left = 0, right = cols - 1;
+            while (left + 1 < right) {
+                int mid = left + (right - left) / 2; // mid element of one row
+                if (binaryMatrix.get(i, mid) == 0) { // one the right
+                    left = mid;
+                } else { // itself or on the left
+                    right = mid;
+                }
+            }
+            if (binaryMatrix.get(i, left) == 1) {
+                smallestIndex = Math.min(smallestIndex, left);
+            }  else if (binaryMatrix.get(i, right) == 1) {
+                smallestIndex = Math.min(smallestIndex, right);
+            } 
+        }
+        return smallestIndex == Integer.MAX_VALUE ? -1 : smallestIndex;
+    }
+}
+```
+
+## 238 Product of Array Except Self
+
+## 973 K Closest Points to Origin
+
+## 560 Subarray Sum Equals K
+
+## 680 Valid Palindrome II
+
+## 415 Add Strings
+
+## 273 Integer to English
+
+## 269 Alien Dictionary
+
+
+
