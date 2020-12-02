@@ -130,19 +130,99 @@ class Solution {
 
 ## 238 Product of Array Except Self
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#238-product-of-array-except-self" %}
+
 ## 973 K Closest Points to Origin
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer-1\#973-k-closest-points-from-origin" %}
 
 ## 560 Subarray Sum Equals K
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray\#560-subarray-sum-equals-k" %}
+
 ## 680 Valid Palindrome II
+
+双指针
+
+```java
+class Solution {
+    public boolean validPalindrome(String s) {
+        if (s.isEmpty() || s.length() <= 2) {
+            return true;
+        }
+        int len = s.length();
+        int left = 0, right = len - 1;
+        while (left < right && s.charAt(left) == s.charAt(right)) {
+            left++;
+            right--;
+        }
+        
+        if (left == right) {
+            return true;
+        }
+        
+        // left++, right--
+        if (checkPalindrome(s, left + 1, right) || checkPalindrome(s, left, right - 1)) {
+            return true;
+        }
+        return false;
+    }    
+    private boolean checkPalindrome(String str, int left, int right) {
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+```
 
 ## 415 Add Strings
 
+各一个指针
+
+```java
+class Solution {
+    public String addStrings(String num1, String num2) {
+        StringBuilder res = new StringBuilder();
+
+        int carry = 0;
+        int p1 = num1.length() - 1;
+        int p2 = num2.length() - 1;
+        while (p1 >= 0 || p2 >= 0) {
+            int x1 = p1 >= 0 ? num1.charAt(p1) - '0' : 0;
+            int x2 = p2 >= 0 ? num2.charAt(p2) - '0' : 0;
+            int value = (x1 + x2 + carry) % 10;
+            carry = (x1 + x2 + carry) / 10;
+            res.append(value);
+            p1--;
+            p2--;    
+        }
+        
+        if (carry != 0)
+            res.append(carry);
+        
+        return res.reverse().toString();
+    }
+}
+```
+
 ## 273 Integer to English
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#273-integer-to-english-words" %}
 
 ## 269 Alien Dictionary
 
+最好拓扑排序的解法
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/graph\#269-alien-dictionary" %}
+
+## 199 Binary Tree Right Side View
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3\#199-binary-tree-right-side-view" %}
 
 
 
@@ -181,4 +261,6 @@ class Solution {
     }
 }
 ```
+
+
 
