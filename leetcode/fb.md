@@ -315,9 +315,101 @@ class SparseVector {
 // int ans = v1.dotProduct(v2);
 ```
 
+## 211 Design Add and Search Words Data Structure
 
+## 215 Kth Largest Element in an Array
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer-1\#215-kth-largest-element-in-an-array" %}
 
+721 Accounts Merge
+
+125 Valid Palindrome
+
+124  [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum)
+
+278  [First Bad Version](https://leetcode.com/problems/first-bad-version)
+
+88  [Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array)
+
+29  [Divide Two Integers](https://leetcode.com/problems/divide-two-integers)
+
+426 [Convert Binary Search Tree to Sorted Doubly Linked List](https://leetcode.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list)
+
+297  [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree)
+
+438  [Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string)
+
+636  [Exclusive Time of Functions](https://leetcode.com/problems/exclusive-time-of-functions)
+
+523  [Continuous Subarray Sum](https://leetcode.com/problems/continuous-subarray-sum)
+
+282  [Expression Add Operators](https://leetcode.com/problems/expression-add-operators)
+
+173  [Binary Search Tree Iterator](https://leetcode.com/problems/binary-search-tree-iterator)
+
+34  [Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array)
+
+528  [Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight)
+
+987  [Vertical Order Traversal of a Binary Tree](https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree)
+
+50  [Pow\(x, n\)](https://leetcode.com/problems/powx-n)
+
+65  [Valid Number](https://leetcode.com/problems/valid-number)
+
+986  [Interval List Intersections](https://leetcode.com/problems/interval-list-intersections)
+
+133  [Clone Graph](https://leetcode.com/problems/clone-graph)
+
+31  [Next Permutation](https://leetcode.com/problems/next-permutation)
+
+708  [Insert into a Sorted Circular Linked List](https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list)
+
+249  [Group Shifted Strings](https://leetcode.com/problems/group-shifted-strings)
+
+42  [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water)
+
+340  [Longest Substring with At Most K Distinct Characters](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters)
+
+543  [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree)
+
+398  [Random Pick Index](https://leetcode.com/problems/random-pick-index)
+
+139 [Word Break](https://leetcode.com/problems/word-break)
+
+339  [Nested List Weight Sum](https://leetcode.com/problems/nested-list-weight-sum)
+
+785  [Is Graph Bipartite?](https://leetcode.com/problems/is-graph-bipartite)
+
+270  [Closest Binary Search Tree Value](https://leetcode.com/problems/closest-binary-search-tree-value)
+
+378  [Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix)
+
+670  [Maximum Swap](https://leetcode.com/problems/maximum-swap)
+
+76  [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring)
+
+317  [Shortest Distance from All Buildings](https://leetcode.com/problems/shortest-distance-from-all-buildings)
+
+536  [Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string)
+
+896  [Monotonic Array](https://leetcode.com/problems/monotonic-array)
+
+621  [Task Scheduler](https://leetcode.com/problems/task-scheduler)
+
+1060  [Missing Element in Sorted Array](https://leetcode.com/problems/missing-element-in-sorted-array)
+
+825  [Friends Of Appropriate Ages](https://leetcode.com/problems/friends-of-appropriate-ages)
+
+236  [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree)
+
+311  [Sparse Matrix Multiplication](https://leetcode.com/problems/sparse-matrix-multiplication)
+
+140  [Word Break II](https://leetcode.com/problems/word-break-ii)
+
+56  [Merge Intervals](https://leetcode.com/problems/merge-intervals)
+
+938  [Range Sum of BST](https://leetcode.com/problems/range-sum-of-bst)
 
 ## 540 Single Element in a Sorted Array
 
@@ -351,5 +443,99 @@ class Solution {
 }
 ```
 
+## Extra: Merge Two Sorted Interval Lists
 
+**样例1**
+
+```text
+输入: [(1,2),(3,4)] and list2 = [(2,3),(5,6)]
+输出: [(1,4),(5,6)]
+解释:
+(1,2),(2,3),(3,4) --> (1,4)
+(5,6) --> (5,6)
+```
+
+**样例2**
+
+```text
+输入: [(1,2),(3,4)] 和 list2 = [(4,5),(6,7)]
+输出: [(1,2),(3,5),(6,7)]
+解释:
+(1,2) --> (1,2)
+(3,4),(4,5) --> (3,5)
+(6,7) --> (6,7)
+```
+
+```java
+class Interval {
+    int start;
+    int end;
+    public Interval(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+}
+
+class myComparator implements Comparator<Interval> {
+    @Override
+    public int compare(Interval i1, Interval i2) {
+        if (i1.start == i2.start) {
+            return 0;
+        } else {
+            return i1.start < i2.start? -1: 1;
+        }
+    }
+}
+
+class IntervalMerge {
+    public List<Interval> mergeList(List<Interval> l1, List<Interval> l2) {
+        if (l1 == null || l1.size()  == 0) {
+            return l2;
+        } else if (l2 == null || l2.size() == 0) {
+            return l1;
+        }
+
+        Collections.sort(l1, new myComparator());
+        Collections.sort(l2, new myComparator());
+
+        List<Interval> result = new ArrayList<>();
+        int ix1 = 0;
+        int ix2 = 0;
+        // Get the first interval
+        Interval prev = null;
+        if (l1.get(0).start < l2.get(0).start) {
+            prev = l1.get(0);
+            ix1 ++;
+        } else {
+            prev = l2.get(0);
+            ix2 ++;
+        }
+        // Move two pointers to merge lists
+        while (ix1 < l1.size() || ix2 < l2.size()) {
+            if (ix2 == l2.size() || (ix1 < l1.size() && l1.get(ix1).start < l2.get(ix2).start)) {
+                // merge prev with ix1
+                if (prev.end < l1.get(ix1).start) {
+                    result.add(prev);
+                    prev = l1.get(ix1);
+                } else {
+                    prev.end = Math.max(prev.end, l1.get(ix1).end);
+                }
+                ix1 ++;
+            } else {
+                // merge prev with ix2
+                if (prev.end < l2.get(ix2).start) {
+                    result.add(prev);
+                    prev = l2.get(ix2);
+                } else {
+                    prev.end = Math.max(prev.end, l2.get(ix2).end);
+                }
+                ix2 ++;
+            }
+        }
+        result.add(prev);
+        return result;
+    }
+
+}
+```
 
