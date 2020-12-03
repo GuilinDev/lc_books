@@ -224,7 +224,96 @@ class Solution {
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3\#199-binary-tree-right-side-view" %}
 
+## 158 Read N Characters Given Read4 II - Call multiple times
 
+```java
+/**
+ * The read4 API is defined in the parent class Reader4.
+ *     int read4(char[] buf4); 
+ */
+
+public class Solution extends Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    char[] bufCache = new char[4];
+    int bufPtr = 0;
+    int bufCount = 0;
+
+    public int read(char[] buf, int n) {
+        int nIndex = 0;
+
+        // fill out every position until reach n
+        while (nIndex < n) {
+            // only if bufPtr does not reach the end of bufCache array, we can assign value from bufCache to final buf array
+            if (bufPtr < bufCount) {
+                buf[nIndex++] = bufCache[bufPtr++];
+            }
+
+            // if we already used all characters from bufCache, we need to read new characters by calling read4()
+            // and then fill the bufCache
+            else {
+                bufCount = read4(bufCache);
+                bufPtr = 0;
+
+                // if no more characters we can read, we should break the entire loop and return 0
+                if (bufCount == 0) {
+                    break;
+                }
+            }
+        }
+        return nIndex;
+    } 
+}
+```
+
+## 301 Remove Invalid Parenthesis
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3\#301-remove-invalid-parentheses" %}
+
+## 1570 Dot Product of Two Sparse Vectors
+
+```java
+class SparseVector {
+    
+    Map<Integer, Integer> map;      // For all non-zero values in the vector, we map the index to the non-zero value.
+    
+    // O(nums.length) time.
+    // O(numNonZeroValues) space.
+    SparseVector(int[] nums) {
+        map = new HashMap<>();
+        // Store the position and value of non-zero values.
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] != 0) {
+                map.put(i, nums[i]);        
+            }
+        }
+    }
+    
+	// Return the dotProduct of two sparse vectors
+    // O(min(vec1numNonZeroValues, vec2numNonZeroValues)) time because we iterate through non-zero values of the vector that has fewer non-zero values and for each value we check in O(1) time whether the other vector has a non-zero value at that index.
+    // O(1) space.
+    public int dotProduct(SparseVector vec) {        
+        if (vec.map.size() < this.map.size()) return vec.dotProduct(this);      // We want to iterate through the smaller map.
+
+        int result = 0;
+        for (Integer currIdx : this.map.keySet()) {
+            // If both vectors have a non-zero value at currIdx then multiply the values and add them to the result.
+            if (vec.map.containsKey(currIdx)) {
+                result += this.map.get(currIdx) * vec.map.get(currIdx);
+            }
+        }
+        return result;
+    }
+}
+
+// Your SparseVector object will be instantiated and called as such:
+// SparseVector v1 = new SparseVector(nums1);
+// SparseVector v2 = new SparseVector(nums2);
+// int ans = v1.dotProduct(v2);
+```
 
 
 
