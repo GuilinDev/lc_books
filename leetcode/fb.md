@@ -321,95 +321,113 @@ class SparseVector {
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer-1\#215-kth-largest-element-in-an-array" %}
 
-721 Accounts Merge
+## 721 Accounts Merge
 
-125 Valid Palindrome
+## 125 Valid Palindrome
 
-124  [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum)
+## 124  [Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum)
 
-278  [First Bad Version](https://leetcode.com/problems/first-bad-version)
+## 278  [First Bad Version](https://leetcode.com/problems/first-bad-version)
 
-88  [Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array)
+## 88  [Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array)
 
-29  [Divide Two Integers](https://leetcode.com/problems/divide-two-integers)
+## 29  [Divide Two Integers](https://leetcode.com/problems/divide-two-integers)
 
-426 [Convert Binary Search Tree to Sorted Doubly Linked List](https://leetcode.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list)
+## 426 [Convert Binary Search Tree to Sorted Doubly Linked List](https://leetcode.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list)
 
-297  [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree)
+## 297  [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree)
 
-438  [Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string)
+## 438  [Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string)
 
-636  [Exclusive Time of Functions](https://leetcode.com/problems/exclusive-time-of-functions)
+## 636  [Exclusive Time of Functions](https://leetcode.com/problems/exclusive-time-of-functions)
 
-523  [Continuous Subarray Sum](https://leetcode.com/problems/continuous-subarray-sum)
+## 523  [Continuous Subarray Sum](https://leetcode.com/problems/continuous-subarray-sum)
 
-282  [Expression Add Operators](https://leetcode.com/problems/expression-add-operators)
+## 282  [Expression Add Operators](https://leetcode.com/problems/expression-add-operators)
 
-173  [Binary Search Tree Iterator](https://leetcode.com/problems/binary-search-tree-iterator)
+## 173  [Binary Search Tree Iterator](https://leetcode.com/problems/binary-search-tree-iterator)
 
-34  [Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array)
+## 34  [Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array)
 
-528  [Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight)
+## 528  [Random Pick with Weight](https://leetcode.com/problems/random-pick-with-weight)
 
-987  [Vertical Order Traversal of a Binary Tree](https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree)
+## 987  [Vertical Order Traversal of a Binary Tree](https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree)
 
-50  [Pow\(x, n\)](https://leetcode.com/problems/powx-n)
+## 50  [Pow\(x, n\)](https://leetcode.com/problems/powx-n)
 
-65  [Valid Number](https://leetcode.com/problems/valid-number)
+## 65  [Valid Number](https://leetcode.com/problems/valid-number)
 
-986  [Interval List Intersections](https://leetcode.com/problems/interval-list-intersections)
+## 986  [Interval List Intersections](https://leetcode.com/problems/interval-list-intersections)
 
-133  [Clone Graph](https://leetcode.com/problems/clone-graph)
+## 133  [Clone Graph](https://leetcode.com/problems/clone-graph)
 
-31  [Next Permutation](https://leetcode.com/problems/next-permutation)
+## 31  [Next Permutation](https://leetcode.com/problems/next-permutation)
 
-708  [Insert into a Sorted Circular Linked List](https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list)
+## 708  [Insert into a Sorted Circular Linked List](https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list)
 
-249  [Group Shifted Strings](https://leetcode.com/problems/group-shifted-strings)
+## 249  [Group Shifted Strings](https://leetcode.com/problems/group-shifted-strings)
 
-42  [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water)
+## 42  [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water)
 
-340  [Longest Substring with At Most K Distinct Characters](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters)
+## 340  [Longest Substring with At Most K Distinct Characters](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters)
 
-543  [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree)
+## 543  [Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree)
 
-398  [Random Pick Index](https://leetcode.com/problems/random-pick-index)
+## 398  [Random Pick Index](https://leetcode.com/problems/random-pick-index)
 
-139 [Word Break](https://leetcode.com/problems/word-break)
+## 139 [Word Break](https://leetcode.com/problems/word-break)
 
-339  [Nested List Weight Sum](https://leetcode.com/problems/nested-list-weight-sum)
+## 339  [Nested List Weight Sum](https://leetcode.com/problems/nested-list-weight-sum)
 
-785  [Is Graph Bipartite?](https://leetcode.com/problems/is-graph-bipartite)
+## 785  [Is Graph Bipartite?](https://leetcode.com/problems/is-graph-bipartite)
 
-270  [Closest Binary Search Tree Value](https://leetcode.com/problems/closest-binary-search-tree-value)
+## 270  [Closest Binary Search Tree Value](https://leetcode.com/problems/closest-binary-search-tree-value)
 
-378  [Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix)
+## 378  [Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix)
 
-670  [Maximum Swap](https://leetcode.com/problems/maximum-swap)
+## 670  [Maximum Swap](https://leetcode.com/problems/maximum-swap)
 
-76  [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring)
+## 76  [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring)
 
-317  [Shortest Distance from All Buildings](https://leetcode.com/problems/shortest-distance-from-all-buildings)
+## 317  [Shortest Distance from All Buildings](https://leetcode.com/problems/shortest-distance-from-all-buildings)
 
-536  [Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string)
+## 536  [Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string)
 
-896  [Monotonic Array](https://leetcode.com/problems/monotonic-array)
+## 896  [Monotonic Array](https://leetcode.com/problems/monotonic-array)
 
-621  [Task Scheduler](https://leetcode.com/problems/task-scheduler)
+## 621  [Task Scheduler](https://leetcode.com/problems/task-scheduler)
 
-1060  [Missing Element in Sorted Array](https://leetcode.com/problems/missing-element-in-sorted-array)
+## 1060  [Missing Element in Sorted Array](https://leetcode.com/problems/missing-element-in-sorted-array)
 
-825  [Friends Of Appropriate Ages](https://leetcode.com/problems/friends-of-appropriate-ages)
+## 825  [Friends Of Appropriate Ages](https://leetcode.com/problems/friends-of-appropriate-ages)
 
-236  [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree)
+## 236  [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree)
 
-311  [Sparse Matrix Multiplication](https://leetcode.com/problems/sparse-matrix-multiplication)
+## 311  [Sparse Matrix Multiplication](https://leetcode.com/problems/sparse-matrix-multiplication)
 
-140  [Word Break II](https://leetcode.com/problems/word-break-ii)
+## 140  [Word Break II](https://leetcode.com/problems/word-break-ii)
 
-56  [Merge Intervals](https://leetcode.com/problems/merge-intervals)
+## 56  [Merge Intervals](https://leetcode.com/problems/merge-intervals)
 
-938  [Range Sum of BST](https://leetcode.com/problems/range-sum-of-bst)
+## 938  [Range Sum of BST](https://leetcode.com/problems/range-sum-of-bst)
+
+## 616 [Add Bold Tag in String](https://leetcode.com/problems/add-bold-tag-in-string)
+
+## 827  [Making A Large Island](https://leetcode.com/problems/making-a-large-island)
+
+## 23  [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists)
+
+## 138  [Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer)
+
+## 314 [Binary Tree Vertical Order Traversal](https://leetcode.com/problems/binary-tree-vertical-order-traversal)
+
+## 689  [Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays)
+
+## 347  [Maximum Sum of 3 Non-Overlapping Subarrays](https://leetcode.com/problems/maximum-sum-of-3-non-overlapping-subarrays)
+
+## 146  [LRU Cache](https://leetcode.com/problems/lru-cache)
+
+## 10  [Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching)
 
 ## 540 Single Element in a Sorted Array
 
