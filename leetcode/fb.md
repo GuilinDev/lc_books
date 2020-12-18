@@ -1485,6 +1485,1078 @@ class Solution {
 }
 ```
 
+#### 161    One Edit Distance $
+
+[判断两个字符串是否可以edit\(增/删/替换\)一次就相等 - 直接判断一次](https://leetcode.com/problems/one-edit-distance/solution/)
+
+```java
+class Solution {
+  public boolean isOneEditDistance(String s, String t) {
+    int ns = s.length();
+    int nt = t.length();
+
+    // Ensure that s is shorter than t.
+    if (ns > nt)
+      return isOneEditDistance(t, s);
+
+    // The strings are NOT one edit away distance  
+    // if the length diff is more than 1.
+    if (nt - ns > 1)
+      return false;
+
+    for (int i = 0; i < ns; i++)
+      if (s.charAt(i) != t.charAt(i))
+        // if strings have the same length
+        if (ns == nt)
+          return s.substring(i + 1).equals(t.substring(i + 1));
+        // if strings have different lengths
+        else
+          return s.substring(i).equals(t.substring(i + 1));
+
+    // If there is no diffs on ns distance
+    // the strings are one edit away only if
+    // t has one more character. 
+    return (ns + 1 == nt);
+  }
+}
+```
+
+#### 283    Move Zeroes
+
+[双指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#283-move-zeroes)
+
+#### 332    Reconstruct Itinerary
+
+[DFS](https://app.gitbook.com/@guilindev/s/interview/leetcode/tag1#332-reconstruct-itinerary)
+
+#### 678    Valid Parenthesis String
+
+[只有小括号和星号，星号可表示任意左右括号，判断是否有效 - 两个栈](https://leetcode-cn.com/problems/valid-parenthesis-string/solution/fen-zhi-tan-xin-shuang-xiang-bian-li-shuang-zhan-j/)
+
+#### 1262 Greatest Sum Divisible by Three
+
+[数组中挑选一些元素，加起来最大可能值可被3整除 - DP](https://leetcode-cn.com/problems/greatest-sum-divisible-by-three/solution/kuo-zhan-yi-xia-ba-ti-mu-de-chu-3bian-cheng-chu-kx/)
+
+#### 1216 Valid Palindrome III $
+
+[可以移除K个字符的 - DP](https://leetcode.com/problems/valid-palindrome-iii/discuss/397606/Find-Longest-Palindromic-Subsequence.)
+
+相当于找最长回文子字符串
+
+```java
+class Solution {
+    public boolean isValidPalindrome(String str, int k) {
+        int n = str.length();
+
+        StringBuilder stringBuilder = new StringBuilder(str).reverse();
+        int lps = lcs(str, stringBuilder.toString(), n, n);
+
+        return (n - lps <= k);
+    }
+
+    /*
+    longest palindromic subsequence:
+    LCS of the given string & its reverse will be the longest palindromic sequence.
+     */
+    private int lcs(String X, String Y, int m, int n) {
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                } else if (X.charAt(i - 1) == Y.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+```
+
+#### 983    Minimum Cost For Tickets
+
+[连续火车旅行n天购票使票价最低 - 从后向前DP](https://leetcode-cn.com/problems/minimum-cost-for-tickets/solution/java-dong-tai-gui-hua-si-lu-bu-zou-cong-hou-xiang-/)
+
+#### 452    Minimum Number of Arrows to Burst Balloons
+
+[排序](https://app.gitbook.com/@guilindev/s/interview/leetcode/greedy#452-minimum-number-of-arrows-to-burst-balloons)
+
+#### 791    Custom Sort String
+
+[根据另一个字符串的顺序对一个字符串排序 - Hashmap或者array保持顺序](https://leetcode-cn.com/problems/custom-sort-string/solution/zi-ding-yi-zi-fu-chuan-pai-xu-by-leetcode/)
+
+#### 15 3Sum
+
+[排序](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum#15-3sum)
+
+#### 406    Queue Reconstruction by Height
+
+[按照身高的属性排序](https://leetcode-cn.com/problems/queue-reconstruction-by-height/solution/gen-ju-shen-gao-zhong-jian-dui-lie-by-leetcode-sol/)
+
+#### 405    Convert a Number to Hexadecimal
+
+[转换整数为十六进制](https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/shu-zi-zhuan-huan-wei-shi-liu-jin-zhi-jie-fa-shou-/)
+
+#### 885    Spiral Matrix III
+
+[逐渐内收螺旋打印](https://leetcode-cn.com/problems/spiral-matrix-iii/solution/luo-xuan-ju-zhen-iii-by-leetcode/)
+
+#### 277    Find the Celebrity
+
+[两个数组](https://app.gitbook.com/@guilindev/s/interview/leetcode/graph#277-find-the-celebrity)
+
+#### 14 Longest Common Prefix
+
+[居然可以二分查找，不过效率更低](https://leetcode-cn.com/problems/longest-common-prefix/solution/zui-chang-gong-gong-qian-zhui-by-leetcode-solution/)
+
+#### 703    Kth Largest Element in a Stream
+
+[最小堆](https://app.gitbook.com/@guilindev/s/interview/leetcode/heap#703-kth-largest-element-in-a-stream)
+
+#### 288    Unique Word Abbreviation $
+
+[把单词中间的字符缩写，判断是否唯一 - HashMap](https://leetcode.com/problems/unique-word-abbreviation/solution/)
+
+```java
+class ValidWordAbbr {
+    private final Map<String, Set<String>> abbrDict = new HashMap<>();
+
+    public ValidWordAbbr(String[] dictionary) {
+        for (String s : dictionary) {
+            String abbr = toAbbr(s);
+            Set<String> words = abbrDict.containsKey(abbr)
+                ? abbrDict.get(abbr) : new HashSet<>();
+            words.add(s);
+            abbrDict.put(abbr, words);
+        }
+    }
+
+    public boolean isUnique(String word) {
+        String abbr = toAbbr(word);
+        Set<String> words = abbrDict.get(abbr);
+        return words == null || (words.size() == 1 && words.contains(word));
+    }
+
+    private String toAbbr(String s) {
+        int n = s.length();
+        if (n <= 2) {
+            return s;
+        }
+        return s.charAt(0) + Integer.toString(n - 2) + s.charAt(n - 1);
+    }
+}
+```
+
+#### 1269 Number of Ways to Stay in the Same Place After Some Steps
+
+[数组的索引n次左右操作后是否停在原地 - 二维DP可降维](https://leetcode-cn.com/problems/number-of-ways-to-stay-in-the-same-place-after-some-steps/solution/javajian-dan-yi-dong-dpjie-fa-by-isaaczhu/)
+
+#### 91 Decode Ways
+
+[DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#91-decode-ways)
+
+#### 98 Validate Binary Search Tree
+
+[验证BST，传入上下边界](https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs#98-validate-binary-search-tree)
+
+#### 1329 Sort the Matrix Diagonally
+
+[矩阵按对角线左上到右下升序排序 - 直接解](https://leetcode-cn.com/problems/sort-the-matrix-diagonally/solution/bao-li-jie-fa-by-liweiwei1419/)
+
+#### 152    Maximum Product Subarray
+
+[找到子数组使其乘积最大 - 维护最大最小两个数](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray#152-maximum-product-subarray)
+
+#### 1361 Validate Binary Tree Nodes
+
+[验证是二叉树还是图 - DFS/UF](https://leetcode-cn.com/problems/validate-binary-tree-nodes/solution/judgedai-ma-ji-caseyou-cuo-wu-ti-gong-lia-zheng-qu/)
+
+#### 567    Permutation in String
+
+[判断一个字符串是否是另一个子串的排列 - 滑动窗口](https://leetcode-cn.com/problems/permutation-in-string/solution/zi-fu-chuan-de-pai-lie-by-leetcode/)
+
+#### 839    Similar String Groups
+
+[交换字符串中两个字符的位置，相同则为相似字符串，返回字符串数组中相似字符串的数目 - UF](https://leetcode-cn.com/problems/similar-string-groups/solution/wen-ti-zhuan-hua-wei-qiu-tu-de-lian-tong-fen-liang/)
+
+#### 698    Partition to K Equal Sum Subsets
+
+[是否可以把数组划分为K个子数组让每个子数组和相等 - DP](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/solution/hua-fen-wei-kge-xiang-deng-de-zi-ji-by-leetcode/)
+
+#### 325    Maximum Size Subarray Sum Equals k $
+
+[和等于k的最长子数组长度 - Hashmap](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+
+```java
+class Solution {
+    public int maxSubArrayLen(int[] nums, int k) {
+        int sum = 0, max = 0;
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            sum = sum + nums[i];
+            if (sum == k) max = i + 1;
+            else if (map.containsKey(sum - k)) max = Math.max(max, i - map.get(sum - k));
+            if (!map.containsKey(sum)) map.put(sum, i);
+        }
+        return max;
+    }
+}
+```
+
+#### 358    Rearrange String k Distance Apart $
+
+[重排字符让相同的字符至少相隔k个距离](https://leetcode.com/problems/rearrange-string-k-distance-apart/)
+
+The greedy algorithm is that in each step, select the char with highest remaining count if possible \(if it is not in the waiting queue\). PQ is used to achieve the greedy. A regular queue waitQueue is used to "freeze" previous appeared char in the period of k.
+
+In each iteration, we need to add current char to the waitQueue and also release the char at front of the queue, put back to maxHeap. The "impossible" case happens when the maxHeap is empty but there is still some char in the waitQueue.
+
+```java
+class Solution {
+    public String rearrangeString(String str, int k) {
+
+        StringBuilder rearranged = new StringBuilder();
+        //count frequency of each char
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : str.toCharArray()) {
+            if (!map.containsKey(c)) {
+                map.put(c, 0);
+            }
+            map.put(c, map.get(c) + 1);
+        }
+
+        //construct a max heap using self-defined comparator, which holds all Map entries, Java is quite verbose
+        Queue<Map.Entry<Character, Integer>> maxHeap = new PriorityQueue<>(new Comparator<Map.Entry<Character, Integer>>() {
+            public int compare(Map.Entry<Character, Integer> entry1, Map.Entry<Character, Integer> entry2) {
+                return entry2.getValue() - entry1.getValue();
+            }
+        });
+
+        Queue<Map.Entry<Character, Integer>> waitQueue = new LinkedList<>();
+        maxHeap.addAll(map.entrySet());
+
+        while (!maxHeap.isEmpty()) {
+
+            Map.Entry<Character, Integer> current = maxHeap.poll();
+            rearranged.append(current.getKey());
+            current.setValue(current.getValue() - 1);
+            waitQueue.offer(current);
+
+            if (waitQueue.size() < k) { // intial k-1 chars, waitQueue not full yet
+                continue;
+            }
+            // release from waitQueue if char is already k apart
+            Map.Entry<Character, Integer> front = waitQueue.poll();
+            //note that char with 0 count still needs to be placed in waitQueue as a place holder
+            if (front.getValue() > 0) {
+                maxHeap.offer(front);
+            }
+        }
+
+        return rearranged.length() == str.length() ? rearranged.toString() : "";
+    }
+
+}
+```
+
+#### 480    Sliding Window Median
+
+[滑动窗口的中位数 - 295流中位数的改造](https://leetcode-cn.com/problems/sliding-window-median/solution/dui-295ti-shao-zuo-gai-jin-by-jerry_nju/)
+
+#### 494    Target Sum
+
+[数组中非负整数组合加减符号使其等于目标数 - DP](https://leetcode-cn.com/problems/target-sum/solution/mu-biao-he-by-leetcode/)
+
+#### 515    Find Largest Value in Each Tree Row
+
+[二叉树的每一行找最大值 - BFS/DFS](https://leetcode-cn.com/problems/find-largest-value-in-each-tree-row/solution/javadai-ma-bfshe-dfsliang-chong-jie-jue-si-lu-yi-j/)
+
+#### 341    Flatten Nested List Iterator
+
+[对嵌套链表进行迭代使其不嵌套 - Stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#341-flatten-nested-list-iterator)
+
+#### 919    Complete Binary Tree Inserter
+
+[完全二叉树插入新结点](https://leetcode-cn.com/problems/complete-binary-tree-inserter/solution/wan-quan-er-cha-shu-ceng-xu-bian-li-bian-li-dao-zi/)
+
+#### 153    Find Minimum in Rotated Sorted Array
+
+[旋转过的有序数组找最小值 - 二分](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su#153-find-minimum-in-rotated-sorted-array)
+
+#### 637    Average of Levels in Binary Tree
+
+[二叉树中每层的均值 - BFS/DFS](https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/solution/er-cha-shu-de-ceng-ping-jun-zhi-by-leetcode-soluti/)
+
+#### 399    Evaluate Division
+
+[字符串组成除法方程并求值 - UF](https://leetcode-cn.com/problems/evaluate-division/solution/ni-zhen-de-zhi-dao-bing-cha-ji-de-gou-zao-guo-chen/)
+
+#### 1055 Shortest Way to Form String $
+
+[从一个短字符串添加自身有的字符形成另一个字符串（subsequence）的最短路径](https://leetcode.com/problems/shortest-way-to-form-string/discuss/330938/Accept-is-not-enough-to-get-a-hire.-Interviewee-4-follow-up)
+
+#### 1439 Find the Kth Smallest Sum of a Matrix With Sorted Rows
+
+[从矩阵中每行选择一个数字，组成一个array，求出第k大的array - BFS](https://leetcode-cn.com/problems/find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows/solution/java-bfs-zui-xiao-dui-by-bran_wang/)
+
+#### 692    Top K Frequent Words
+
+[字符串数组中k频次的单词 - 小根堆](https://leetcode-cn.com/problems/top-k-frequent-words/solution/qian-kge-gao-pin-dan-ci-by-leetcode/)
+
+#### 498    Diagonal Traverse
+
+[矩阵左上右下再右下左上的对角线遍历 - 模拟](https://leetcode-cn.com/problems/diagonal-traverse/solution/dui-jiao-xian-bian-li-by-leetcode/)
+
+#### 346    Moving Average from Data Stream
+
+[滑动窗口计算中位数 - 队列](https://app.gitbook.com/@guilindev/s/interview/leetcode/queue#346-moving-average-from-data-stream)
+
+#### 300    Longest Increasing Subsequence
+
+[LIS - 二分](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#300-longest-increasing-subsequence)
+
+#### 1 Two Sum
+
+[注意题意别翻船](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum#1-2sum)
+
+#### 79 Word Search
+
+[单词查找 - DFS](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#79-word-search)
+
+#### 207    Course Schedule
+
+[课程安排1 - 拓扑排序](https://app.gitbook.com/@guilindev/s/interview/leetcode/graph#207-course-schedule)
+
+#### 773    Sliding Puzzle
+
+[2x3的板上滑动谜题，类似华容道 - BFS或优化的A\*搜索](https://leetcode-cn.com/problems/sliding-puzzle/solution/hua-dong-mi-ti-by-leetcode/)
+
+#### 224    Basic Calculator
+
+[计算器，只有加减和括号](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#224-basic-calculator)
+
+#### 128    Longest Consecutive Sequence
+
+[整数数组中最长递增LCS - DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#128-longest-consecutive-sequence)
+
+#### 102    Binary Tree Level Order Traversal
+
+[层序遍历 - BFS](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#102-binary-tree-level-order-traversal)
+
+#### 969    Pancake Sorting
+
+[煎饼排序，对数组前k个元素进行翻转完成排序 - 查找最大值然后翻转](https://leetcode-cn.com/problems/pancake-sorting/solution/cha-zhao-zui-da-zhi-suo-zai-wei-zhi-fan-zhuan-zhi-/)
+
+#### 1305 All Elements in Two Binary Search Trees
+
+[返回两颗二叉树的所有整数并升序排列 - 中序归并](https://leetcode-cn.com/problems/all-elements-in-two-binary-search-trees/solution/java-san-chong-jie-fa-by-npe_tle/)
+
+#### 150    Evaluate Reverse Polish Notation
+
+[逆波兰数 - 栈/递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#150-evaluate-reverse-polish-notation)
+
+#### 345    Reverse Vowels of a String
+
+[字符串中仅交换一次左右的元音字符](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#345-reverse-vowels-of-a-string)
+
+#### 686    Repeated String Match
+
+\[一个字符串重复n次后，另一个字符串是否是其子串\]\([https://leetcode.com/problems/repeated-string-match/discuss/108086/Java-Solution-Just-keep-building-\(OJ-Missing-Test-Cases](https://leetcode.com/problems/repeated-string-match/discuss/108086/Java-Solution-Just-keep-building-%28OJ-Missing-Test-Cases)\)\)
+
+#### 490    The Maze
+
+[判断是否达到终点 - BFS](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3#490-the-maze)
+
+#### 449    Serialize and Deserialize BST
+
+[反序列化时二分](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#449-serialize-and-deserialize-bst)
+
+#### 54 Spiral Matrix
+
+[四个变量控制位置](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#54-spiral-matrix)
+
+#### 286    Walls and Gates $
+
+\[矩阵中将每个房间更新为距离最近门的距离 - BFS\]\([https://leetcode.com/problems/walls-and-gates/discuss/72745/Java-BFS-Solution-O\(mn\)-Time](https://leetcode.com/problems/walls-and-gates/discuss/72745/Java-BFS-Solution-O%28mn%29-Time)\)
+
+Push all gates into queue first. Then for each gate update its neighbor cells and push them to the queue.
+
+Repeating above steps until there is nothing left in the queue.
+
+```java
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        if (rooms.length == 0 || rooms[0].length == 0) return;
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < rooms.length; i++) {
+            for (int j = 0; j < rooms[0].length; j++) {
+                if (rooms[i][j] == 0) queue.add(new int[]{i, j});
+            }
+        }
+        while (!queue.isEmpty()) {
+            int[] top = queue.remove();
+            int row = top[0], col = top[1];
+            if (row > 0 && rooms[row - 1][col] == Integer.MAX_VALUE) {
+                rooms[row - 1][col] = rooms[row][col] + 1;
+                queue.add(new int[]{row - 1, col});
+            }
+            if (row < rooms.length - 1 && rooms[row + 1][col] == Integer.MAX_VALUE) {
+                rooms[row + 1][col] = rooms[row][col] + 1;
+                queue.add(new int[]{row + 1, col});
+            }
+            if (col > 0 && rooms[row][col - 1] == Integer.MAX_VALUE) {
+                rooms[row][col - 1] = rooms[row][col] + 1;
+                queue.add(new int[]{row, col - 1});
+            }
+            if (col < rooms[0].length - 1 && rooms[row][col + 1] == Integer.MAX_VALUE) {
+                rooms[row][col + 1] = rooms[row][col] + 1;
+                queue.add(new int[]{row, col + 1});
+            }
+        }
+    }
+}
+```
+
+#### 127    Word Ladder
+
+[单词顺着dict变化 - 无向图BFS](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3#127-word-ladder)
+
+#### 307    Range Sum Query - Mutable
+
+[一维数组 - 线段树](https://app.gitbook.com/@guilindev/s/interview/leetcode/design#307-range-sum-query-mutable)
+
+#### 387    First Unique Character in a String
+
+[HashMap或者Array记录是否出现](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#387-first-unique-character-in-a-string)
+
+#### 143    Reorder List
+
+[首尾重构链表 - Stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#143-reorder-list)
+
+#### 364    Nested List Weight Sum II $
+
+[返回嵌套列表的总和并按照深度加权 - BFS](https://leetcode.com/problems/nested-list-weight-sum-ii/)
+
+```java
+class Solution {
+    public int depthSumInverse(List<NestedInteger> nestedList) {
+        if (nestedList == null) return 0;
+        Queue<NestedInteger> queue = new LinkedList<NestedInteger>();
+        int prev = 0;
+        int total = 0;
+        for (NestedInteger next: nestedList) {
+            queue.offer(next);
+        }
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            int levelSum = 0;
+            for (int i = 0; i < size; i++) {
+                NestedInteger current = queue.poll();
+                if (current.isInteger()) levelSum += current.getInteger();
+                List<NestedInteger> nextList = current.getList();
+                if (nextList != null) {
+                    for (NestedInteger next: nextList) {
+                        queue.offer(next);
+                    }
+                }
+            }
+            prev += levelSum;
+            total += prev;
+        }
+        return total;
+    }
+}
+```
+
+#### 148    Sort List
+
+[对链表排序 - Merge Sort](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#148-sort-list)
+
+#### 73 Set Matrix Zeroes
+
+[通过第一行第一列记录0的位置](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#73-set-matrix-zeroes)
+
+#### 420    Strong Password Checker
+
+[强密码验证](https://app.gitbook.com/@guilindev/s/interview/leetcode/tag#420-strong-password-checker)
+
+#### 605    Can Place Flowers
+
+[一维数组 - 贪心](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#605-can-place-flowers)
+
+#### 419    Battleships in a Board
+
+[计算二维数组上可以放多少个X - 修改值](https://leetcode-cn.com/problems/battleships-in-a-board/solution/zhi-xiu-gai-ji-jin-jie-by-directivex/)
+
+#### 1162 As Far from Land as Possible
+
+[找出NxN的网格中一个海洋格子离最近陆地曼哈顿距离最大 BFS](https://leetcode-cn.com/problems/as-far-from-land-as-possible/solution/di-tu-fen-xi-by-leetcode-solution/)
+
+#### 3 Longest Substring Without Repeating Characters
+
+[HashMap/hashset/array](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#3-longest-substring-without-repeating-characters)
+
+#### 739    Daily Temperatures
+
+[单调栈Monotonic Stack](https://leetcode-cn.com/problems/daily-temperatures/solution/mei-ri-wen-du-by-leetcode-solution/)
+
+#### 20 Valid Parentheses
+
+[注意有没有别的字符等](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#20-valid-parentheses)
+
+#### 285    Inorder Successor in BST
+
+[中序遍历的下一个，利用BST特性](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#285-inorder-successor-in-bst)
+
+#### 336    Palindrome Pairs
+
+[找出字符串数组中所有能组成回文词的两个字符串](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#336-palindrome-pairs)
+
+#### 154    Find Minimum in Rotated Sorted Array II
+
+[有重复元素的旋转过数组找到最小值](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su#154-find-minimum-in-rotated-sorted-array-ii)
+
+#### 22 Generate Parentheses
+
+[给个整数生成有效括号组合 - 递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#22-generate-parentheses)
+
+#### 2 Add Two Numbers
+
+[链表从后往前](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#2-add-two-numbers)
+
+#### 392    Is Subsequence
+
+[判断一个字符串是否是另一个字符串的subsequence - 双指针/DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#392-is-subsequence)
+
+#### 257    Binary Tree Paths
+
+[返回二叉树所有root到leaf的路径](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#257-binary-tree-paths)
+
+#### 865    Smallest Subtree with all the Deepest Nodes
+
+[返回包含最深子结点的子树\(且不是叶子结点\) - DFS](https://leetcode-cn.com/problems/smallest-subtree-with-all-the-deepest-nodes/solution/ju-you-suo-you-zui-shen-jie-dian-de-zui-xiao-zi-sh/)
+
+#### 234    Palindrome Linked List
+
+[Stack/递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#234-palindrome-linked-list)
+
+#### 57 Insert Interval
+
+[在有序区间的列表中插入一个新的区间依然有序 - 贪心](https://app.gitbook.com/@guilindev/s/interview/leetcode/tag4#57-insert-interval)
+
+#### 1213 Intersection of Three Sorted Arrays $
+
+[三个有序数组的交集 - 三指针](https://leetcode.com/problems/intersection-of-three-sorted-arrays/solution/)
+
+```java
+class Solution {
+    public List<Integer> arraysIntersection(int[] arr1, int[] arr2, int[] arr3) {
+        List<Integer> ans = new ArrayList <>();
+        // prepare three pointers to iterate through three arrays
+        // p1, p2, and p3 point to the beginning of arr1, arr2, and arr3 accordingly
+        int p1 = 0, p2 = 0, p3 = 0;
+
+        while (p1 < arr1.length && p2 < arr2.length && p3 < arr3.length) {
+
+            if (arr1[p1] == arr2[p2] && arr2[p2] == arr3[p3]) {
+                ans.add(arr1[p1]);
+                p1++;
+                p2++;
+                p3++;
+            } else {
+                if (arr1[p1] < arr2[p2]) {
+                    p1++;
+                } else if (arr2[p2] < arr3[p3]) {
+                    p2++;
+                } else {
+                    p3++;
+                }
+
+            }
+        }
+        return ans;
+    }
+}
+```
+
+#### 1053 Previous Permutation With One Swap
+
+[整数数组中交换一次元素得到按字典序比原数组排列小的最大数组](https://leetcode-cn.com/problems/previous-permutation-with-one-swap/solution/han-xiang-xi-fen-xi-si-lu-jian-dan-ti-mu-you-qu-by/)
+
+#### 17 Letter Combinations of a Phone Number
+
+[回溯](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#17-letter-combinations-of-a-phone-number)
+
+#### 538    Convert BST to Greater Tree
+
+[BST的值加上所有比它大的值的和更新](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#538-convert-bst-to-greater-tree)
+
+#### 759    Employee Free Time $
+
+[intervals所有员工都没工作的空闲时间 - 扫描线](https://leetcode.com/problems/employee-free-time/solution/)
+
+```java
+class Solution {
+    public List<Interval> employeeFreeTime(List<List<Interval>> avails) {
+        int OPEN = 0, CLOSE = 1;
+
+        List<int[]> events = new ArrayList();
+        for (List<Interval> employee: avails)
+            for (Interval iv: employee) {
+                events.add(new int[]{iv.start, OPEN});
+                events.add(new int[]{iv.end, CLOSE});
+            }
+
+        Collections.sort(events, (a, b) -> a[0] != b[0] ? a[0]-b[0] : a[1]-b[1]);
+        List<Interval> ans = new ArrayList();
+
+        int prev = -1, bal = 0;
+        for (int[] event: events) {
+            // event[0] = time, event[1] = command
+            if (bal == 0 && prev >= 0)
+                ans.add(new Interval(prev, event[0]));
+            bal += event[1] == OPEN ? 1 : -1;
+            prev = event[0];
+        }
+
+        return ans;
+    }
+}
+```
+
+#### 1382 Balance a Binary Search Tree
+
+[将二叉树变平衡 - 贪心类似AVL旋转](https://leetcode-cn.com/problems/balance-a-binary-search-tree/solution/jiang-er-cha-sou-suo-shu-bian-ping-heng-by-leetcod/)
+
+#### 53 Maximum Subarray
+
+[子数组的和最大 - 顺序扫描或DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray#53-maximum-subarray)
+
+#### 121    Best Time to Buy and Sell Stock
+
+[股票买卖 - 只可买一次](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#121-best-time-to-buy-and-sell-stock)
+
+#### 1314 Matrix Block Sum
+
+[矩阵的区域的每个元素的和都满足条件 - 二维前缀和](https://leetcode-cn.com/problems/matrix-block-sum/solution/jing-dian-de-qian-zhui-he-wen-ti-by-lirunjun/)
+
+#### 206    Reverse Linked List
+
+[别翻船](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#206-reverse-linked-list)
+
+#### 122    Best Time to Buy and Sell Stock II
+
+[股票买卖 - 可无限买卖](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#122-best-time-to-buy-and-sell-stock-ii)
+
+#### 66 Plus One
+
+[注意进位](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#66-plus-one)
+
+#### 1027 Longest Arithmetic Subsequence
+
+[整数数组中的最长等差数列 - DP/hashmap二分优化](https://leetcode-cn.com/problems/longest-arithmetic-subsequence/solution/hashmap-bao-li-yong-shi-ji-bai-9642-nei-cun-ji-bai/)
+
+#### 443    String Compression
+
+[原地压缩字符串数组中的每一个字符 - 双指针](https://leetcode-cn.com/problems/string-compression/solution/ya-suo-zi-fu-chuan-by-leetcode/)
+
+#### 545    Boundary of Binary Tree
+
+[求二叉树的左边界右边界和叶子 - 先序遍历](https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs#545-boundary-of-binary-tree)
+
+#### 416    Partition Equal Subset Sum
+
+[正整数数组分成两个子集让二者和相等 - DP](https://leetcode-cn.com/problems/partition-equal-subset-sum/solution/fen-ge-deng-he-zi-ji-by-leetcode-solution/)
+
+#### 189    Rotate Array
+
+[数组元素向右旋转k步 - 翻转](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#189-rotate-array)
+
+#### 1146 Snapshot Array
+
+[实现快照数组](https://app.gitbook.com/@guilindev/s/interview/leetcode/tag#1146-snapshot-array)
+
+#### 694    Number of Distinct Islands $
+
+[岛屿数量](https://leetcode.com/problems/number-of-distinct-islands/solution/) DFS
+
+```java
+class Solution {
+    int[][] grid;
+    boolean[][] seen;
+    Set<Integer> shape;
+
+    public void explore(int r, int c, int r0, int c0) {
+        if (0 <= r && r < grid.length && 0 <= c && c < grid[0].length &&
+                grid[r][c] == 1 && !seen[r][c]) {
+            seen[r][c] = true;
+            shape.add((r - r0) * 2 * grid[0].length + (c - c0));
+            explore(r+1, c, r0, c0);
+            explore(r-1, c, r0, c0);
+            explore(r, c+1, r0, c0);
+            explore(r, c-1, r0, c0);
+        }
+    }
+    public int numDistinctIslands(int[][] grid) {
+        this.grid = grid;
+        seen = new boolean[grid.length][grid[0].length];
+        Set shapes = new HashSet<HashSet<Integer>>();
+
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                shape = new HashSet<Integer>();
+                explore(r, c, r, c);
+                if (!shape.isEmpty()) {
+                    shapes.add(shape);
+                }
+            }
+        }
+
+        return shapes.size();
+    }
+}
+```
+
+#### 36 Valid Sudoku
+
+[三个hashset](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#36-valid-sudoku)
+
+#### 11 Container With Most Water
+
+[双指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#11-container-with-most-water)
+
+#### 1287 Element Appearing More Than 25% In Sorted Array
+
+[有序数组里面超过25%次数的元素 - 检查数字后面25%的元素](https://leetcode-cn.com/problems/element-appearing-more-than-25-in-sorted-array/solution/li-yong-you-xu-shu-zu-te-xing-qiu-jie-by-user8300r/)
+
+#### 90 Subsets II
+
+[背诵题](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#90-subsets-ii)
+
+#### 219    Contains Duplicate II
+
+[是否包含两个元素，二者值相等，索引相差不超过k，有重复值 - hashmap/hashset](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#219-contains-duplicate-ii)
+
+#### 1460 Make Two Arrays Equal by Reversing Sub-arrays
+
+[一个整数数组，翻转其子数组任意次后，能否等同另一个整数数组 - 判断排序后是否相同](https://leetcode-cn.com/problems/make-two-arrays-equal-by-reversing-sub-arrays/solution/gen-wan-mo-fang-chai-bu-duo-by-supperbug/)
+
+#### 230    Kth Smallest Element in a BST
+
+[Stack/递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#230-kth-smallest-element-in-bst)
+
+#### 21 Merge Two Sorted Lists
+
+[别翻船](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#21-merge-two-sorted-lists)
+
+#### 1254 Number of Closed Islands
+
+[二维数组中，周围全是水的封闭岛屿的数量 - DFS](https://leetcode-cn.com/problems/number-of-closed-islands/solution/java-dfssou-suo-by-ppppjqute-2/)
+
+#### 242    Valid Anagram
+
+[别翻船](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#242-valid-anagram)
+
+#### 46 Permutations
+
+[背诵题](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#46-permutations)
+
+#### 117    Populating Next Right Pointers in Each Node II
+
+[将不一定是完美二叉树填充一个索引为向右的指针 - 每一行看作链表](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii/solution/bfsjie-jue-zui-hao-de-ji-bai-liao-100de-yong-hu-by/)
+
+#### 32 Longest Valid Parentheses
+
+[字符串中最长有效括号的长度 - Stack/DP](https://leetcode-cn.com/problems/longest-valid-parentheses/solution/zui-chang-you-xiao-gua-hao-by-leetcode-solution/)
+
+#### 62 Unique Paths
+
+[机器人走路 - DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#62-unique-paths)
+
+#### 350    Intersection of Two Arrays II
+
+[两个整数数组的交集，有重复数字 - 双指针/hashmap](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#350-intersection-of-two-arrays-ii)
+
+#### 1143 Longest Common Subsequence
+
+[LCS - 两个字符串的最长公共子序列 - DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#1143-longest-common-subsequence)
+
+#### 268    Missing Number
+
+[傻傻位操作](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled#268-missing-number)
+
+#### 1091 Shortest Path in Binary Matrix
+
+[二进制矩阵左上到右下的最短距离，八个方向 - 标准BFS](https://leetcode-cn.com/problems/shortest-path-in-binary-matrix/solution/1091java-bfszhi-jie-da-bai-98-xiang-jie-by-ustcyyw/)
+
+#### 859    Buddy Strings
+
+[能否交换字符串字符（一次）变成另一个字符串 Buddy String](https://leetcode-cn.com/problems/buddy-strings/solution/qin-mi-zi-fu-chuan-by-leetcode/)
+
+#### 209    Minimum Size Subarray Sum
+
+[整数数组中最短的子数组的和大于给定值 - 二分/滑动窗口/队列](https://app.gitbook.com/@guilindev/s/interview/leetcode/hua-dong-chuang-kou#209-minimize-size-subarray-sum)
+
+#### 5 Longest Palindromic Substring
+
+[直接算/DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#5-longest-palindromic-substring)
+
+#### 168    Excel Sheet Column Title
+
+[excel列数字转换成字母](https://leetcode-cn.com/problems/excel-sheet-column-title/solution/guan-yu-n-de-li-jie-by-douya0808/)
+
+#### 136    Single Number
+
+[傻傻位操作](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled#136-single-number)
+
+#### 16 3Sum Closest
+
+[维护一个min](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum#16-3sum-closest)
+
+#### 1528 Shuffle String
+
+[前后半截重排字符串即可](https://leetcode-cn.com/problems/shuffle-string/solution/zhong-xin-pai-lie-zi-fu-chuan-by-leetcode-solution/)
+
+#### 38 Count and Say
+
+[直接模拟](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#38-count-and-say)
+
+#### 384    Shuffle an Array
+
+[随机shuffle一个整数数组 - 洗牌算法](https://leetcode-cn.com/problems/shuffle-an-array/solution/da-luan-shu-zu-by-leetcode/)
+
+#### 572    Subtree of Another Tree
+
+[检查一棵树是否存在子树与另一颗树相同 ](https://leetcode-cn.com/problems/subtree-of-another-tree/solution/ling-yi-ge-shu-de-zi-shu-by-leetcode-solution/)
+
+#### 334    Increasing Triplet Subsequence
+
+[未排序的数组上寻找是否有递增长度为3的子数组 - DP/双指针](https://leetcode-cn.com/problems/increasing-triplet-subsequence/solution/334-di-zeng-de-san-yuan-zi-xu-lie-liang-chong-si-l/)
+
+#### 51 N-Queens
+
+[回溯](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#51-n-queens)
+
+#### 516    Longest Palindromic Subsequence
+
+[找到字符串中最长回文subsequence - DP](https://leetcode-cn.com/problems/longest-palindromic-subsequence/solution/dong-tai-gui-hua-si-yao-su-by-a380922457-3/)
+
+#### 349    Intersection of Two Arrays
+
+[两个数字数组的交集，无重复 - HashSet/双指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#349-intersection-of-two-arrays)
+
+#### 7 Reverse Integer
+
+[注意越界](https://app.gitbook.com/@guilindev/s/interview/leetcode/math#7-reverse-integer)
+
+#### 24 Swap Nodes in Pairs
+
+[链表中两两交换结点 - dummy/递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#24-swap-nodes-in-pairs)
+
+#### 303    Range Sum Query - Immutable
+
+[直接计算](https://app.gitbook.com/@guilindev/s/interview/leetcode/design#303-range-sum-query-immutable)
+
+#### 131    Palindrome Partitioning
+
+[分割字符串让每个子串都是回文串 - 回溯](https://leetcode-cn.com/problems/palindrome-partitioning/solution/hui-su-you-hua-jia-liao-dong-tai-gui-hua-by-liweiw/)
+
+#### 134    Gas Station
+
+[贪心](https://app.gitbook.com/@guilindev/s/interview/leetcode/greedy#134-gas-station)
+
+#### 44 Wildcard Matching
+
+[正则表达式，问号表示任意单个，星号表示任意字符串 - DP](https://leetcode-cn.com/problems/wildcard-matching/solution/tong-pei-fu-pi-pei-by-leetcode-solution/)
+
+#### 442    Find All Duplicates in an Array
+
+[找出出现两次的元素 - 取负数做索引标记](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#442-find-all-duplicates-in-an-array)
+
+#### 706    Design HashMap
+
+[设计哈希表 - 数组+取模](https://leetcode-cn.com/problems/design-hashmap/solution/she-ji-ha-xi-biao-by-leetcode/)
+
+#### 160    Intersection of Two Linked Lists
+
+[双指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#160-intersection-of-two-linked-lists)
+
+#### 665    Non-decreasing Array
+
+[判断一个整数数组最多改变一个元素的情况下能否成为非递减数组 - 双指针](https://leetcode-cn.com/problems/non-decreasing-array/solution/javashuang-zhi-zhen-yi-ci-xun-huan-chang-shu-kong-/)
+
+#### 75 Sort Colors
+
+[三路快排](https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou#75-sort-colors)
+
+#### 239    Sliding Window Maximum
+
+[滑动窗口的最大值 - Deque](https://app.gitbook.com/@guilindev/s/interview/leetcode/heap#239-sliding-window-maximum)
+
+#### 205    Isomorphic Strings
+
+[同构词 - hashmap](https://leetcode-cn.com/problems/isomorphic-strings/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-42/)
+
+#### 858    Mirror Reflection
+
+[光线反射检查哪个接收器最先接到 - 模拟/数学](https://leetcode-cn.com/problems/mirror-reflection/solution/jing-mian-fan-she-by-leetcode/)
+
+#### 116    Populating Next Right Pointers in Each Node
+
+[完美二叉树创建右指针索引](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#116-populating-next-right-pointers-in-each-node)
+
+#### 414    Third Maximum Number
+
+[整数数组中第3大的数 维护三个变量/queue/快选](https://leetcode-cn.com/problems/third-maximum-number/solution/9465-8526-by-bobby996/)
+
+#### 72 Edit Distance
+
+[每次增删改一个字符，返回最少操作次数 - DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#72-edit-distance)
+
+#### 25 Reverse Nodes in k-Group
+
+[递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#25-reverse-nodes-in-k-group)
+
+#### 208    Implement Trie \(Prefix Tree\)
+
+[Trie](https://app.gitbook.com/@guilindev/s/interview/leetcode/trie-qian-zhui-shu#208-implement-trie-prefix-tree)
+
+#### 28 Implement strStr\(\)
+
+[KMP了解下](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#28-implement-substr)
+
+#### 159    Longest Substring with At Most Two Distinct Characters
+
+[滑动窗口中最多有两个不同字符 - hashmap](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-2#159-longest-substring-with-at-most-two-distinct-characters)
+
+#### 617    Merge Two Binary Trees
+
+[递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#617-merge-two-binary-tree)
+
+#### 328    Odd Even Linked List
+
+[双指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#328-odd-even-linked-list)
+
+#### 191    Number of 1 Bits
+
+[n & \(n - 1\)](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled#191-number-of-1-bits)
+
+#### 235    Lowest Common Ancestor of a Binary Search Tree
+
+[递归/迭代](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#235-lowest-common-ancestor-of-a-binary-search-tree)
+
+#### 6 ZigZag Conversion
+
+[ZigZag Conversion](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#6-zigzag-conversion)
+
+#### 151    Reverse Words in a String
+
+[两次翻转](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#151-reverse-words-in-a-string)
+
+#### 141    Linked List Cycle
+
+[快慢指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#141-linked-list-cycle)
+
+#### 221    Maximal Square
+
+[二维矩阵只含1的最大正方形 - DP](https://leetcode-cn.com/problems/maximal-square/solution/zui-da-zheng-fang-xing-by-leetcode-solution/)
+
+#### 74 Search a 2D Matrix
+
+[坐标换算当作一维](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su#74-search-a-2d-matrix)
+
+#### 94 Binary Tree Inorder Traversal
+
+[Stack解法](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#94-binary-tree-inorder-traversal)
+
+#### 240    Search a 2D Matrix II
+
+[右上角或左下角](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su#240-search-a-2d-matrix-ii)
+
+#### 26 Remove Duplicates from Sorted Array
+
+[交换/保留一个值](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/26-27-80-zai-array-zhong-yi-chu-yuan-su#26-remove-duplicates-from-sorted-array)
+
+#### 145    Binary Tree Postorder Traversal
+
+[Stack解法](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#145-binary-tree-postorder-traversal)
+
+#### 13 Roman to Integer
+
+[考虑每个字符的前后](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#13-roman-to-integer)
+
+#### 41 First Missing Positive
+
+[从1开始缺失的第一个正数 - 桶排序思想](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#41-first-missing-positive)
+
+#### 64 Minimum Path Sum
+
+[矩阵中左上到右下的最小path和 - DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#64-minimum-path-sum)
+
+#### 445    Add Two Numbers II
+
+[链表从前往后加 - 两个stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#445-add-two-numbers-ii)
+
+#### 105    Construct Binary Tree from Preorder and Inorder Traversal
+
+[套路](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#105-construct-binary-tree-from-preorder-and-inorder-traversal)
+
+#### 218    The Skyline Problem
+
+[扫描线](https://app.gitbook.com/@guilindev/s/interview/leetcode/sao-miao-xian#218-the-skyline-problem)
+
+#### 112    Path Sum
+
+[判断是否有路径](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#112-path-sum)
+
+#### 55 Jump Game
+
+[DP/贪心](https://app.gitbook.com/@guilindev/s/interview/leetcode/greedy#55-jump-game)
+
+#### 48    Rotate Image
+
+[旋转90度 - 转置矩阵](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#48-rotate-image)
+
+#### 155    Min Stack
+
+[两个stack/一个stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#155-min-stack)
+
+#### 395    Longest Substring with At Least K Repeating Characters
+
+[至少有k个重复字符的最长字串（每个字符都不少于k次）- 递归+hashmap](https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/solution/yi-dong-de-di-gui-ha-xi-by-lxsyz/)
+
+#### 322    Coin Change
+
+[硬币可以任意取， DP](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#322-coin-change)
+
+#### 104    Maximum Depth of Binary Tree
+
+[多解法](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#104-maximum-depth-of-binary-tree)
+
+#### 4 Median of Two Sorted Arrays
+
+[二分搜索](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#4-median-of-two-sorted-arrays)
+
+#### 101    Symmetric Tree
+
+[递归/非递归](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#101-symmetric-tree)
+
+#### 310    Minimum Height Trees
+
+[图中找到最小高度树（不一定二叉树）- BFS拓扑排序](https://leetcode-cn.com/problems/minimum-height-trees/solution/zui-rong-yi-li-jie-de-bfsfen-xi-jian-dan-zhu-shi-x/)
+
+#### 47 Permutations II
+
+[背诵题](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#47-permutations-ii)
+
+#### 394 Decode Strings
+
+[压缩的字符串解码](https://leetcode-cn.com/problems/decode-string/solution/zi-fu-chuan-jie-ma-by-leetcode-solution/)
+
 ## Extra: Merge Two Sorted Interval Lists
 
 **样例1**
