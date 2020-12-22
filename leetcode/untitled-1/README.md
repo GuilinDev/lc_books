@@ -2644,7 +2644,127 @@ class Solution {
 }
 ```
 
-##  654 - Maximum Binary Tree
+## 1650 Lowest Common Ancestor of a Binary Tree III
+
+### 题目
+
+Given two nodes of a binary tree `p` and `q`, return _their lowest common ancestor \(LCA\)_.
+
+Each node will have a reference to its parent node. The definition for `Node` is below:
+
+```text
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+}
+```
+
+According to the [**definition of LCA on Wikipedia**](https://en.wikipedia.org/wiki/Lowest_common_ancestor): "The lowest common ancestor of two nodes p and q in a tree T is the lowest node that has both p and q as descendants \(where we allow **a node to be a descendant of itself**\)."
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2018/12/14/binarytree.png)
+
+```text
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+Output: 3
+Explanation: The LCA of nodes 5 and 1 is 3.
+```
+
+**Example 2:**![](https://assets.leetcode.com/uploads/2018/12/14/binarytree.png)
+
+```text
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+Output: 5
+Explanation: The LCA of nodes 5 and 4 is 5 since a node can be a descendant of itself according to the LCA definition.
+```
+
+**Example 3:**
+
+```text
+Input: root = [1,2], p = 1, q = 2
+Output: 1
+```
+
+**Constraints:**
+
+* The number of nodes in the tree is in the range `[2, 105]`.
+* `-109 <= Node.val <= 109`
+* All `Node.val` are **unique**.
+* `p != q`
+* `p` and `q` exist in the tree.
+
+### 分析
+
+1）同160 Intersection of Two LinkedLists类似，先Record the path from node **p** to root. \(O\(N\) space, N is length of path P\)，再Traverse from node **q** to root and find the first common point.
+
+2）上个办法的优化，不用记录路径，因为有父结点的索引，先判断二者是否相同，相同就返回，不同就继续往父结点走，遇到null时换路径。
+
+### 代码 
+
+1）time - O\(n\); space - O\(n\)，n - 深度
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+};
+*/
+
+class Solution {
+    public Node lowestCommonAncestor(Node p, Node q) {
+        List<Node> p_path = recordPath(p);
+        while(q.parent != null) {
+            for (Node n : p_path) {
+                if (q == n) {
+                    return q;
+                }
+            }
+            q = q.parent;
+        }
+        return q;
+    }
+    private List<Node> recordPath(Node node) {
+        List<Node> result = new ArrayList<>();
+        while (node != null) {
+            result.add(node);
+            node = node.parent;
+        }
+        return result;
+    }
+}
+```
+
+2）优化，time - O\(n\); space - O\(1\)，n - 深度
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+};
+*/
+
+class Solution {
+    public Node lowestCommonAncestor(Node p, Node q) {
+        Node pIndex = p, qIndex = q;
+        while (pIndex != qIndex) {
+            pIndex = (pIndex == null) ? q : pIndex.parent;
+            qIndex = (qIndex == null) ? p : qIndex.parent;
+        }
+        return qIndex; // return pIndex
+    }
+}
+```
+
+## 654 - Maximum Binary Tree
 
 ### 原题概述
 
