@@ -2021,7 +2021,7 @@ class Solution {
 }
 ```
 
-## 244 Shortest Word Distance II
+## 244 Shortest Word Distance II $
 
 ### 题目
 
