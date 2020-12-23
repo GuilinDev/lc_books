@@ -1,5 +1,11 @@
 # Linkedin
 
+## 339 Nested List Weight Sum 75.2% Easy $
+
+嵌套数组深度为权重求和，由外向内 DFS
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs\#339-nested-list-weight-sum" %}
+
 ## 364 Nested List Weight Sum II 63.3% Medium $
 
 嵌套数组深度为权重求和II \(与339不同的地方是权重的计算方式，array最里面为1，最外面为最大\) - DFS/BFS
@@ -56,19 +62,82 @@ class Solution {
 }
 ```
 
-##  244 Shortest Word Distance II 53.3% Medium $
+## 243 Shortest Word Distance 61.7% Easy $
 
+Array中找单词距离
 
+```java
+class Solution {
+    public int shortestDistance(String[] words, String word1, String word2) {
+        int res = words.length;
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < words.length; i++) {
+            String str = words[i];
+            if (str.equals(word1) && map.containsKey(word2)) {
+                res = Math.min(res, i - map.get(word2));
+            } else if (str.equals(word2) && map.containsKey(word1)) {
+                res = Math.min(res, i - map.get(word1));
+            }
+            map.put(str, i);
+        }
+        return res;
+    }
+}
+```
 
-##  170 Two Sum III - Data structure design 34.6% Easy $
+不用HashMap，O\(m \* n\)
 
+```java
+class Solution {
+    public int shortestWordDistance(String[] words, String word1, String word2) {
+        int index = -1;
+        int min = words.length;
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals(word1) || words[i].equals(word2)) {
+                if (index != -1 && !words[index].equals(words[i])) {
+                    min = Math.min(i - index, min);
+                }
+                index = i;
+            }
+        }
+        return min;
+    }
+}
+```
 
+## 244 Shortest Word Distance II 53.3% Medium $
 
-##  339 Nested List Weight Sum 75.2% Easy $
+设计一个API，这个API会被调用很多次
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#244-shortest-word-distance-ii" %}
 
+## 245 Shortest Word Distance III $
 
-##  272 Closest Binary Search Tree Value II 51.6% Hard $
+两个单词可能相同，array中也可能有重复的单词，从243中第二个办法修改
+
+```java
+class Solution {
+    public int shortestWordDistance(String[] words, String word1, String word2) {
+        int index = -1;
+        int min = words.length;
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals(word1) || words[i].equals(word2)) {
+                if (index != -1 && (word1.equals(word2) || !words[index].equals(words[i]))) {
+                    min = Math.min(i - index, min);
+                }
+                index = i;
+            }
+        }
+        return min;
+    }
+}
+```
+
+## 170 Two Sum III - Data structure design 34.6% Easy $
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum\#170-two-sum-iii-data-structure-design" %}
+
+## 272 Closest Binary Search Tree Value II 51.6% Hard $
 
 
 
@@ -114,7 +183,7 @@ class Solution {
 
 ##  53 Maximum Subarray 47.4% Easy
 
-##  243 Shortest Word Distance 61.7% Easy
+
 
 ##  187 Repeated DNA Sequences 41.1% Medium
 
