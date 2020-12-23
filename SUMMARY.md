@@ -54,6 +54,8 @@
   * [7. Design](leetcode/7.-design.md)
   * [8. 高级数据结构和算法](leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa.md)
   * [Facebook](leetcode/facebook.md)
+  * [Linkedin](leetcode/linkedin.md)
+  * [System Design](leetcode/system-design.md)
   * [FB](leetcode/fb.md)
   * [tag0](leetcode/tag0.md)
   * [tag1](leetcode/tag1.md)
