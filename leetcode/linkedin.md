@@ -139,33 +139,866 @@ class Solution {
 
 ## 272 Closest Binary Search Tree Value II 51.6% Hard $
 
+BST中，找到给定的k个离target的最近的结点的数 （270是找一个）
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#272-closest-binary-search-tree-value-ii" %}
 
-##  156 Binary Tree Upside Down 55.9% Medium $
+## 156 Binary Tree Upside Down 55.9% Medium $
 
+Given the `root` of a binary tree, turn the tree upside down and return _the new root_.
 
+You can turn a binary tree upside down with the following steps:
 
-##  716 Max Stack 42.9% Easy $
+1. The original left child becomes the new root.
+2. The original root becomes the new right child.
+3. The original right child becomes the new left child.
 
+![](https://assets.leetcode.com/uploads/2020/08/29/main.jpg)
 
+The mentioned steps are done level by level, it is **guaranteed** that every node in the given tree has either **0 or 2 children**.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/08/29/updown.jpg)
+
+```text
+Input: root = [1,2,3,4,5]
+Output: [4,5,2,null,null,3,1]
+```
+
+**Example 2:**
+
+```text
+Input: root = []
+Output: []
+```
+
+**Example 3:**
+
+```text
+Input: root = [1]
+Output: [1]
+```
+
+**Constraints:**
+
+* The number of nodes in the tree will be in the range `[0, 10]`.
+* `1 <= Node.val <= 10`
+* `Every node has either 0 or 2 children.`
+
+类似206翻转链表，可以递归和迭代来实现递归
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode upsideDownBinaryTree(TreeNode root) {
+        if(root == null || root.left == null) {
+            return root;
+        }
+
+        TreeNode newRoot = upsideDownBinaryTree(root.left);
+        root.left.left = root.right;   // node 2 left children
+        root.left.right = root;         // node 2 right children
+        root.left = null;
+        root.right = null;
+        return newRoot;
+    }
+    public ListNode reverseList(ListNode head) {
+            if (head == null || head.next == null) return head;
+            ListNode newHead = reverseList(head.next);
+            head.next.next = head;
+            head.next = null;
+            return newHead;
+    }
+}
+```
+
+迭代
+
+```java
+class Solution {
+    public TreeNode upsideDownBinaryTree(TreeNode root) {
+        TreeNode curr = root;
+        TreeNode next = null;
+        TreeNode temp = null;
+        TreeNode prev = null;
+
+        while(curr != null) {
+            next = curr.left;
+
+            // swapping nodes now, need temp to keep the previous right child
+            curr.left = temp;
+            temp = curr.right;
+            curr.right = prev;
+
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }  
+
+    public ListNode reverseList(ListNode head) {
+            ListNode pre = null;
+            ListNode cur = head;
+            while (cur != null) {
+                ListNode next = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
+            }
+
+            return pre;
+    }
+}
+```
+
+## 716 Max Stack 42.9% Easy $
+
+Design a max stack data structure that supports the stack operations and supports finding the stack's maximum element.
+
+Implement the `MaxStack` class:
+
+* `MaxStack()` Initializes the stack object.
+* `void push(int x)` Pushes element `x` onto the stack.
+* `int pop()` Removes the element on top of the stack and returns it.
+* `int top()` Gets the element on the top of the stack without removing it.
+* `int peekMax()` Retrieves the maximum element in the stack without removing it.
+* `int popMax()` Retrieves the maximum element in the stack and removes it. If there is more than one maximum element, only remove the **top-most** one.
+
+两个Stacks， Time Complexity: O\(N\) for the `popMax` operation, and O\(1\) for the other operations, where N is the number of operations performed. Space Complexity: O\(N\), the maximum size of the stack
+
+```java
+class MaxStack {
+    Stack<Integer> stack;
+    Stack<Integer> maxStack;
+
+    public MaxStack() {
+        stack = new Stack();
+        maxStack = new Stack();
+    }
+
+    public void push(int x) {
+        int max = maxStack.isEmpty() ? x : maxStack.peek();
+        maxStack.push(max > x ? max : x);
+        stack.push(x);
+    }
+
+    public int pop() {
+        maxStack.pop();
+        return stack.pop();
+    }
+
+    public int top() {
+        return stack.peek();
+    }
+
+    public int peekMax() {
+        return maxStack.peek();
+    }
+
+    public int popMax() {
+        int max = peekMax();
+        Stack<Integer> buffer = new Stack();
+        while (top() != max) buffer.push(pop());
+        pop();
+        while (!buffer.isEmpty()) push(buffer.pop());
+        return max;
+    }
+}
+```
+
+Double Linked List + TreeMap，Time Complexity: O\(logN\) for all operations except `peek` which is O\(1\), where N is the number of operations performed. Most operations involving `TreeMap` are O\(logN\)； Space Complexity: O\(N\), the size of the data structures used.
+
+```java
+class MaxStack {
+    TreeMap<Integer, List<Node>> map;
+    DoubleLinkedList dll;
+
+    public MaxStack() {
+        map = new TreeMap();
+        dll = new DoubleLinkedList();
+    }
+
+    public void push(int x) {
+        Node node = dll.add(x);
+        if(!map.containsKey(x))
+            map.put(x, new ArrayList<Node>());
+        map.get(x).add(node);
+    }
+
+    public int pop() {
+        int val = dll.pop();
+        List<Node> L = map.get(val);
+        L.remove(L.size() - 1);
+        if (L.isEmpty()) map.remove(val);
+        return val;
+    }
+
+    public int top() {
+        return dll.peek();
+    }
+
+    public int peekMax() {
+        return map.lastKey();
+    }
+
+    public int popMax() {
+        int max = peekMax();
+        List<Node> L = map.get(max);
+        Node node = L.remove(L.size() - 1);
+        dll.unlink(node);
+        if (L.isEmpty()) map.remove(max);
+        return max;
+    }
+}
+
+class DoubleLinkedList {
+    Node head, tail;
+
+    public DoubleLinkedList() {
+        head = new Node(0);
+        tail = new Node(0);
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public Node add(int val) {
+        Node x = new Node(val);
+        x.next = tail;
+        x.prev = tail.prev;
+        tail.prev = tail.prev.next = x;
+        return x;
+    }
+
+    public int pop() {
+        return unlink(tail.prev).val;
+    }
+
+    public int peek() {
+        return tail.prev.val;
+    }
+
+    public Node unlink(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+        return node;
+    }
+}
+
+class Node {
+    int val;
+    Node prev, next;
+    public Node(int v) {val = v;}
+}
+```
 
 ##  149 Max Points on a Line 17.2% Hard
 
-##  366 Find Leaves of Binary Tree 71.4% Medium $
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/math\#149-max-point-on-a-line" %}
 
-##  254 Factor Combinations 47.1% Medium $
+## 366 Find Leaves of Binary Tree 71.4% Medium $
 
-##  256 Paint House 53.0% Medium $
+逐层移除叶子结点
 
-##  65 Valid Number 15.6% Hard
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#366-find-leaves-of-binary-tree" %}
 
-##  432 All O\`one Data Structure 33.0% Hard
+## 254 Factor Combinations 47.1% Medium $
 
-##  265 Paint House II 45.3% Hard $
+Numbers can be regarded as product of its factors. For example,
 
-##  380 Insert Delete GetRandom O\(1\) 48.4% Medium
+```text
+8 = 2 x 2 x 2;
+  = 2 x 4.
+```
 
-##  68 Text Justification 29.0% Hard
+Write a function that takes an integer n and return all possible combinations of its factors.
+
+**Note:**
+
+1. You may assume that n is always positive.
+2. Factors should be greater than 1 and less than n.
+
+**Example 1:**
+
+```text
+Input: 1
+Output: []
+```
+
+**Example 2:**
+
+```text
+Input: 37
+Output:[]
+```
+
+**Example 3:**
+
+```text
+Input: 12
+Output:
+[
+  [2, 6],
+  [2, 2, 3],
+  [3, 4]
+]
+```
+
+**Example 4:**
+
+```text
+Input: 32
+Output:
+[
+  [2, 16],
+  [2, 2, 8],
+  [2, 2, 2, 4],
+  [2, 2, 2, 2, 2],
+  [2, 4, 4],
+  [4, 8]
+]
+```
+
+利用DFS
+
+```java
+class Solution {
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        helper(result, new ArrayList<Integer>(), n, 2);
+        return result;
+    }
+
+    public void helper(List<List<Integer>> result, List<Integer> item, int n, int start){
+        if (n <= 1) {
+            if (item.size() > 1) {
+                result.add(new ArrayList<Integer>(item));
+            }
+            return;
+        }
+
+        for (int i = start; i <= n; ++i) {
+            if (n % i == 0) {
+                item.add(i);
+                helper(result, item, n/i, i);
+                item.remove(item.size()-1);
+            }
+        }
+    }
+}
+```
+
+## 256 Paint House 53.0% Medium $
+
+There is a row of n houses, where each house can be painted one of three colors: red, blue, or green. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
+
+The cost of painting each house with a certain color is represented by a `n x 3` cost matrix. For example, `costs[0][0]` is the cost of painting house 0 with the color red; `costs[1][2]` is the cost of painting house 1 with color green, and so on... Find the minimum cost to paint all houses.
+
+**Example 1:**
+
+```text
+Input: costs = [[17,2,17],[16,16,5],[14,3,19]]
+Output: 10
+Explanation: Paint house 0 into blue, paint house 1 into green, paint house 2 into blue.
+Minimum cost: 2 + 5 + 3 = 10.
+```
+
+**Example 2:**
+
+```text
+Input: costs = []
+Output: 0
+```
+
+**Example 3:**
+
+```text
+Input: costs = [[7,6,2]]
+Output: 2
+```
+
+**Constraints:**
+
+* `costs.length == n`
+* `costs[i].length == 3`
+* `0 <= n <= 100`
+* `1 <= costs[i][j] <= 20`
+
+记忆化搜索
+
+```java
+class Solution {
+
+    private int[][] costs;
+    private Map<String, Integer> memo;
+
+    public int minCost(int[][] costs) {
+        if (costs.length == 0) {
+            return 0;
+        }
+        this.costs = costs;
+        this.memo = new HashMap<>();
+        return Math.min(paintCost(0, 0), Math.min(paintCost(0, 1), paintCost(0, 2)));
+    }
+
+    private int paintCost(int n, int color) {
+        if (memo.containsKey(getKey(n, color))) {
+            return memo.get(getKey(n, color));   
+        }
+        int totalCost = costs[n][color];
+        if (n == costs.length - 1) {
+        } else if (color == 0) { // Red
+            totalCost += Math.min(paintCost(n + 1, 1), paintCost(n + 1, 2));
+        } else if (color == 1) { // Green
+            totalCost += Math.min(paintCost(n + 1, 0), paintCost(n + 1, 2));
+        } else { // Blue
+            totalCost += Math.min(paintCost(n + 1, 0), paintCost(n + 1, 1));
+        }        
+        memo.put(getKey(n, color), totalCost);
+
+        return totalCost;
+    }
+
+    private String getKey(int n, int color) {
+        return String.valueOf(n) + " " + String.valueOf(color);
+    }
+}
+```
+
+DP
+
+```java
+class Solution {
+    public int minCost(int[][] costs) {
+
+        for (int n = costs.length - 2; n >= 0; n--) {
+            // Total cost of painting the nth house red.
+            costs[n][0] += Math.min(costs[n + 1][1], costs[n + 1][2]);
+            // Total cost of painting the nth house green.
+            costs[n][1] += Math.min(costs[n + 1][0], costs[n + 1][2]);
+            // Total cost of painting the nth house blue.
+            costs[n][2] += Math.min(costs[n + 1][0], costs[n + 1][1]);
+        }
+
+        if (costs.length == 0) return 0;   
+
+        return Math.min(Math.min(costs[0][0], costs[0][1]), costs[0][2]);
+    }
+}
+```
+
+DP + 状态压缩
+
+```java
+
+/* This code OVERWRITES the input array! */
+
+class Solution {
+    public int minCost(int[][] costs) {
+
+        if (costs.length == 0) return 0;
+
+        int[] previousRow = costs[costs.length -1];
+
+        for (int n = costs.length - 2; n >= 0; n--) {
+
+            /* PROBLEMATIC CODE IS HERE
+             * This line here is NOT making a copy of the original, it's simply
+             * making a reference to it Therefore, any writes into currentRow
+             * will also be written into "costs". This is not what we wanted!
+             */
+            int[] currentRow = costs[n];
+
+            // Total cost of painting the nth house red.
+            currentRow[0] += Math.min(previousRow[1], previousRow[2]);
+            // Total cost of painting the nth house green.
+            currentRow[1] += Math.min(previousRow[0], previousRow[2]);
+            // Total cost of painting the nth house blue.
+            currentRow[2] += Math.min(previousRow[0], previousRow[1]);
+            previousRow = currentRow;
+        }  
+
+        return Math.min(Math.min(previousRow[0], previousRow[1]), previousRow[2]);
+    }
+}
+```
+
+## 265 Paint House II 45.3% Hard $
+
+There are a row of n houses, each house can be painted with one of the k colors. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
+
+The cost of painting each house with a certain color is represented by a `n x k` cost matrix. For example, `costs[0][0]` is the cost of painting house 0 with color 0; `costs[1][2]` is the cost of painting house 1 with color 2, and so on... Find the minimum cost to paint all houses.
+
+**Note:**  
+All costs are positive integers.
+
+**Example:**
+
+```text
+Input: [[1,5,3],[2,9,4]]
+Output: 5
+Explanation: Paint house 0 into color 0, paint house 1 into color 2. Minimum cost: 1 + 4 = 5; 
+             Or paint house 0 into color 2, paint house 1 into color 0. Minimum cost: 3 + 2 = 5. 
+```
+
+**Follow up:**  
+Could you solve it in O\(nk\) runtime?
+
+记忆化搜索
+
+```java
+class Solution {
+
+    private int n;
+    private int k;
+    private int[][] costs;
+    private Map<String, Integer> memo;
+
+    public int minCostII(int[][] costs) {
+        if (costs.length == 0) return 0;
+        this.k = costs[0].length;
+        this.n = costs.length;
+        this.costs = costs;
+        this.memo = new HashMap<>();
+        int minCost = Integer.MAX_VALUE;
+        for (int color = 0; color < k; color++) {
+            minCost = Math.min(minCost, memoSolve(0, color));
+        }
+        return minCost;
+    }
+
+    private int memoSolve(int houseNumber, int color) {
+
+        // Base case: There are no more houses after this one.
+        if (houseNumber == n - 1) {
+            return costs[houseNumber][color];
+        }
+
+        // Memoization lookup case: Have we already solved this subproblem?
+        if (memo.containsKey(getKey(houseNumber, color))) {
+            return memo.get(getKey(houseNumber, color));
+        }
+
+        // Recursive case: Determine the minimum cost for the remainder.
+        int minRemainingCost = Integer.MAX_VALUE;
+        for (int nextColor = 0; nextColor < k; nextColor++) {
+            if (color == nextColor) continue;
+            int currentRemainingCost = memoSolve(houseNumber + 1, nextColor);
+            minRemainingCost = Math.min(currentRemainingCost, minRemainingCost);
+        }
+        int totalCost = costs[houseNumber][color] + minRemainingCost;
+        memo.put(getKey(houseNumber, color), totalCost);
+        return totalCost;
+    }
+
+    // Convert a house number and color into a simple string key for the memo.
+    private String getKey(int n, int color) {
+        return String.valueOf(n) + " " + String.valueOf(color);
+    }
+}
+```
+
+朴素DP
+
+```java
+class Solution {
+
+    public int minCostII(int[][] costs) {
+
+        if (costs.length == 0) return 0;
+        int k = costs[0].length;
+        int n = costs.length;
+
+        for (int house = 1; house < n; house++) {
+            for (int color = 0; color < k; color++) {
+                int min = Integer.MAX_VALUE;
+                for (int previousColor = 0; previousColor < k; previousColor++) {
+                    if (color == previousColor) continue;
+                    min = Math.min(min, costs[house - 1][previousColor]);
+                }
+                costs[houseNumber][color] += min;
+            }
+        }
+
+        // Find the minimum in the last row.
+        int min = Integer.MAX_VALUE;
+        for (int c : costs[n - 1]) {
+            min = Math.min(min, c);
+        }
+        return min;
+    }
+}
+```
+
+DP + 时间空间优化
+
+```java
+class Solution {
+
+    public int minCostII(int[][] costs) {
+
+        if (costs.length == 0) return 0;
+        int k = costs[0].length;
+        int n = costs.length;
+
+
+        /* Firstly, we need to determine the 2 lowest costs of
+         * the first row. We also need to remember the color of
+         * the lowest. */
+        int prevMin = -1; int prevSecondMin = -1; int prevMinColor = -1;
+        for (int color = 0; color < k; color++) {
+            int cost = costs[0][color];
+            if (prevMin == -1 || cost < prevMin) {
+                prevSecondMin = prevMin;
+                prevMinColor = color;
+                prevMin = cost;
+            } else if (prevSecondMin == -1 || cost < prevSecondMin) {
+                prevSecondMin = cost;
+            }
+        }
+
+        // And now, we need to work our way down, keeping track of the minimums.
+        for (int house = 1; house < n; house++) {
+            int min = -1; int secondMin = -1; int minColor = -1;
+            for (int color = 0; color < k; color++) {
+                // Determine the cost for this cell (without writing it in).
+                int cost = costs[house][color];
+                if (color == prevMinColor) {
+                    cost += prevSecondMin;
+                } else {
+                    cost += prevMin;
+                }
+                // Determine whether or not this current cost is also a minimum.
+                if (min == -1 || cost < min) {
+                    secondMin = min;
+                    minColor = color;
+                    min = cost;
+                } else if (secondMin == -1 || cost < secondMin) {
+                    secondMin = cost;
+                }
+            }
+            // Transfer current mins to be previous mins.
+            prevMin = min;
+            prevSecondMin = secondMin;
+            prevMinColor = minColor;
+        }
+
+        return prevMin;
+    }
+}
+```
+
+## 65 Valid Number 15.6% Hard
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#65-valid-number" %}
+
+## 432 All O\`one Data Structure 33.0% Hard
+
+操作的APIs严格时间为O\(1\)的数据结构
+
+1. Inc\(Key\) - Inserts a new key with value 1. Or increments an existing key by 1. Key is guaranteed to be a **non-empty** string.
+2. Dec\(Key\) - If Key's value is 1, remove it from the data structure. Otherwise decrements an existing key by 1. If the key does not exist, this function does nothing. Key is guaranteed to be a **non-empty** string.
+3. GetMaxKey\(\) - Returns one of the keys with maximal value. If no element exists, return an empty string `""`.
+4. GetMinKey\(\) - Returns one of the keys with minimal value. If no element exists, return an empty string `""`.
+
+Java双向链表 + HashMap
+
+```java
+package util;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * @author qiminghao
+ * @version 1.0.0
+ * @ClassName AllOne.java
+ * @Description 432. All O`one Data Structure
+ * @createTime 2020/1/8 4:51
+ */
+public class AllOne {
+
+    // map1保存key-.value 的映射
+    private Map<String, Integer> map1;
+    // map2保存val->keys 的映射， DLinkedNode为双向链表节点
+    // map2的作用是为了O(1)时间拿到统计次数对应的链表节点
+    // 链表中的所有操作只会涉及到前一个节点或者后一个节点，时间也为O(1)
+    private Map<Integer, DLinkedNode> map2;
+    // 双向链表的头， 双向链表从head到tail的value值依次减小
+    private DLinkedNode head;
+    // 双向链表的尾
+    private DLinkedNode tail;
+
+    /** Initialize your data structure here. */
+    public AllOne() {
+        map1 = new HashMap<>();
+        map2 = new HashMap<>();
+        head = new DLinkedNode(0);
+        tail = new DLinkedNode(0);
+        head.next = tail;
+        tail.pre = head;
+    }
+
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void inc(String key) {
+        // 如果map1中包含key
+        if (map1.containsKey(key)) {
+            int val = map1.get(key);
+            map1.put(key, val + 1);
+            // 根据value拿到次数更新前的node
+            DLinkedNode node = map2.get(val);
+            // value加一后，从原node的Set中删除key
+            node.keys.remove(key);
+            DLinkedNode preNode = node.pre;
+            // 当前一个node为head或前一个node的次数统计大于val+1时，
+            // 表示还目前没有统计次数为val+1的key，
+            // 此时应该新建一个DLinkedNode，将newNode插入到preNode和node之间，并把key加入到newNode的保存key的Set中
+            // 同时，将新的统计次数（val+1）和新节点newNode的映射加入到map2中
+            if (preNode == head || preNode.val > val + 1) {
+                DLinkedNode newNode = new DLinkedNode(val + 1);
+                newNode.keys.add(key);
+                newNode.next = node;
+                newNode.pre = preNode;
+                preNode.next = newNode;
+                node.pre = newNode;
+                map2.put(val + 1, newNode);
+                preNode = newNode;
+            } else {    // 如果当前已经有统计次数为val+1的节点，只需key加入到Set中即可
+                preNode.keys.add(key);
+            }
+            // 如果原节点在移除key后size为0，则删除该节点，并在map2中删除val->node的映射
+            if (node.keys.size() == 0) {
+                preNode.next = node.next;
+                node.next.pre = preNode;
+                map2.remove(val);
+            }
+        } else {    // map1中不包含key
+            map1.put(key, 1);
+            DLinkedNode node = map2.get(1);
+            // 如果当前没有统计次数为1的节点，则新建节点并插入到双向链表的尾部，因为统计次数最小为1
+            // 并将1->newNode的映射加入到map2中
+            if (node == null) {
+                DLinkedNode newNode = new DLinkedNode(1);
+                newNode.keys.add(key);
+                newNode.next = tail;
+                newNode.pre = tail.pre;
+                tail.pre.next = newNode;
+                tail.pre = newNode;
+                map2.put(1, newNode);
+            } else {
+                node.keys.add(key);
+            }
+        }
+    }
+
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void dec(String key) {
+        // 如果map1中包含key,进行处理，否则不做任何操作
+        if (map1.containsKey(key)) {
+            // 获取当前统计次数
+            int val = map1.get(key);
+            // 当前统计次数对应的节点
+            DLinkedNode node = map2.get(val);
+            // 从节点的keys set中移除当前key
+            node.keys.remove(key);
+            // 如果原统计次数为1，从map1中移除当前key
+            if (val == 1) {
+                map1.remove(key);
+            } else {
+                // 更新map1中的统计次数
+                map1.put(key, val - 1);
+                // 拿到当前节点的下一个节点
+                DLinkedNode nextNode = node.next;
+                // 如果下一个节点为链表尾部或下一个节点的统计次数小于val-1
+                // 则新建一个节点，统计次数为val-1，将当前key加入到keys Set中
+                // 并将新节点插入到当前节点的后面，同时更新map2
+                if (nextNode == tail || nextNode.val < val - 1) {
+                    DLinkedNode newNode = new DLinkedNode(val - 1);
+                    newNode.keys.add(key);
+                    newNode.pre = node;
+                    newNode.next = nextNode;
+                    node.next = newNode;
+                    nextNode.pre = newNode;
+                    map2.put(val - 1, newNode);
+                } else {    // 下一个节点的统计次数为val-1，将key加到下一节点的keys Set中
+                    nextNode.keys.add(key);
+                }
+            }
+            // 如果当前节点只包含这一个key，删除后size为0，则将当前节点删除，并更新map2
+            if (node.keys.size() == 0) {
+                node.pre.next = node.next;
+                node.next.pre = node.pre;
+                map2.remove(val);
+            }
+        }
+    }
+
+    /** Returns one of the keys with maximal value. */
+    public String getMaxKey() {
+        // 按照双向链表的定义，如果链表中存在节点（head和tail不算，dummy节点），则对应最大value的keys为head的下一个节点
+        if (head.next == tail) {
+            return "";
+        } else {
+            return head.next.keys.iterator().next();
+        }
+    }
+
+    /** Returns one of the keys with Minimal value. */
+    public String getMinKey() {
+        // 按照双向链表的定义，如果链表中存在节点（head和tail不算，dummy节点），则对应最小value的keys为tail的前一个节点
+        if (tail.pre == head) {
+            return "";
+        } else {
+            return tail.pre.keys.iterator().next();
+        }
+    }
+
+    private class DLinkedNode {
+        int val;
+        Set<String> keys;
+        DLinkedNode pre, next;
+        public DLinkedNode(int val) {
+            this.val = val;
+            this.keys = new HashSet<>();
+        }
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
+```
+
+## 380 Insert Delete GetRandom O\(1\) 48.4% Medium
+
+所有操作平均时间复杂度为O\(1\)
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/design\#380-insert-delete-getrandom-o-1" %}
+
+## 68 Text Justification 29.0% Hard
+
+文本左右对齐
+
+{% embed url="https://leetcode-cn.com/problems/text-justification/solution/68-wen-ben-zuo-you-dui-qi-by-acw\_weian/" %}
 
 ##  341 Flatten Nested List Iterator 54.0% Medium
 
