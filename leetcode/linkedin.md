@@ -1000,27 +1000,47 @@ public class AllOne {
 
 {% embed url="https://leetcode-cn.com/problems/text-justification/solution/68-wen-ben-zuo-you-dui-qi-by-acw\_weian/" %}
 
-##  341 Flatten Nested List Iterator 54.0% Medium
+## 341 Flatten Nested List Iterator 54.0% Medium
 
-##  150 Evaluate Reverse Polish Notation 37.4% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#341-flatten-nested-list-iterator" %}
 
-##  205 Isomorphic Strings 40.3% Easy
+## 150 Evaluate Reverse Polish Notation 37.4% Medium
 
-##  730 Count Different Palindromic Subsequences 43.2% Hard
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#150-evaluate-reverse-polish-notation" %}
 
-##  297 Serialize and Deserialize Binary Tree 49.1% Hard
+## 205 Isomorphic Strings 40.3% Easy
 
-##  50 Pow\(x, n\) 30.7% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#205-isomorphic-strings" %}
 
-##  611 Valid Triangle Number 48.9% Medium
+## 730 Count Different Palindromic Subsequences 43.2% Hard
 
-##  53 Maximum Subarray 47.4% Easy
+ 给定一个字符串 S，找出 S 中不同的非空回文子序列个数，并**返回该数字与 `10^9 + 7` 的模。**DP
 
+{% embed url="https://leetcode-cn.com/problems/count-different-palindromic-subsequences/solution/tong-ji-bu-tong-hui-wen-zi-zi-fu-chuan-by-leetcode/" %}
 
+## 297 Serialize and Deserialize Binary Tree 49.1% Hard
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#297-serialize-and-deserialize-binary-tree" %}
+
+## 50 Pow\(x, n\) 30.7% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/er-fen-sou-suo\#50-power-x-n" %}
+
+## 611 Valid Triangle Number 48.9% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/array-zhong-de-shu-zi-zu-cheng-san-jiao-xing\#611-valid-triangle-number" %}
+
+## 53 Maximum Subarray 47.4% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/array/zi-shu-zu-subarray\#53-maximum-subarray" %}
 
 ##  187 Repeated DNA Sequences 41.1% Medium
 
+
+
 ##  152 Maximum Product Subarray 32.5% Medium
+
+
 
 ##  261 Graph Valid Tree 42.8% Medium
 
