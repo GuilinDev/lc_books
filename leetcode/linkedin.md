@@ -1036,57 +1036,317 @@ public class AllOne {
 
 ##  187 Repeated DNA Sequences 41.1% Medium
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled\#187-repeated-dna-sequence" %}
 
+## 152 Maximum Product Subarray 32.5% Medium
 
-##  152 Maximum Product Subarray 32.5% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray\#152-maximum-product-subarray" %}
 
+## 261 Graph Valid Tree 42.8% Medium $
 
+Given `n` nodes labeled from `0` to `n-1` and a list of undirected edges \(each edge is a pair of nodes\), write a function to check whether these edges make up a valid tree.
 
-##  261 Graph Valid Tree 42.8% Medium
+**Example 1:**
 
-##  698 Partition to K Equal Sum Subsets 45.5% Medium
+```text
+Input: n = 5, and edges = [[0,1], [0,2], [0,3], [1,4]]
+Output: true
+```
 
-##  72 Edit Distance 46.2% Hard
+**Example 2:**
 
-##  245 Shortest Word Distance III 55.7% Medium
+```text
+Input: n = 5, and edges = [[0,1], [1,2], [2,3], [1,3], [1,4]]
+Output: false
+```
 
-##  671 Second Minimum Node In a Binary Tree 42.7% Easy
+**Note**: you can assume that no duplicate edges will appear in `edges`. Since all edges are undirected, `[0,1]` is the same as `[1,0]` and thus will not appear together in `edges`.
 
-##  516 Longest Palindromic Subsequence 54.7% Medium
+图的DFS
 
-##  200 Number of Islands 48.3% Medium
+```java
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        // initialize adjacency list
+        List<List<Integer>> adjList = new ArrayList<List<Integer>>(n);
+        
+        // initialize vertices
+        for (int i = 0; i < n; i++)
+            adjList.add(i, new ArrayList<Integer>());
+        
+        // add edges    
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0], v = edges[i][1];
+            adjList.get(u).add(v);
+            adjList.get(v).add(u);
+        }
+        
+        boolean[] visited = new boolean[n];
+        
+        // make sure there's no cycle
+        if (hasCycle(adjList, 0, visited, -1))
+            return false;
+        
+        // make sure all vertices are connected
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) 
+                return false;
+        }
+        
+        return true;
+    }
+    
+    // check if an undirected graph has cycle started from vertex u
+    boolean hasCycle(List<List<Integer>> adjList, int u, boolean[] visited, int parent) {
+        visited[u] = true;
+        
+        for (int i = 0; i < adjList.get(u).size(); i++) {
+            int v = adjList.get(u).get(i);
+            
+            if ((visited[v] && parent != v) || (!visited[v] && hasCycle(adjList, v, visited, u)))
+                return true;
+        }
+        
+        return false;
+    }
+}
+```
+
+BFS
+
+```java
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        int[] visited = new int[n];
+        List<List<Integer>> adjList = new ArrayList<>();
+        for (int i=0; i<n; ++i) { adjList.add(new ArrayList<Integer>()); }
+        for (int[] edge: edges) {
+            adjList.get(edge[0]).add(edge[1]);
+            adjList.get(edge[1]).add(edge[0]);
+        }
+        if (hasCycle(-1, 0, visited, adjList)) { return false; }  // has cycle
+        for (int v: visited) { if (v == 0) { return false; } }  // not 1 single connected component
+        return true;
+    }
+    
+    private boolean hasCycle(int pred, int vertex, int[] visited, List<List<Integer>> adjList) {
+        visited[vertex] = 1;  // current vertex is being visited
+        for (Integer succ: adjList.get(vertex)) {  // successors of current vertex
+            if (succ != pred) {  // exclude current vertex's predecessor
+                if (visited[succ] == 1) { return true; }  // back edge/loop detected!
+                else if (visited[succ] == 0) {
+                    if (hasCycle(vertex, succ, visited, adjList)) { return true; }
+                }
+            }
+        }
+        visited[vertex] = 2;
+        return false;
+    }
+}
+```
+
+Union-Find with path compression and merge by rank
+
+```java
+class Solution {
+    
+    class UnionFind {
+        
+        int[] parent;
+        int[] rank;
+        int count;
+        
+        UnionFind(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            count = n;  // number of components
+            for (int i=0; i<n; ++i) { parent[i] = i; }  // initially, each node's parent is itself.
+        }
+        
+        int find(int x) {
+            if (x != parent[x]) {
+                parent[x] = find(parent[x]);  // find root with path compression
+            }
+            return parent[x];
+        }
+        
+        boolean union(int x, int y) {
+            int X = find(x), Y = find(y);
+            if (X == Y) { return false; }
+            if (rank[X] > rank[Y]) { parent[Y] = X; }  // tree Y is lower
+            else if (rank[X] < rank[Y]) { parent[X] = Y; }  // tree X is lower
+            else {  // same height
+                parent[Y] = X;
+                ++rank[X];
+            }
+            --count;
+            return true;
+        }
+    }
+    
+    public boolean validTree(int n, int[][] edges) {
+        UnionFind uf = new UnionFind(n);
+        for (int[] edge: edges) {
+            int x = edge[0], y = edge[1];
+            if (!uf.union(x, y)) { return false; }  // loop detected
+        }
+        return uf.count == 1;
+    }
+}
+```
+
+## 698 Partition to K Equal Sum Subsets 45.5% Medium
+
+ 给定一个整数数组  `nums` 和一个正整数 `k`，找出是否有可能把这个数组分成 `k` 个非空子集，其总和都相等。
+
+{% embed url="https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/solution/javadai-fan-hui-zhi-de-hui-su-fa-by-caipengbo/" %}
+
+## 72 Edit Distance 46.2% Hard
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#72-edit-distance" %}
+
+## 671 Second Minimum Node In a Binary Tree 42.7% Easy
+
+给定一个非空特殊的二叉树，每个节点都是正数，并且每个节点的子节点数量只能为 2 或 0。如果一个节点有两个子节点的话，那么该节点的值等于两个子节点中较小的一个。
+
+更正式地说，root.val = min\(root.left.val, root.right.val\) 总成立。
+
+给出这样的一个二叉树，你需要输出所有节点中的第二小的值。如果第二小的值不存在的话，输出 -1 。
+
+根据题目中所给条件，根节点root的值一定是最小值。求大于roo.val的最小值即可。 注意一个测试用例：\[2,2,2147483647\] 2147483647是Integer的最大值。
+
+```java
+class Solution {
+    public long second_min = Long.MAX_VALUE;   //直接用long
+
+    public int findSecondMinimumValue(TreeNode root) {
+        if(root==null){
+            return -1;
+        }
+        long x = Long.MAX_VALUE;
+        second_min = getMin(root,root.val,x);
+        return (int)(second_min==Long.MAX_VALUE?-1:second_min);
+    }
+
+    //求大于num的最小值
+    public long getMin(TreeNode root,long num,long cur){
+        if (root != null) {
+            if(root.val>num){
+                cur = Math.min(cur,root.val);
+            }
+            return Math.min(getMin(root.left, num, cur),getMin(root.right, num, cur));
+        }
+        return cur;
+    }
+}
+```
+
+## 516 Longest Palindromic Subsequence 54.7% Medium
+
+ 给定一个字符串 `s` ，找到其中最长的回文子序列，并返回该序列的长度。可以假设 `s` 的最大长度为 `1000` 。
+
+```java
+class Solution {
+    /*
+    dp[i][j]: the longest palindromic subsequence’s length of substring(i, j)
+    状态转移方程: dp[i][j] = dp[i+1][j-1] + 2 if s.charAt(i) == s.charAt(j)
+    otherwise, dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1])
+    初始化: dp[i][i] = 1
+    
+    https://leetcode.com/problems/longest-palindromic-subsequence/discuss/99101/Straight-forward-Java-DP-solution
+    同时还有自顶向下的例子
+    */
+    public int longestPalindromeSubseq(String s) {
+        int[][] dp = new int[s.length()][s.length()];
+        
+        for (int i = s.length() - 1; i >= 0; i--) {
+            dp[i][i] = 1;
+            for (int j = i+1; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = dp[i+1][j-1] +2;
+                } else {
+                    dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+                }
+            }
+        }
+        return dp[0][s.length()-1];
+    }
+}
+```
+
+## 200 Number of Islands 48.3% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs\#200-number-of-islands" %}
 
 ##  277 Find the Celebrity 42.9% Medium
 
-##  76 Minimum Window Substring 35.5% Hard
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/graph\#277-find-the-celebrity" %}
 
-##  373 Find K Pairs with Smallest Sums 37.3% Medium
+## 76 Minimum Window Substring 35.5% Hard
 
-##  56 Merge Intervals 40.4% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-2\#76-minimum-window-substring" %}
 
-##  236 Lowest Common Ancestor of a Binary Tree 47.8% Medium
+## 373 Find K Pairs with Smallest Sums 37.3% Medium
 
-##  464 Can I Win 29.5% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/heap\#373-find-k-pairs-with-smallest-sums" %}
 
-##  235 Lowest Common Ancestor of a Binary Search Tree 51.2% Easy
+## 56 Merge Intervals 40.4% Medium
 
-##  605 Can Place Flowers 32.0% Easy
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou\#56-merge-intervals" %}
 
-##  12 Integer to Roman 55.8% Medium
+## 236 Lowest Common Ancestor of a Binary Tree 47.8% Medium
 
-##  102 Binary Tree Level Order Traversal 56.0% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#236-lowest-common-ancestor-of-binary-tree" %}
+
+## 464 Can I Win 29.5% Medium
+
+从一个范围（例如1到10）中两个人轮流抽取整数，抽取后不放回，累加和先达到100或者超过为赢。回溯or DP
+
+{% embed url="https://leetcode-cn.com/problems/can-i-win/solution/hui-su-zhuang-ya-dp-by-8bun/" %}
+
+## 235 Lowest Common Ancestor of a Binary Search Tree 51.2% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#235-lowest-common-ancestor-of-a-binary-search-tree" %}
+
+## 605 Can Place Flowers 32.0% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#605-can-place-flowers" %}
+
+## 12 Integer to Roman 55.8% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#12-integer-to-roman" %}
+
+## 102 Binary Tree Level Order Traversal 56.0% Medium
+
+
 
 ##  273 Integer to English Words 27.8% Hard
 
+
+
 ##  381 Insert Delete GetRandom O\(1\) - Duplicates allowed 34.6% Hard
+
+
 
 ##  636 Exclusive Time of Functions 53.6% Medium
 
-##  33 Search in Rotated Sorted Array 35.5% Medium 1 Two Sum 46.0% Easy
+
+
+##  33 Search in Rotated Sorted Array 35.5% Medium
+
+
+
+##  1 Two Sum 46.0% Easy
+
+
 
 ##  127 Word Ladder 30.9% Medium
 
+
+
 ##  34 Find First and Last Position of Element in Sorted Array 36.9% Medium
+
+
 
 ##  20 Valid Parentheses 39.5% Easy
 
