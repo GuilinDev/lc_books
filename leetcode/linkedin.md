@@ -1,32 +1,98 @@
 # Linkedin
 
-## 364 Nested List Weight Sum II 63.3% Medium
+## 364 Nested List Weight Sum II 63.3% Medium $
 
-##  244 Shortest Word Distance II 53.3% Medium
+嵌套数组深度为权重求和II \(与339不同的地方是权重的计算方式，array最里面为1，最外面为最大\) - DFS/BFS
 
-##  170 Two Sum III - Data structure design 34.6% Easy
+DFS, The idea is to deduct number depth - level times. For example, 1x + 2y + 3z = \(3 + 1\) \* \(x + y + z\) - \(3x + 2y + z\); So we can convert this problem to Nested List Weight Sum I and just record max depth and flat sum at the same time.
 
-##  339 Nested List Weight Sum 75.2% Easy
+```java
+class Solution {
+    public int depthSumInverse(List<NestedInteger> nestedList) {
+        int depthSum = dfs(nestedList, 1);
+        return flatSum * (max + 1) - depthSum;
+    }
 
-##  272 Closest Binary Search Tree Value II 51.6% Hard
+    int flatSum = 0;
+    int max = 1;
+    private int dfs(List<NestedInteger> input, int depth) {
+        if (input == null || input.size() == 0) return 0;
+        int sum = 0;
+        for (NestedInteger i : input) {
+            if (i.isInteger()) {
+                max = Math.max(depth, max);
+                sum += i.getInteger() * depth;
+                flatSum += i.getInteger();
+            } else {
+                sum += dfs(i.getList(), depth + 1);
+            }
+        }
+        return sum;
+    }
+}
+```
 
-##  156 Binary Tree Upside Down 55.9% Medium
+BFS
 
-##  716 Max Stack 42.9% Easy
+```java
+class Solution {
+    public int depthSumInverse(List<NestedInteger> nestedList) {
+       Queue<NestedInteger> q = new LinkedList(nestedList);
+       int prevSum = 0, total = 0;
+       while(!q.isEmpty()){
+           int size = q.size();
+           for(int i = 0; i < size; ++i){
+               NestedInteger ni = q.poll();
+               if(ni.isInteger()){
+                   prevSum += ni.getInteger();
+               }else{
+                   q.addAll(ni.getList());
+               }
+           }
+           total += prevSum;
+       }
+       return total;
+    }
+}
+```
+
+##  244 Shortest Word Distance II 53.3% Medium $
+
+
+
+##  170 Two Sum III - Data structure design 34.6% Easy $
+
+
+
+##  339 Nested List Weight Sum 75.2% Easy $
+
+
+
+##  272 Closest Binary Search Tree Value II 51.6% Hard $
+
+
+
+##  156 Binary Tree Upside Down 55.9% Medium $
+
+
+
+##  716 Max Stack 42.9% Easy $
+
+
 
 ##  149 Max Points on a Line 17.2% Hard
 
-##  366 Find Leaves of Binary Tree 71.4% Medium
+##  366 Find Leaves of Binary Tree 71.4% Medium $
 
-##  254 Factor Combinations 47.1% Medium
+##  254 Factor Combinations 47.1% Medium $
 
-##  256 Paint House 53.0% Medium
+##  256 Paint House 53.0% Medium $
 
 ##  65 Valid Number 15.6% Hard
 
 ##  432 All O\`one Data Structure 33.0% Hard
 
-##  265 Paint House II 45.3% Hard
+##  265 Paint House II 45.3% Hard $
 
 ##  380 Insert Delete GetRandom O\(1\) 48.4% Medium
 
