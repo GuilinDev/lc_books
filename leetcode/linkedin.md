@@ -1330,151 +1330,837 @@ class Solution {
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#273-integer-to-english-words" %}
 
-## 636 Exclusive Time of Functions 53.6% Medium
+## 636  Exclusive Time of Functions
 
+[抢占CPU资源的函数独占时间，关键是单线程非抢占cpu，就是说父函数调用子函数，子函数结束之后、父函数才有可能结束。不会出现父函数结束了，子函数继续运行的情况 - 栈](https://leetcode-cn.com/problems/exclusive-time-of-functions/solution/han-shu-de-du-zhan-shi-jian-by-leetcode/)
 
+## 33 Search in Rotated Sorted Array 35.5% Medium
 
-##  33 Search in Rotated Sorted Array 35.5% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su\#33-search-in-rotated-sorted-array" %}
 
+## 1 Two Sum 46.0% Easy
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/ksum\#1-2sum" %}
 
-##  1 Two Sum 46.0% Easy
+## 127 Word Ladder 30.9% Medium
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3\#127-word-ladder" %}
 
+## 34 Find First and Last Position of Element in Sorted Array 36.9% Medium
 
-##  127 Word Ladder 30.9% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su\#34-find-first-and-last-position-of-element-in-sorted-array-search-for-a-range" %}
 
+## 20 Valid Parentheses 39.5% Easy
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#20-valid-parentheses" %}
 
-##  34 Find First and Last Position of Element in Sorted Array 36.9% Medium
+## 57 Insert Interval 34.7% Medium
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag4\#57-insert-interval" %}
 
+## 69 Sqrt\(x\) 34.7% Easy
 
-##  20 Valid Parentheses 39.5% Easy
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/er-fen-sou-suo\#69-sqrt-x" %}
 
-##  57 Insert Interval 34.7% Medium
+## 319 Bulb Switcher 45.3% Medium
 
-##  69 Sqrt\(x\) 34.7% Easy
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/math\#319-bulb-switcher" %}
 
-##  319 Bulb Switcher 45.3% Medium
+## 744 Find Smallest Letter Greater Than Target 45.6% Easy
 
-##  744 Find Smallest Letter Greater Than Target 45.6% Easy
+给一个排序后的字符列表 letters ，列表中只包含小写英文字母。另给出一个目标字母 target，请你寻找在这一有序列表里比目标字母大的最小字母。在比较时，字母是依序循环出现的。举个例子：
 
-##  46 Permutations 65.7% Medium
+如果目标字母 target = 'z' 并且字符列表为 letters = \['a', 'b'\]，则答案返回 'a'
 
-##  13 Roman to Integer 56.3% Easy
+二分法
 
-##  1117 Building H2O 53.1% Medium
+```java
+class Solution {
+    // 1. 扫描法  
+    // 2. 二分法  实际上我们需要找到最小一个比目标元素大的 即从有序数组中找到一个最小的数字比目标元素大
+    public char nextGreatestLetter(char[] letters, char target) {
+        int i = 0;
+        int j = letters.length - 1;
+        char ans = letters[0];
+        while(i <= j) {
+            int mid = i + (j - i) / 2;
+            if(letters[mid] > target) {  
+                ans = letters[mid];
+                j = mid - 1;
+            } else {
+                i = mid + 1;
+            }
+        }
+        return ans;
+    }
+}
+```
 
-##  449 Serialize and Deserialize BST 53.7% Medium
+## 46 Permutations 65.7% Medium
 
-##  146 LRU Cache 34.9% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking\#46-permutations" %}
 
-##  151 Reverse Words in a String 23.1% Medium
+## 13 Roman to Integer 56.3% Easy
 
-##  215 Kth Largest Element in an Array 57.2% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#13-roman-to-integer" %}
+
+## 1117 Building H2O 53.1% Medium
+
+氢分子和氧分子两个线程生成水H2O，用Semaphore信号量
+
+{% embed url="https://leetcode-cn.com/problems/building-h2o/solution/semaphor-cyclicbarrier-zhi-guan-shi-xian-by-luca-z/" %}
+
+## 449 Serialize and Deserialize BST 53.7% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#449-serialize-and-deserialize-bst" %}
+
+## 146 LRU Cache 34.9% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa\#146-lru-cache" %}
+
+## 151 Reverse Words in a String 23.1% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#151-reverse-words-in-a-string" %}
+
+## 215 Kth Largest Element in an Array 57.2% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer-1\#215-kth-largest-element-in-an-array" %}
 
 ##  126 Word Ladder II 23.2% Hard
 
-##  655 Print Binary Tree 55.6% Medium
+单词接龙II，需要找出所有路径，单向或双向BFS
 
-##  160 Intersection of Two Linked Lists 42.3% Easy
+{% embed url="https://leetcode-cn.com/problems/word-ladder-ii/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-3-3/" %}
 
-##  296 Best Meeting Point 58.0% Hard
+## 655 Print Binary Tree 55.6% Medium
 
-##  1188 Design Bounded Blocking Queue 72.4% Medium
+在一个 m\*n 的二维字符串数组中输出二叉树，并遵守以下规则：
 
-##  101 Symmetric Tree 47.7% Easy
+* 行数 m 应当等于给定二叉树的高度。 
+* 列数 n 应当总是奇数。 
+* 根节点的值（以字符串格式给出）应当放在可放置的第一行正中间。根节点所在的行与列会将剩余空间划分为两部分（左下部分和右下部分）。你应该将左子树输出在左下部分，右子树输出在右下部分。左下和右下部分应当有相同的大小。即使一个子树为空而另一个非空，你不需要为空的子树输出任何东西，但仍需要为另一个子树留出足够的空间。然而，如果两个子树都为空则不需要为它们留出任何空间。
+* 每个未使用的空间应包含一个空的字符串""。 
+* 使用相同的规则输出子树。
 
-##  412 Fizz Buzz 63.4% Easy
+DFS或BFS
 
-##  460 LFU Cache 35.4% Hard
+{% embed url="https://leetcode-cn.com/problems/print-binary-tree/solution/shu-chu-er-cha-shu-by-leetcode/" %}
 
-##  47 Permutations II 48.7% Medium
+## 160 Intersection of Two Linked Lists 42.3% Easy
 
-##  311 Sparse Matrix Multiplication 63.3% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#160-intersection-of-two-linked-lists" %}
 
-##  706 Design HashMap 62.3% Easy
+## 296 Best Meeting Point 58.0% Hard $
 
-##  367 Valid Perfect Square 42.0% Easy
+最佳碰头地点
 
-##  8 String to Integer \(atoi\) 15.5% Medium
+A group of two or more people wants to meet and minimize the total travel distance. You are given a 2D grid of values 0 or 1, where each 1 marks the home of someone in the group. The distance is calculated using [Manhattan Distance](http://en.wikipedia.org/wiki/Taxicab_geometry), where distance\(p1, p2\) = `|p2.x - p1.x| + |p2.y - p1.y|`.
 
-##  739 Daily Temperatures 64.2% Medium
+**Example:**
 
-##  715 Range Module 39.8% Hard
+```text
+Input: 
 
-##  103 Binary Tree Zigzag Level Order Traversal 49.6% Medium
+1 - 0 - 0 - 0 - 1
+|   |   |   |   |
+0 - 0 - 0 - 0 - 0
+|   |   |   |   |
+0 - 0 - 1 - 0 - 0
 
-##  1042 Flower Planting With No Adjacent 48.5% Medium
+Output: 6 
 
-##  349 Intersection of Two Arrays 64.1% Easy
+Explanation: Given three people living at (0,0), (0,4), and (2,2):
+             The point (0,2) is an ideal meeting point, as the total travel distance 
+             of 2+2+2=6 is minimal. So return 6.
+```
 
-##  61 Rotate List 31.4% Medium
+朴素BFS（超时）- Time O\(m^2 \* n^2 \), Space O\(mn\)
 
-##  1235 Maximum Profit in Job Scheduling 46.4% Hard
+```java
+class Solution {
+    public int minTotalDistance(int[][] grid) {
+        int minDistance = Integer.MAX_VALUE;
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                int distance = search(grid, row, col);
+                minDistance = Math.min(distance, minDistance);
+            }
+        }
+        return minDistance;
+    }
 
-##  323 Number of Connected Components in an Undirected Graph 57.2% Medium
+    private int search(int[][] grid, int row, int col) {
+        Queue<Point> q = new LinkedList<>();
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        q.add(new Point(row, col, 0));
+        int totalDistance = 0;
+        while (!q.isEmpty()) {
+            Point point = q.poll();
+            int r = point.row;
+            int c = point.col;
+            int d = point.distance;
+            if (r < 0 || c < 0 || r >= m || c >= n || visited[r][c]) {
+                continue;
+            }
+            if (grid[r][c] == 1) {
+                totalDistance += d;
+            }
+            visited[r][c] = true;
+            q.add(new Point(r + 1, c, d + 1));
+            q.add(new Point(r - 1, c, d + 1));
+            q.add(new Point(r, c + 1, d + 1));
+            q.add(new Point(r, c - 1, d + 1));
+        }
+        return totalDistance;
+    }
 
-##  23 Merge k Sorted Lists 41.7% Hard
+    public class Point {
+        int row;
+        int col;
+        int distance;
+        public Point(int row, int col, int distance) {
+            this.row = row;
+            this.col = col;
+            this.distance = distance;
+        }
+    }
+}
+```
 
-##  100 Same Tree 53.9% Easy
+ We could use the [Selection algorithm](https://en.wikipedia.org/wiki/Selection_algorithm) to select the median in O\(mn\) time, but there is an easier way. Notice that we can collect both the row and column coordinates in sorted order.
 
-##  104 Maximum Depth of Binary Tree 67.5% Easy
+```java
+class Solution {
+    public int minTotalDistance(int[][] grid) {
+        List<Integer> rows = collectRows(grid);
+        List<Integer> cols = collectCols(grid);
+        int row = rows.get(rows.size() / 2);
+        int col = cols.get(cols.size() / 2);
+        return minDistance1D(rows, row) + minDistance1D(cols, col);
+    }
 
-##  528 Random Pick with Weight 44.4% Medium
+    private int minDistance1D(List<Integer> points, int origin) {
+        int distance = 0;
+        for (int point : points) {
+            distance += Math.abs(point - origin);
+        }
+        return distance;
+    }
 
-##  470 Implement Rand10\(\) Using Rand7\(\) 45.9% Medium
+    private List<Integer> collectRows(int[][] grid) {
+        List<Integer> rows = new ArrayList<>();
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                if (grid[row][col] == 1) {
+                    rows.add(row);
+                }
+            }
+        }
+        return rows;
+    }
 
-##  796 Rotate String 49.4% Easy
+    private List<Integer> collectCols(int[][] grid) {
+        List<Integer> cols = new ArrayList<>();
+        for (int col = 0; col < grid[0].length; col++) {
+            for (int row = 0; row < grid.length; row++) {
+                if (grid[row][col] == 1) {
+                    cols.add(col);
+                }
+            }
+        }
+        return cols;
+    }
+}
+```
 
-##  721 Accounts Merge 50.8% Medium
+## 1188 Design Bounded Blocking Queue 72.4% Medium $
 
-##  40 Combination Sum II 49.6% Medium
+Implement a thread safe bounded blocking queue that has the following methods:
 
-##  88 Merge Sorted Array 40.1% Easy
+* `BoundedBlockingQueue(int capacity)` The constructor initializes the queue with a maximum `capacity`.
+* `void enqueue(int element)` Adds an `element` to the front of the queue. If the queue is full, the calling thread is blocked until the queue is no longer full.
+* `int dequeue()` Returns the element at the rear of the queue and removes it. If the queue is empty, the calling thread is blocked until the queue is no longer empty.
+* `int size()` Returns the number of elements currently in the queue.
 
-##  39 Combination Sum 58.4% Medium
+Your implementation will be tested using multiple threads at the same time. Each thread will either be a producer thread that only makes calls to the `enqueue` method or a consumer thread that only makes calls to the `dequeue` method. The `size` method will be called after every test case.
 
-##  1148 Article Views I 76.7% Easy
+Please do not use built-in implementations of bounded blocking queue as this will not be accepted in an interview.
+
+**Example 1:**
+
+```text
+Input:
+1
+1
+["BoundedBlockingQueue","enqueue","dequeue","dequeue","enqueue","enqueue","enqueue","enqueue","dequeue"]
+[[2],[1],[],[],[0],[2],[3],[4],[]]
+
+Output:
+[1,0,2,2]
+
+Explanation:
+Number of producer threads = 1
+Number of consumer threads = 1
+
+BoundedBlockingQueue queue = new BoundedBlockingQueue(2);   // initialize the queue with capacity = 2.
+
+queue.enqueue(1);   // The producer thread enqueues 1 to the queue.
+queue.dequeue();    // The consumer thread calls dequeue and returns 1 from the queue.
+queue.dequeue();    // Since the queue is empty, the consumer thread is blocked.
+queue.enqueue(0);   // The producer thread enqueues 0 to the queue. The consumer thread is unblocked and returns 0 from the queue.
+queue.enqueue(2);   // The producer thread enqueues 2 to the queue.
+queue.enqueue(3);   // The producer thread enqueues 3 to the queue.
+queue.enqueue(4);   // The producer thread is blocked because the queue's capacity (2) is reached.
+queue.dequeue();    // The consumer thread returns 2 from the queue. The producer thread is unblocked and enqueues 4 to the queue.
+queue.size();       // 2 elements remaining in the queue. size() is always called at the end of each test case.
+```
+
+**ReentrantLock + Condition Solution**
+
+ReentrantLock = Voltaile + CAS + Condition  
+Condition = LinkedNode which contains Waiting Thread  
+In same ReentrantLock, we can create multiple Conditions  
+For this question, blockingqueue need 2 waiting list \( full / empty\)  
+When queue is empty, we block dequeue thread, and add thread to empty waiting list  
+When queue is full, block enqueue thread, add thread to full waiting list
+
+Lock --- --- &gt; empty condition -&gt; blocked Thread1 -&gt; blocked Thread2  
+\|  
+\| --- &gt; full condition -&gt; blocked Thread 3 -&gt; blocked Thread4
+
+Signal = Notify  
+SignalAll = NotifyAll  
+Await = Wait
+
+Same as BlockingQueue implmentation in Java source code.
+
+```java
+import java.util.concurrent.locks.ReentrantLock; 
+import java.util.concurrent.locks.Condition; 
+
+class BoundedBlockingQueue {
+    private ReentrantLock lock = new ReentrantLock();
+    private Condition full = lock.newCondition();
+    private Condition empty = lock.newCondition();
+    private int[] queue;
+    private int tail = 0;
+    private int head = 0;
+    private int size = 0;
+    public BoundedBlockingQueue(int capacity) {
+        queue = new int[capacity];
+    }
+    
+    public void enqueue(int element) throws InterruptedException {
+		lock.lock();
+        try {
+            while(size == queue.length) {
+                full.await();
+            }
+            queue[tail++] = element;
+            tail %= queue.length;
+            size++;
+            empty.signal();
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    public int dequeue() throws InterruptedException {
+    		lock.lock();
+            try {
+                while(size == 0) {
+                    empty.await();
+                }
+                int res = queue[head++];
+                head %= queue.length;
+                size--;
+                full.signal();
+                return res;
+            } finally {
+                lock.unlock();
+            }
+        }
+        
+        public int size() throws InterruptedException {
+            lock.lock();
+    		try {
+    			return this.size;
+    		} finally {
+    			lock.unlock();
+    		}
+    }
+}
+```
+
+## 101 Symmetric Tree 47.7% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#101-symmetric-tree" %}
+
+## 412 Fizz Buzz 63.4% Easy
+
+模拟或字符串连接
+
+{% embed url="https://leetcode-cn.com/problems/fizz-buzz/solution/fizz-buzz-by-leetcode/" %}
+
+## 460 LFU Cache 35.4% Hard
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa\#460-lfu" %}
+
+## 47 Permutations II 48.7% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking\#47-permutations-ii" %}
+
+## 311 Sparse Matrix Multiplication 63.3% Medium $
+
+稀疏矩阵相乘Given two [sparse matrices](https://en.wikipedia.org/wiki/Sparse_matrix) **A** and **B**, return the result of **AB**.
+
+You may assume that **A**'s column number is equal to **B**'s row number.
+
+**Example:**
+
+```text
+Input:
+
+A = [
+  [ 1, 0, 0],
+  [-1, 0, 3]
+]
+
+B = [
+  [ 7, 0, 0 ],
+  [ 0, 0, 0 ],
+  [ 0, 0, 1 ]
+]
+
+Output:
+
+     |  1 0 0 |   | 7 0 0 |   |  7 0 0 |
+AB = | -1 0 3 | x | 0 0 0 | = | -7 0 3 |
+                  | 0 0 1 |
+```
+
+**Constraints:**
+
+* `1 <= A.length, B.length <= 100`
+* `1 <= A[i].length, B[i].length <= 100`
+* `-100 <= A[i][j], B[i][j] <= 100`
+
+直接解法
+
+```java
+class Solution {
+    public int[][] multiply(int[][] A, int[][] B) {
+        int m = A.length, n = A[0].length, nB = B[0].length;
+        int[][] C = new int[m][nB];
+
+        for(int i = 0; i < m; i++) {
+            for(int k = 0; k < n; k++) {
+                if (A[i][k] != 0) {
+                    for (int j = 0; j < nB; j++) {
+                        if (B[k][j] != 0) C[i][j] += A[i][k] * B[k][j];
+                    }
+                }
+            }
+        }
+        return C;   
+    }
+}
+```
+
+## 706 Design HashMap 62.3% Easy
+
+不使用build in的API实现HashMap的put，get和remove
+
+取模 + 用数组模拟
+
+{% embed url="https://leetcode-cn.com/problems/design-hashmap/solution/she-ji-ha-xi-biao-by-leetcode/" %}
+
+## 367 Valid Perfect Square 42.0% Easy
+
+有效的完全平方数，使用二分法或者牛顿迭代法
+
+{% embed url="https://leetcode-cn.com/problems/valid-perfect-square/solution/you-xiao-de-wan-quan-ping-fang-shu-by-leetcode/" %}
+
+## 8 String to Integer \(atoi\) 15.5% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#8-string-to-integer-atoi" %}
+
+## 739 Daily Temperatures 64.2% Medium
+
+单调栈
+
+```java
+class Solution {
+    public int[] dailyTemperatures(int[] T) {
+        int length = T.length;
+        int[] ans = new int[length];
+        Deque<Integer> stack = new LinkedList<Integer>();
+        for (int i = 0; i < length; i++) {
+            int temperature = T[i];
+            while (!stack.isEmpty() && temperature > T[stack.peek()]) {
+                int prevIndex = stack.pop();
+                ans[prevIndex] = i - prevIndex;
+            }
+            stack.push(i);
+        }
+        return ans;
+    }
+}
+```
+
+## 715 Range Module 39.8% Hard
+
+实现跟踪数字范围的模块
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag1\#715-range-module" %}
+
+## 103 Binary Tree Zigzag Level Order Traversal 49.6% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#103-binary-tree-zigzag-level-order-traversal" %}
+
+## 1042 Flower Planting With No Adjacent 48.5% Medium
+
+不邻接种花，
+
+You have `n` gardens, labeled from `1` to `n`, and an array `paths` where `paths[i] = [xi, yi]` describes a bidirectional path between garden `xi` to garden `yi`. In each garden, you want to plant one of 4 types of flowers.
+
+All gardens have **at most 3** paths coming into or leaving it.
+
+Your task is to choose a flower type for each garden such that, for any two gardens connected by a path, they have different types of flowers.
+
+Return _**any** such a choice as an array_ `answer`_, where_ `answer[i]` _is the type of flower planted in the_ `(i+1)th` _garden. The flower types are denoted_ `1`_,_ `2`_,_ `3`_, or_ `4`_. It is guaranteed an answer exists._
+
+**Example 1:**
+
+```text
+Input: n = 3, paths = [[1,2],[2,3],[3,1]]
+Output: [1,2,3]
+Explanation:
+Gardens 1 and 2 have different types.
+Gardens 2 and 3 have different types.
+Gardens 3 and 1 have different types.
+Hence, [1,2,3] is a valid answer. Other valid answers include [1,2,4], [1,4,2], and [3,2,1].
+```
+
+**Example 2:**
+
+```text
+Input: n = 4, paths = [[1,2],[3,4]]
+Output: [1,2,1,2]
+```
+
+**Example 3:**
+
+```text
+Input: n = 4, paths = [[1,2],[2,3],[3,4],[4,1],[1,3],[2,4]]
+Output: [1,2,3,4]
+```
+
+**Constraints:**
+
+* `1 <= n <= 104`
+* `0 <= paths.length <= 2 * 104`
+* `paths[i].length == 2`
+* `1 <= xi, yi <= n`
+* `xi != yi`
+* Every garden has **at most 3** paths coming into or leaving it.
+
+染色问题
+
+{% embed url="https://leetcode-cn.com/problems/flower-planting-with-no-adjacent/solution/jian-dan-de-ran-se-wen-ti-bu-xu-yao-kao-lu-hui-su-/" %}
+
+## 349 Intersection of Two Arrays 64.1% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#349-intersection-of-two-arrays" %}
+
+## 350 Intersection of Two Arrays II 51.8% Easy
+
+有重复数字
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#350-intersection-of-two-arrays-ii" %}
+
+## 61 Rotate List 31.4% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#61-rotate-list" %}
+
+## 1235 Maximum Profit in Job Scheduling 46.4% Hard
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag4\#1255-maximum-score-words-formed-by-letters" %}
+
+## 323 Number of Connected Components in an Undirected Graph 57.2% Medium $
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs\#323-number-of-connected-components-in-an-undirected-graph" %}
+
+## 23 Merge k Sorted Lists 41.7% Hard
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#23-merge-k-sorted-lists" %}
+
+## 100 Same Tree 53.9% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#100-same-tree" %}
+
+## 104 Maximum Depth of Binary Tree 67.5% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#104-maximum-depth-of-binary-tree" %}
+
+## 528 Random Pick with Weight 44.4% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag0\#528-random-pick-with-weight" %}
+
+## 470 Implement Rand10\(\) Using Rand7\(\) 45.9% Medium
+
+Given the **API** `rand7()` that generates a uniform random integer in the range `[1, 7]`, write a function `rand10()` that generates a uniform random integer in the range `[1, 10]`. You can only call the API `rand7()`, and you shouldn't call any other API. Please **do not** use a language's built-in random API.
+
+Each test case will have one **internal** argument `n`, the number of times that your implemented function `rand10()` will be called while testing. Note that this is **not an argument** passed to `rand10()`.
+
+**Follow up:**
+
+* What is the [expected value](https://en.wikipedia.org/wiki/Expected_value) for the number of calls to `rand7()` function?
+* Could you minimize the number of calls to `rand7()`?
+
+**Example 1:**
+
+```text
+Input: n = 1
+Output: [2]
+```
+
+**Example 2:**
+
+```text
+Input: n = 2
+Output: [2,8]
+```
+
+**Example 3:**
+
+```text
+Input: n = 3
+Output: [3,8,10]
+```
+
+**Constraints:**
+
+* `1 <= n <= 105`
+
+ 不要使用系统的 `Math.random()` 方法。
+
+{% embed url="https://leetcode-cn.com/problems/implement-rand10-using-rand7/solution/xiang-xi-si-lu-ji-you-hua-si-lu-fen-xi-zhu-xing-ji/" %}
+
+## 796 Rotate String 49.4% Easy
+
+通过旋转确定是否可以由字符串A变为B
+
+可以KMP
+
+{% embed url="https://leetcode-cn.com/problems/rotate-string/solution/xuan-zhuan-zi-fu-chuan-by-leetcode/" %}
+
+## 721 Accounts Merge 50.8% Medium
+
+[根据邮件和用户名合并账户 - DFS](https://leetcode-cn.com/problems/accounts-merge/solution/zhang-hu-he-bing-by-leetcode/)
+
+## 40 Combination Sum II 49.6% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking\#40-combination-sum-ii" %}
+
+## 88 Merge Sorted Array 40.1% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/he-bing-you-xu-de-arrays\#88-merge-sorted-array" %}
+
+## 39 Combination Sum 58.4% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking\#39-combination-sum" %}
+
+## 1148 Article Views I 76.7% Easy $
+
+浏览文章SQL
+
+If with distinct keyword,
+
+```sql
+SELECT DISTINCT author_id AS id FROM Views 
+where author_id = viewer_id 
+ORDER BY id
+```
+
+If order by first, we need another Select and alias
+
+```sql
+SELECT id from (SELECT author_id AS id FROM Views 
+where author_id = viewer_id 
+ORDER BY id)a
+GROUP BY id
+```
+
+If just with group by \(automatically sorted by id\)
+
+```sql
+SELECT author_id AS id FROM Views 
+where author_id = viewer_id 
+GROUP BY id
+```
+
+## 198 House Robber 42.6% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#198-house-robber" %}
+
+## 973 K Closest Points to Origin 64.4% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer-1\#973-k-closest-points-from-origin" %}
+
+## 21 Merge Two Sorted Lists 55.1% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#21-merge-two-sorted-lists" %}
+
+## 75 Sort Colors 48.7% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou\#75-sort-colors" %}
+
+## 1028 Recover a Tree From Preorder Traversal 70.6% Hard
+
+输入短划线，仅从先序还原树，迭代方法更好
+
+{% embed url="https://leetcode-cn.com/problems/recover-a-tree-from-preorder-traversal/solution/cong-xian-xu-bian-li-huan-yuan-er-cha-shu-by-leetc/" %}
+
+## 54 Spiral Matrix 35.2% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#54-spiral-matrix" %}
+
+## 173 Binary Search Tree Iterator 59.3% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#173-binary-search-tree-iterator" %}
+
+## 238 Product of Array Except Self 61.1% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#238-product-of-array-except-self" %}
+
+## 230 Kth Smallest Element in a BST 61.9% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#230-kth-smallest-element-in-bst" %}
+
+## 70 Climbing Stairs 48.4% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#70-climb-stairs" %}
+
+## 362 Design Hit Counter 64.8% Medium $
+
+Design a hit counter which counts the number of hits received in the past 5 minutes.
+
+Each function accepts a timestamp parameter \(in seconds granularity\) and you may assume that calls are being made to the system in chronological order \(ie, the timestamp is monotonically increasing\). You may assume that the earliest timestamp starts at 1.
+
+It is possible that several hits arrive roughly at the same time.
+
+**Example:**
+
+```text
+HitCounter counter = new HitCounter();
+
+// hit at timestamp 1.
+counter.hit(1);
+
+// hit at timestamp 2.
+counter.hit(2);
+
+// hit at timestamp 3.
+counter.hit(3);
+
+// get hits at timestamp 4, should return 3.
+counter.getHits(4);
+
+// hit at timestamp 300.
+counter.hit(300);
+
+// get hits at timestamp 300, should return 4.
+counter.getHits(300);
+
+// get hits at timestamp 301, should return 3.
+counter.getHits(301); 
+```
+
+**Follow up:**  
+What if the number of hits per second could be very large? Does your design scale?
+
+use a queue to record the information of all the hits. Each time we call the function getHits\( \), we have to delete the elements which hits beyond 5 mins \(300\). The result would be the length of the queue
+
+```java
+class HitCounter {
+    Queue<Integer> q = null;
+    /** Initialize your data structure here. */
+    public HitCounter() {
+        q = new LinkedList<Integer>();
+    }
+    
+    /** Record a hit.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public void hit(int timestamp) {
+        q.offer(timestamp);
+    }
+    
+    /** Return the number of hits in the past 5 minutes.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public int getHits(int timestamp) {
+        while(!q.isEmpty() && timestamp - q.peek() >= 300) {
+            q.poll();
+        }
+        return q.size();
+    }
+}
+```
+
+## 981 Time Based Key-Value Store 53.8% Medium
+
+设计基于时间的键值存储
+
+Create a timebased key-value store class `TimeMap`, that supports two operations.
+
+1. `set(string key, string value, int timestamp)`
+
+* Stores the `key` and `value`, along with the given `timestamp`.
+
+2. `get(string key, int timestamp)`
+
+* Returns a value such that `set(key, value, timestamp_prev)` was called previously, with `timestamp_prev <= timestamp`.
+* If there are multiple such values, it returns the one with the largest `timestamp_prev`.
+* If there are no values, it returns the empty string \(`""`\).
+
+**Example 1:**
+
+```text
+Input: inputs = ["TimeMap","set","get","get","set","get","get"], inputs = [[],["foo","bar",1],["foo",1],["foo",3],["foo","bar2",4],["foo",4],["foo",5]]
+Output: [null,null,"bar","bar",null,"bar2","bar2"]
+Explanation:   
+TimeMap kv;   
+kv.set("foo", "bar", 1); // store the key "foo" and value "bar" along with timestamp = 1   
+kv.get("foo", 1);  // output "bar"   
+kv.get("foo", 3); // output "bar" since there is no value corresponding to foo at timestamp 3 and timestamp 2, then the only value is at timestamp 1 ie "bar"   
+kv.set("foo", "bar2", 4);   
+kv.get("foo", 4); // output "bar2"   
+kv.get("foo", 5); //output "bar2"   
+```
+
+{% embed url="https://leetcode-cn.com/problems/time-based-key-value-store/solution/ji-yu-shi-jian-de-jian-zhi-cun-chu-by-leetcode/" %}
+
+## 647 Palindromic Substrings 61.6% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#647-palindromic-substrings" %}
+
+## 113 Path Sum II 48.3% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#113-path-sum-ii" %}
+
+## 121 Best Time to Buy and Sell Stock 51.2% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#121-best-time-to-buy-and-sell-stock" %}
+
+## 141 Linked List Cycle 42.0% Easy
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#141-linked-list-cycle" %}
+
+## 785 Is Graph Bipartite? 48.1% Medium
 
 
-
-##  198 House Robber 42.6% Medium
-
-##  973 K Closest Points to Origin 64.4% Medium
-
-##  21 Merge Two Sorted Lists 55.1% Easy
-
-##  75 Sort Colors 48.7% Medium
-
-##  1028 Recover a Tree From Preorder Traversal 70.6% Hard
-
-##  54 Spiral Matrix 35.2% Medium
-
-##  350 Intersection of Two Arrays II 51.8% Easy
-
-##  173 Binary Search Tree Iterator 59.3% Medium
-
-##  238 Product of Array Except Self 61.1% Medium
-
-##  230 Kth Smallest Element in a BST 61.9% Medium
-
-##  70 Climbing Stairs 48.4% Easy
-
-##  362 Design Hit Counter 64.8% Medium
-
-##  981 Time Based Key-Value Store 53.8% Medium
-
-##  647 Palindromic Substrings 61.6% Medium
-
-##  113 Path Sum II 48.3% Medium
-
-##  121 Best Time to Buy and Sell Stock 51.2% Easy
-
-##  141 Linked List Cycle 42.0% Easy
-
-##  785 Is Graph Bipartite? 48.1% Medium
 
 ##  240 Search a 2D Matrix II 43.8% Medium
 
