@@ -2160,45 +2160,123 @@ kv.get("foo", 5); //output "bar2"
 
 ## 785 Is Graph Bipartite? 48.1% Medium
 
+Recall that a graph is bipartite if we can split its set of nodes into two independent subsets A and B, such that every edge in the graph has one node in A and another node in B. 若无向图 G=\(V,E\) 的顶点集 V 可以分割为两个互不相交的子集，且图中每条边的两个顶点分别属于不同的子集，则称图 G 为一个二分图。
 
+[判断是否二分图 DFS/BFS/UF](https://leetcode-cn.com/problems/is-graph-bipartite/solution/bfs-dfs-bing-cha-ji-san-chong-fang-fa-pan-duan-er-/)
 
-##  240 Search a 2D Matrix II 43.8% Medium
+## 240 Search a 2D Matrix II 43.8% Medium
 
-##  987 Vertical Order Traversal of a Binary Tree 37.4% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su\#240-search-a-2d-matrix-ii" %}
+
+## 987 Vertical Order Traversal of a Binary Tree 37.4% Medium
+
+这道题跟314的不同之处在于，这道题要计算左右子树的坐标方式，314只管BFS打印出来。
+
+[垂序遍历 DFS记录坐标+排序](https://leetcode-cn.com/problems/vertical-order-traversal-of-a-binary-tree/solution/er-cha-shu-de-chui-xu-bian-li-by-leetcode-2/)
 
 ##  387 First Unique Character in a String 53.7% Easy
 
-##  713 Subarray Product Less Than K 40.3% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#387-first-unique-character-in-a-string" %}
 
-##  207 Course Schedule 44.1% Medium
+## 713 Subarray Product Less Than K 40.3% Medium
 
-##  142 Linked List Cycle II 39.1% Medium
+找出整数数组中乘积小于k的所有子数组
 
-##  279 Perfect Squares 48.4% Medium
+二分或双指针
 
-##  125 Valid Palindrome 37.7% Easy
+{% embed url="https://leetcode-cn.com/problems/subarray-product-less-than-k/solution/cheng-ji-xiao-yu-kde-zi-shu-zu-by-leetcode/" %}
 
-##  206 Reverse Linked List 64.5% Easy
+## 279 Perfect Squares 48.4% Medium
 
-##  515 Find Largest Value in Each Tree Row 61.9% Medium
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#279-perfect-squares" %}
 
-##  633 Sum of Square Numbers 32.4% Medium
+## 515 Find Largest Value in Each Tree Row 61.9% Medium
 
-##  946 Validate Stack Sequences 63.3% Medium
+在二叉树中找每一行的最大值
 
-##  1107 New Users Daily Count 45.7% Medium
+```java
+/**
+ * 深度优先搜索(DFS) -- 
+ */
+class Solution {
+    public List<Integer> largestValues(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        dfs(root, list, 0);
+        return list;
+    }
 
-##  1127 User Purchase Platform 50.3% Hard
+    public void dfs(TreeNode node, List<Integer> list, int level) {
+        if (node == null) return;
 
-##  1149 Article Views II 48.3% Medium
+        if (list.size() == level) {
+            list.add(node.val);
+        } else {
+            list.set(level, Math.max(list.get(level), node.val));
+        }
+        dfs(node.left, list, level+1);
+        dfs(node.right, list, level+1);
+    }
+}
 
-##  1343 Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold 64.5% Medium
+/**
+* 广度优先搜索(BFS) -- 按层级遍历
+*/
+class Solution {
+    public List<Integer> largestValues(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) return list;
 
-##  1588 Sum of All Odd Length Subarrays 81.5% Easy
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            int max = Integer.MIN_VALUE;
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                max = Math.max(node.val, max);
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+            list.add(max);
+        }
+        return list;
+    }
+}
+```
 
-##  1644 Lowest Common Ancestor of a Binary Tree II 58.0% Medium
+## 633 Sum of Square Numbers 32.4% Medium
 
-##  1650 Lowest Common Ancestor of a Binary Tree III 78.6% Medium
+平方数之和， 给定一个非负整数 `c` ，判断是否存在两个整数 `a` 和 `b`，使得 `a2 + b2 = c` 
+
+{% embed url="https://leetcode-cn.com/problems/sum-of-square-numbers/solution/ping-fang-shu-zhi-he-by-leetcode/" %}
+
+## 946 Validate Stack Sequences 63.3% Medium
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#946-validate-stack-sequence" %}
+
+## 1343 Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold 64.5% Medium
+
+size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动窗口或前缀和
+
+{% embed url="https://leetcode-cn.com/problems/number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold/solution/bao-li-qiu-jie-hua-dong-chuang-kou-qiu-jie-qian-zh/" %}
+
+## 1588 Sum of All Odd Length Subarrays 81.5% Easy
+
+
+
+## 1644 Lowest Common Ancestor of a Binary Tree II 58.0% Medium $
+
+
+
+## 1650 Lowest Common Ancestor of a Binary Tree III 78.6% Medium $
+
+树结点上有parent索引指向父结点
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#1650-lowest-common-ancestor-of-a-binary-tree-iii" %}
 
 
 
