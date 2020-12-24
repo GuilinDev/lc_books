@@ -2266,11 +2266,17 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 ## 1588 Sum of All Odd Length Subarrays 81.5% Easy
 
+正整数数组中，计算所有可能的奇数长度子数组（连续子序列）的和。
 
+求元素出现次数，而不是直接求子数组个数，否则复杂度很高
+
+{% embed url="https://leetcode-cn.com/problems/sum-of-all-odd-length-subarrays/solution/onshi-jian-fu-za-du-o1shi-jian-fu-za-du-by-crj1998/" %}
 
 ## 1644 Lowest Common Ancestor of a Binary Tree II 58.0% Medium $
 
+树结点自己可作为自己的后裔。
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#1644-lowest-common-ancestor-of-a-binary-tree-ii-usd" %}
 
 ## 1650 Lowest Common Ancestor of a Binary Tree III 78.6% Medium $
 
