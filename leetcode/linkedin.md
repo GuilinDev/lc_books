@@ -994,6 +994,12 @@ public class AllOne {
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/design\#380-insert-delete-getrandom-o-1" %}
 
+## 381 Insert Delete GetRandom O\(1\) - Duplicates allowed 34.6% Hard
+
+所有操作平均时间复杂度为O\(1\)，并且有重复数，用HashMap
+
+{% embed url="https://leetcode-cn.com/problems/insert-delete-getrandom-o1-duplicates-allowed/solution/o1-shi-jian-cha-ru-shan-chu-he-huo-qu-sui-ji-yua-5/" %}
+
 ## 68 Text Justification 29.0% Hard
 
 文本左右对齐
@@ -1318,17 +1324,13 @@ class Solution {
 
 ## 102 Binary Tree Level Order Traversal 56.0% Medium
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#102-binary-tree-level-order-traversal" %}
 
+## 273 Integer to English Words 27.8% Hard
 
-##  273 Integer to English Words 27.8% Hard
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#273-integer-to-english-words" %}
 
-
-
-##  381 Insert Delete GetRandom O\(1\) - Duplicates allowed 34.6% Hard
-
-
-
-##  636 Exclusive Time of Functions 53.6% Medium
+## 636 Exclusive Time of Functions 53.6% Medium
 
 
 
