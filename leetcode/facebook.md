@@ -1932,43 +1932,71 @@ class Solution {
 
 ## 126 Word Ladder II
 
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs\#339-nested-list-weight-sum" %}
+
 ## 52 N-Queens II
+
+给定n返回所有解法
+
+{% embed url="https://leetcode-cn.com/problems/n-queens-ii/solution/nhuang-hou-ii-by-leetcode-solution/" %}
 
 ## 940 Distinct Subsequences II
 
+给定一个字符串 `S`，计算 `S` 的不同非空子序列的个数。结果可能很大，所以**返回答案模** **`10^9 + 7`**.
+
+{% embed url="https://leetcode-cn.com/problems/distinct-subsequences-ii/solution/bu-tong-de-zi-xu-lie-ii-by-leetcode/" %}
+
 ## 27 Remove Element
+
+同Move Zeros
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/26-27-80-zai-array-zhong-yi-chu-yuan-su\#27-remove-element" %}
 
 ## 930 Binary Subarrays With Sum
 
+ 在由若干 `0` 和 `1`  组成的数组二元数组 `A` 中，有多少个和为 `S` 的**非空**子数组。
+
+{% embed url="https://leetcode-cn.com/problems/binary-subarrays-with-sum/solution/he-xiang-tong-de-er-yuan-zi-shu-zu-by-leetcode/" %}
+
 ## 1574 Shortest Subarray to be Removed to Make Array Sorted
+
+删除最短的子数组使剩余数组有序
+
+{% embed url="https://leetcode-cn.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/solution/hua-hua-by-solituderain/" %}
 
 ## 1123 Lowest Common Ancestor of Deepest Leaves
 
+{% embed url="https://leetcode-cn.com/problems/lowest-common-ancestor-of-deepest-leaves/solution/liang-chong-si-lu-yi-chong-qian-xu-bian-li-yi-chon/" %}
+
 ## 1029 Two City Scheduling
 
-#### 674 Longest Continuous Increasing Subsequence
+公司计划面试 2N 人。第 i 人飞往 A 市的费用为 costs\[i\]\[0\]，飞往 B 市的费用为 costs\[i\]\[1\]。返回将每个人都飞到某座城市的最低费用，要求每个城市都有 N 人抵达
 
-#### 547 Friend Cycles
+{% embed url="https://leetcode-cn.com/problems/two-city-scheduling/solution/er-cha-shu-de-chui-xu-bian-li-by-leetcode/" %}
 
-#### 485 Max Consecutive Ones
+## 674 Longest Continuous Increasing Subsequence
 
-#### 468 Validate IP Address
+unsorted
 
-#### 210 Course Schedule II
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#674-longest-continuous-increasing-subsequence](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#674-longest-continuous-increasing-subsequence)
+
+## 485 Max Consecutive Ones
+
+
+
+## 468 Validate IP Address
+
+
 
 #### 130 Surrounded Regions
 
-#### 69 Sqrt\(x\)
 
-#### 40 Combination Sum II
-
-#### 39 Combination Sum
 
 #### 691    Stickers to Spell Word
 
 #### 1650 Lowest Common Ancestor of a Binary Tree III
 
-#### 228    Summary Ranges
+#### 228  Summary Ranges
 
 #### 597 Friend Requests I: Overall Acceptance Rate $
 
@@ -1986,7 +2014,7 @@ class Solution {
 
 #### 
 
-#### 307    Range Sum Query - Mutable
+## 307    Range Sum Query - Mutable
 
 [一维数组 - 线段树](https://app.gitbook.com/@guilindev/s/interview/leetcode/design#307-range-sum-query-mutable)
 
