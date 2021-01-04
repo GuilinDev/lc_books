@@ -56,7 +56,6 @@
   * [Facebook](leetcode/facebook.md)
   * [Linkedin](leetcode/linkedin.md)
   * [System Design](leetcode/system-design.md)
-  * [FB](leetcode/fb.md)
   * [tag0](leetcode/tag0.md)
   * [tag1](leetcode/tag1.md)
   * [tag2](leetcode/tag2.md)

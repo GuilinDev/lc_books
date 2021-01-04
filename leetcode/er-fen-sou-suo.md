@@ -219,27 +219,29 @@ Explanation: The square root of 8 is 2.82842..., and since
 
 ### 代码
 
-二分法搜索合适的数
+二分法搜索合适的数，模板写法
 
 ```java
 class Solution {
     public int mySqrt(int x) {
-        assert x >= 0 : "x should be non-negative";
-        while (x <= 1) {
+        if (x <= 1) {
             return x;
         }
-        int left = 0;
-        int right = x;
-        while (left <= right) {
+        int left = 0, right = x;
+        while (left + 1 < right) {
             int mid = left + (right - left) / 2;
             int temp = x / mid;
-            if (temp >= mid) {
-                left = mid + 1;
+            if (temp >= mid) { // 等于时还不能停，因为是地板除法，temp*mid可能比x小（有更大的备选），所以要挪动left
+                left = mid;
             } else {
-                right = mid - 1;
+                right = mid;
             }
         }
-        return right; // left <= right的条件后，right在左边，刚好符合地板除法
+
+        if (x / right >= right) { // 先检查right是否符合，因为right更大
+            return right;
+        }
+        return left;
     }
 }
 ```
