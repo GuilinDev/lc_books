@@ -815,17 +815,15 @@ class Solution {
 
 ## 315 Count of Smaller Numbers After Self
 
-{% embed url="https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/segment-tree\#315-count-of-smaller-numbers-after-self" %}
+[https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/segment-tree\#315-count-of-smaller-numbers-after-self](https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/segment-tree#315-count-of-smaller-numbers-after-self)
 
 ## 250 Count Univalue Subtrees
 
-{% embed url="https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/untitled-1\#250-count-univalue-subtrees" %}
+[https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/untitled-1\#250-count-univalue-subtrees](https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/untitled-1#250-count-univalue-subtrees)
 
 ## 53 - Maximum Subarray
 
-{% embed url="https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/array/zi-shu-zu-subarray\#53-maximum-subarray" %}
-
-
+[https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/array/zi-shu-zu-subarray\#53-maximum-subarray](https://app.gitbook.com/@guilindev/s/interview/v/master/leetcode/array/zi-shu-zu-subarray#53-maximum-subarray)
 
 ## 688 Knight Probability in Chessboard
 

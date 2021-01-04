@@ -436,7 +436,7 @@ class Solution {
 }
 ```
 
-## 34 Find First and Last Position of Element in Sorted Array \(Search for a Range\)
+## 34 - Find First and Last Position of Element in Sorted Array \(Search for a Range\)
 
 ### 原题概述
 
@@ -523,7 +523,7 @@ public int[] searchRange(int[] nums, int target) {
 
 
 
-## 74 Search a 2D Matrix
+## 74 - Search a 2D Matrix
 
 ### 原题概述
 
@@ -592,7 +592,7 @@ class Solution {
 }
 ```
 
-## 240 Search a 2D Matrix II
+## 240 - Search a 2D Matrix II
 
 ### 原题概述
 
@@ -648,7 +648,7 @@ class Solution {
 }
 ```
 
-## 162 Find Peak Element
+## 162 - Find Peak Element
 
 ### 原题概述
 
