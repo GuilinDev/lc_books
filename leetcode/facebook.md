@@ -2055,7 +2055,7 @@ class Solution {
 
 ## 1574 Shortest Subarray to be Removed to Make Array Sorted
 
-删除最短的子数组使剩余数组有序
+一个整数数组，删除最短的子数组的数使剩余数组有序
 
 {% embed url="https://leetcode-cn.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/solution/hua-hua-by-solituderain/" %}
 
@@ -2153,7 +2153,7 @@ N 种不同类型的贴纸。每个贴纸上都有一个小写的英文单词。
 
 ## 143    Reorder List
 
-[首尾重构链表 - Stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#143-reorder-list)
+[首尾元素逐个交换重构链表 - Stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#143-reorder-list)
 
 ## 364    Nested List Weight Sum II $
 
