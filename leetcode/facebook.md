@@ -2944,6 +2944,12 @@ Please note that we locate `targetNode` in `buildParentMap`.
 
 {% embed url="https://leetcode-cn.com/problems/cousins-in-binary-tree/solution/er-cha-shu-de-tang-xiong-di-jie-dian-by-leetcode/" %}
 
+## 547 Number of Provinces
+
+找不连通的分量的数目，和朋友圈一样
+
+{% embed url="https://leetcode-cn.com/problems/number-of-provinces/solution/peng-you-quan-by-leetcode/" %}
+
 ## Extra: Merge Two Sorted Interval Lists
 
 样例1 输入: \[\(1,2\),\(3,4\)\] and list2 = \[\(2,3\),\(5,6\)\] 输出: \[\(1,4\),\(5,6\)\] 解释: \(1,2\),\(2,3\),\(3,4\) --&gt; \(1,4\) \(5,6\) --&gt; \(5,6\) 样例2 输入: \[\(1,2\),\(3,4\)\] 和 list2 = \[\(4,5\),\(6,7\)\] 输出: \[\(1,2\),\(3,5\),\(6,7\)\] 解释: \(1,2\) --&gt; \(1,2\) \(3,4\),\(4,5\) --&gt; \(3,5\) \(6,7\) --&gt; \(6,7\)
