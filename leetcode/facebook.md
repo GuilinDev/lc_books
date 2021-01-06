@@ -2790,6 +2790,154 @@ class Solution {
 
 {% embed url="https://leetcode-cn.com/problems/maximum-width-ramp/solution/zui-da-kuan-du-po-by-leetcode/" %}
 
+## 742 Closest Leaf in a Binary Tree $
+
+Given a binary tree **where every node has a unique value**, and a target key `k`, find the value of the nearest leaf node to target `k` in the tree.
+
+Here, nearest to a leaf means the least number of edges travelled on the binary tree to reach any leaf of the tree. Also, a node is called a leaf if it has no children.
+
+In the following examples, the input tree is represented in flattened form row by row. The actual `root` tree given will be a TreeNode object.
+
+**Example 1:**
+
+```text
+Input:
+root = [1, 3, 2], k = 1
+Diagram of binary tree:
+          1
+         / \
+        3   2
+
+Output: 2 (or 3)
+
+Explanation: Either 2 or 3 is the nearest leaf node to the target of 1.
+```
+
+解法DFS
+
+1. First, preform DFS on root in order to find the node whose val = k, at the meantime use `HashMap` to keep record of all back edges from child to parent;
+2. Then perform BFS on this node to find the closest leaf node.
+
+```java
+class Solution {
+    private int val = 0;
+    private int steps = 0;
+    
+    public int findClosestLeaf(TreeNode root, int k) {
+        dfs(root, k, 0);
+        return val;
+    }
+    
+    private int dfs(TreeNode root, int k, int depth){
+        if(root != null){
+            if(root.val == k) {
+                // DFS to leaves from this node
+                dfsFromNode(root, 0);
+                return 1;
+            }else{
+                // Continue trying to find
+                int leftSubtree = dfs(root.left, k, depth + 1);
+                int rightSubtree = dfs(root.right, k, depth + 1);
+                if(leftSubtree != -1){
+                    if(root.right != null) dfsFromNode(root.right, ++leftSubtree);
+                    return leftSubtree;
+                }else if (rightSubtree != -1) {
+                    if(root.left != null) dfsFromNode(root.left, ++rightSubtree);
+                    return rightSubtree;
+                }
+            }
+        }
+        return -1;
+    }
+    
+    private void dfsFromNode(TreeNode root, int depth){
+        if(root.left == null && root.right == null){
+            if(val == 0){
+                val = root.val;
+                steps = depth;
+            }else if(depth < steps){
+                val = root.val;
+                steps = depth;
+            }
+        }else{
+            if(root.left != null) dfsFromNode(root.left, depth+1);
+            if(root.right != null) dfsFromNode(root.right, depth+1);
+        }
+    }
+}
+```
+
+BFS，It sounds like a graph rather than a tree for we can go parent-ward to look for leaves.  
+So we have to point child to its parent as well, which is done by `childToParent` map.
+
+Now the problem becomes to find the shortest path from `targetNode` to any leaf, which can be solved by **BFS**, where the start is `targetNode`, the end is the first leaf node.
+
+Please note that we locate `targetNode` in `buildParentMap`.
+
+```java
+ private static TreeNode targetNode;
+    private static int k;
+    
+    public int findClosestLeaf(TreeNode root, int k) {
+        targetNode = null;
+        this.k = k;
+        
+        /* Map child node to parent node. */
+        Map<TreeNode, TreeNode> childToParent = new HashMap<>();
+        buildParentMap(root, childToParent);
+        
+        /* BFS to get closest leaf. */
+        Deque<TreeNode> queue = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+        queue.offer(targetNode);
+        visited.add(targetNode.val);
+        
+        while (!queue.isEmpty()) {          
+            TreeNode curr = queue.poll();
+            
+            /* Check if current polled treenode is a leaf. */
+            if (curr.left == null && curr.right == null)
+                return curr.val;
+            
+            /* Add current node's children to queue. */
+            if (curr.left != null && !visited.contains(curr.left.val)) {
+                visited.add(curr.left.val);
+                queue.offer(curr.left);
+            }
+            if (curr.right != null && !visited.contains(curr.right.val)) {
+                visited.add(curr.right.val);
+                queue.offer(curr.right);
+            }
+            
+            /* Add current node's parent to queue. */
+            TreeNode parent = childToParent.get(curr);
+            if (parent != null && !visited.contains(parent.val)) {
+                visited.add(parent.val);
+                queue.offer(parent);                
+            }                
+        }
+        
+        return -1;
+    }
+    
+    private void buildParentMap(TreeNode root, Map<TreeNode, TreeNode> childToParent) {
+        if (root == null)
+            return;
+        
+        buildParentMap(root.left, childToParent);
+        buildParentMap(root.right, childToParent);
+        
+        /* Check if current root is the target node. */
+        if (root.val == k)
+            targetNode = root;
+        
+        if (root.left != null)
+            childToParent.put(root.left, root);
+        if (root.right != null)
+            childToParent.put(root.right, root);
+    }
+```
+
 ## Extra: Merge Two Sorted Interval Lists
 
 样例1 输入: \[\(1,2\),\(3,4\)\] and list2 = \[\(2,3\),\(5,6\)\] 输出: \[\(1,4\),\(5,6\)\] 解释: \(1,2\),\(2,3\),\(3,4\) --&gt; \(1,4\) \(5,6\) --&gt; \(5,6\) 样例2 输入: \[\(1,2\),\(3,4\)\] 和 list2 = \[\(4,5\),\(6,7\)\] 输出: \[\(1,2\),\(3,5\),\(6,7\)\] 解释: \(1,2\) --&gt; \(1,2\) \(3,4\),\(4,5\) --&gt; \(3,5\) \(6,7\) --&gt; \(6,7\)
