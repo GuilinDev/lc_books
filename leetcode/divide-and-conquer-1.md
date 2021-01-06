@@ -288,7 +288,7 @@ class Solution {
 }
 ```
 
-利用Heap，只选择topK，不排序topK
+利用Heap，只选择topK，不排序topK，O\(n\*log\(K\)\)，需要把所有n个数字放入
 
 ```java
 class Solution {
@@ -312,7 +312,7 @@ class Solution {
 }
 ```
 
-快速选择
+快速选择, O\(k\*log\(k\) + n\)，k比较小（例如几百）的时候很快
 
 ```java
 class Solution {
