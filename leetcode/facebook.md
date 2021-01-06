@@ -3026,9 +3026,9 @@ class IntervalMerge {
 }
 ```
 
-## Extra
+## Extra Generate Patterns
 
-Generate Patterns
+类似17 Letters Combinations of a Phone Number
 
 ```text
 Given a string as input, return the list of all the patterns possible:
@@ -3075,6 +3075,82 @@ public static void main(String[] args) {
 	map.put("12", Arrays.asList('X'));
 	map.put("3", Arrays.asList('P','Q'));
 	System.out.println(getAllPatterns(map, "123"));
+}
+```
+
+## Extra **Cartesian tree**
+
+Given an integer array, create a tree with following properties: 
+
+a. Binary tree b. Min tree \(heap\) c. In order traversal return original array.
+
+For eg:
+
+1. \[1, 2, 3, 5\]
+
+Output:
+
+```text
+1
+ \
+  2
+   \
+    3
+     \
+      5
+```
+
+1. \[5, 8, 1,2\]
+
+Output:
+
+```text
+		1
+	       / \
+              5   2
+               \
+		8
+```
+
+代码
+
+```java
+/**
+* Assuming standard Binary Node Class definition with value, left and right appropriately.
+**/
+
+public Node buildTree(Integer[] input) {
+    // Standard null checks and input validations.
+
+    Node root;
+    Stack<Node> inputStack = new Stack<>();
+    
+    for (int index = 0; index < input.length; index++) {
+
+        Integer current = input[index];
+        Node currentNode = new Node(current);
+
+        if (inputStack.isEmpty()) {
+            root = currentNode;
+        } else {
+            Node previousNode = inputStack.pop();
+            int compare = previousNode.value.compareTo(current);
+
+            // Assuming Integer-Array has no duplicates.
+            switch (compare) {
+                case -1:
+                    previousNode.right = currentNode;
+                break;
+                case 1:
+                    currentNode.left = root;
+                    root = currentNode;
+                break;
+            }
+        }
+        inputStack.push(currentNode);
+    }
+    inputStack.clear();
+    return root;
 }
 ```
 
