@@ -404,7 +404,7 @@ class Node {
 }
 ```
 
-## 149 Max Points on a Line 17.2% Hard
+##  149 Max Points on a Line 17.2% Hard
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/math\#149-max-point-on-a-line" %}
 
@@ -501,8 +501,6 @@ class Solution {
 ```
 
 ## 256 Paint House 53.0% Medium $
-
-三种颜色
 
 There is a row of n houses, where each house can be painted one of three colors: red, blue, or green. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
 
@@ -638,8 +636,6 @@ class Solution {
 ```
 
 ## 265 Paint House II 45.3% Hard $
-
-k种颜色
 
 There are a row of n houses, each house can be painted with one of the k colors. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
 
@@ -805,8 +801,6 @@ class Solution {
 ```
 
 ## 65 Valid Number 15.6% Hard
-
-字符串判断是否是decimal
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#65-valid-number" %}
 
@@ -1300,8 +1294,6 @@ class Solution {
 
 ## 373 Find K Pairs with Smallest Sums 37.3% Medium
 
-两个升序排序好的整数数组，各取一个组成pair使其和最小。
-
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/heap\#373-find-k-pairs-with-smallest-sums" %}
 
 ## 56 Merge Intervals 40.4% Medium
@@ -1787,7 +1779,7 @@ class Solution {
 
 ## 367 Valid Perfect Square 42.0% Easy
 
-判断是否是有效的完全平方数，使用二分法或者牛顿迭代法
+有效的完全平方数，使用二分法或者牛顿迭代法
 
 {% embed url="https://leetcode-cn.com/problems/valid-perfect-square/solution/you-xiao-de-wan-quan-ping-fang-shu-by-leetcode/" %}
 
@@ -1895,9 +1887,7 @@ Output: [1,2,3,4]
 
 ## 1235 Maximum Profit in Job Scheduling 46.4% Hard
 
-根据空闲时间规划兼职工作，使利润最大
-
-{% embed url="https://leetcode-cn.com/problems/maximum-profit-in-job-scheduling/solution/java-dong-tai-gui-hua-by-zhi-94/" %}
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag4\#1255-maximum-score-words-formed-by-letters" %}
 
 ## 323 Number of Connected Components in an Undirected Graph 57.2% Medium $
 
@@ -2190,15 +2180,13 @@ Recall that a graph is bipartite if we can split its set of nodes into two indep
 
 ## 713 Subarray Product Less Than K 40.3% Medium
 
-找出正整数数组中乘积小于k的所有子数组
+找出整数数组中乘积小于k的所有子数组
 
 二分或双指针
 
 {% embed url="https://leetcode-cn.com/problems/subarray-product-less-than-k/solution/cheng-ji-xiao-yu-kde-zi-shu-zu-by-leetcode/" %}
 
 ## 279 Perfect Squares 48.4% Medium
-
-给一个正整数，求最少由几个完全平方数组成，考察[四平方和定理](https://zh.wikipedia.org/wiki/%E5%9B%9B%E5%B9%B3%E6%96%B9%E5%92%8C%E5%AE%9A%E7%90%86)（没听说过）
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#279-perfect-squares" %}
 
@@ -2262,13 +2250,11 @@ class Solution {
 
 ## 633 Sum of Square Numbers 32.4% Medium
 
-平方数之和， 给定一个非负整数 `c` ，判断是否存在两个整数 `a` 和 `b`，使得 `a^2 + b^2 = c` 
+平方数之和， 给定一个非负整数 `c` ，判断是否存在两个整数 `a` 和 `b`，使得 `a2 + b2 = c` 
 
 {% embed url="https://leetcode-cn.com/problems/sum-of-square-numbers/solution/ping-fang-shu-zhi-he-by-leetcode/" %}
 
 ## 946 Validate Stack Sequences 63.3% Medium
-
-验证栈序列，给定 pushed 和 popped 两个序列，每个序列中的 值都不重复，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop 操作序列的结果时，返回 true；否则，返回 false 。
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#946-validate-stack-sequence" %}
 
@@ -2288,7 +2274,7 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 ## 1644 Lowest Common Ancestor of a Binary Tree II 58.0% Medium $
 
-树结点自己可作为自己的后裔，236则是严格找上面的祖先。
+树结点自己可作为自己的后裔。
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#1644-lowest-common-ancestor-of-a-binary-tree-ii-usd" %}
 

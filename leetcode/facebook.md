@@ -363,7 +363,7 @@ class SparseVector {
 
 ## 438 Find All Anagrams in a String
 
-[一个字符串中找到所有异位词子串的起始位置 - 滑动窗口 + HashMap/Array](https://leetcode.com/problems/find-all-anagrams-in-a-string/solution/)
+[一个字符串中找到所有异位词子串的起始位置 - 滑动窗口 + HashMap/Array \(模板集合，最后一个\)](https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)
 
 ## 636  Exclusive Time of Functions
 
@@ -526,7 +526,7 @@ class Solution {
 
 ## 398    Random Pick Index
 
-[有重复元素的随机数返回索引 - 蓄水池抽样问题](https://leetcode-cn.com/problems/random-pick-index/solution/xu-shui-chi-chou-yang-wen-ti-by-an-xin-9/)
+[数组中有重复元素，随机数返回索引 - 蓄水池抽样问题](https://leetcode-cn.com/problems/random-pick-index/solution/xu-shui-chi-chou-yang-wen-ti-by-an-xin-9/)
 
 ## 139    Word Break
 
@@ -582,6 +582,15 @@ class Solution {
 ## 536    Construct Binary Tree from String $
 
 [从一个数字（根）和小括号（层数）的字符串生成二叉树 DFS或Stack](https://leetcode.com/problems/construct-binary-tree-from-string/)
+
+Example:
+
+```text
+Input: "4(2(3)(1))(6(5))"
+Output: return the tree root node representing the following tree:
+```
+
+Stack
 
 ```java
 class Solution {
@@ -727,6 +736,14 @@ class Solution {
 
 ## 616    Add Bold Tag in String $
 
+```text
+Input: 
+s = "abcxyz123"
+dict = ["abc","123"]
+Output:
+"<b>abc</b>xyz<b>123</b>"
+```
+
 [Dict包含的子串分别加入标识 - 用一个01二叉树组标记位置是不是子串](https://leetcode.com/problems/add-bold-tag-in-string/discuss/104248/Java-Solution-boolean-array)
 
 ```java
@@ -770,6 +787,27 @@ class Solution {
 [in place](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#138-copy-list-with-random-pointer)
 
 ## 314    Binary Tree Vertical Order Traversal $
+
+```text
+Input: [3,9,20,null,null,15,7]
+
+   3
+  /\
+ /  \
+ 9  20
+    /\
+   /  \
+  15   7 
+
+Output:
+
+[
+  [9],
+  [3,15],
+  [20],
+  [7]
+]
+```
 
 [树形结构的从左向右Traversal - BFS](https://leetcode.com/problems/binary-tree-vertical-order-traversal/discuss/76401/5ms-Java-Clean-Solution)
 
@@ -829,6 +867,19 @@ class Solution {
   ```
 
 ## 689    Maximum Sum of 3 Non-Overlapping Subarrays
+
+```text
+Input: [1,2,1,2,6,7,5,1], 2
+Output: [0, 3, 5]
+Explanation: Subarrays [1, 2], [2, 6], [7, 5] correspond to the starting indices [0, 3, 5].
+We could have also taken [2, 1], but an answer of [1, 3, 5] would be lexicographically larger.
+```
+
+Note:
+
+* `nums.length` will be between 1 and 20000.
+* `nums[i]` will be between 1 and 65535.
+* `k` will be between 1 and floor\(nums.length / 3\).
 
 [找出一个整数数组中，三个不重叠子数组的起点index集合，保证三个子数组相加的和最大 - DP](https://leetcode-cn.com/problems/maximum-sum-of-3-non-overlapping-subarrays/solution/san-ge-wu-zhong-die-zi-shu-zu-de-zui-da-he-by-leet/)
 
@@ -955,6 +1006,16 @@ class Solution {
 
 ## 1498 Number of Subsequences That Satisfy the Given Sum Condition
 
+```java
+输入：nums = [3,5,6,7], target = 9
+输出：4
+解释：有 4 个子序列满足该条件。
+[3] -> 最小元素 + 最大元素 <= target (3 + 3 <= 9)
+[3,5] -> (3 + 5 <= 9)
+[3,5,6] -> (3 + 6 <= 9)
+[3,6] -> (3 + 6 <= 9)
+```
+
 [子数组中的最小值和最大值相加的和，小于等于目标值的子数组总数（大数据集）- 排序后二分](https://leetcode-cn.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/solution/java-er-fen-sou-suo-by-aliengod/)
 
 ## 43 Multiply Strings
@@ -974,6 +1035,20 @@ class Solution {
 [二维矩阵的区域和搜索 - DP缓存](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/solution/er-wei-qu-yu-he-jian-suo-ju-zhen-bu-ke-bian-by-lee/)
 
 ## 333    Largest BST Subtree $
+
+```text
+Input: [10,5,15,1,8,null,7]
+
+   10 
+   / \ 
+  5*  15 
+ / \   \ 
+1*  8*   7
+
+Output: 3
+Explanation: The Largest(最多结点) BST Subtree in this case is the highlighted one.
+             The return value is the subtree's size, which is 3.
+```
 
 [找出有最多结点的子BST](https://leetcode.com/problems/largest-bst-subtree/)
 
@@ -1300,6 +1375,26 @@ class Solution {
 
 ## 408 Valid Word Abbreviation $
 
+```text
+["word", "1ord", "w1rd", "wo1d", "wor1", "2rd", "w2d", "wo2", "1o1d", "1or1", "w1r1", "1o2", "2r1", "3d", "w3", "4"]
+```
+
+Example 1:
+
+```text
+Given s = "internationalization", abbr = "i12iz4n":
+
+Return true.
+```
+
+Example 2:
+
+```text
+Given s = "apple", abbr = "a2e":
+
+Return false.
+```
+
 [理解题意，字符串数组中单词才是有效的缩写 - 双指针](https://leetcode.com/problems/valid-word-abbreviation/)
 
 Iterate over the characters of abbr and skip number of characters of word. Then compare ith chracter of word with jth character of abbr
@@ -1600,7 +1695,7 @@ class Solution {
 
 ## 406    Queue Reconstruction by Height
 
-[按照身高的属性排序](https://leetcode-cn.com/problems/queue-reconstruction-by-height/solution/gen-ju-shen-gao-zhong-jian-dui-lie-by-leetcode-sol/)
+二维数组表示，[按照身高的属性排序](https://leetcode-cn.com/problems/queue-reconstruction-by-height/solution/gen-ju-shen-gao-zhong-jian-dui-lie-by-leetcode-sol/)
 
 ## 405    Convert a Number to Hexadecimal
 
@@ -1960,7 +2055,7 @@ class Solution {
 
 ## 1574 Shortest Subarray to be Removed to Make Array Sorted
 
-删除最短的子数组使剩余数组有序
+一个整数数组，删除最短的子数组的数使剩余数组有序
 
 {% embed url="https://leetcode-cn.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/solution/hua-hua-by-solituderain/" %}
 
@@ -2058,7 +2153,7 @@ N 种不同类型的贴纸。每个贴纸上都有一个小写的英文单词。
 
 ## 143    Reorder List
 
-[首尾重构链表 - Stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#143-reorder-list)
+[首尾元素逐个交换重构链表 - Stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#143-reorder-list)
 
 ## 364    Nested List Weight Sum II $
 
@@ -2680,6 +2775,20 @@ class Solution {
 ## 394 Decode Strings
 
 [压缩的字符串解码](https://leetcode-cn.com/problems/decode-string/solution/zi-fu-chuan-jie-ma-by-leetcode-solution/)
+
+## 962 Maximum Width Ramp
+
+最大宽度的坡
+
+给定一个整数数组 A，坡是元组 \(i, j\)，其中 i &lt; j 且 A\[i\] &lt;= A\[j\]。这样的坡的宽度为 j - i。
+
+找出 A 中的坡的最大宽度，如果不存在，返回 0 。
+
+示例 1：
+
+输入：\[6,0,8,2,1,5\] 输出：4 解释： 最大宽度的坡为 \(i, j\) = \(1, 5\): A\[1\] = 0 且 A\[5\] = 5.
+
+{% embed url="https://leetcode-cn.com/problems/maximum-width-ramp/solution/zui-da-kuan-du-po-by-leetcode/" %}
 
 ## Extra: Merge Two Sorted Interval Lists
 
