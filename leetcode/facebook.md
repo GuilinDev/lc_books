@@ -881,7 +881,7 @@ Note:
 * `nums[i]` will be between 1 and 65535.
 * `k` will be between 1 and floor\(nums.length / 3\).
 
-[找出一个整数数组中，三个不重叠子数组的起点index集合，保证三个子数组相加的和最大 - DP](https://leetcode-cn.com/problems/maximum-sum-of-3-non-overlapping-subarrays/solution/san-ge-wu-zhong-die-zi-shu-zu-de-zui-da-he-by-leet/)
+[找出一个整数数组中，三个不重叠子数组的起点index集合，每个子数组长度为k，使得三个子数组相加的和最大 - DP](https://leetcode-cn.com/problems/maximum-sum-of-3-non-overlapping-subarrays/solution/san-ge-wu-zhong-die-zi-shu-zu-de-zui-da-he-by-leet/)
 
 ```java
 class Solution {
@@ -1901,7 +1901,7 @@ class Solution {
 
 ## 1439 Find the Kth Smallest Sum of a Matrix With Sorted Rows
 
-[从矩阵中每行选择一个数字，组成一个array，求出第k大的array - BFS](https://leetcode-cn.com/problems/find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows/solution/java-bfs-zui-xiao-dui-by-bran_wang/)
+[从矩阵中每行选择一个数字，组成一个array，求出第k小和的array - BFS](https://leetcode-cn.com/problems/find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows/solution/java-bfs-zui-xiao-dui-by-bran_wang/)
 
 ## 692    Top K Frequent Words
 
