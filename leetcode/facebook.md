@@ -881,7 +881,7 @@ Note:
 * `nums[i]` will be between 1 and 65535.
 * `k` will be between 1 and floor\(nums.length / 3\).
 
-[找出一个整数数组中，三个不重叠子数组的起点index集合，每个子数组长度为k，使得三个子数组相加的和最大 - DP](https://leetcode-cn.com/problems/maximum-sum-of-3-non-overlapping-subarrays/solution/san-ge-wu-zhong-die-zi-shu-zu-de-zui-da-he-by-leet/)
+[找出一个整数数组中，三个不重叠子数组的起点index集合，保证三个子数组相加的和最大 - DP](https://leetcode-cn.com/problems/maximum-sum-of-3-non-overlapping-subarrays/solution/san-ge-wu-zhong-die-zi-shu-zu-de-zui-da-he-by-leet/)
 
 ```java
 class Solution {
@@ -1901,7 +1901,7 @@ class Solution {
 
 ## 1439 Find the Kth Smallest Sum of a Matrix With Sorted Rows
 
-[从矩阵中每行选择一个数字，组成一个array，求出第k小和的array - BFS](https://leetcode-cn.com/problems/find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows/solution/java-bfs-zui-xiao-dui-by-bran_wang/)
+[从矩阵中每行选择一个数字，组成一个array，求出第k大的array - BFS](https://leetcode-cn.com/problems/find-the-kth-smallest-sum-of-a-matrix-with-sorted-rows/solution/java-bfs-zui-xiao-dui-by-bran_wang/)
 
 ## 692    Top K Frequent Words
 
@@ -3023,134 +3023,6 @@ class IntervalMerge {
         result.add(prev);
         return result;
     }
-}
-```
-
-## Extra Generate Patterns
-
-类似17 Letters Combinations of a Phone Number
-
-```text
-Given a string as input, return the list of all the patterns possible:
-
-'1' : ['A', 'B', 'C'], 
-'2' : ['D', 'E'],
-'12' : ['X']
-'3' : ['P', 'Q']
-Example if input is '123', then output should be 
-[ADP, ADQ, AEP, AEQ, BDP, BDQ, BEP, BEQ, CDP, CDQ, CEP, CEQ, XP, XQ]
-```
-
-```java
-public static List<String> getAllPatterns(Map<String, List<Character>> map, String str){
-	List<String> ans = new ArrayList<>();
-	dfsPatterns(map, str, 0, new StringBuilder(), ans);
-	return ans;
-}
-
-private static void dfsPatterns(Map<String, List<Character>> map, String str, int index, StringBuilder sb, List<String> ans){
-	if (index >= str.length()) {
-		ans.add(sb.toString());
-		return;
-	}
-	
-	for (int i=index+1; i<=str.length(); i++) {
-		String key = str.substring(index, i);
-		if (map.containsKey(key)) {
-			List<Character> list = map.get(key);
-			for (Character c : list) {
-				sb.append(c);
-				dfsPatterns(map, str, i, sb, ans);
-				sb.deleteCharAt(sb.length()-1);
-			}
-		}
-		
-	}
-}
-
-public static void main(String[] args) {
-	Map<String, List<Character>> map = new HashMap<>();
-	map.put("1", Arrays.asList('A','B','C'));
-	map.put("2", Arrays.asList('D','E'));
-	map.put("12", Arrays.asList('X'));
-	map.put("3", Arrays.asList('P','Q'));
-	System.out.println(getAllPatterns(map, "123"));
-}
-```
-
-## Extra **Cartesian tree**
-
-Given an integer array, create a tree with following properties: 
-
-a. Binary tree b. Min tree \(heap\) c. In order traversal return original array.
-
-For eg:
-
-1. \[1, 2, 3, 5\]
-
-Output:
-
-```text
-1
- \
-  2
-   \
-    3
-     \
-      5
-```
-
-1. \[5, 8, 1,2\]
-
-Output:
-
-```text
-		1
-	       / \
-              5   2
-               \
-		8
-```
-
-代码
-
-```java
-/**
-* Assuming standard Binary Node Class definition with value, left and right appropriately.
-**/
-
-public Node buildTree(Integer[] input) {
-    // Standard null checks and input validations.
-
-    Node root;
-    Stack<Node> inputStack = new Stack<>();
-    
-    for (int index = 0; index < input.length; index++) {
-
-        Integer current = input[index];
-        Node currentNode = new Node(current);
-
-        if (inputStack.isEmpty()) {
-            root = currentNode;
-        } else {
-            Node previousNode = inputStack.pop();
-            int compare = previousNode.value.compareTo(current);
-
-            // Assuming Integer-Array has no duplicates.
-            switch (compare) {
-                case -1:
-                    previousNode.right = currentNode;
-                break;
-                case 1:
-                    currentNode.left = root;
-                    root = currentNode;
-                break;
-            }
-        }
-        inputStack.push(currentNode);
-    }
-    inputStack.clear();
-    return root;
 }
 ```
 

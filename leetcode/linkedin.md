@@ -109,7 +109,7 @@ class Solution {
 
 设计一个API，这个API会被调用很多次
 
-{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#244-shortest-word-distance-ii" %}
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#244-shortest-word-distance-ii-usd" %}
 
 ## 245 Shortest Word Distance III $
 
@@ -404,7 +404,7 @@ class Node {
 }
 ```
 
-##  149 Max Points on a Line 17.2% Hard
+## 149 Max Points on a Line 17.2% Hard
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/math\#149-max-point-on-a-line" %}
 
@@ -501,6 +501,8 @@ class Solution {
 ```
 
 ## 256 Paint House 53.0% Medium $
+
+三种颜色
 
 There is a row of n houses, where each house can be painted one of three colors: red, blue, or green. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
 
@@ -636,6 +638,8 @@ class Solution {
 ```
 
 ## 265 Paint House II 45.3% Hard $
+
+k种颜色
 
 There are a row of n houses, each house can be painted with one of the k colors. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
 
@@ -801,6 +805,8 @@ class Solution {
 ```
 
 ## 65 Valid Number 15.6% Hard
+
+字符串判断是否是decimal
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#65-valid-number" %}
 
@@ -1247,9 +1253,77 @@ class Solution {
 }
 ```
 
+671的延申，Tournament/winner tree，特点是父结点比左右子树都小，所有结点不一样 - 时空log\(n\)
+
+```java
+/** 
+* A tournament tree is a binary tree 
+* where the parent is the minimum of the two children. 
+* Given a tournament tree find the second minimum value in the tree. 
+* A node in the tree will always have 2 or 0 children. 
+* Also all leaves will have distinct and unique values. 
+*         2 
+*      /    \ 
+*     2      3 
+*    / \    /  \    
+*   4   2   5   3 
+* 
+* In this given tree the answer is 3. 
+*/
+
+
+class Node {
+  Integer value;
+  Node left, right;
+  Node(Integer value, Node left, Node right) {
+    this.value = value;
+    this.left = left;
+    this.right = right;
+  }
+}
+class Solution {
+  /**
+  * This should return the second minimum
+  * int value in the given tournament tree
+  * Basically, you are comparing all the winners except the first winner. 
+  That is why you need to go down it's direction and compare with the other members 
+  who haven't faced each other in the process.
+  */
+  
+   public static Integer secondMin(Node root) {
+        if(root.left == null || root.right == null) return Integer.MAX_VALUE;
+        int min;
+        if(root.left.val == root.val) { //直接跳过最上面的root，自顶向下找到的结点就是第二小结点
+            min = Math.min(root.right.val, secondMin(root.left));
+        } else {
+            min = Math.min(root.left.val, secondMin(root.right));
+        }
+        
+        return min;
+    } 
+}
+```
+
 ## 516 Longest Palindromic Subsequence 54.7% Medium
 
  给定一个字符串 `s` ，找到其中最长的回文子序列，并返回该序列的长度。可以假设 `s` 的最大长度为 `1000` 。
+
+Given a string s, find the longest palindromic subsequence's length in s. You may assume that the maximum length of s is 1000.
+
+**Example 1:**  
+Input:
+
+```text
+"bbbab"
+```
+
+Output:
+
+```text
+4
+```
+
+One possible longest palindromic subsequence is "bbbb".
 
 ```java
 class Solution {
@@ -1293,6 +1367,8 @@ class Solution {
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-2\#76-minimum-window-substring" %}
 
 ## 373 Find K Pairs with Smallest Sums 37.3% Medium
+
+两个升序排序好的整数数组，各取一个组成pair使其和最小。
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/heap\#373-find-k-pairs-with-smallest-sums" %}
 
@@ -1436,6 +1512,12 @@ class Solution {
 
 在一个 m\*n 的二维字符串数组中输出二叉树，并遵守以下规则：
 
+1. The row number `m` should be equal to the height of the given binary tree.
+2. The column number `n` should always be an odd number.
+3. The root node's value \(in string format\) should be put in the exactly middle of the first row it can be put. The column and the row where the root node belongs will separate the rest space into two parts \(**left-bottom part and right-bottom part**\). You should print the left subtree in the left-bottom part and print the right subtree in the right-bottom part. The left-bottom part and the right-bottom part should have the same size. Even if one subtree is none while the other is not, you don't need to print anything for the none subtree but still need to leave the space as large as that for the other subtree. However, if two subtrees are none, then you don't need to leave space for both of them.
+4. Each unused space should contain an empty string `""`.
+5. Print the subtrees following the same rules.
+
 * 行数 m 应当等于给定二叉树的高度。 
 * 列数 n 应当总是奇数。 
 * 根节点的值（以字符串格式给出）应当放在可放置的第一行正中间。根节点所在的行与列会将剩余空间划分为两部分（左下部分和右下部分）。你应该将左子树输出在左下部分，右子树输出在右下部分。左下和右下部分应当有相同的大小。即使一个子树为空而另一个非空，你不需要为空的子树输出任何东西，但仍需要为另一个子树留出足够的空间。然而，如果两个子树都为空则不需要为它们留出任何空间。
@@ -1447,6 +1529,8 @@ DFS或BFS
 {% embed url="https://leetcode-cn.com/problems/print-binary-tree/solution/shu-chu-er-cha-shu-by-leetcode/" %}
 
 ## 160 Intersection of Two Linked Lists 42.3% Easy
+
+注意确定一下是否有环
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#160-intersection-of-two-linked-lists" %}
 
@@ -1529,7 +1613,7 @@ class Solution {
 }
 ```
 
- We could use the [Selection algorithm](https://en.wikipedia.org/wiki/Selection_algorithm) to select the median in O\(mn\) time, but there is an easier way. Notice that we can collect both the row and column coordinates in sorted order.
+We could use the [Selection algorithm](https://en.wikipedia.org/wiki/Selection_algorithm) to select the median in O\(mn\) time, but there is an easier way. Notice that we can collect both the row and column coordinates in sorted order.
 
 ```java
 class Solution {
@@ -1779,7 +1863,7 @@ class Solution {
 
 ## 367 Valid Perfect Square 42.0% Easy
 
-有效的完全平方数，使用二分法或者牛顿迭代法
+判断是否是有效的完全平方数，使用二分法或者牛顿迭代法
 
 {% embed url="https://leetcode-cn.com/problems/valid-perfect-square/solution/you-xiao-de-wan-quan-ping-fang-shu-by-leetcode/" %}
 
@@ -1883,11 +1967,15 @@ Output: [1,2,3,4]
 
 ## 61 Rotate List 31.4% Medium
 
+Rotate就是向右滑动
+
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#61-rotate-list" %}
 
 ## 1235 Maximum Profit in Job Scheduling 46.4% Hard
 
-{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag4\#1255-maximum-score-words-formed-by-letters" %}
+根据空闲时间规划兼职工作，使利润最大
+
+{% embed url="https://leetcode-cn.com/problems/maximum-profit-in-job-scheduling/solution/java-dong-tai-gui-hua-by-zhi-94/" %}
 
 ## 323 Number of Connected Components in an Undirected Graph 57.2% Medium $
 
@@ -1951,7 +2039,7 @@ Output: [3,8,10]
 
 ## 796 Rotate String 49.4% Easy
 
-通过旋转确定是否可以由字符串A变为B
+通过旋转（把左边字符移到右边）确定是否可以由字符串A变为B
 
 可以KMP
 
@@ -2025,6 +2113,8 @@ GROUP BY id
 {% embed url="https://leetcode-cn.com/problems/recover-a-tree-from-preorder-traversal/solution/cong-xian-xu-bian-li-huan-yuan-er-cha-shu-by-leetc/" %}
 
 ## 54 Spiral Matrix 35.2% Medium
+
+由外层向内层顺时针螺旋打印数组
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#54-spiral-matrix" %}
 
@@ -2148,6 +2238,8 @@ kv.get("foo", 5); //output "bar2"
 
 ## 113 Path Sum II 48.3% Medium
 
+返回所有符合条件的路径
+
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#113-path-sum-ii" %}
 
 ## 121 Best Time to Buy and Sell Stock 51.2% Easy
@@ -2180,13 +2272,15 @@ Recall that a graph is bipartite if we can split its set of nodes into two indep
 
 ## 713 Subarray Product Less Than K 40.3% Medium
 
-找出整数数组中乘积小于k的所有子数组
+找出正整数数组中乘积小于k的所有子数组
 
 二分或双指针
 
 {% embed url="https://leetcode-cn.com/problems/subarray-product-less-than-k/solution/cheng-ji-xiao-yu-kde-zi-shu-zu-by-leetcode/" %}
 
 ## 279 Perfect Squares 48.4% Medium
+
+给一个正整数，求最少由几个完全平方数组成，考察[四平方和定理](https://zh.wikipedia.org/wiki/%E5%9B%9B%E5%B9%B3%E6%96%B9%E5%92%8C%E5%AE%9A%E7%90%86)（没听说过）
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#279-perfect-squares" %}
 
@@ -2250,11 +2344,13 @@ class Solution {
 
 ## 633 Sum of Square Numbers 32.4% Medium
 
-平方数之和， 给定一个非负整数 `c` ，判断是否存在两个整数 `a` 和 `b`，使得 `a2 + b2 = c` 
+平方数之和， 给定一个非负整数 `c` ，判断是否存在两个整数 `a` 和 `b`，使得 `a^2 + b^2 = c` 
 
 {% embed url="https://leetcode-cn.com/problems/sum-of-square-numbers/solution/ping-fang-shu-zhi-he-by-leetcode/" %}
 
 ## 946 Validate Stack Sequences 63.3% Medium
+
+验证栈序列，给定 pushed 和 popped 两个序列，每个序列中的 值都不重复，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop 操作序列的结果时，返回 true；否则，返回 false 。
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#946-validate-stack-sequence" %}
 
@@ -2274,7 +2370,7 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 ## 1644 Lowest Common Ancestor of a Binary Tree II 58.0% Medium $
 
-树结点自己可作为自己的后裔。
+树结点自己可作为自己的后裔，236则是严格找上面的祖先。
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#1644-lowest-common-ancestor-of-a-binary-tree-ii-usd" %}
 
@@ -2282,7 +2378,5 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 树结点上有parent索引指向父结点
 
-{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#1650-lowest-common-ancestor-of-a-binary-tree-iii" %}
-
-
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#1650-lowest-common-ancestor-of-a-binary-tree-iii-usd" %}
 
