@@ -2956,6 +2956,12 @@ Please note that we locate `targetNode` in `buildParentMap`.
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#316-remove-duplicate-letters" %}
 
+## 518 Coin Change 2
+
+322是求出最少的硬币数，这道把所有组合的个数算出来，硬币都可无限用。
+
+{% embed url="https://leetcode-cn.com/problems/coin-change-2/solution/dong-tai-gui-hua-wan-quan-bei-bao-wen-ti-by-liweiw/" %}
+
 ## Extra: Merge Two Sorted Interval Lists
 
 样例1 输入: \[\(1,2\),\(3,4\)\] and list2 = \[\(2,3\),\(5,6\)\] 输出: \[\(1,4\),\(5,6\)\] 解释: \(1,2\),\(2,3\),\(3,4\) --&gt; \(1,4\) \(5,6\) --&gt; \(5,6\) 样例2 输入: \[\(1,2\),\(3,4\)\] 和 list2 = \[\(4,5\),\(6,7\)\] 输出: \[\(1,2\),\(3,5\),\(6,7\)\] 解释: \(1,2\) --&gt; \(1,2\) \(3,4\),\(4,5\) --&gt; \(3,5\) \(6,7\) --&gt; \(6,7\)
