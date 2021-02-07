@@ -70,10 +70,10 @@ class Solution {
 ```java
 class Solution {
     public int maxProfit(int[] prices) {
-        int minBuy = Integer.MAX_VALUE, maxProfit = 0;
+        int minPriceStock = Integer.MAX_VALUE, maxProfit = 0;
         for (int price : prices) {
-            minBuy = Math.min(minBuy, price);//找到子问题中最小的buy的价格
-            maxProfit = Math.max(maxProfit, price - minBuy);//找到最小buy价格下最大的利润
+            minPriceStock = Math.min(minPriceStock, price);//找到子问题中最小的buy的价格
+            maxProfit = Math.max(maxProfit, price - minPriceStock);//找到最小buy价格下最大的利润
         }
 
         return maxProfit;
