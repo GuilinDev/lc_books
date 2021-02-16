@@ -2414,5 +2414,13 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 [双指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-2#125-valid-palindrome)
 
+## 700 Search in a Binary Search Tree BST
+
+{% embed url="https://leetcode-cn.com/problems/search-in-a-binary-search-tree/solution/er-cha-sou-suo-shu-zhong-de-sou-suo-by-leetcode/" %}
+
+## 701 Insert into a Binary Search Tree BST
+
+{% embed url="https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/solution/di-gui-he-fei-di-gui-liang-chong-fang-shi-jie-jue-/" %}
+
 
 
