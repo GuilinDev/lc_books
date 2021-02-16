@@ -2402,5 +2402,9 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 {% embed url="https://leetcode-cn.com/problems/maximum-sum-circular-subarray/solution/java-qian-zhui-he-dan-diao-dui-lie-dai-zhu-shi-by-/" %}
 
+## 1249 Minimum Remove to Make Valid Parentheses
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#1249-minimum-remove-to-make-valid-parentheses" %}
+
 
 
