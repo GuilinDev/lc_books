@@ -2380,3 +2380,13 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#1650-lowest-common-ancestor-of-a-binary-tree-iii-usd" %}
 
+## 360 Sort Tramsformed Array
+
+有序转化数组，给你一个已经 排好序 的整数数组 nums 和整数 a、b、c。对于数组中的每一个数 x，计算函数值 f\(x\) = ax2 + bx + c，请将函数值产生的数组返回。
+
+要注意，返回的这个数组必须按照 升序排列，并且我们所期望的解法时间复杂度为 O\(n\)
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag5\#360-sort-tramsformed-array" %}
+
+
+
