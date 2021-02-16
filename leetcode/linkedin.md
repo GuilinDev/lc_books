@@ -2406,5 +2406,7 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#1249-minimum-remove-to-make-valid-parentheses" %}
 
+## 125 Valid Palindrome
 
+[双指针](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-2#125-valid-palindrome)
 
