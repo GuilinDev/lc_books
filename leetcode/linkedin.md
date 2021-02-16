@@ -1358,7 +1358,11 @@ class Solution {
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs\#200-number-of-islands" %}
 
-##  277 Find the Celebrity 42.9% Medium
+## 207 Course Schedule
+
+{% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/graph\#207-course-schedule" %}
+
+## 277 Find the Celebrity 42.9% Medium
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/graph\#277-find-the-celebrity" %}
 
