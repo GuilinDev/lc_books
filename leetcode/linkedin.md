@@ -2388,5 +2388,19 @@ size大小为 K 且平均值大于等于阈值的所有子数组数目，滑动�
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/tag5\#360-sort-tramsformed-array" %}
 
+## 918  [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray)
+
+给定一个由整数数组 A 表示的环形数组 C，求 C 的非空子数组的最大可能和。在此处，环形数组意味着数组的末端将会与开头相连呈环状。（形式上，当0 &lt;= i &lt; A.length 时 C\[i\] = A\[i\]，且当 i &gt;= 0 时 C\[i+A.length\] = C\[i\]）此外，子数组最多只能包含固定缓冲区 A 中的每个元素一次。（形式上，对于子数组 C\[i\], C\[i+1\], ..., C\[j\]，不存在 i &lt;= k1, k2 &lt;= j 其中 k1 % A.length = k2 % A.length）
+
+```text
+输入：[1,-2,3,-2]
+输出：3
+解释：从子数组 [3] 得到最大和 3
+```
+
+前缀和 + 单调队列，展开成链处理
+
+{% embed url="https://leetcode-cn.com/problems/maximum-sum-circular-subarray/solution/java-qian-zhui-he-dan-diao-dui-lie-dai-zhu-shi-by-/" %}
+
 
 
