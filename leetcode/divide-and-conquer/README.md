@@ -1578,9 +1578,11 @@ class Solution {
 }
 ```
 
-DP
+DP & Manacher
 
+{% embed url="https://leetcode-cn.com/problems/palindromic-substrings/solution/liang-dao-hui-wen-zi-chuan-de-jie-fa-xiang-jie-zho/" %}
 
+{% embed url="https://leetcode-cn.com/problems/palindromic-substrings/solution/hui-wen-zi-chuan-by-leetcode-solution/" %}
 
 ## 91 Decode Ways
 
