@@ -2053,7 +2053,7 @@ Output: [3,8,10]
 
 ## 721 Accounts Merge 50.8% Medium
 
-[根据邮件和用户名合并账户 - DFS](https://leetcode-cn.com/problems/accounts-merge/solution/zhang-hu-he-bing-by-leetcode/)
+[根据邮件和用户名合并账户 - DFS](https://leetcode-cn.com/problems/accounts-merge/solution/zhang-hu-he-bing-by-leetcode-solution-3dyq/)
 
 ## 40 Combination Sum II 49.6% Medium
 
