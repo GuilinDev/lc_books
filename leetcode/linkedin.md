@@ -1014,6 +1014,8 @@ public class AllOne {
 
 ## 341 Flatten Nested List Iterator 54.0% Medium
 
+建立压平嵌套链表的迭代器
+
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#341-flatten-nested-list-iterator" %}
 
 ## 150 Evaluate Reverse Polish Notation 37.4% Medium
