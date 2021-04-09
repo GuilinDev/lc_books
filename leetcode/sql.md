@@ -1298,31 +1298,202 @@ where grp in ( select grp from t group by grp having count(*) >=3  )
 
 ## 197 Rising Temperature
 
+Table: `Weather`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| recordDate    | date    |
+| temperature   | int     |
++---------------+---------+
+id is the primary key for this table.
+This table contains information about the temperature in a certain day.
+```
+
+Write an SQL query to find all dates' `id` with higher temperature compared to its previous dates \(yesterday\).
+
+Return the result table in **any order**.
+
+The query result format is in the following example:
+
+```text
+Weather
++----+------------+-------------+
+| id | recordDate | Temperature |
++----+------------+-------------+
+| 1  | 2015-01-01 | 10          |
+| 2  | 2015-01-02 | 25          |
+| 3  | 2015-01-03 | 20          |
+| 4  | 2015-01-04 | 30          |
++----+------------+-------------+
+
+Result table:
++----+
+| id |
++----+
+| 2  |
+| 4  |
++----+
+In 2015-01-02, temperature was higher than the previous day (10 -> 25).
+In 2015-01-04, temperature was higher than the previous day (20 -> 30).
+```
+
 ### Schema
 
-
+```sql
+Create table If Not Exists Weather (Id int, RecordDate date, Temperature int)
+Truncate table Weather
+insert into Weather (Id, RecordDate, Temperature) values ('1', '2015-01-01', '10')
+insert into Weather (Id, RecordDate, Temperature) values ('2', '2015-01-02', '25')
+insert into Weather (Id, RecordDate, Temperature) values ('3', '2015-01-03', '20')
+insert into Weather (Id, RecordDate, Temperature) values ('4', '2015-01-04', '30')
+```
 
 ### Solution
 
+TO\_DAYS\(\)
 
+```sql
+# Write your MySQL query statement below
+Select w_cur.ID From weather w_cur, weather w_prev 
+Where w_cur.temperature > w_prev.temperature And
+    TO_DAYS(w_cur.recordDate ) - TO_DAYS(w_prev.recordDate) = 1
+```
 
 ## 1517 Find Users with Valid E-Mails
 
+Table: `Users`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| name          | varchar |
+| mail          | varchar |
++---------------+---------+
+user_id is the primary key for this table.
+This table contains information of the users signed up in a website. Some e-mails are invalid.
+```
+
+Write an SQL query to find the users who have **valid emails**.
+
+A valid e-mail has a prefix name and a domain where: 
+
+* **The prefix name** is a string that may contain letters \(upper or lower case\), digits, underscore `'_'`, period `'.'` and/or dash `'-'`. The prefix name **must** start with a letter.
+* **The domain** is `'@leetcode.com'`.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+```text
+Users
++---------+-----------+-------------------------+
+| user_id | name      | mail                    |
++---------+-----------+-------------------------+
+| 1       | Winston   | winston@leetcode.com    |
+| 2       | Jonathan  | jonathanisgreat         |
+| 3       | Annabelle | bella-@leetcode.com     |
+| 4       | Sally     | sally.come@leetcode.com |
+| 5       | Marwan    | quarz#2020@leetcode.com |
+| 6       | David     | david69@gmail.com       |
+| 7       | Shapiro   | .shapo@leetcode.com     |
++---------+-----------+-------------------------+
+
+Result table:
++---------+-----------+-------------------------+
+| user_id | name      | mail                    |
++---------+-----------+-------------------------+
+| 1       | Winston   | winston@leetcode.com    |
+| 3       | Annabelle | bella-@leetcode.com     |
+| 4       | Sally     | sally.come@leetcode.com |
++---------+-----------+-------------------------+
+The mail of user 2 doesn't have a domain.
+The mail of user 5 has # sign which is not allowed.
+The mail of user 6 doesn't have leetcode domain.
+The mail of user 7 starts with a period.
+```
+
 ### Schema
 
-
+```sql
+Create table If Not Exists Users (user_id int, name varchar(30), mail varchar(50))
+Truncate table Users
+insert into Users (user_id, name, mail) values ('1', 'Winston', 'winston@leetcode.com')
+insert into Users (user_id, name, mail) values ('2', 'Jonathan', 'jonathanisgreat')
+insert into Users (user_id, name, mail) values ('3', 'Annabelle', 'bella-@leetcode.com')
+insert into Users (user_id, name, mail) values ('4', 'Sally', 'sally.come@leetcode.com')
+insert into Users (user_id, name, mail) values ('5', 'Marwan', 'quarz#2020@leetcode.com')
+insert into Users (user_id, name, mail) values ('6', 'David', 'david69@gmail.com')
+insert into Users (user_id, name, mail) values ('7', 'Shapiro', '.shapo@leetcode.com')
+```
 
 ### Solution
 
+```sql
 
+```
 
 ## 183 Customers Who Never Order
 
+Suppose that a website contains two tables, the `Customers` table and the `Orders` table. Write a SQL query to find all customers who never order anything.
+
+Table: `Customers`.
+
+```text
++----+-------+
+| Id | Name  |
++----+-------+
+| 1  | Joe   |
+| 2  | Henry |
+| 3  | Sam   |
+| 4  | Max   |
++----+-------+
+```
+
+Table: `Orders`.
+
+```text
++----+------------+
+| Id | CustomerId |
++----+------------+
+| 1  | 3          |
+| 2  | 1          |
++----+------------+
+```
+
+Using the above tables as example, return the following:
+
+```text
++-----------+
+| Customers |
++-----------+
+| Henry     |
+| Max       |
++-----------+
+```
+
 ### Schema
 
-
+```sql
+Create table If Not Exists Customers (Id int, Name varchar(255))
+Create table If Not Exists Orders (Id int, CustomerId int)
+Truncate table Customers
+insert into Customers (Id, Name) values ('1', 'Joe')
+insert into Customers (Id, Name) values ('2', 'Henry')
+insert into Customers (Id, Name) values ('3', 'Sam')
+insert into Customers (Id, Name) values ('4', 'Max')
+Truncate table Orders
+insert into Orders (Id, CustomerId) values ('1', '3')
+insert into Orders (Id, CustomerId) values ('2', '1')
+```
 
 ### Solution
 
+```sql
 
+```
 
