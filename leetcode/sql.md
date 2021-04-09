@@ -1434,7 +1434,8 @@ insert into Users (user_id, name, mail) values ('7', 'Shapiro', '.shapo@leetcode
 ### Solution
 
 ```sql
-
+select * from Users 
+where regexp_like(mail, '^[A-Za-z]+[A-Za-z0-9\_\.\-]*@leetcode.com')
 ```
 
 ## 183 Customers Who Never Order
