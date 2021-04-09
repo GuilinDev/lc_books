@@ -725,6 +725,8 @@ insert into salary (id, name, sex, salary) values ('4', 'D', 'f', '500')
 
 ### Solution
 
+Case When
+
 ```sql
 # Write your MySQL query statement below
 Update Salary
@@ -734,11 +736,11 @@ Update Salary
               End)
 ```
 
-简化
+IF函数
 
 ```sql
 Update Salary
-    Set sex = IF (sex = 'm', 'f', 'm')
+    Set sex = IF(sex = 'm', 'f', 'm')
 ```
 
 ## 196 Delete Duplicate Emails
@@ -790,4 +792,429 @@ Delete from Person Where Id not in (
     ) tmp
 )
 ```
+
+## 610 Triangle Judgement
+
+ A pupil Tim gets homework to identify whether three line segments could possibly form a triangle.
+
+ However, this assignment is very heavy because there are hundreds of records to calculate.
+
+ Could you help Tim by writing a query to judge whether these three sides can form a triangle, assuming table `triangle` holds the length of the three sides x, y and z.
+
+```text
+| x  | y  | z  |
+|----|----|----|
+| 13 | 15 | 30 |
+| 10 | 20 | 15 |
+```
+
+For the sample data above, your query should return the follow result:
+
+```text
+| x  | y  | z  | triangle |
+|----|----|----|----------|
+| 13 | 15 | 30 | No       |
+| 10 | 20 | 15 | Yes      |
+```
+
+### Schema
+
+```sql
+Create table If Not Exists triangle (x int, y int, z int)
+Truncate table triangle
+insert into triangle (x, y, z) values ('13', '15', '30')
+insert into triangle (x, y, z) values ('10', '20', '15')
+```
+
+### Solution
+
+Case When
+
+```sql
+# Write your MySQL query statement below
+Select *, 
+    Case When
+        x + y > z and
+        x + z > y and
+        y + z > z
+    Then 'Yes'
+    Else 'No'
+    End As 'Triangle'
+From Triangle
+```
+
+IF函数
+
+```sql
+# Write your MySQL query statement below
+Select *, IF(x + y > z and x + z > y and y + z > x, 'Yes', 'No') as 'triangle'
+From triangle
+```
+
+## 626 Exchange Seats
+
+Mary is a teacher in a middle school and she has a table `seat` storing students' names and their corresponding seat ids.
+
+The column **id** is continuous increment.
+
+Mary wants to change seats for the adjacent students.
+
+Can you write a SQL query to output the result for Mary?
+
+```text
++---------+---------+
+|    id   | student |
++---------+---------+
+|    1    | Abbot   |
+|    2    | Doris   |
+|    3    | Emerson |
+|    4    | Green   |
+|    5    | Jeames  |
++---------+---------+
+```
+
+For the sample input, the output is:
+
+```text
++---------+---------+
+|    id   | student |
++---------+---------+
+|    1    | Doris   |
+|    2    | Abbot   |
+|    3    | Green   |
+|    4    | Emerson |
+|    5    | Jeames  |
++---------+---------+
+```
+
+**Note:**
+
+If the number of students is odd, there is no need to change the last one's seat.
+
+### Schema
+
+```sql
+Create table If Not Exists seat(id int, student varchar(255))
+Truncate table seat
+insert into seat (id, student) values ('1', 'Abbot')
+insert into seat (id, student) values ('2', 'Doris')
+insert into seat (id, student) values ('3', 'Emerson')
+insert into seat (id, student) values ('4', 'Green')
+insert into seat (id, student) values ('5', 'Jeames')
+```
+
+### Solution
+
+Case When
+
+```sql
+# Write your MySQL query statement below
+SELECT
+	CASE
+		WHEN seat.id % 2 <> 0 AND seat.id = (SELECT COUNT(*) FROM seat) THEN seat.id
+		WHEN seat.id % 2 = 0 THEN seat.id - 1
+		ELSE
+			seat.id + 1
+	END as id,
+	student 
+FROM seat
+ORDER BY id
+;
+```
+
+IF函数
+
+```sql
+# Write your MySQL query statement below
+Select
+IF(id < (Select count(*) from seat), IF(id mod 2 = 0, id - 1, id + 1), if(id mod 2 = 0, id - 1, id)) as id, student
+From seat
+Order by id Asc;
+```
+
+## 1179 Reformat Department Table
+
+Table: `Department`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| revenue       | int     |
+| month         | varchar |
++---------------+---------+
+(id, month) is the primary key of this table.
+The table has information about the revenue of each department per month.
+The month has values in ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].
+```
+
+Write an SQL query to reformat the table such that there is a department id column and a revenue column **for each month**.
+
+The query result format is in the following example:
+
+```text
+Department table:
++------+---------+-------+
+| id   | revenue | month |
++------+---------+-------+
+| 1    | 8000    | Jan   |
+| 2    | 9000    | Jan   |
+| 3    | 10000   | Feb   |
+| 1    | 7000    | Feb   |
+| 1    | 6000    | Mar   |
++------+---------+-------+
+
+Result table:
++------+-------------+-------------+-------------+-----+-------------+
+| id   | Jan_Revenue | Feb_Revenue | Mar_Revenue | ... | Dec_Revenue |
++------+-------------+-------------+-------------+-----+-------------+
+| 1    | 8000        | 7000        | 6000        | ... | null        |
+| 2    | 9000        | null        | null        | ... | null        |
+| 3    | null        | 10000       | null        | ... | null        |
++------+-------------+-------------+-------------+-----+-------------+
+
+Note that the result table has 13 columns (1 for the department id + 12 for the months).
+```
+
+### Schema
+
+```sql
+Create table If Not Exists Department (id int, revenue int, month varchar(5))
+Truncate table Department
+insert into Department (id, revenue, month) values ('1', '8000', 'Jan')
+insert into Department (id, revenue, month) values ('2', '9000', 'Jan')
+insert into Department (id, revenue, month) values ('3', '10000', 'Feb')
+insert into Department (id, revenue, month) values ('1', '7000', 'Feb')
+insert into Department (id, revenue, month) values ('1', '6000', 'Mar')
+```
+
+### Solution
+
+```sql
+# Write your MySQL query statement below
+select id, 
+	sum(case when month = 'jan' then revenue else null end) as Jan_Revenue,
+	sum(case when month = 'feb' then revenue else null end) as Feb_Revenue,
+	sum(case when month = 'mar' then revenue else null end) as Mar_Revenue,
+	sum(case when month = 'apr' then revenue else null end) as Apr_Revenue,
+	sum(case when month = 'may' then revenue else null end) as May_Revenue,
+	sum(case when month = 'jun' then revenue else null end) as Jun_Revenue,
+	sum(case when month = 'jul' then revenue else null end) as Jul_Revenue,
+	sum(case when month = 'aug' then revenue else null end) as Aug_Revenue,
+	sum(case when month = 'sep' then revenue else null end) as Sep_Revenue,
+	sum(case when month = 'oct' then revenue else null end) as Oct_Revenue,
+	sum(case when month = 'nov' then revenue else null end) as Nov_Revenue,
+	sum(case when month = 'dec' then revenue else null end) as Dec_Revenue
+from department
+group by id
+order by id
+```
+
+## 1412 Find the Quiet Students in All Exams
+
+Table: `Student`
+
+```text
++---------------------+---------+
+| Column Name         | Type    |
++---------------------+---------+
+| student_id          | int     |
+| student_name        | varchar |
++---------------------+---------+
+student_id is the primary key for this table.
+student_name is the name of the student.
+```
+
+Table: `Exam`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| exam_id       | int     |
+| student_id    | int     |
+| score         | int     |
++---------------+---------+
+(exam_id, student_id) is the primary key for this table.
+Student with student_id got score points in exam with id exam_id.
+```
+
+A "quite" student is the one who took at least one exam and didn't score neither the high score nor the low score.
+
+Write an SQL query to report the students \(student\_id, student\_name\) being "quiet" in **ALL** exams.
+
+Don't return the student who has never taken any exam. Return the result table **ordered** by student\_id.
+
+The query result format is in the following example.
+
+```text
+Student table:
++-------------+---------------+
+| student_id  | student_name  |
++-------------+---------------+
+| 1           | Daniel        |
+| 2           | Jade          |
+| 3           | Stella        |
+| 4           | Jonathan      |
+| 5           | Will          |
++-------------+---------------+
+
+Exam table:
++------------+--------------+-----------+
+| exam_id    | student_id   | score     |
++------------+--------------+-----------+
+| 10         |     1        |    70     |
+| 10         |     2        |    80     |
+| 10         |     3        |    90     |
+| 20         |     1        |    80     |
+| 30         |     1        |    70     |
+| 30         |     3        |    80     |
+| 30         |     4        |    90     |
+| 40         |     1        |    60     |
+| 40         |     2        |    70     |
+| 40         |     4        |    80     |
++------------+--------------+-----------+
+
+Result table:
++-------------+---------------+
+| student_id  | student_name  |
++-------------+---------------+
+| 2           | Jade          |
++-------------+---------------+
+
+For exam 1: Student 1 and 3 hold the lowest and high score respectively.
+For exam 2: Student 1 hold both highest and lowest score.
+For exam 3 and 4: Studnet 1 and 4 hold the lowest and high score respectively.
+Student 2 and 5 have never got the highest or lowest in any of the exam.
+Since student 5 is not taking any exam, he is excluded from the result.
+So, we only return the information of Student 2.
+```
+
+### Schema
+
+```sql
+Create table If Not Exists Student (student_id int, student_name varchar(30))
+Create table If Not Exists Exam (exam_id int, student_id int, score int)
+Truncate table Student
+insert into Student (student_id, student_name) values ('1', 'Daniel')
+insert into Student (student_id, student_name) values ('2', 'Jade')
+insert into Student (student_id, student_name) values ('3', 'Stella')
+insert into Student (student_id, student_name) values ('4', 'Jonathan')
+insert into Student (student_id, student_name) values ('5', 'Will')
+Truncate table Exam
+insert into Exam (exam_id, student_id, score) values ('10', '1', '70')
+insert into Exam (exam_id, student_id, score) values ('10', '2', '80')
+insert into Exam (exam_id, student_id, score) values ('10', '3', '90')
+insert into Exam (exam_id, student_id, score) values ('20', '1', '80')
+insert into Exam (exam_id, student_id, score) values ('30', '1', '70')
+insert into Exam (exam_id, student_id, score) values ('30', '3', '80')
+insert into Exam (exam_id, student_id, score) values ('30', '4', '90')
+insert into Exam (exam_id, student_id, score) values ('40', '1', '60')
+insert into Exam (exam_id, student_id, score) values ('40', '2', '70')
+insert into Exam (exam_id, student_id, score) values ('40', '4', '80')
+```
+
+### Solution
+
+```sql
+# Write your MySQL query statement below
+WITH cte AS(
+    SELECT exam_id, exam.student_id, student_name, score, RANK() OVER(PARTITION BY exam_id ORDER BY score) rk1, RANK() OVER(PARTITION BY exam_id ORDER BY score DESC) rk2 
+    FROM exam LEFT JOIN student
+    ON exam.student_id = student.student_id
+)
+
+SELECT DISTINCT student_id, student_name
+FROM cte
+WHERE student_id NOT IN (SELECT student_id FROM cte WHERE rk1 = 1 or rk2 = 1)
+ORDER BY student_id
+```
+
+## 180 Consecutive Numbers
+
+Table: `Logs`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| num         | varchar |
++-------------+---------+
+id is the primary key for this table.
+```
+
+Write an SQL query to find all numbers that appear at least three times consecutively.
+
+Return the result table in **any order**.
+
+The query result format is in the following example:
+
+```text
+Logs table:
++----+-----+
+| Id | Num |
++----+-----+
+| 1  | 1   |
+| 2  | 1   |
+| 3  | 1   |
+| 4  | 2   |
+| 5  | 1   |
+| 6  | 2   |
+| 7  | 2   |
++----+-----+
+
+Result table:
++-----------------+
+| ConsecutiveNums |
++-----------------+
+| 1               |
++-----------------+
+1 is the only number that appears consecutively for at least three times.
+```
+
+### Schema
+
+```sql
+Create table If Not Exists Logs (Id int, Num int)
+Truncate table Logs
+insert into Logs (Id, Num) values ('1', '1')
+insert into Logs (Id, Num) values ('2', '1')
+insert into Logs (Id, Num) values ('3', '1')
+insert into Logs (Id, Num) values ('4', '2')
+insert into Logs (Id, Num) values ('5', '1')
+insert into Logs (Id, Num) values ('6', '2')
+insert into Logs (Id, Num) values ('7', '2')
+```
+
+### Solution
+
+```sql
+
+```
+
+## 601 Human Traffic of Stadiums
+
+### Schema
+
+### Solution
+
+## 197 Rising Temperature
+
+### Schema
+
+### Solution
+
+## 1517 Find Users with Valid E-Mails
+
+### Schema
+
+### Solution
+
+## 183 Customers Who Never Order
+
+### Schema
+
+### Solution
 
