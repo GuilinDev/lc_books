@@ -1495,6 +1495,18 @@ insert into Orders (Id, CustomerId) values ('2', '1')
 ### Solution
 
 ```sql
+SELECT A.Name as 'Customers' from Customers A
+WHERE NOT EXISTS (SELECT 1 FROM Orders B WHERE A.Id = B.CustomerId)
+```
 
+```sql
+SELECT A.Name as 'Customers' from Customers A
+WHERE A.Id NOT IN (SELECT B.CustomerId from Orders B)
+```
+
+```sql
+SELECT A.Name as 'Customers' from Customers A
+LEFT JOIN Orders B on  a.Id = B.CustomerId
+WHERE b.CustomerId is NULL
 ```
 
