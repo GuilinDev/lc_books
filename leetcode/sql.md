@@ -1510,3 +1510,279 @@ LEFT JOIN Orders B on  a.Id = B.CustomerId
 WHERE b.CustomerId is NULL
 ```
 
+## 1757 Recyclable and Low Fat Products
+
+Table: `Products`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| product_id  | int     |
+| low_fats    | enum    |
+| recyclable  | enum    |
++-------------+---------+
+product_id is the primary key for this table.
+low_fats is an ENUM of type ('Y', 'N') where 'Y' means this product is low fat and 'N' means it is not.
+recyclable is an ENUM of types ('Y', 'N') where 'Y' means this product is recyclable and 'N' means it is not.
+```
+
+Write an SQL query to find the ids of products that are both low fat and recyclable.
+
+Return the result table in **any order**.
+
+The query result format is in the following example:
+
+```text
+Products table:
++-------------+----------+------------+
+| product_id  | low_fats | recyclable |
++-------------+----------+------------+
+| 0           | Y        | N          |
+| 1           | Y        | Y          |
+| 2           | N        | Y          |
+| 3           | Y        | Y          |
+| 4           | N        | N          |
++-------------+----------+------------+
+Result table:
++-------------+
+| product_id  |
++-------------+
+| 1           |
+| 3           |
++-------------+
+Only products 1 and 3 are both low fat and recyclable.
+```
+
+### Schema
+
+```sql
+Create table If Not Exists Products (product_id int, low_fats ENUM('Y', 'N'), recyclable ENUM('Y','N'))
+Truncate table Products
+insert into Products (product_id, low_fats, recyclable) values ('0', 'Y', 'N')
+insert into Products (product_id, low_fats, recyclable) values ('1', 'Y', 'Y')
+insert into Products (product_id, low_fats, recyclable) values ('2', 'N', 'Y')
+insert into Products (product_id, low_fats, recyclable) values ('3', 'Y', 'Y')
+insert into Products (product_id, low_fats, recyclable) values ('4', 'N', 'N')
+```
+
+### Solution
+
+```sql
+SELECT product_id FROM Products 
+WHERE low_fats = 'Y' AND recyclable = 'Y' 
+ORDER BY 1 ASC # 按Select后的第一列排序
+```
+
+## 1741 Find Total Time Spent by Each Employee
+
+### Schema
+
+### Solution
+
+## 1683 Invalid Tweets
+
+### Schema
+
+### Solution
+
+## 1693 Daily Leads and Partners
+
+### Schema
+
+### Solution
+
+### 
+
+## 1795 Rearrange Products Table
+
+### Schema
+
+### Solution
+
+## 1350 Students With Invalid Departments
+
+### Schema
+
+### Solution
+
+## 1378 Replace Employee ID With The Unique Identifier
+
+### Schema
+
+### Solution
+
+## 1571 Warehouse Manager
+
+### Schema
+
+### Solution
+
+## 1587 Bank Account Summary II
+
+### Schema
+
+### Solution
+
+##  1303 Find the Team Size
+
+### Schema
+
+### Solution
+
+## 1581 Customer Who Visited but Did Not Make Any Transactions
+
+### Schema
+
+### Solution
+
+### 
+
+## 1623 All Valid Triplets That Can Represent a Country
+
+### Schema
+
+### Solution
+
+### 
+
+## 1777 Product's Price for Each Store
+
+### Schema
+
+### Solution
+
+### 
+
+## 1484 Group Sold Products By The Date
+
+### Schema
+
+### Solution
+
+### 
+
+## 1407 Top Travellers
+
+### Schema
+
+### Solution
+
+### 
+
+## 1069 Product Sales Analysis II
+
+### Schema
+
+### Solution
+
+### 
+
+## 1565 Unique Orders and Customers Per Month
+
+### Schema
+
+### Solution
+
+### 
+
+## 1251 Average Selling Price
+
+### Schema
+
+### Solution
+
+### 
+
+## 1173 Immediate Food Delivery I
+
+### Schema
+
+### Solution
+
+### 
+
+## 1179 Reformat Department Table
+
+### Schema
+
+### Solution
+
+### 
+
+## 1068 Product Sales Analysis I
+
+### Schema
+
+### Solution
+
+### 
+
+## 511 Game Play Analysis I
+
+### Schema
+
+### Solution
+
+### 
+
+## 613 Shortest Distance in a Line
+
+### Schema
+
+### Solution
+
+### 
+
+## 1661 Average Time of Process per Machine
+
+### Schema
+
+### Solution
+
+### 
+
+## 595 Big Countries
+
+### Schema
+
+### Solution
+
+### 
+
+## 1789 Primary Department for Each Employee
+
+### Schema
+
+### Solution
+
+### 
+
+## 627 Swap Salary
+
+### Schema
+
+### Solution
+
+### 
+
+## 1435 Create a Session Bar Chart
+
+### Schema
+
+### Solution
+
+### 
+
+## 1327 List the Products Ordered in a Period
+
+### Schema
+
+### Solution
+
+### 
+
+
+
+
+
