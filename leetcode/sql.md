@@ -1576,35 +1576,381 @@ ORDER BY 1 ASC # 按Select后的第一列排序
 
 ## 1741 Find Total Time Spent by Each Employee
 
+Table: `Employees`
+
+```text
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| emp_id      | int  |
+| event_day   | date |
+| in_time     | int  |
+| out_time    | int  |
++-------------+------+
+(emp_id, event_day, in_time) is the primary key of this table.
+The table shows the employees' entries and exits in an office.
+event_day is the day at which this event happened, in_time is the minute at which the employee entered the office, and out_time is the minute at which they left the office.
+in_time and out_time are between 1 and 1440.
+It is guaranteed that no two events on the same day intersect in time, and in_time < out_time.
+```
+
+Write an SQL query to calculate the total time **in minutes** spent by each employee on each day at the office. Note that within one day, an employee can enter and leave more than once. The time spent in the office for a single entry is `out_time - in_time`.
+
+Return the result table in **any order**.
+
+The query result format is in the following example:
+
+```text
+Employees table:
++--------+------------+---------+----------+
+| emp_id | event_day  | in_time | out_time |
++--------+------------+---------+----------+
+| 1      | 2020-11-28 | 4       | 32       |
+| 1      | 2020-11-28 | 55      | 200      |
+| 1      | 2020-12-03 | 1       | 42       |
+| 2      | 2020-11-28 | 3       | 33       |
+| 2      | 2020-12-09 | 47      | 74       |
++--------+------------+---------+----------+
+Result table:
++------------+--------+------------+
+| day        | emp_id | total_time |
++------------+--------+------------+
+| 2020-11-28 | 1      | 173        |
+| 2020-11-28 | 2      | 30         |
+| 2020-12-03 | 1      | 41         |
+| 2020-12-09 | 2      | 27         |
++------------+--------+------------+
+Employee 1 has three events: two on day 2020-11-28 with a total of (32 - 4) + (200 - 55) = 173, and one on day 2020-12-03 with a total of (42 - 1) = 41.
+Employee 2 has two events: one on day 2020-11-28 with a total of (33 - 3) = 30, and one on day 2020-12-09 with a total of (74 - 47) = 27.
+```
+
 ### Schema
 
+```sql
+Create table If Not Exists Employees(emp_id int, event_day date, in_time int, out_time int)
+Truncate table Employees
+insert into Employees (emp_id, event_day, in_time, out_time) values ('1', '2020-11-28', '4', '32')
+insert into Employees (emp_id, event_day, in_time, out_time) values ('1', '2020-11-28', '55', '200')
+insert into Employees (emp_id, event_day, in_time, out_time) values ('1', '2020-12-3', '1', '42')
+insert into Employees (emp_id, event_day, in_time, out_time) values ('2', '2020-11-28', '3', '33')
+insert into Employees (emp_id, event_day, in_time, out_time) values ('2', '2020-12-9', '47', '74')
+```
+
 ### Solution
+
+```sql
+Select event_day as 'day', emp_id, Sum(out_time - in_time) As total_time
+From Employees
+# Group By 1, 2
+Group By event_day, emp_id
+```
 
 ## 1683 Invalid Tweets
 
+Table: `Tweets`
+
+```text
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| tweet_id       | int     |
+| content        | varchar |
++----------------+---------+
+tweet_id is the primary key for this table.
+This table contains all the tweets in a social media app.
+```
+
+Write an SQL query to find the IDs of the invalid tweets. The tweet is invalid if the number of characters used in the content of the tweet is **strictly greater** than `15`.
+
+Return the result table **in any order**.
+
+The query result format is in the following example:
+
+```text
+Tweets table:
++----------+----------------------------------+
+| tweet_id | content                          |
++----------+----------------------------------+
+| 1        | Vote for Biden                   |
+| 2        | Let us make America great again! |
++----------+----------------------------------+
+
+Result table:
++----------+
+| tweet_id |
++----------+
+| 2        |
++----------+
+Tweet 1 has length = 14. It is a valid tweet.
+Tweet 2 has length = 32. It is an invalid tweet.
+```
+
 ### Schema
 
+```sql
+Create table If Not Exists Tweets(tweet_id int, content varchar(50))
+Truncate table Tweets
+insert into Tweets (tweet_id, content) values ('1', 'Vote for Biden')
+insert into Tweets (tweet_id, content) values ('2', 'Let us make America great again!')
+```
+
 ### Solution
+
+```sql
+Select tweet_id From Tweets Where CHAR_LENGTH(content) > 15
+# CHAR_LENGTH() 计算有多少字符，LENGTH()计算总长，包括空格
+```
 
 ## 1693 Daily Leads and Partners
 
+Table: `DailySales`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| date_id     | date    |
+| make_name   | varchar |
+| lead_id     | int     |
+| partner_id  | int     |
++-------------+---------+
+This table does not have a primary key.
+This table contains the date and the name of the product sold and the IDs of the lead and partner it was sold to.
+The name consists of only lowercase English letters.
+```
+
+Write an SQL query that will, for each `date_id` and `make_name`, return the number of **distinct** `lead_id`'s and **distinct** `partner_id`'s.
+
+Return the result table in any order.
+
+The query result format is in the following example:
+
+```text
+DailySales table:
++-----------+-----------+---------+------------+
+| date_id   | make_name | lead_id | partner_id |
++-----------+-----------+---------+------------+
+| 2020-12-8 | toyota    | 0       | 1          |
+| 2020-12-8 | toyota    | 1       | 0          |
+| 2020-12-8 | toyota    | 1       | 2          |
+| 2020-12-7 | toyota    | 0       | 2          |
+| 2020-12-7 | toyota    | 0       | 1          |
+| 2020-12-8 | honda     | 1       | 2          |
+| 2020-12-8 | honda     | 2       | 1          |
+| 2020-12-7 | honda     | 0       | 1          |
+| 2020-12-7 | honda     | 1       | 2          |
+| 2020-12-7 | honda     | 2       | 1          |
++-----------+-----------+---------+------------+
+Result table:
++-----------+-----------+--------------+-----------------+
+| date_id   | make_name | unique_leads | unique_partners |
++-----------+-----------+--------------+-----------------+
+| 2020-12-8 | toyota    | 2            | 3               |
+| 2020-12-7 | toyota    | 1            | 2               |
+| 2020-12-8 | honda     | 2            | 2               |
+| 2020-12-7 | honda     | 3            | 2               |
++-----------+-----------+--------------+-----------------+
+For 2020-12-8, toyota gets leads = [0, 1] and partners = [0, 1, 2] while honda gets leads = [1, 2] and partners = [1, 2].
+For 2020-12-7, toyota gets leads = [0] and partners = [1, 2] while honda gets leads = [0, 1, 2] and partners = [1, 2].
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists DailySales(date_id date, make_name varchar(20), lead_id int, partner_id int)
+Truncate table DailySales
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'toyota', '0', '1')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'toyota', '1', '0')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'toyota', '1', '2')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'toyota', '0', '2')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'toyota', '0', '1')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'honda', '1', '2')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'honda', '2', '1')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'honda', '0', '1')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'honda', '1', '2')
+insert into DailySales (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'honda', '2', '1')
+```
 
 ### Solution
 
-### 
+```sql
+Select date_id, make_name, count(distinct(lead_id)) As unique_leads, count(distinct(partner_id)) As unique_partners
+From DailySales
+Group By 1, 2
+```
 
 ## 1795 Rearrange Products Table
 
+Table: `Products`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| product_id  | int     |
+| store1      | int     |
+| store2      | int     |
+| store3      | int     |
++-------------+---------+
+product_id is the primary key for this table.
+Each row in this table indicates the product's price in 3 different stores: store1, store2, and store3.
+If the product is not available in a store, the price will be null in that store's column.
+```
+
+Write an SQL query to rearrange the `Products` table so that each row has `(product_id, store, price)`. If a product is not available in a store, do **not** include a row with that `product_id` and `store` combination in the result table.
+
+Return the result table in **any order**.
+
+The query result format is in the following example:
+
+```text
+Products table:
++------------+--------+--------+--------+
+| product_id | store1 | store2 | store3 |
++------------+--------+--------+--------+
+| 0          | 95     | 100    | 105    |
+| 1          | 70     | null   | 80     |
++------------+--------+--------+--------+
+
+Result table:
++------------+--------+-------+
+| product_id | store  | price |
++------------+--------+-------+
+| 0          | store1 | 95    |
+| 0          | store2 | 100   |
+| 0          | store3 | 105   |
+| 1          | store1 | 70    |
+| 1          | store3 | 80    |
++------------+--------+-------+
+
+Product 0 is available in all three stores with prices 95, 100, and 105 respectively.
+Product 1 is available in store1 with price 70 and store3 with price 80. The product is not available in store2.
+```
+
 ### Schema
 
+```sql
+Create table If Not Exists Products (product_id int, store1 int, store2 int, store3 int)
+Truncate table Products
+insert into Products (product_id, store1, store2, store3) values ('0', '95', '100', '105')
+insert into Products (product_id, store1, store2, store3) values ('1', '70', 'None', '80')
+```
+
 ### Solution
+
+考察Union或Union All的用法，后者可以列出重复值
+
+```sql
+SELECT product_id, 'store1' AS store, store1 AS price FROM Products WHERE store1 IS NOT NULL
+UNION 
+SELECT product_id, 'store2' AS store, store2 AS price FROM Products WHERE store2 IS NOT NULL
+UNION 
+SELECT product_id, 'store3' AS store, store3 AS price FROM Products WHERE store3 IS NOT NULL
+
+ORDER BY 1,2 ASC
+```
 
 ## 1350 Students With Invalid Departments
 
+Table: `Departments`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| name          | varchar |
++---------------+---------+
+id is the primary key of this table.
+The table has information about the id of each department of a university.
+```
+
+Table: `Students`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| name          | varchar |
+| department_id | int     |
++---------------+---------+
+id is the primary key of this table.
+The table has information about the id of each student at a university and the id of the department he/she studies at.
+```
+
+Write an SQL query to find the id and the name of all students who are enrolled in departments that no longer exists.
+
+Return the result table in any order.
+
+The query result format is in the following example:
+
+```text
+Departments table:
++------+--------------------------+
+| id   | name                     |
++------+--------------------------+
+| 1    | Electrical Engineering   |
+| 7    | Computer Engineering     |
+| 13   | Bussiness Administration |
++------+--------------------------+
+
+Students table:
++------+----------+---------------+
+| id   | name     | department_id |
++------+----------+---------------+
+| 23   | Alice    | 1             |
+| 1    | Bob      | 7             |
+| 5    | Jennifer | 13            |
+| 2    | John     | 14            |
+| 4    | Jasmine  | 77            |
+| 3    | Steve    | 74            |
+| 6    | Luis     | 1             |
+| 8    | Jonathan | 7             |
+| 7    | Daiana   | 33            |
+| 11   | Madelynn | 1             |
++------+----------+---------------+
+
+Result table:
++------+----------+
+| id   | name     |
++------+----------+
+| 2    | John     |
+| 7    | Daiana   |
+| 4    | Jasmine  |
+| 3    | Steve    |
++------+----------+
+
+John, Daiana, Steve and Jasmine are enrolled in departments 14, 33, 74 and 77 respectively. department 14, 33, 74 and 77 doesn't exist in the Departments table.
+```
+
 ### Schema
 
+```sql
+Create table If Not Exists Departments (id int, name varchar(30))
+Create table If Not Exists Students (id int, name varchar(30), department_id int)
+Truncate table Departments
+insert into Departments (id, name) values ('1', 'Electrical Engineering')
+insert into Departments (id, name) values ('7', 'Computer Engineering')
+insert into Departments (id, name) values ('13', 'Bussiness Administration')
+Truncate table Students
+insert into Students (id, name, department_id) values ('23', 'Alice', '1')
+insert into Students (id, name, department_id) values ('1', 'Bob', '7')
+insert into Students (id, name, department_id) values ('5', 'Jennifer', '13')
+insert into Students (id, name, department_id) values ('2', 'John', '14')
+insert into Students (id, name, department_id) values ('4', 'Jasmine', '77')
+insert into Students (id, name, department_id) values ('3', 'Steve', '74')
+insert into Students (id, name, department_id) values ('6', 'Luis', '1')
+insert into Students (id, name, department_id) values ('8', 'Jonathan', '7')
+insert into Students (id, name, department_id) values ('7', 'Daiana', '33')
+insert into Students (id, name, department_id) values ('11', 'Madelynn', '1')
+```
+
 ### Solution
+
+```sql
+
+```
 
 ## 1378 Replace Employee ID With The Unique Identifier
 
