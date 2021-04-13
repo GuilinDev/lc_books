@@ -1948,33 +1948,433 @@ insert into Students (id, name, department_id) values ('11', 'Madelynn', '1')
 
 ### Solution
 
-```sql
+sub query
 
+```sql
+Select id, name From Students
+Where department_id not in (Select id from Departments)
+```
+
+outer join，这里的右表是Students
+
+```sql
+SELECT s.id, s.name FROM Departments d
+RIGHT JOIN Students s
+ON d.id = s.department_id
+WHERE d.id IS NULL
 ```
 
 ## 1378 Replace Employee ID With The Unique Identifier
 
+Table: `Employees`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| name          | varchar |
++---------------+---------+
+id is the primary key for this table.
+Each row of this table contains the id and the name of an employee in a company.
+```
+
+Table: `EmployeeUNI`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| unique_id     | int     |
++---------------+---------+
+(id, unique_id) is the primary key for this table.
+Each row of this table contains the id and the corresponding unique id of an employee in the company.
+```
+
+Write an SQL query to show the **unique ID** of each user, If a user doesn't have a unique ID replace just show null.
+
+Return the result table in **any** order.
+
+The query result format is in the following example:
+
+```text
+Employees table:
++----+----------+
+| id | name     |
++----+----------+
+| 1  | Alice    |
+| 7  | Bob      |
+| 11 | Meir     |
+| 90 | Winston  |
+| 3  | Jonathan |
++----+----------+
+
+EmployeeUNI table:
++----+-----------+
+| id | unique_id |
++----+-----------+
+| 3  | 1         |
+| 11 | 2         |
+| 90 | 3         |
++----+-----------+
+
+Result table:
++-----------+----------+
+| unique_id | name     |
++-----------+----------+
+| null      | Alice    |
+| null      | Bob      |
+| 2         | Meir     |
+| 3         | Winston  |
+| 1         | Jonathan |
++-----------+----------+
+
+Alice and Bob don't have a unique ID, We will show null instead.
+The unique ID of Meir is 2.
+The unique ID of Winston is 3.
+The unique ID of Jonathan is 1.
+```
+
 ### Schema
 
+```sql
+Create table If Not Exists Employees (id int, name varchar(20))
+Create table If Not Exists EmployeeUNI (id int, unique_id int)
+Truncate table Employees
+insert into Employees (id, name) values ('1', 'Alice')
+insert into Employees (id, name) values ('7', 'Bob')
+insert into Employees (id, name) values ('11', 'Meir')
+insert into Employees (id, name) values ('90', 'Winston')
+insert into Employees (id, name) values ('3', 'Jonathan')
+Truncate table EmployeeUNI
+insert into EmployeeUNI (id, unique_id) values ('3', '1')
+insert into EmployeeUNI (id, unique_id) values ('11', '2')
+insert into EmployeeUNI (id, unique_id) values ('90', '3')
+```
+
 ### Solution
+
+左表是Employees，没有记录得时候用Null补齐
+
+```sql
+Select empU.unique_id, emp.name
+From Employees emp
+Left Join EmployeeUNI empU
+On emp.id = empU.id
+```
 
 ## 1571 Warehouse Manager
 
+Table: `Warehouse`
+
+```text
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| name         | varchar |
+| product_id   | int     |
+| units        | int     |
++--------------+---------+
+(name, product_id) is the primary key for this table.
+Each row of this table contains the information of the products in each warehouse.
+```
+
+Table: `Products`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| product_name  | varchar |
+| Width         | int     |
+| Length        | int     |
+| Height        | int     |
++---------------+---------+
+product_id is the primary key for this table.
+Each row of this table contains the information about the product dimensions (Width, Lenght and Height) in feets of each product.
+```
+
+Write an SQL query to report, How much cubic feet of **volume** does the inventory occupy in each warehouse.
+
+* warehouse\_name
+* volume
+
+Return the result table in **any** order.
+
+The query result format is in the following example.
+
+```text
+Warehouse table:
++------------+--------------+-------------+
+| name       | product_id   | units       |
++------------+--------------+-------------+
+| LCHouse1   | 1            | 1           |
+| LCHouse1   | 2            | 10          |
+| LCHouse1   | 3            | 5           |
+| LCHouse2   | 1            | 2           |
+| LCHouse2   | 2            | 2           |
+| LCHouse3   | 4            | 1           |
++------------+--------------+-------------+
+
+Products table:
++------------+--------------+------------+----------+-----------+
+| product_id | product_name | Width      | Length   | Height    |
++------------+--------------+------------+----------+-----------+
+| 1          | LC-TV        | 5          | 50       | 40        |
+| 2          | LC-KeyChain  | 5          | 5        | 5         |
+| 3          | LC-Phone     | 2          | 10       | 10        |
+| 4          | LC-T-Shirt   | 4          | 10       | 20        |
++------------+--------------+------------+----------+-----------+
+
+Result table:
++----------------+------------+
+| warehouse_name | volume     | 
++----------------+------------+
+| LCHouse1       | 12250      | 
+| LCHouse2       | 20250      |
+| LCHouse3       | 800        |
++----------------+------------+
+Volume of product_id = 1 (LC-TV), 5x50x40 = 10000
+Volume of product_id = 2 (LC-KeyChain), 5x5x5 = 125 
+Volume of product_id = 3 (LC-Phone), 2x10x10 = 200
+Volume of product_id = 4 (LC-T-Shirt), 4x10x20 = 800
+LCHouse1: 1 unit of LC-TV + 10 units of LC-KeyChain + 5 units of LC-Phone.
+          Total volume: 1*10000 + 10*125  + 5*200 = 12250 cubic feet
+LCHouse2: 2 units of LC-TV + 2 units of LC-KeyChain.
+          Total volume: 2*10000 + 2*125 = 20250 cubic feet
+LCHouse3: 1 unit of LC-T-Shirt.
+          Total volume: 1*800 = 800 cubic feet.
+```
+
 ### Schema
 
+```sql
+Create table If Not Exists Warehouse (name varchar(50), product_id int, units int)
+Create table If Not Exists Products (product_id int, product_name varchar(50), Width int,Length int,Height int)
+Truncate table Warehouse
+insert into Warehouse (name, product_id, units) values ('LCHouse1', '1', '1')
+insert into Warehouse (name, product_id, units) values ('LCHouse1', '2', '10')
+insert into Warehouse (name, product_id, units) values ('LCHouse1', '3', '5')
+insert into Warehouse (name, product_id, units) values ('LCHouse2', '1', '2')
+insert into Warehouse (name, product_id, units) values ('LCHouse2', '2', '2')
+insert into Warehouse (name, product_id, units) values ('LCHouse3', '4', '1')
+Truncate table Products
+insert into Products (product_id, product_name, Width, Length, Height) values ('1', 'LC-TV', '5', '50', '40')
+insert into Products (product_id, product_name, Width, Length, Height) values ('2', 'LC-KeyChain', '5', '5', '5')
+insert into Products (product_id, product_name, Width, Length, Height) values ('3', 'LC-Phone', '2', '10', '10')
+insert into Products (product_id, product_name, Width, Length, Height) values ('4', 'LC-T-Shirt', '4', '10', '20')
+```
+
 ### Solution
+
+先计算某个产品，再计算整个仓库
+
+```sql
+Select w.name As WAREHOUSE_NAME, Sum(p.width * p.length * height * w.units) As VOLUME # 某个仓库中某个产品的总体积
+From warehouse w
+Inner Join products p
+On w.product_id = p.product_id
+Group By warehouse_name # 仓库里的所有产品体积合成一个
+```
+
+子查询先计算出一个产品
+
+```sql
+SELECT name warehouse_name, SUM(units * size) volume
+FROM Warehouse W
+LEFT JOIN
+(
+    SELECT product_id, Width * Length * Height size
+    FROM Products
+) ps
+ON W.product_id = ps.product_id
+GROUP BY name
+```
 
 ## 1587 Bank Account Summary II
 
+Table: `Users`
+
+```text
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| account      | int     |
+| name         | varchar |
++--------------+---------+
+account is the primary key for this table.
+Each row of this table contains the account number of each user in the bank.
+```
+
+Table: `Transactions`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| trans_id      | int     |
+| account       | int     |
+| amount        | int     |
+| transacted_on | date    |
++---------------+---------+
+trans_id is the primary key for this table.
+Each row of this table contains all changes made to all accounts.
+amount is positive if the user received money and negative if they transferred money.
+All accounts start with a balance 0.
+```
+
+Write an SQL query to report the name and balance of users with a balance higher than 10000. The balance of an account is equal to the sum of the amounts of all transactions involving that account.
+
+Return the result table in **any** order.
+
+The query result format is in the following example.
+
+```text
+Users table:
++------------+--------------+
+| account    | name         |
++------------+--------------+
+| 900001     | Alice        |
+| 900002     | Bob          |
+| 900003     | Charlie      |
++------------+--------------+
+
+Transactions table:
++------------+------------+------------+---------------+
+| trans_id   | account    | amount     | transacted_on |
++------------+------------+------------+---------------+
+| 1          | 900001     | 7000       |  2020-08-01   |
+| 2          | 900001     | 7000       |  2020-09-01   |
+| 3          | 900001     | -3000      |  2020-09-02   |
+| 4          | 900002     | 1000       |  2020-09-12   |
+| 5          | 900003     | 6000       |  2020-08-07   |
+| 6          | 900003     | 6000       |  2020-09-07   |
+| 7          | 900003     | -4000      |  2020-09-11   |
++------------+------------+------------+---------------+
+
+Result table:
++------------+------------+
+| name       | balance    |
++------------+------------+
+| Alice      | 11000      |
++------------+------------+
+Alice's balance is (7000 + 7000 - 3000) = 11000.
+Bob's balance is 1000.
+Charlie's balance is (6000 + 6000 - 4000) = 8000.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Users (account int, name varchar(20))
+Create table If Not Exists Transactions (trans_id int, account int, amount int, transacted_on date)
+Truncate table Users
+insert into Users (account, name) values ('900001', 'Alice')
+insert into Users (account, name) values ('900002', 'Bob')
+insert into Users (account, name) values ('900003', 'Charlie')
+Truncate table Transactions
+insert into Transactions (trans_id, account, amount, transacted_on) values ('1', '900001', '7000', '2020-08-01')
+insert into Transactions (trans_id, account, amount, transacted_on) values ('2', '900001', '7000', '2020-09-01')
+insert into Transactions (trans_id, account, amount, transacted_on) values ('3', '900001', '-3000', '2020-09-02')
+insert into Transactions (trans_id, account, amount, transacted_on) values ('4', '900002', '1000', '2020-09-12')
+insert into Transactions (trans_id, account, amount, transacted_on) values ('5', '900003', '6000', '2020-08-07')
+insert into Transactions (trans_id, account, amount, transacted_on) values ('6', '900003', '6000', '2020-09-07')
+insert into Transactions (trans_id, account, amount, transacted_on) values ('7', '900003', '-4000', '2020-09-11')
+```
 
 ### Solution
 
-##  1303 Find the Team Size
+对每个人做group，sum可以直接计算正负数
+
+```sql
+Select u.name, sum(t.amount) As balance
+From users u
+Left join transactions t
+On u.account = t.account
+Group by 1
+Having balance > 10000
+```
+
+using等同于join中的on
+
+```sql
+Select name, sum(amount) As balance
+From users
+Left join transactions
+Using(account)
+Group by account
+Having balance > 10000
+```
+
+## 1303 Find the Team Size
+
+Table: `Employee`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| employee_id   | int     |
+| team_id       | int     |
++---------------+---------+
+employee_id is the primary key for this table.
+Each row of this table contains the ID of each employee and their respective team.
+```
+
+Write an SQL query to find the team size of each of the employees.
+
+Return result table in any order.
+
+The query result format is in the following example:
+
+```text
+Employee Table:
++-------------+------------+
+| employee_id | team_id    |
++-------------+------------+
+|     1       |     8      |
+|     2       |     8      |
+|     3       |     8      |
+|     4       |     7      |
+|     5       |     9      |
+|     6       |     9      |
++-------------+------------+
+Result table:
++-------------+------------+
+| employee_id | team_size  |
++-------------+------------+
+|     1       |     3      |
+|     2       |     3      |
+|     3       |     3      |
+|     4       |     1      |
+|     5       |     2      |
+|     6       |     2      |
++-------------+------------+
+Employees with Id 1,2,3 are part of a team with team_id = 8.
+Employees with Id 4 is part of a team with team_id = 7.
+Employees with Id 5,6 are part of a team with team_id = 9.
+```
 
 ### Schema
 
+```sql
+Create table If Not Exists Employee (employee_id int, team_id int)
+Truncate table Employee
+insert into Employee (employee_id, team_id) values ('1', '8')
+insert into Employee (employee_id, team_id) values ('2', '8')
+insert into Employee (employee_id, team_id) values ('3', '8')
+insert into Employee (employee_id, team_id) values ('4', '7')
+insert into Employee (employee_id, team_id) values ('5', '9')
+insert into Employee (employee_id, team_id) values ('6', '9')
+```
+
 ### Solution
+
+```sql
+
+```
 
 ## 1581 Customer Who Visited but Did Not Make Any Transactions
 
