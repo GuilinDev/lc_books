@@ -53,7 +53,7 @@
     * [位操作基本知识](leetcode/untitled/wei-cao-zuo-ji-ben-zhi-shi.md)
   * [7. Design](leetcode/7.-design.md)
   * [8. 高级数据结构和算法](leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa.md)
-  * [SQL](leetcode/sql.md)
+  * [SQL\_1](leetcode/sql.md)
   * [Facebook](leetcode/facebook.md)
   * [Linkedin](leetcode/linkedin.md)
   * [System Design](leetcode/system-design.md)

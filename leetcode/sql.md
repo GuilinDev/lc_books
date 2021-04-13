@@ -1,4 +1,4 @@
-# SQL
+# SQL\_1
 
 ## 176 Second Highest Salary
 
@@ -2372,81 +2372,868 @@ insert into Employee (employee_id, team_id) values ('6', '9')
 
 ### Solution
 
-```sql
+[window function](https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html)
 
+```sql
+Select employee_id, count(*) over(partition by team_id) As team_size
+From employee
 ```
 
 ## 1581 Customer Who Visited but Did Not Make Any Transactions
 
+Table: `Visits`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| visit_id    | int     |
+| customer_id | int     |
++-------------+---------+
+visit_id is the primary key for this table.
+This table contains information about the customers who visited the mall.
+```
+
+Table: `Transactions`
+
+```text
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| transaction_id | int     |
+| visit_id       | int     |
+| amount         | int     |
++----------------+---------+
+transaction_id is the primary key for this table.
+This table contains information about the transactions made during the visit_id.
+```
+
+Write an SQL query to find the IDs of the users who visited without making any transactions and the number of times they made these types of visits.
+
+Return the result table sorted in **any order**.
+
+The query result format is in the following example:
+
+```text
+Visits
++----------+-------------+
+| visit_id | customer_id |
++----------+-------------+
+| 1        | 23          |
+| 2        | 9           |
+| 4        | 30          |
+| 5        | 54          |
+| 6        | 96          |
+| 7        | 54          |
+| 8        | 54          |
++----------+-------------+
+
+Transactions
++----------------+----------+--------+
+| transaction_id | visit_id | amount |
++----------------+----------+--------+
+| 2              | 5        | 310    |
+| 3              | 5        | 300    |
+| 9              | 5        | 200    |
+| 12             | 1        | 910    |
+| 13             | 2        | 970    |
++----------------+----------+--------+
+
+Result table:
++-------------+----------------+
+| customer_id | count_no_trans |
++-------------+----------------+
+| 54          | 2              |
+| 30          | 1              |
+| 96          | 1              |
++-------------+----------------+
+Customer with id = 23 visited the mall once and made one transaction during the visit with id = 12.
+Customer with id = 9 visited the mall once and made one transaction during the visit with id = 13.
+Customer with id = 30 visited the mall once and did not make any transactions.
+Customer with id = 54 visited the mall three times. During 2 visits they did not make any transactions, and during one visit they made 3 transactions.
+Customer with id = 96 visited the mall once and did not make any transactions.
+As we can see, users with IDs 30 and 96 visited the mall one time without making any transactions. Also user 54 visited the mall twice and did not make any transactions.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Visits(visit_id int, customer_id int)
+Create table If Not Exists Transactions(transaction_id int, visit_id int, amount int)
+Truncate table Visits
+insert into Visits (visit_id, customer_id) values ('1', '23')
+insert into Visits (visit_id, customer_id) values ('2', '9')
+insert into Visits (visit_id, customer_id) values ('4', '30')
+insert into Visits (visit_id, customer_id) values ('5', '54')
+insert into Visits (visit_id, customer_id) values ('6', '96')
+insert into Visits (visit_id, customer_id) values ('7', '54')
+insert into Visits (visit_id, customer_id) values ('8', '54')
+Truncate table Transactions
+insert into Transactions (transaction_id, visit_id, amount) values ('2', '5', '310')
+insert into Transactions (transaction_id, visit_id, amount) values ('3', '5', '300')
+insert into Transactions (transaction_id, visit_id, amount) values ('9', '5', '200')
+insert into Transactions (transaction_id, visit_id, amount) values ('12', '1', '910')
+insert into Transactions (transaction_id, visit_id, amount) values ('13', '2', '970')
+```
 
 ### Solution
 
-### 
+Sub query的效率不如join
+
+```sql
+SELECT customer_id, COUNT(*) as count_no_trans
+FROM Visits
+WHERE visit_id NOT IN (SELECT DISTINCT visit_id FROM Transactions)
+GROUP BY customer_id
+```
+
+join
+
+```sql
+SELECT customer_id, COUNT(Visits.visit_id) AS count_no_trans
+FROM visits
+LEFT JOIN Transactions
+ON Visits.visit_id = Transactions.visit_id
+WHERE Transactions.visit_id IS NULL
+GROUP BY customer_id
+```
 
 ## 1623 All Valid Triplets That Can Represent a Country
 
+Table: `SchoolA`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| student_id    | int     |
+| student_name  | varchar |
++---------------+---------+
+student_id is the primary key for this table.
+Each row of this table contains the name and the id of a student in school A.
+All student_name are distinct.
+```
+
+Table: `SchoolB`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| student_id    | int     |
+| student_name  | varchar |
++---------------+---------+
+student_id is the primary key for this table.
+Each row of this table contains the name and the id of a student in school B.
+All student_name are distinct.
+```
+
+Table: `SchoolC`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| student_id    | int     |
+| student_name  | varchar |
++---------------+---------+
+student_id is the primary key for this table.
+Each row of this table contains the name and the id of a student in school C.
+All student_name are distinct.
+```
+
+There is a country with three schools, where each student is enrolled in **exactly one** school. The country is joining a competition and wants to select one student from each school to represent the country such that:
+
+* `member_A` is selected from `SchoolA`,
+* `member_B` is selected from `SchoolB`,
+* `member_C` is selected from `SchoolC`, and
+* The selected students' names and IDs are pairwise distinct \(i.e. no two students share the same name, and no two students share the same ID\).
+
+Write an SQL query to find all the possible triplets representing the country under the given constraints.
+
+Return the result table in **any order**.
+
+The query result format is in the following example.
+
+```text
+SchoolA table:
++------------+--------------+
+| student_id | student_name |
++------------+--------------+
+| 1          | Alice        |
+| 2          | Bob          |
++------------+--------------+
+
+SchoolB table:
++------------+--------------+
+| student_id | student_name |
++------------+--------------+
+| 3          | Tom          |
++------------+--------------+
+
+SchoolC table:
++------------+--------------+
+| student_id | student_name |
++------------+--------------+
+| 3          | Tom          |
+| 2          | Jerry        |
+| 10         | Alice        |
++------------+--------------+
+
+Result table:
++----------+----------+----------+
+| member_A | member_B | member_C |
++----------+----------+----------+
+| Alice    | Tom      | Jerry    |
+| Bob      | Tom      | Alice    |
++----------+----------+----------+
+Let us see all the possible triplets.
+- (Alice, Tom, Tom) --> Rejected because member_B and member_C have the same name and the same ID.
+- (Alice, Tom, Jerry) --> Valid triplet.
+- (Alice, Tom, Alice) --> Rejected because member_A and member_C have the same name.
+- (Bob, Tom, Tom) --> Rejected because member_B and member_C have the same name and the same ID.
+- (Bob, Tom, Jerry) --> Rejected because member_A and member_C have the same ID.
+- (Bob, Tom, Alice) --> Valid triplet.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists SchoolA (student_id int, student_name varchar(20))
+Create table If Not Exists SchoolB (student_id int, student_name varchar(20))
+Create table If Not Exists SchoolC (student_id int, student_name varchar(20))
+Truncate table SchoolA
+insert into SchoolA (student_id, student_name) values ('1', 'Alice')
+insert into SchoolA (student_id, student_name) values ('2', 'Bob')
+Truncate table SchoolB
+insert into SchoolB (student_id, student_name) values ('3', 'Tom')
+Truncate table SchoolC
+insert into SchoolC (student_id, student_name) values ('3', 'Tom')
+insert into SchoolC (student_id, student_name) values ('2', 'Jerry')
+insert into SchoolC (student_id, student_name) values ('10', 'Alice')
+```
 
 ### Solution
 
-### 
+考察Cross Join
+
+```sql
+SELECT sa.student_name AS member_a
+    , sb.student_name AS member_b
+    , sc.student_name AS member_c
+FROM schoola sa CROSS JOIN schoolb sb 
+    CROSS JOIN schoolc sc
+        WHERE sa.student_name != sb.student_name 
+            AND sa.student_name != sc.student_name
+            AND sb.student_name != sc.student_name
+            AND sa.student_id != sc.student_id
+            AND sb.student_id != sc.student_id
+            AND sa.student_id != sb.student_id
+```
 
 ## 1777 Product's Price for Each Store
 
+Table: `Products`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| product_id  | int     |
+| store       | enum    |
+| price       | int     |
++-------------+---------+
+(product_id,store) is the primary key for this table.
+store is an ENUM of type ('store1', 'store2', 'store3') where each represents the store this product is available at.
+price is the price of the product at this store.
+```
+
+Write an SQL query to find the price of each product in each store.
+
+Return the result table in **any order**.
+
+The query result format is in the following example:
+
+```text
+Products table:
++-------------+--------+-------+
+| product_id  | store  | price |
++-------------+--------+-------+
+| 0           | store1 | 95    |
+| 0           | store3 | 105   |
+| 0           | store2 | 100   |
+| 1           | store1 | 70    |
+| 1           | store3 | 80    |
++-------------+--------+-------+
+Result table:
++-------------+--------+--------+--------+
+| product_id  | store1 | store2 | store3 |
++-------------+--------+--------+--------+
+| 0           | 95     | 100    | 105    |
+| 1           | 70     | null   | 80     |
++-------------+--------+--------+--------+
+Product 0 price's are 95 for store1, 100 for store2 and, 105 for store3.
+Product 1 price's are 70 for store1, 80 for store3 and, it's not sold in store2.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Products (product_id int, store ENUM('store1', 'store2', 'store3'), price int)
+Truncate table Products
+insert into Products (product_id, store, price) values ('0', 'store1', '95')
+insert into Products (product_id, store, price) values ('0', 'store3', '105')
+insert into Products (product_id, store, price) values ('0', 'store2', '100')
+insert into Products (product_id, store, price) values ('1', 'store1', '70')
+insert into Products (product_id, store, price) values ('1', 'store3', '80')
+```
 
 ### Solution
 
-### 
+研究下Pivot Table的用法，以下是native方法
+
+```sql
+Select product_id,
+    Max(Case When store = 'store1' Then price End) as 'store1',
+    Max(Case When store = 'store2' Then price End) as 'store2',
+    Max(Case When store = 'store3' Then price End) as 'store3'
+From Products
+Group By 1
+```
 
 ## 1484 Group Sold Products By The Date
 
+Table `Activities`:
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| sell_date   | date    |
+| product     | varchar |
++-------------+---------+
+There is no primary key for this table, it may contains duplicates.
+Each row of this table contains the product name and the date it was sold in a market.
+```
+
+Write an SQL query to find for each date, the number of distinct products sold and their names.
+
+The sold-products names for each date should be sorted lexicographically. 
+
+Return the result table ordered by `sell_date`.
+
+The query result format is in the following example.
+
+```text
+Activities table:
++------------+-------------+
+| sell_date  | product     |
++------------+-------------+
+| 2020-05-30 | Headphone   |
+| 2020-06-01 | Pencil      |
+| 2020-06-02 | Mask        |
+| 2020-05-30 | Basketball  |
+| 2020-06-01 | Bible       |
+| 2020-06-02 | Mask        |
+| 2020-05-30 | T-Shirt     |
++------------+-------------+
+
+Result table:
++------------+----------+------------------------------+
+| sell_date  | num_sold | products                     |
++------------+----------+------------------------------+
+| 2020-05-30 | 3        | Basketball,Headphone,T-shirt |
+| 2020-06-01 | 2        | Bible,Pencil                 |
+| 2020-06-02 | 1        | Mask                         |
++------------+----------+------------------------------+
+For 2020-05-30, Sold items were (Headphone, Basketball, T-shirt), we sort them lexicographically and separate them by comma.
+For 2020-06-01, Sold items were (Pencil, Bible), we sort them lexicographically and separate them by comma.
+For 2020-06-02, Sold item is (Mask), we just return it.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Activities (sell_date date, product varchar(20))
+Truncate table Activities
+insert into Activities (sell_date, product) values ('2020-05-30', 'Headphone')
+insert into Activities (sell_date, product) values ('2020-06-01', 'Pencil')
+insert into Activities (sell_date, product) values ('2020-06-02', 'Mask')
+insert into Activities (sell_date, product) values ('2020-05-30', 'Basketball')
+insert into Activities (sell_date, product) values ('2020-06-01', 'Bible')
+insert into Activities (sell_date, product) values ('2020-06-02', 'Mask')
+insert into Activities (sell_date, product) values ('2020-05-30', 'T-Shirt')
+```
 
 ### Solution
 
-### 
+```sql
+SELECT 
+    sell_date,
+    COUNT(DISTINCT product) AS num_sold,
+    #GROUP_CONCAT(DISTINCT product ORDER BY product ASC SEPARATOR ',') AS products
+    GROUP_CONCAT(DISTINCT product ORDER BY product) AS products
+FROM Activities
+GROUP BY sell_date;
+```
 
 ## 1407 Top Travellers
 
+Table: `Users`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| name          | varchar |
++---------------+---------+
+id is the primary key for this table.
+name is the name of the user.
+```
+
+Table: `Rides`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| user_id       | int     |
+| distance      | int     |
++---------------+---------+
+id is the primary key for this table.
+user_id is the id of the user who travelled the distance "distance".
+```
+
+Write an SQL query to report the distance travelled by each user.
+
+Return the result table ordered by `travelled_distance` in **descending order**, if two or more users travelled the same distance, order them by their `name` in **ascending order**.
+
+The query result format is in the following example.
+
+```text
+Users table:
++------+-----------+
+| id   | name      |
++------+-----------+
+| 1    | Alice     |
+| 2    | Bob       |
+| 3    | Alex      |
+| 4    | Donald    |
+| 7    | Lee       |
+| 13   | Jonathan  |
+| 19   | Elvis     |
++------+-----------+
+
+Rides table:
++------+----------+----------+
+| id   | user_id  | distance |
++------+----------+----------+
+| 1    | 1        | 120      |
+| 2    | 2        | 317      |
+| 3    | 3        | 222      |
+| 4    | 7        | 100      |
+| 5    | 13       | 312      |
+| 6    | 19       | 50       |
+| 7    | 7        | 120      |
+| 8    | 19       | 400      |
+| 9    | 7        | 230      |
++------+----------+----------+
+
+Result table:
++----------+--------------------+
+| name     | travelled_distance |
++----------+--------------------+
+| Elvis    | 450                |
+| Lee      | 450                |
+| Bob      | 317                |
+| Jonathan | 312                |
+| Alex     | 222                |
+| Alice    | 120                |
+| Donald   | 0                  |
++----------+--------------------+
+Elvis and Lee travelled 450 miles, Elvis is the top traveller as his name is alphabetically smaller than Lee.
+Bob, Jonathan, Alex and Alice have only one ride and we just order them by the total distances of the ride.
+Donald didn't have any rides, the distance travelled by him is 0.
+```
+
 ### Schema
+
+```sql
+Create Table If Not Exists Users (id int, name varchar(30))
+Create Table If Not Exists Rides (id int, user_id int, distance int)
+Truncate table Users
+insert into Users (id, name) values ('1', 'Alice')
+insert into Users (id, name) values ('2', 'Bob')
+insert into Users (id, name) values ('3', 'Alex')
+insert into Users (id, name) values ('4', 'Donald')
+insert into Users (id, name) values ('7', 'Lee')
+insert into Users (id, name) values ('13', 'Jonathan')
+insert into Users (id, name) values ('19', 'Elvis')
+Truncate table Rides
+insert into Rides (id, user_id, distance) values ('1', '1', '120')
+insert into Rides (id, user_id, distance) values ('2', '2', '317')
+insert into Rides (id, user_id, distance) values ('3', '3', '222')
+insert into Rides (id, user_id, distance) values ('4', '7', '100')
+insert into Rides (id, user_id, distance) values ('5', '13', '312')
+insert into Rides (id, user_id, distance) values ('6', '19', '50')
+insert into Rides (id, user_id, distance) values ('7', '7', '120')
+insert into Rides (id, user_id, distance) values ('8', '19', '400')
+insert into Rides (id, user_id, distance) values ('9', '7', '230')
+```
 
 ### Solution
 
-### 
+```sql
+select u.name, coalesce(sum(r.distance), 0) as "travelled_distance"
+from users as u
+left join rides as r
+on u.id = r.user_id
+group by u.name
+order by travelled_distance desc, u.name
+```
+
+```sql
+select u.name, isnull(sum(r.distance),0) as travelled_distance
+from users u left outer join rides r
+on u.id = r.user_id
+group by u.name
+order by travelled_distance desc, name asc
+```
 
 ## 1069 Product Sales Analysis II
 
+Table: `Sales`
+
+```text
++-------------+-------+
+| Column Name | Type  |
++-------------+-------+
+| sale_id     | int   |
+| product_id  | int   |
+| year        | int   |
+| quantity    | int   |
+| price       | int   |
++-------------+-------+
+sale_id is the primary key of this table.
+product_id is a foreign key to Product table.
+Note that the price is per unit.
+```
+
+Table: `Product`
+
+```text
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| product_id   | int     |
+| product_name | varchar |
++--------------+---------+
+product_id is the primary key of this table.
+```
+
+Write an SQL query that reports the total quantity sold for every product id.
+
+The query result format is in the following example:
+
+```text
+Sales table:
++---------+------------+------+----------+-------+
+| sale_id | product_id | year | quantity | price |
++---------+------------+------+----------+-------+ 
+| 1       | 100        | 2008 | 10       | 5000  |
+| 2       | 100        | 2009 | 12       | 5000  |
+| 7       | 200        | 2011 | 15       | 9000  |
++---------+------------+------+----------+-------+
+
+Product table:
++------------+--------------+
+| product_id | product_name |
++------------+--------------+
+| 100        | Nokia        |
+| 200        | Apple        |
+| 300        | Samsung      |
++------------+--------------+
+
+Result table:
++--------------+----------------+
+| product_id   | total_quantity |
++--------------+----------------+
+| 100          | 22             |
+| 200          | 15             |
++--------------+----------------+
+```
+
 ### Schema
+
+```sql
+Create table Sales (sale_id int, product_id int, year int, quantity int, price int)
+Create table Product (product_id int, product_name varchar(10))
+Truncate table Sales
+insert into Sales (sale_id, product_id, year, quantity, price) values ('1', '100', '2008', '10', '5000')
+insert into Sales (sale_id, product_id, year, quantity, price) values ('2', '100', '2009', '12', '5000')
+insert into Sales (sale_id, product_id, year, quantity, price) values ('7', '200', '2011', '15', '9000')
+Truncate table Product
+insert into Product (product_id, product_name) values ('100', 'Nokia')
+insert into Product (product_id, product_name) values ('200', 'Apple')
+insert into Product (product_id, product_name) values ('300', 'Samsung')
+```
 
 ### Solution
 
-### 
+```sql
+SELECT product_id, SUM(quantity) AS total_quantity
+FROM Sales
+GROUP BY product_id
+```
 
 ## 1565 Unique Orders and Customers Per Month
 
+Table: `Orders`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| order_id      | int     |
+| order_date    | date    |
+| customer_id   | int     |
+| invoice       | int     |
++---------------+---------+
+order_id is the primary key for this table.
+This table contains information about the orders made by customer_id.
+```
+
+Write an SQL query to find the number of **unique orders** and the number of **unique customers** with invoices **&gt; $20** for each **different month**.
+
+Return the result table sorted in **any order**.
+
+The query result format is in the following example:
+
+```text
+Orders
++----------+------------+-------------+------------+
+| order_id | order_date | customer_id | invoice    |
++----------+------------+-------------+------------+
+| 1        | 2020-09-15 | 1           | 30         |
+| 2        | 2020-09-17 | 2           | 90         |
+| 3        | 2020-10-06 | 3           | 20         |
+| 4        | 2020-10-20 | 3           | 21         |
+| 5        | 2020-11-10 | 1           | 10         |
+| 6        | 2020-11-21 | 2           | 15         |
+| 7        | 2020-12-01 | 4           | 55         |
+| 8        | 2020-12-03 | 4           | 77         |
+| 9        | 2021-01-07 | 3           | 31         |
+| 10       | 2021-01-15 | 2           | 20         |
++----------+------------+-------------+------------+
+
+Result table:
++---------+-------------+----------------+
+| month   | order_count | customer_count |
++---------+-------------+----------------+
+| 2020-09 | 2           | 2              |
+| 2020-10 | 1           | 1              |
+| 2020-12 | 2           | 1              |
+| 2021-01 | 1           | 1              |
++---------+-------------+----------------+
+In September 2020 we have two orders from 2 different customers with invoices > $20.
+In October 2020 we have two orders from 1 customer, and only one of the two orders has invoice > $20.
+In November 2020 we have two orders from 2 different customers but invoices < $20, so we don't include that month.
+In December 2020 we have two orders from 1 customer both with invoices > $20.
+In January 2021 we have two orders from 2 different customers, but only one of them with invoice > $20.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Orders (order_id int, order_date date, customer_id int, invoice int)
+Truncate table Orders
+insert into Orders (order_id, order_date, customer_id, invoice) values ('1', '2020-09-15', '1', '30')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('2', '2020-09-17', '2', '90')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('3', '2020-10-06', '3', '20')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('4', '2020-10-20', '3', '21')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('5', '2020-11-10', '1', '10')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('6', '2020-11-21', '2', '15')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('7', '2020-12-01', '4', '55')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('8', '2020-12-03', '4', '77')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('9', '2021-01-07', '3', '31')
+insert into Orders (order_id, order_date, customer_id, invoice) values ('10', '2021-01-15', '2', '20')
+```
 
 ### Solution
 
-### 
+```sql
+select left(order_date, 7) month, count(distinct order_id) order_count, count(distinct customer_id) customer_count
+from orders
+where invoice > 20
+group by 1;
+```
 
 ## 1251 Average Selling Price
 
+Table: `Prices`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| start_date    | date    |
+| end_date      | date    |
+| price         | int     |
++---------------+---------+
+(product_id, start_date, end_date) is the primary key for this table.
+Each row of this table indicates the price of the product_id in the period from start_date to end_date.
+For each product_id there will be no two overlapping periods. That means there will be no two intersecting periods for the same product_id.
+```
+
+Table: `UnitsSold`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| purchase_date | date    |
+| units         | int     |
++---------------+---------+
+There is no primary key for this table, it may contain duplicates.
+Each row of this table indicates the date, units and product_id of each product sold. 
+```
+
+Write an SQL query to find the average selling price for each product.
+
+`average_price` should be **rounded to 2 decimal places**.
+
+The query result format is in the following example:
+
+```text
+Prices table:
++------------+------------+------------+--------+
+| product_id | start_date | end_date   | price  |
++------------+------------+------------+--------+
+| 1          | 2019-02-17 | 2019-02-28 | 5      |
+| 1          | 2019-03-01 | 2019-03-22 | 20     |
+| 2          | 2019-02-01 | 2019-02-20 | 15     |
+| 2          | 2019-02-21 | 2019-03-31 | 30     |
++------------+------------+------------+--------+
+ 
+UnitsSold table:
++------------+---------------+-------+
+| product_id | purchase_date | units |
++------------+---------------+-------+
+| 1          | 2019-02-25    | 100   |
+| 1          | 2019-03-01    | 15    |
+| 2          | 2019-02-10    | 200   |
+| 2          | 2019-03-22    | 30    |
++------------+---------------+-------+
+
+Result table:
++------------+---------------+
+| product_id | average_price |
++------------+---------------+
+| 1          | 6.96          |
+| 2          | 16.96         |
++------------+---------------+
+Average selling price = Total Price of Product / Number of products sold.
+Average selling price for product 1 = ((100 * 5) + (15 * 20)) / 115 = 6.96
+Average selling price for product 2 = ((200 * 15) + (30 * 30)) / 230 = 16.96
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Prices (product_id int, start_date date, end_date date, price int)
+Create table If Not Exists UnitsSold (product_id int, purchase_date date, units int)
+Truncate table Prices
+insert into Prices (product_id, start_date, end_date, price) values ('1', '2019-02-17', '2019-02-28', '5')
+insert into Prices (product_id, start_date, end_date, price) values ('1', '2019-03-01', '2019-03-22', '20')
+insert into Prices (product_id, start_date, end_date, price) values ('2', '2019-02-01', '2019-02-20', '15')
+insert into Prices (product_id, start_date, end_date, price) values ('2', '2019-02-21', '2019-03-31', '30')
+Truncate table UnitsSold
+insert into UnitsSold (product_id, purchase_date, units) values ('1', '2019-02-25', '100')
+insert into UnitsSold (product_id, purchase_date, units) values ('1', '2019-03-01', '15')
+insert into UnitsSold (product_id, purchase_date, units) values ('2', '2019-02-10', '200')
+insert into UnitsSold (product_id, purchase_date, units) values ('2', '2019-03-22', '30')
+```
 
 ### Solution
 
-### 
+```sql
+SELECT a.product_id, ROUND(SUM(b.units * a.price) / SUM(b.units), 2) as average_price
+FROM Prices as a
+JOIN UnitsSold as b
+ON a.product_id = b.product_id AND (b.purchase_date BETWEEN a.start_date AND a.end_date)
+GROUP BY product_id;
+```
 
 ## 1173 Immediate Food Delivery I
 
+Table: `Delivery`
+
+```text
++-----------------------------+---------+
+| Column Name                 | Type    |
++-----------------------------+---------+
+| delivery_id                 | int     |
+| customer_id                 | int     |
+| order_date                  | date    |
+| customer_pref_delivery_date | date    |
++-----------------------------+---------+
+delivery_id is the primary key of this table.
+The table holds information about food delivery to customers that make orders at some date and specify a preferred delivery date (on the same order date or after it).
+```
+
+If the preferred delivery date of the customer is the same as the order date then the order is called _immediate_ otherwise it's called _scheduled_.
+
+Write an SQL query to find the percentage of immediate orders in the table, **rounded to 2 decimal places**.
+
+The query result format is in the following example:
+
+```text
+Delivery table:
++-------------+-------------+------------+-----------------------------+
+| delivery_id | customer_id | order_date | customer_pref_delivery_date |
++-------------+-------------+------------+-----------------------------+
+| 1           | 1           | 2019-08-01 | 2019-08-02                  |
+| 2           | 5           | 2019-08-02 | 2019-08-02                  |
+| 3           | 1           | 2019-08-11 | 2019-08-11                  |
+| 4           | 3           | 2019-08-24 | 2019-08-26                  |
+| 5           | 4           | 2019-08-21 | 2019-08-22                  |
+| 6           | 2           | 2019-08-11 | 2019-08-13                  |
++-------------+-------------+------------+-----------------------------+
+
+Result table:
++----------------------+
+| immediate_percentage |
++----------------------+
+| 33.33                |
++----------------------+
+The orders with delivery id 2 and 3 are immediate while the others are scheduled.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Delivery (delivery_id int, customer_id int, order_date date, customer_pref_delivery_date date)
+Truncate table Delivery
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('1', '1', '2019-08-01', '2019-08-02')
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('2', '5', '2019-08-02', '2019-08-02')
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('3', '1', '2019-08-11', '2019-08-11')
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('4', '3', '2019-08-24', '2019-08-26')
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('5', '4', '2019-08-21', '2019-08-22')
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('6', '2', '2019-08-11', '2019-08-13')
+```
 
 ### Solution
 
-### 
+应用AVG函数，求到有多少个日期相等的占总数（不含null）的比例
+
+```sql
+Select round(100 * AVG(order_date = customer_pref_delivery_date), 2) As immediate_percentage
+From delivery
+```
 
 ## 1179 Reformat Department Table
 
