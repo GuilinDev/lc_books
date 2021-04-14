@@ -3431,58 +3431,399 @@ insert into point (x) values ('2')
 ### Solution
 
 ```sql
-
+Select min(a.x - b.x) As shortest
+From point a, point b
+Where a.x > b.x # 不能是自己跟自己比
 ```
 
 ## 1661 Average Time of Process per Machine
 
+Table: `Activity`
+
+```text
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| machine_id     | int     |
+| process_id     | int     |
+| activity_type  | enum    |
+| timestamp      | float   |
++----------------+---------+
+The table shows the user activities for a factory website.
+(machine_id, process_id, activity_type) is the primary key of this table.
+machine_id is the ID of a machine.
+process_id is the ID of a process running on the machine with ID machine_id.
+activity_type is an ENUM of type ('start', 'end').
+timestamp is a float representing the current time in seconds.
+'start' means the machine starts the process at the given timestamp and 'end' means the machine ends the process at the given timestamp.
+The 'start' timestamp will always be before the 'end' timestamp for every (machine_id, process_id) pair.
+```
+
+There is a factory website that has several machines each running the **same number of processes**. Write an SQL query to find the **average time** each machine takes to complete a process.
+
+The time to complete a process is the `'end' timestamp` minus the `'start' timestamp`. The average time is calculated by the total time to complete every process on the machine divided by the number of processes that were run.
+
+The resulting table should have the `machine_id` along with the **average time** as `processing_time`, which should be **rounded to 3 decimal places**.
+
+The query result format is in the following example:
+
+```text
+Activity table:
++------------+------------+---------------+-----------+
+| machine_id | process_id | activity_type | timestamp |
++------------+------------+---------------+-----------+
+| 0          | 0          | start         | 0.712     |
+| 0          | 0          | end           | 1.520     |
+| 0          | 1          | start         | 3.140     |
+| 0          | 1          | end           | 4.120     |
+| 1          | 0          | start         | 0.550     |
+| 1          | 0          | end           | 1.550     |
+| 1          | 1          | start         | 0.430     |
+| 1          | 1          | end           | 1.420     |
+| 2          | 0          | start         | 4.100     |
+| 2          | 0          | end           | 4.512     |
+| 2          | 1          | start         | 2.500     |
+| 2          | 1          | end           | 5.000     |
++------------+------------+---------------+-----------+
+
+Result table:
++------------+-----------------+
+| machine_id | processing_time |
++------------+-----------------+
+| 0          | 0.894           |
+| 1          | 0.995           |
+| 2          | 1.456           |
++------------+-----------------+
+
+There are 3 machines running 2 processes each.
+Machine 0's average time is ((1.520 - 0.712) + (4.120 - 3.140)) / 2 = 0.894
+Machine 1's average time is ((1.550 - 0.550) + (1.420 - 0.430)) / 2 = 0.995
+Machine 2's average time is ((4.512 - 4.100) + (5.000 - 2.500)) / 2 = 1.456
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Activity (machine_id int, process_id int, activity_type ENUM('start', 'end'), timestamp float)
+Truncate table Activity
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('0', '0', 'start', '0.712')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('0', '0', 'end', '1.52')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('0', '1', 'start', '3.14')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('0', '1', 'end', '4.12')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('1', '0', 'start', '0.55')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('1', '0', 'end', '1.55')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('1', '1', 'start', '0.43')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('1', '1', 'end', '1.42')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('2', '0', 'start', '4.1')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('2', '0', 'end', '4.512')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('2', '1', 'start', '2.5')
+insert into Activity (machine_id, process_id, activity_type, timestamp) values ('2', '1', 'end', '5')
+```
 
 ### Solution
 
-### 
+```sql
+
+```
 
 ## 595 Big Countries
 
+There is a table `World`
+
+```text
++-----------------+------------+------------+--------------+---------------+
+| name            | continent  | area       | population   | gdp           |
++-----------------+------------+------------+--------------+---------------+
+| Afghanistan     | Asia       | 652230     | 25500100     | 20343000      |
+| Albania         | Europe     | 28748      | 2831741      | 12960000      |
+| Algeria         | Africa     | 2381741    | 37100000     | 188681000     |
+| Andorra         | Europe     | 468        | 78115        | 3712000       |
+| Angola          | Africa     | 1246700    | 20609294     | 100990000     |
++-----------------+------------+------------+--------------+---------------+
+```
+
+A country is big if it has an area of bigger than 3 million square km or a population of more than 25 million.
+
+Write a SQL solution to output big countries' name, population and area.
+
+For example, according to the above table, we should output:
+
+```text
++--------------+-------------+--------------+
+| name         | population  | area         |
++--------------+-------------+--------------+
+| Afghanistan  | 25500100    | 652230       |
+| Algeria      | 37100000    | 2381741      |
++--------------+-------------+--------------+
+```
+
 ### Schema
+
+```sql
+
+```
 
 ### Solution
 
-### 
+```sql
+
+```
 
 ## 1789 Primary Department for Each Employee
 
+Table: `Employee`
+
+```text
++---------------+---------+
+| Column Name   |  Type   |
++---------------+---------+
+| employee_id   | int     |
+| department_id | int     |
+| primary_flag  | varchar |
++---------------+---------+
+(employee_id, department_id) is the primary key for this table.
+employee_id is the id of the employee.
+department_id is the id of the department to which the employee belongs.
+primary_flag is an ENUM of type ('Y', 'N'). If the flag is 'Y', the department is the primary department for the employee. If the flag is 'N', the department is not the primary.
+```
+
+Employees can belong to multiple departments. When the employee joins other departments, they need to decide which department is their primary department. Note that when an employee belongs to only one department, their primary column is `'N'`.
+
+Write an SQL query to report all the employees with their primary department. For employees who belong to one department, report their only department.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+```text
+Employee table:
++-------------+---------------+--------------+
+| employee_id | department_id | primary_flag |
++-------------+---------------+--------------+
+| 1           | 1             | N            |
+| 2           | 1             | Y            |
+| 2           | 2             | N            |
+| 3           | 3             | N            |
+| 4           | 2             | N            |
+| 4           | 3             | Y            |
+| 4           | 4             | N            |
++-------------+---------------+--------------+
+
+Result table:
++-------------+---------------+
+| employee_id | department_id |
++-------------+---------------+
+| 1           | 1             |
+| 2           | 1             |
+| 3           | 3             |
+| 4           | 3             |
++-------------+---------------+
+- The Primary department for employee 1 is 1.
+- The Primary department for employee 2 is 1.
+- The Primary department for employee 3 is 3.
+- The Primary department for employee 4 is 3.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Employee (employee_id int, department_id int, primary_flag ENUM('Y','N'))
+Truncate table Employee
+insert into Employee (employee_id, department_id, primary_flag) values ('1', '1', 'N')
+insert into Employee (employee_id, department_id, primary_flag) values ('2', '1', 'Y')
+insert into Employee (employee_id, department_id, primary_flag) values ('2', '2', 'N')
+insert into Employee (employee_id, department_id, primary_flag) values ('3', '3', 'N')
+insert into Employee (employee_id, department_id, primary_flag) values ('4', '2', 'N')
+insert into Employee (employee_id, department_id, primary_flag) values ('4', '3', 'Y')
+insert into Employee (employee_id, department_id, primary_flag) values ('4', '4', 'N')
+```
 
 ### Solution
 
-### 
+```sql
 
-## 627 Swap Salary
-
-### Schema
-
-### Solution
-
-### 
+```
 
 ## 1435 Create a Session Bar Chart
 
+Table: `Sessions`
+
+```text
++---------------------+---------+
+| Column Name         | Type    |
++---------------------+---------+
+| session_id          | int     |
+| duration            | int     |
++---------------------+---------+
+session_id is the primary key for this table.
+duration is the time in seconds that a user has visited the application.
+```
+
+You want to know how long a user visits your application. You decided to create bins of "\[0-5&gt;", "\[5-10&gt;", "\[10-15&gt;" and "15 minutes or more" and count the number of sessions on it.
+
+Write an SQL query to report the \(bin, total\) in **any** order.
+
+The query result format is in the following example.
+
+```text
+Sessions table:
++-------------+---------------+
+| session_id  | duration      |
++-------------+---------------+
+| 1           | 30            |
+| 2           | 199           |
+| 3           | 299           |
+| 4           | 580           |
+| 5           | 1000          |
++-------------+---------------+
+
+Result table:
++--------------+--------------+
+| bin          | total        |
++--------------+--------------+
+| [0-5>        | 3            |
+| [5-10>       | 1            |
+| [10-15>      | 0            |
+| 15 or more   | 1            |
++--------------+--------------+
+
+For session_id 1, 2 and 3 have a duration greater or equal than 0 minutes and less than 5 minutes.
+For session_id 4 has a duration greater or equal than 5 minutes and less than 10 minutes.
+There are no session with a duration greater or equial than 10 minutes and less than 15 minutes.
+For session_id 5 has a duration greater or equal than 15 minutes.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Sessions (session_id int, duration int)
+Truncate table Sessions
+insert into Sessions (session_id, duration) values ('1', '30')
+insert into Sessions (session_id, duration) values ('2', '199')
+insert into Sessions (session_id, duration) values ('3', '299')
+insert into Sessions (session_id, duration) values ('4', '580')
+insert into Sessions (session_id, duration) values ('5', '1000')
+```
 
 ### Solution
 
-### 
+```sql
+
+```
 
 ## 1327 List the Products Ordered in a Period
 
+Table: `Products`
+
+```text
++------------------+---------+
+| Column Name      | Type    |
++------------------+---------+
+| product_id       | int     |
+| product_name     | varchar |
+| product_category | varchar |
++------------------+---------+
+product_id is the primary key for this table.
+This table contains data about the company's products.
+```
+
+Table: `Orders`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| order_date    | date    |
+| unit          | int     |
++---------------+---------+
+There is no primary key for this table. It may have duplicate rows.
+product_id is a foreign key to Products table.
+unit is the number of products ordered in order_date.
+```
+
+Write an SQL query to get the names of products with greater than or equal to 100 units ordered in February 2020 and their amount.
+
+Return result table in any order.
+
+The query result format is in the following example:
+
+```text
+Products table:
++-------------+-----------------------+------------------+
+| product_id  | product_name          | product_category |
++-------------+-----------------------+------------------+
+| 1           | Leetcode Solutions    | Book             |
+| 2           | Jewels of Stringology | Book             |
+| 3           | HP                    | Laptop           |
+| 4           | Lenovo                | Laptop           |
+| 5           | Leetcode Kit          | T-shirt          |
++-------------+-----------------------+------------------+
+
+Orders table:
++--------------+--------------+----------+
+| product_id   | order_date   | unit     |
++--------------+--------------+----------+
+| 1            | 2020-02-05   | 60       |
+| 1            | 2020-02-10   | 70       |
+| 2            | 2020-01-18   | 30       |
+| 2            | 2020-02-11   | 80       |
+| 3            | 2020-02-17   | 2        |
+| 3            | 2020-02-24   | 3        |
+| 4            | 2020-03-01   | 20       |
+| 4            | 2020-03-04   | 30       |
+| 4            | 2020-03-04   | 60       |
+| 5            | 2020-02-25   | 50       |
+| 5            | 2020-02-27   | 50       |
+| 5            | 2020-03-01   | 50       |
++--------------+--------------+----------+
+
+Result table:
++--------------------+---------+
+| product_name       | unit    |
++--------------------+---------+
+| Leetcode Solutions | 130     |
+| Leetcode Kit       | 100     |
++--------------------+---------+
+
+Products with product_id = 1 is ordered in February a total of (60 + 70) = 130.
+Products with product_id = 2 is ordered in February a total of 80.
+Products with product_id = 3 is ordered in February a total of (2 + 3) = 5.
+Products with product_id = 4 was not ordered in February 2020.
+Products with product_id = 5 is ordered in February a total of (50 + 50) = 100.
+```
+
 ### Schema
+
+```sql
+Create table If Not Exists Products (product_id int, product_name varchar(40), product_category varchar(40))
+Create table If Not Exists Orders (product_id int, order_date date, unit int)
+Truncate table Products
+insert into Products (product_id, product_name, product_category) values ('1', 'Leetcode Solutions', 'Book')
+insert into Products (product_id, product_name, product_category) values ('2', 'Jewels of Stringology', 'Book')
+insert into Products (product_id, product_name, product_category) values ('3', 'HP', 'Laptop')
+insert into Products (product_id, product_name, product_category) values ('4', 'Lenovo', 'Laptop')
+insert into Products (product_id, product_name, product_category) values ('5', 'Leetcode Kit', 'T-shirt')
+Truncate table Orders
+insert into Orders (product_id, order_date, unit) values ('1', '2020-02-05', '60')
+insert into Orders (product_id, order_date, unit) values ('1', '2020-02-10', '70')
+insert into Orders (product_id, order_date, unit) values ('2', '2020-01-18', '30')
+insert into Orders (product_id, order_date, unit) values ('2', '2020-02-11', '80')
+insert into Orders (product_id, order_date, unit) values ('3', '2020-02-17', '2')
+insert into Orders (product_id, order_date, unit) values ('3', '2020-02-24', '3')
+insert into Orders (product_id, order_date, unit) values ('4', '2020-03-01', '20')
+insert into Orders (product_id, order_date, unit) values ('4', '2020-03-04', '30')
+insert into Orders (product_id, order_date, unit) values ('4', '2020-03-04', '60')
+insert into Orders (product_id, order_date, unit) values ('5', '2020-02-25', '50')
+insert into Orders (product_id, order_date, unit) values ('5', '2020-02-27', '50')
+insert into Orders (product_id, order_date, unit) values ('5', '2020-03-01', '50')
+```
 
 ### Solution
 
-### 
+```sql
 
-
+```
 
 
 
