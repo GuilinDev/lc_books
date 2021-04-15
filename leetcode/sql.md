@@ -3536,7 +3536,11 @@ insert into Activity (machine_id, process_id, activity_type, timestamp) values (
 ### Solution
 
 ```sql
-
+SELECT s.machine_id, ROUND(AVG(e.timestamp-s.timestamp), 3) AS processing_time
+FROM Activity s JOIN Activity e ON
+    s.machine_id = e.machine_id AND s.process_id = e.process_id AND
+    s.activity_type = 'start' AND e.activity_type = 'end'
+GROUP BY s.machine_id
 ```
 
 ## 595 Big Countries
@@ -3573,13 +3577,33 @@ For example, according to the above table, we should output:
 ### Schema
 
 ```sql
-
+Create table If Not Exists World (name varchar(255), continent varchar(255), area int, population int, gdp int)
+Truncate table World
+insert into World (name, continent, area, population, gdp) values ('Afghanistan', 'Asia', '652230', '25500100', '20343000000')
+insert into World (name, continent, area, population, gdp) values ('Albania', 'Europe', '28748', '2831741', '12960000000')
+insert into World (name, continent, area, population, gdp) values ('Algeria', 'Africa', '2381741', '37100000', '188681000000')
+insert into World (name, continent, area, population, gdp) values ('Andorra', 'Europe', '468', '78115', '3712000000')
+insert into World (name, continent, area, population, gdp) values ('Angola', 'Africa', '1246700', '20609294', '100990000000')
 ```
 
 ### Solution
 
 ```sql
+SELECT name, population, area
+FROM World
+WHERE area > 3000000 OR population > 25000000
+```
 
+```sql
+SELECT name, population, area
+FROM World
+WHERE area > 3000000 
+
+UNION
+
+SELECT name, population, area
+FROM World
+WHERE population > 25000000
 ```
 
 ## 1789 Primary Department for Each Employee
@@ -3654,7 +3678,26 @@ insert into Employee (employee_id, department_id, primary_flag) values ('4', '4'
 ### Solution
 
 ```sql
+SELECT employee_id, department_id 
+FROM Employee
+WHERE primary_flag = 'Y'
+UNION
+SELECT employee_id, department_id 
+FROM Employee 
+GROUP BY employee_id
+HAVING COUNT(employee_id) = 1
+```
 
+Window Function
+
+```sql
+SELECT EMPLOYEE_ID,DEPARTMENT_ID
+FROM
+(
+SELECT *,COUNT(EMPLOYEE_ID) OVER(PARTITION BY EMPLOYEE_ID) C
+FROM EMPLOYEE
+)T
+WHERE C=1 OR PRIMARY_FLAG='Y'
 ```
 
 ## 1435 Create a Session Bar Chart
@@ -3721,7 +3764,22 @@ insert into Sessions (session_id, duration) values ('5', '1000')
 ### Solution
 
 ```sql
+WITH cte AS (
+    SELECT '[0-5>' AS bin,  0 AS min_duration, 5*60 AS max_duration
+    UNION ALL
+    SELECT '[5-10>' AS bin,  5*60 AS min_duration, 10*60 AS max_duration
+    UNION ALL
+    SELECT '[10-15>' AS bin, 10*60 AS min_duration, 15*60 AS max_duration
+    UNION ALL
+    SELECT '15 or more' AS bin,  15*60 as min_duration, 2147483647 AS max_duration
+    )
 
+SELECT cte.bin, COUNT(s.session_id) AS total
+FROM Sessions s
+RIGHT JOIN cte 
+		ON s.duration >= min_duration 
+        AND s.duration < max_duration				 
+GROUP BY cte.bin;
 ```
 
 ## 1327 List the Products Ordered in a Period
@@ -3835,8 +3893,21 @@ insert into Orders (product_id, order_date, unit) values ('5', '2020-03-01', '50
 ### Solution
 
 ```sql
-
+Select p.product_name,
+sum(o.unit) as unit
+From Products p
+Join Orders o on p.product_id = o.product_id
+Where Left(order_date, 7) = '2020-02'
+Group by p.product_name
+Having sum(o.unit) >= 100
 ```
 
-
+```sql
+Select product_name,sum(unit) as unit
+From Products a
+Left join Orders b on a.product_id = b.product_id
+Where month(order_date) = 2 and year(order_date) = '2020'
+Group by a.product_id
+Having unit >=100
+```
 
