@@ -3763,6 +3763,8 @@ insert into Sessions (session_id, duration) values ('5', '1000')
 
 ### Solution
 
+[CTE - Common Table Expression解释](https://leetcode.com/problems/create-a-session-bar-chart/discuss/887107/EXPLAINED%3A-Clear-and-Simple-Solution-%28No-CASE-statement%29)
+
 ```sql
 WITH cte AS (
     SELECT '[0-5>' AS bin,  0 AS min_duration, 5*60 AS max_duration
