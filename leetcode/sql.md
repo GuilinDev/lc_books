@@ -2707,7 +2707,7 @@ insert into Products (product_id, store, price) values ('1', 'store3', '80')
 
 ```sql
 Select product_id,
-    Max(Case When store = 'store1' Then price End) as 'store1',
+    Max(Case When store = 'store1' Then ifnull(price, null) End) as 'store1',
     Max(Case When store = 'store2' Then price End) as 'store2',
     Max(Case When store = 'store3' Then price End) as 'store3'
 From Products
