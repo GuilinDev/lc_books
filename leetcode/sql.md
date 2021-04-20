@@ -3975,85 +3975,583 @@ insert into Views (article_id, author_id, viewer_id, view_date) values ('3', '4'
 ### Solution
 
 ```sql
+Select Distinct author_id as id 
+From Views
+Where author_id = viewer_id
+Order by author_id
+```
 
+```sql
+SELECT author_id AS id FROM Views 
+where author_id = viewer_id 
+GROUP BY id #自动排序
 ```
 
 ## 586 Customer Placing the Largest Number of Orders
 
+Table: `Orders`
+
+```text
++-----------------+----------+
+| Column Name     | Type     |
++-----------------+----------+
+| order_number    | int      |
+| customer_number | int      |
++-----------------+----------+
+order_number is the primary key for this table.
+This table contains information about the order ID and the customer ID.
+```
+
+Write an SQL query to find the `customer_number` for the customer who has placed **the largest number of orders**.
+
+It is **guaranteed** that exactly one customer will have placed more orders than any other customer.
+
+The query result format is in the following example:
+
+```text
+Orders table:
++--------------+-----------------+
+| order_number | customer_number |
++--------------+-----------------+
+| 1            | 1               |
+| 2            | 2               |
+| 3            | 3               |
+| 4            | 3               |
++--------------+-----------------+
+
+Result table:
++-----------------+
+| customer_number |
++-----------------+
+| 3               |
++-----------------+
+The customer with number 3 has two orders, which is greater than either customer 1 or 2 because each of them only has one order. 
+So the result is customer_number 3.
+```
+
+ **Follow up:** What if more than one customer have the largest number of orders, can you find all the `customer_number` in this case?
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists orders (order_number int, customer_number int)
+Truncate table orders
+insert into orders (order_number, customer_number) values ('1', '1')
+insert into orders (order_number, customer_number) values ('2', '2')
+insert into orders (order_number, customer_number) values ('3', '3')
+insert into orders (order_number, customer_number) values ('4', '3')
 ```
 
 ### Solution
 
 ```sql
+Select customer_number 
+From Orders
+Group By customer_number
+Order By count(*) desc limit 1
+```
 
+Follow Up
+
+```sql
+SELECT customer_number
+FROM orders
+GROUP BY customer_number
+HAVING COUNT(order_number) = (
+	SELECT COUNT(order_number) cnt
+	FROM orders
+	GROUP BY customer_number
+	ORDER BY cnt DESC
+	LIMIT 1
+)
 ```
 
 ## 1280 Students and Examinations
 
+Table: `Students`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| student_id    | int     |
+| student_name  | varchar |
++---------------+---------+
+student_id is the primary key for this table.
+Each row of this table contains the ID and the name of one student in the school.
+```
+
+Table: `Subjects`
+
+```text
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| subject_name | varchar |
++--------------+---------+
+subject_name is the primary key for this table.
+Each row of this table contains the name of one subject in the school.
+```
+
+Table: `Examinations`
+
+```text
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| student_id   | int     |
+| subject_name | varchar |
++--------------+---------+
+There is no primary key for this table. It may contain duplicates.
+Each student from the Students table takes every course from Subjects table.
+Each row of this table indicates that a student with ID student_id attended the exam of subject_name.
+```
+
+Write an SQL query to find the number of times each student attended each exam.
+
+Order the result table by `student_id` and `subject_name`.
+
+The query result format is in the following example:
+
+```text
+Students table:
++------------+--------------+
+| student_id | student_name |
++------------+--------------+
+| 1          | Alice        |
+| 2          | Bob          |
+| 13         | John         |
+| 6          | Alex         |
++------------+--------------+
+Subjects table:
++--------------+
+| subject_name |
++--------------+
+| Math         |
+| Physics      |
+| Programming  |
++--------------+
+Examinations table:
++------------+--------------+
+| student_id | subject_name |
++------------+--------------+
+| 1          | Math         |
+| 1          | Physics      |
+| 1          | Programming  |
+| 2          | Programming  |
+| 1          | Physics      |
+| 1          | Math         |
+| 13         | Math         |
+| 13         | Programming  |
+| 13         | Physics      |
+| 2          | Math         |
+| 1          | Math         |
++------------+--------------+
+Result table:
++------------+--------------+--------------+----------------+
+| student_id | student_name | subject_name | attended_exams |
++------------+--------------+--------------+----------------+
+| 1          | Alice        | Math         | 3              |
+| 1          | Alice        | Physics      | 2              |
+| 1          | Alice        | Programming  | 1              |
+| 2          | Bob          | Math         | 1              |
+| 2          | Bob          | Physics      | 0              |
+| 2          | Bob          | Programming  | 1              |
+| 6          | Alex         | Math         | 0              |
+| 6          | Alex         | Physics      | 0              |
+| 6          | Alex         | Programming  | 0              |
+| 13         | John         | Math         | 1              |
+| 13         | John         | Physics      | 1              |
+| 13         | John         | Programming  | 1              |
++------------+--------------+--------------+----------------+
+The result table should contain all students and all subjects.
+Alice attended Math exam 3 times, Physics exam 2 times and Programming exam 1 time.
+Bob attended Math exam 1 time, Programming exam 1 time and didn't attend the Physics exam.
+Alex didn't attend any exam.
+John attended Math exam 1 time, Physics exam 1 time and Programming exam 1 time.
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Students (student_id int, student_name varchar(20))
+Create table If Not Exists Subjects (subject_name varchar(20))
+Create table If Not Exists Examinations (student_id int, subject_name varchar(20))
+Truncate table Students
+insert into Students (student_id, student_name) values ('1', 'Alice')
+insert into Students (student_id, student_name) values ('2', 'Bob')
+insert into Students (student_id, student_name) values ('13', 'John')
+insert into Students (student_id, student_name) values ('6', 'Alex')
+Truncate table Subjects
+insert into Subjects (subject_name) values ('Math')
+insert into Subjects (subject_name) values ('Physics')
+insert into Subjects (subject_name) values ('Programming')
+Truncate table Examinations
+insert into Examinations (student_id, subject_name) values ('1', 'Math')
+insert into Examinations (student_id, subject_name) values ('1', 'Physics')
+insert into Examinations (student_id, subject_name) values ('1', 'Programming')
+insert into Examinations (student_id, subject_name) values ('2', 'Programming')
+insert into Examinations (student_id, subject_name) values ('1', 'Physics')
+insert into Examinations (student_id, subject_name) values ('1', 'Math')
+insert into Examinations (student_id, subject_name) values ('13', 'Math')
+insert into Examinations (student_id, subject_name) values ('13', 'Programming')
+insert into Examinations (student_id, subject_name) values ('13', 'Physics')
+insert into Examinations (student_id, subject_name) values ('2', 'Math')
+insert into Examinations (student_id, subject_name) values ('1', 'Math')
 ```
 
 ### Solution
 
 ```sql
-
+Select st.student_id, st.student_name, su.subject_name, count(ex.subject_name) attended_exams
+From Students st
+Inner Join Subjects su
+Left Join Examinations ex
+ON st.student_id = ex.student_id AND su.subject_name = ex.subject_name
+GROUP BY st.student_id, su.subject_name
+ORDER BY student_id, subject_name
 ```
 
 ## 1511 Customer Order Frequency
 
+Table: `Customers`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| customer_id   | int     |
+| name          | varchar |
+| country       | varchar |
++---------------+---------+
+customer_id is the primary key for this table.
+This table contains information of the customers in the company.
+```
+
+Table: `Product`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| description   | varchar |
+| price         | int     |
++---------------+---------+
+product_id is the primary key for this table.
+This table contains information of the products in the company.
+price is the product cost.
+```
+
+Table: `Orders`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| order_id      | int     |
+| customer_id   | int     |
+| product_id    | int     |
+| order_date    | date    |
+| quantity      | int     |
++---------------+---------+
+order_id is the primary key for this table.
+This table contains information on customer orders.
+customer_id is the id of the customer who bought "quantity" products with id "product_id".
+Order_date is the date in format ('YYYY-MM-DD') when the order was shipped.
+```
+
+Write an SQL query to report the customer\_id and customer\_name of customers who have spent at least $100 in each month of June and July 2020.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+```text
+Customers
++--------------+-----------+-------------+
+| customer_id  | name      | country     |
++--------------+-----------+-------------+
+| 1            | Winston   | USA         |
+| 2            | Jonathan  | Peru        |
+| 3            | Moustafa  | Egypt       |
++--------------+-----------+-------------+
+
+Product
++--------------+-------------+-------------+
+| product_id   | description | price       |
++--------------+-------------+-------------+
+| 10           | LC Phone    | 300         |
+| 20           | LC T-Shirt  | 10          |
+| 30           | LC Book     | 45          |
+| 40           | LC Keychain | 2           |
++--------------+-------------+-------------+
+
+Orders
++--------------+-------------+-------------+-------------+-----------+
+| order_id     | customer_id | product_id  | order_date  | quantity  |
++--------------+-------------+-------------+-------------+-----------+
+| 1            | 1           | 10          | 2020-06-10  | 1         |
+| 2            | 1           | 20          | 2020-07-01  | 1         |
+| 3            | 1           | 30          | 2020-07-08  | 2         |
+| 4            | 2           | 10          | 2020-06-15  | 2         |
+| 5            | 2           | 40          | 2020-07-01  | 10        |
+| 6            | 3           | 20          | 2020-06-24  | 2         |
+| 7            | 3           | 30          | 2020-06-25  | 2         |
+| 9            | 3           | 30          | 2020-05-08  | 3         |
++--------------+-------------+-------------+-------------+-----------+
+
+Result table:
++--------------+------------+
+| customer_id  | name       |  
++--------------+------------+
+| 1            | Winston    |
++--------------+------------+ 
+Winston spent $300 (300 * 1) in June and $100 ( 10 * 1 + 45 * 2) in July 2020.
+Jonathan spent $600 (300 * 2) in June and $20 ( 2 * 10) in July 2020.
+Moustafa spent $110 (10 * 2 + 45 * 2) in June and $0 in July 2020.
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Customers (customer_id int, name varchar(30), country varchar(30))
+Create table If Not Exists Product (product_id int, description varchar(30), price int)
+Create table If Not Exists Orders (order_id int, customer_id int, product_id int, order_date date, quantity int)
+Truncate table Customers
+insert into Customers (customer_id, name, country) values ('1', 'Winston', 'USA')
+insert into Customers (customer_id, name, country) values ('2', 'Jonathan', 'Peru')
+insert into Customers (customer_id, name, country) values ('3', 'Moustafa', 'Egypt')
+Truncate table Product
+insert into Product (product_id, description, price) values ('10', 'LC Phone', '300')
+insert into Product (product_id, description, price) values ('20', 'LC T-Shirt', '10')
+insert into Product (product_id, description, price) values ('30', 'LC Book', '45')
+insert into Product (product_id, description, price) values ('40', 'LC Keychain', '2')
+Truncate table Orders
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('1', '1', '10', '2020-06-10', '1')
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('2', '1', '20', '2020-07-01', '1')
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('3', '1', '30', '2020-07-08', '2')
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('4', '2', '10', '2020-06-15', '2')
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('5', '2', '40', '2020-07-01', '10')
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('6', '3', '20', '2020-06-24', '2')
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('7', '3', '30', '2020-06-25', '2')
+insert into Orders (order_id, customer_id, product_id, order_date, quantity) values ('9', '3', '30', '2020-05-08', '3')
 ```
 
 ### Solution
 
 ```sql
-
+SELECT customer_id, name
+FROM Customers 
+JOIN Orders USING(customer_id) 
+JOIN Product USING(product_id)
+GROUP BY customer_id
+HAVING SUM(IF(LEFT(order_date, 7) = '2020-06', quantity, 0) * price) >= 100
+    AND SUM(IF(LEFT(order_date, 7) = '2020-07', quantity, 0) * price) >= 100
 ```
 
 ## 584 Find Customer Referee
 
+Given a table `customer` holding customers information and the referee.
+
+```text
++------+------+-----------+
+| id   | name | referee_id|
++------+------+-----------+
+|    1 | Will |      NULL |
+|    2 | Jane |      NULL |
+|    3 | Alex |         2 |
+|    4 | Bill |      NULL |
+|    5 | Zack |         1 |
+|    6 | Mark |         2 |
++------+------+-----------+
+```
+
+Write a query to return the list of customers **NOT** referred by the person with id '2'.
+
+For the sample data above, the result is:
+
+```text
++------+
+| name |
++------+
+| Will |
+| Jane |
+| Bill |
+| Zack |
++------+
+```
+
 ### Schema
 
 ```sql
-
+CREATE TABLE IF NOT EXISTS customer (id INT,name VARCHAR(25),referee_id INT);
+Truncate table customer
+insert into customer (id, name, referee_id) values ('1', 'Will', 'None')
+insert into customer (id, name, referee_id) values ('2', 'Jane', 'None')
+insert into customer (id, name, referee_id) values ('3', 'Alex', '2')
+insert into customer (id, name, referee_id) values ('4', 'Bill', 'None')
+insert into customer (id, name, referee_id) values ('5', 'Zack', '1')
+insert into customer (id, name, referee_id) values ('6', 'Mark', '2')
 ```
 
 ### Solution
 
 ```sql
-
+Select name 
+From customer
+Where referee_id is null or referee_id != '2'
 ```
 
 ## 1082 Sales Analysis I
 
+Table: `Product`
+
+```text
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| product_id   | int     |
+| product_name | varchar |
+| unit_price   | int     |
++--------------+---------+
+product_id is the primary key of this table.
+```
+
+Table: `Sales`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| seller_id   | int     |
+| product_id  | int     |
+| buyer_id    | int     |
+| sale_date   | date    |
+| quantity    | int     |
+| price       | int     |
++------ ------+---------+
+This table has no primary key, it can have repeated rows.
+product_id is a foreign key to Product table.
+```
+
+Write an SQL query that reports the best **seller** by total sales price, If there is a tie, report them all.
+
+The query result format is in the following example:
+
+```text
+Product table:
++------------+--------------+------------+
+| product_id | product_name | unit_price |
++------------+--------------+------------+
+| 1          | S8           | 1000       |
+| 2          | G4           | 800        |
+| 3          | iPhone       | 1400       |
++------------+--------------+------------+
+
+Sales table:
++-----------+------------+----------+------------+----------+-------+
+| seller_id | product_id | buyer_id | sale_date  | quantity | price |
++-----------+------------+----------+------------+----------+-------+
+| 1         | 1          | 1        | 2019-01-21 | 2        | 2000  |
+| 1         | 2          | 2        | 2019-02-17 | 1        | 800   |
+| 2         | 2          | 3        | 2019-06-02 | 1        | 800   |
+| 3         | 3          | 4        | 2019-05-13 | 2        | 2800  |
++-----------+------------+----------+------------+----------+-------+
+
+Result table:
++-------------+
+| seller_id   |
++-------------+
+| 1           |
+| 3           |
++-------------+
+Both sellers with id 1 and 3 sold products with the most total price of 2800.
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Product (product_id int, product_name varchar(10), unit_price int)
+Create table If Not Exists Sales (seller_id int, product_id int, buyer_id int, sale_date date, quantity int, price int)
+Truncate table Product
+insert into Product (product_id, product_name, unit_price) values ('1', 'S8', '1000')
+insert into Product (product_id, product_name, unit_price) values ('2', 'G4', '800')
+insert into Product (product_id, product_name, unit_price) values ('3', 'iPhone', '1400')
+Truncate table Sales
+insert into Sales (seller_id, product_id, buyer_id, sale_date, quantity, price) values ('1', '1', '1', '2019-01-21', '2', '2000')
+insert into Sales (seller_id, product_id, buyer_id, sale_date, quantity, price) values ('1', '2', '2', '2019-02-17', '1', '800')
+insert into Sales (seller_id, product_id, buyer_id, sale_date, quantity, price) values ('2', '2', '3', '2019-06-02', '1', '800')
+insert into Sales (seller_id, product_id, buyer_id, sale_date, quantity, price) values ('3', '3', '4', '2019-05-13', '2', '2800')
 ```
 
 ### Solution
 
 ```sql
-
+Select seller_id 
+From Sales
+Group By seller_id
+HAVING SUM(PRICE) >= all (
+    SELECT SUM(PRICE)
+    FROM Sales
+    GROUP BY seller_id
+)
 ```
 
 ## 1050 Actors and Directors Who Cooperated At Least Three Times
 
+Table: `ActorDirector`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| actor_id    | int     |
+| director_id | int     |
+| timestamp   | int     |
++-------------+---------+
+timestamp is the primary key column for this table.
+```
+
+Write a SQL query for a report that provides the pairs `(actor_id, director_id)` where the actor have cooperated with the director at least 3 times.
+
+**Example:**
+
+```text
+ActorDirector table:
++-------------+-------------+-------------+
+| actor_id    | director_id | timestamp   |
++-------------+-------------+-------------+
+| 1           | 1           | 0           |
+| 1           | 1           | 1           |
+| 1           | 1           | 2           |
+| 1           | 2           | 3           |
+| 1           | 2           | 4           |
+| 2           | 1           | 5           |
+| 2           | 1           | 6           |
++-------------+-------------+-------------+
+
+Result table:
++-------------+-------------+
+| actor_id    | director_id |
++-------------+-------------+
+| 1           | 1           |
++-------------+-------------+
+The only pair is (1, 1) where they cooperated exactly 3 times.
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists ActorDirector (actor_id int, director_id int, timestamp int)
+Truncate table ActorDirector
+insert into ActorDirector (actor_id, director_id, timestamp) values ('1', '1', '0')
+insert into ActorDirector (actor_id, director_id, timestamp) values ('1', '1', '1')
+insert into ActorDirector (actor_id, director_id, timestamp) values ('1', '1', '2')
+insert into ActorDirector (actor_id, director_id, timestamp) values ('1', '2', '3')
+insert into ActorDirector (actor_id, director_id, timestamp) values ('1', '2', '4')
+insert into ActorDirector (actor_id, director_id, timestamp) values ('2', '1', '5')
+insert into ActorDirector (actor_id, director_id, timestamp) values ('2', '1', '6')
 ```
 
 ### Solution
