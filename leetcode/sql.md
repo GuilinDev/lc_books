@@ -3686,6 +3686,7 @@ SELECT employee_id, department_id
 FROM Employee 
 GROUP BY employee_id
 HAVING COUNT(employee_id) = 1
+# HAVING COUNT(*) = 1
 ```
 
 Window Function
@@ -3982,9 +3983,11 @@ Order by author_id
 ```
 
 ```sql
-SELECT author_id AS id FROM Views 
-where author_id = viewer_id 
-GROUP BY id #自动排序
+SELECT author_id AS id 
+FROM Views 
+Where author_id = viewer_id 
+GROUP BY id
+Order By id
 ```
 
 ## 586 Customer Placing the Largest Number of Orders
