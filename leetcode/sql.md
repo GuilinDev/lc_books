@@ -4557,50 +4557,259 @@ insert into ActorDirector (actor_id, director_id, timestamp) values ('2', '1', '
 ### Solution
 
 ```sql
-
+SELECT actor_id, director_id
+FROM ActorDirector
+GROUP BY actor_id, director_id
+HAVING COUNT(*) >= 3
 ```
 
 ## 577 Employee Bonus
 
+Select all employee's name and bonus whose bonus is &lt; 1000.
+
+Table:`Employee`
+
+```text
++-------+--------+-----------+--------+
+| empId |  name  | supervisor| salary |
++-------+--------+-----------+--------+
+|   1   | John   |  3        | 1000   |
+|   2   | Dan    |  3        | 2000   |
+|   3   | Brad   |  null     | 4000   |
+|   4   | Thomas |  3        | 4000   |
++-------+--------+-----------+--------+
+empId is the primary key column for this table.
+```
+
+Table: `Bonus`
+
+```text
++-------+-------+
+| empId | bonus |
++-------+-------+
+| 2     | 500   |
+| 4     | 2000  |
++-------+-------+
+empId is the primary key column for this table.
+```
+
+Example ouput:
+
+```text
++-------+-------+
+| name  | bonus |
++-------+-------+
+| John  | null  |
+| Dan   | 500   |
+| Brad  | null  |
++-------+-------+
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Employee (EmpId int, Name varchar(255), Supervisor int, Salary int)
+Create table If Not Exists Bonus (EmpId int, Bonus int)
+Truncate table Employee
+insert into Employee (EmpId, Name, Supervisor, Salary) values ('3', 'Brad', 'None', '4000')
+insert into Employee (EmpId, Name, Supervisor, Salary) values ('1', 'John', '3', '1000')
+insert into Employee (EmpId, Name, Supervisor, Salary) values ('2', 'Dan', '3', '2000')
+insert into Employee (EmpId, Name, Supervisor, Salary) values ('4', 'Thomas', '3', '4000')
+Truncate table Bonus
+insert into Bonus (EmpId, Bonus) values ('2', '500')
+insert into Bonus (EmpId, Bonus) values ('4', '2000')
 ```
 
 ### Solution
 
 ```sql
-
+Select name, bonus
+From Employee e
+Left Join Bonus b Using(empId)
+Having b.bonus is null or b.bonus < 1000
 ```
 
 ## 1633 Percentage of Users Attended a Contest
 
+Table: `Users`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| user_id     | int     |
+| user_name   | varchar |
++-------------+---------+
+user_id is the primary key for this table.
+Each row of this table contains the name and the id of a user.
+```
+
+Table: `Register`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| contest_id  | int     |
+| user_id     | int     |
++-------------+---------+
+(contest_id, user_id) is the primary key for this table.
+Each row of this table contains the id of a user and the contest they registered into.
+```
+
+Write an SQL query to find the percentage of the users registered in each contest rounded to two decimals.
+
+Return the result table ordered by `percentage` in **descending order**. In case of a tie, order it by `contest_id` in **ascending order**.
+
+The query result format is in the following example.
+
+```text
+Users table:
++---------+-----------+
+| user_id | user_name |
++---------+-----------+
+| 6       | Alice     |
+| 2       | Bob       |
+| 7       | Alex      |
++---------+-----------+
+
+Register table:
++------------+---------+
+| contest_id | user_id |
++------------+---------+
+| 215        | 6       |
+| 209        | 2       |
+| 208        | 2       |
+| 210        | 6       |
+| 208        | 6       |
+| 209        | 7       |
+| 209        | 6       |
+| 215        | 7       |
+| 208        | 7       |
+| 210        | 2       |
+| 207        | 2       |
+| 210        | 7       |
++------------+---------+
+
+Result table:
++------------+------------+
+| contest_id | percentage |
++------------+------------+
+| 208        | 100.0      |
+| 209        | 100.0      |
+| 210        | 100.0      |
+| 215        | 66.67      |
+| 207        | 33.33      |
++------------+------------+
+All the users registered in contests 208, 209, and 210. The percentage is 100% and we sort them in the answer table by contest_id in ascending order.
+Alice and Alex registered in contest 215 and the percentage is ((2/3) * 100) = 66.67%
+Bob registered in contest 207 and the percentage is ((1/3) * 100) = 33.33%
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Users (user_id int, user_name varchar(20))
+Create table If Not Exists Register (contest_id int, user_id int)
+Truncate table Users
+insert into Users (user_id, user_name) values ('6', 'Alice')
+insert into Users (user_id, user_name) values ('2', 'Bob')
+insert into Users (user_id, user_name) values ('7', 'Alex')
+Truncate table Register
+insert into Register (contest_id, user_id) values ('215', '6')
+insert into Register (contest_id, user_id) values ('209', '2')
+insert into Register (contest_id, user_id) values ('208', '2')
+insert into Register (contest_id, user_id) values ('210', '6')
+insert into Register (contest_id, user_id) values ('208', '6')
+insert into Register (contest_id, user_id) values ('209', '7')
+insert into Register (contest_id, user_id) values ('209', '6')
+insert into Register (contest_id, user_id) values ('215', '7')
+insert into Register (contest_id, user_id) values ('208', '7')
+insert into Register (contest_id, user_id) values ('210', '2')
+insert into Register (contest_id, user_id) values ('207', '2')
+insert into Register (contest_id, user_id) values ('210', '7')
 ```
 
 ### Solution
 
 ```sql
-
+# Group by contest_d and calculate the percentage of distinct user_id of all user_id from table users.
+SELECT contest_id, ROUND(COUNT(DISTINCT user_id) * 100 / (SELECT COUNT(*) FROM Users), 2) AS percentage
+FROM Register 
+GROUP BY contest_id
+ORDER BY percentage DESC, contest_id
 ```
 
 ## 1729 Find Followers Count
 
+Table: `Followers`
+
+```text
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| user_id     | int  |
+| follower_id | int  |
++-------------+------+
+(user_id, follower_id) is the primary key for this table.
+This table contains the IDs of a user and a follower in a social media app where the follower follows the user.
+```
+
+Write an SQL query that will, for each user, return the number of followers.
+
+Return the result table ordered by `user_id`.
+
+The query result format is in the following example:
+
+```text
+Followers table:
++---------+-------------+
+| user_id | follower_id |
++---------+-------------+
+| 0       | 1           |
+| 1       | 0           |
+| 2       | 0           |
+| 2       | 1           |
++---------+-------------+
+Result table:
++---------+----------------+
+| user_id | followers_count|
++---------+----------------+
+| 0       | 1              |
+| 1       | 1              |
+| 2       | 2              |
++---------+----------------+
+The followers of 0 are {1}
+The followers of 1 are {0}
+The followers of 2 are {0,1}
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Followers(user_id int, follower_id int)
+Truncate table Followers
+insert into Followers (user_id, follower_id) values ('0', '1')
+insert into Followers (user_id, follower_id) values ('1', '0')
+insert into Followers (user_id, follower_id) values ('2', '0')
+insert into Followers (user_id, follower_id) values ('2', '1')
 ```
 
 ### Solution
 
-```sql
+count\(column\) and count\(\*\), also count\(1\)
 
+```sql
+Select user_id, count(follower_id) As followers_count
+From Followers
+Group By user_id
+Order by user_id
 ```
 
-
+```sql
+Select user_id, count(*) As followers_count
+From Followers
+Group By user_id
+Order by user_id
+```
 
