@@ -1,100 +1,130 @@
 # SQL\_2
 
-## 1517 Find Users With Valid E-Mails 
-
-Table: `Users`
-
-```text
-+---------------+---------+
-| Column Name   | Type    |
-+---------------+---------+
-| user_id       | int     |
-| name          | varchar |
-| mail          | varchar |
-+---------------+---------+
-user_id is the primary key for this table.
-This table contains information of the users signed up in a website. Some e-mails are invalid.
-```
-
-Write an SQL query to find the users who have **valid emails**.
-
-A valid e-mail has a prefix name and a domain where: 
-
-* **The prefix name** is a string that may contain letters \(upper or lower case\), digits, underscore `'_'`, period `'.'` and/or dash `'-'`. The prefix name **must** start with a letter.
-* **The domain** is `'@leetcode.com'`.
-
-Return the result table in any order.
-
-The query result format is in the following example.
-
-```text
-Users
-+---------+-----------+-------------------------+
-| user_id | name      | mail                    |
-+---------+-----------+-------------------------+
-| 1       | Winston   | winston@leetcode.com    |
-| 2       | Jonathan  | jonathanisgreat         |
-| 3       | Annabelle | bella-@leetcode.com     |
-| 4       | Sally     | sally.come@leetcode.com |
-| 5       | Marwan    | quarz#2020@leetcode.com |
-| 6       | David     | david69@gmail.com       |
-| 7       | Shapiro   | .shapo@leetcode.com     |
-+---------+-----------+-------------------------+
-
-Result table:
-+---------+-----------+-------------------------+
-| user_id | name      | mail                    |
-+---------+-----------+-------------------------+
-| 1       | Winston   | winston@leetcode.com    |
-| 3       | Annabelle | bella-@leetcode.com     |
-| 4       | Sally     | sally.come@leetcode.com |
-+---------+-----------+-------------------------+
-The mail of user 2 doesn't have a domain.
-The mail of user 5 has # sign which is not allowed.
-The mail of user 6 doesn't have leetcode domain.
-The mail of user 7 starts with a period.
-```
-
-### Schema
-
-```sql
-Create table If Not Exists Users (user_id int, name varchar(30), mail varchar(50))
-Truncate table Users
-insert into Users (user_id, name, mail) values ('1', 'Winston', 'winston@leetcode.com')
-insert into Users (user_id, name, mail) values ('2', 'Jonathan', 'jonathanisgreat')
-insert into Users (user_id, name, mail) values ('3', 'Annabelle', 'bella-@leetcode.com')
-insert into Users (user_id, name, mail) values ('4', 'Sally', 'sally.come@leetcode.com')
-insert into Users (user_id, name, mail) values ('5', 'Marwan', 'quarz#2020@leetcode.com')
-insert into Users (user_id, name, mail) values ('6', 'David', 'david69@gmail.com')
-insert into Users (user_id, name, mail) values ('7', 'Shapiro', '.shapo@leetcode.com')
-```
-
-### Solution
-
-```sql
-
-```
-
 ## 620 Not Boring Movies
 
+ X city opened a new cinema, many people would like to go to this cinema. The cinema also gives out a poster indicating the movies’ ratings and descriptions.
+
+Please write a SQL query to output movies with an odd numbered ID and a description that is not 'boring'. Order the result by rating.
+
+For example, table `cinema`:
+
+```text
++---------+-----------+--------------+-----------+
+|   id    | movie     |  description |  rating   |
++---------+-----------+--------------+-----------+
+|   1     | War       |   great 3D   |   8.9     |
+|   2     | Science   |   fiction    |   8.5     |
+|   3     | irish     |   boring     |   6.2     |
+|   4     | Ice song  |   Fantacy    |   8.6     |
+|   5     | House card|   Interesting|   9.1     |
++---------+-----------+--------------+-----------+
+```
+
+For the example above, the output should be:
+
+```text
++---------+-----------+--------------+-----------+
+|   id    | movie     |  description |  rating   |
++---------+-----------+--------------+-----------+
+|   5     | House card|   Interesting|   9.1     |
+|   1     | War       |   great 3D   |   8.9     |
++---------+-----------+--------------+-----------+
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists cinema (id int, movie varchar(255), description varchar(255), rating float(2, 1))
+Truncate table cinema
+insert into cinema (id, movie, description, rating) values ('1', 'War', 'great 3D', '8.9')
+insert into cinema (id, movie, description, rating) values ('2', 'Science', 'fiction', '8.5')
+insert into cinema (id, movie, description, rating) values ('3', 'irish', 'boring', '6.2')
+insert into cinema (id, movie, description, rating) values ('4', 'Ice song', 'Fantacy', '8.6')
+insert into cinema (id, movie, description, rating) values ('5', 'House card', 'Interesting', '9.1')
 ```
 
 ### Solution
 
 ```sql
-
+Select *
+From cinema
+Where description not like '%boring%' # description <> 'boring'
+And id % 2 != 0
+Order by rating DESC
 ```
 
 ## 1211 Queries Quality and Percentage
 
+Table: `Queries`
+
+```text
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| query_name  | varchar |
+| result      | varchar |
+| position    | int     |
+| rating      | int     |
++-------------+---------+
+There is no primary key for this table, it may have duplicate rows.
+This table contains information collected from some queries on a database.
+The position column has a value from 1 to 500.
+The rating column has a value from 1 to 5. Query with rating less than 3 is a poor query.
+```
+
+We define query `quality` as:
+
+> The average of the ratio between query rating and its position.
+
+We also define `poor query percentage` as:
+
+> The percentage of all queries with rating less than 3.
+
+Write an SQL query to find each `query_name`, the `quality` and `poor_query_percentage`.
+
+Both `quality` and `poor_query_percentage` should be **rounded to 2 decimal places**.
+
+The query result format is in the following example:
+
+```text
+Queries table:
++------------+-------------------+----------+--------+
+| query_name | result            | position | rating |
++------------+-------------------+----------+--------+
+| Dog        | Golden Retriever  | 1        | 5      |
+| Dog        | German Shepherd   | 2        | 5      |
+| Dog        | Mule              | 200      | 1      |
+| Cat        | Shirazi           | 5        | 2      |
+| Cat        | Siamese           | 3        | 3      |
+| Cat        | Sphynx            | 7        | 4      |
++------------+-------------------+----------+--------+
+
+Result table:
++------------+---------+-----------------------+
+| query_name | quality | poor_query_percentage |
++------------+---------+-----------------------+
+| Dog        | 2.50    | 33.33                 |
+| Cat        | 0.66    | 33.33                 |
++------------+---------+-----------------------+
+
+Dog queries quality is ((5 / 1) + (5 / 2) + (1 / 200)) / 3 = 2.50
+Dog queries poor_ query_percentage is (1 / 3) * 100 = 33.33
+
+Cat queries quality equals ((2 / 5) + (3 / 3) + (4 / 7)) / 3 = 0.66
+Cat queries poor_ query_percentage is (1 / 3) * 100 = 33.33
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Queries (query_name varchar(30), result varchar(50), position int, rating int)
+Truncate table Queries
+insert into Queries (query_name, result, position, rating) values ('Dog', 'Golden Retriever', '1', '5')
+insert into Queries (query_name, result, position, rating) values ('Dog', 'German Shepherd', '2', '5')
+insert into Queries (query_name, result, position, rating) values ('Dog', 'Mule', '200', '1')
+insert into Queries (query_name, result, position, rating) values ('Cat', 'Shirazi', '5', '2')
+insert into Queries (query_name, result, position, rating) values ('Cat', 'Siamese', '3', '3')
+insert into Queries (query_name, result, position, rating) values ('Cat', 'Sphynx', '7', '4')
 ```
 
 ### Solution
