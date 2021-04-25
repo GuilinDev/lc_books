@@ -660,3 +660,157 @@ Left Join Employee e On p.employee_id = e.employee_id
 Group By 1
 ```
 
+## 603 Consecutive Available Seats
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 1075 Project Employees I
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 1113 Reported Posts
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 607 Sales Person 
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 182 Duplicate Emails
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 175 Combine Two Tables 
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 1667 Fix Names in a Table 
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 1527 Patients With a Condition 
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 181 Employees Earning More Than Their Managers 
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 1322 Ads Performance
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
+## 183 Customers Who Never Order
+
+### Schema
+
+```sql
+
+```
+
+### Solution
+
+```sql
+
+```
+
