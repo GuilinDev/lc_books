@@ -662,72 +662,310 @@ Group By 1
 
 ## 603 Consecutive Available Seats
 
+ Several friends at a cinema ticket office would like to reserve consecutive available seats.  
+Can you help to query all the consecutive available seats order by the seat\_id using the following `cinema` table?
+
+```text
+| seat_id | free |
+|---------|------|
+| 1       | 1    |
+| 2       | 0    |
+| 3       | 1    |
+| 4       | 1    |
+| 5       | 1    |
+```
+
+ Your query should return the following result for the sample case above.
+
+```text
+| seat_id |
+|---------|
+| 3       |
+| 4       |
+| 5       |
+```
+
+**Note**:
+
+* The seat\_id is an auto increment int, and free is bool \('1' means free, and '0' means occupied.\).
+* Consecutive available seats are more than 2\(inclusive\) seats consecutively available.
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists cinema (seat_id int primary key auto_increment, free bool)
+Truncate table cinema
+insert into cinema (seat_id, free) values ('1', '1')
+insert into cinema (seat_id, free) values ('2', '0')
+insert into cinema (seat_id, free) values ('3', '1')
+insert into cinema (seat_id, free) values ('4', '1')
+insert into cinema (seat_id, free) values ('5', '1')
 ```
 
 ### Solution
 
 ```sql
-
+Select distinct a.seat_id 
+From cinema a, cinema b
+Where a.free = 1 And b.free = 1 # 空闲
+    And (a.seat_id + 1 = b.seat_id Or a.seat_id = b.seat_id + 1) # 连续
+Order by a.seat_id asc
 ```
 
-## 1075 Project Employees I
-
-### Schema
-
 ```sql
-
-```
-
-### Solution
-
-```sql
-
+Select distinct a.seat_id 
+From cinema a, cinema b
+Where a.free = true And b.free = true # 空闲，0不为true
+    And abs(a.seat_id - b.seat_id) = 1 # 连续
+Order by a.seat_id asc
 ```
 
 ## 1113 Reported Posts
 
+Table: `Actions`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| post_id       | int     |
+| action_date   | date    | 
+| action        | enum    |
+| extra         | varchar |
++---------------+---------+
+There is no primary key for this table, it may have duplicate rows.
+The action column is an ENUM type of ('view', 'like', 'reaction', 'comment', 'report', 'share').
+The extra column has optional information about the action such as a reason for report or a type of reaction. 
+```
+
+Write an SQL query that reports the number of posts reported yesterday for each report reason. Assume today is **2019-07-05**.
+
+The query result format is in the following example:
+
+```text
+Actions table:
++---------+---------+-------------+--------+--------+
+| user_id | post_id | action_date | action | extra  |
++---------+---------+-------------+--------+--------+
+| 1       | 1       | 2019-07-01  | view   | null   |
+| 1       | 1       | 2019-07-01  | like   | null   |
+| 1       | 1       | 2019-07-01  | share  | null   |
+| 2       | 4       | 2019-07-04  | view   | null   |
+| 2       | 4       | 2019-07-04  | report | spam   |
+| 3       | 4       | 2019-07-04  | view   | null   |
+| 3       | 4       | 2019-07-04  | report | spam   |
+| 4       | 3       | 2019-07-02  | view   | null   |
+| 4       | 3       | 2019-07-02  | report | spam   |
+| 5       | 2       | 2019-07-04  | view   | null   |
+| 5       | 2       | 2019-07-04  | report | racism |
+| 5       | 5       | 2019-07-04  | view   | null   |
+| 5       | 5       | 2019-07-04  | report | racism |
++---------+---------+-------------+--------+--------+
+
+Result table:
++---------------+--------------+
+| report_reason | report_count |
++---------------+--------------+
+| spam          | 1            |
+| racism        | 2            |
++---------------+--------------+ 
+Note that we only care about report reasons with non zero number of reports.
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Actions (user_id int, post_id int, action_date date, action ENUM('view', 'like', 'reaction', 'comment', 'report', 'share'), extra varchar(10))
+Truncate table Actions
+insert into Actions (user_id, post_id, action_date, action, extra) values ('1', '1', '2019-07-01', 'view', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('1', '1', '2019-07-01', 'like', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('1', '1', '2019-07-01', 'share', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('2', '4', '2019-07-04', 'view', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('2', '4', '2019-07-04', 'report', 'spam')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('3', '4', '2019-07-04', 'view', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('3', '4', '2019-07-04', 'report', 'spam')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('4', '3', '2019-07-02', 'view', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('4', '3', '2019-07-02', 'report', 'spam')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('5', '2', '2019-07-04', 'view', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('5', '2', '2019-07-04', 'report', 'racism')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('5', '5', '2019-07-04', 'view', 'None')
+insert into Actions (user_id, post_id, action_date, action, extra) values ('5', '5', '2019-07-04', 'report', 'racism')
 ```
 
 ### Solution
 
 ```sql
-
+Select extra as report_reason, count(distinct post_id) as report_count
+From Actions
+Where action = 'report' And action_date = '2019-07-04' # action_date = subdate(curdate_date, 1)
+Group by 1
 ```
 
 ## 607 Sales Person 
 
+**Description**
+
+Given three tables: `salesperson`, `company`, `orders`.  
+Output all the **names** in the table `salesperson`, who didn’t have sales to company 'RED'.
+
+**Example**  
+**Input**
+
+Table: `salesperson`
+
+```text
++----------+------+--------+-----------------+-----------+
+| sales_id | name | salary | commission_rate | hire_date |
++----------+------+--------+-----------------+-----------+
+|   1      | John | 100000 |     6           | 4/1/2006  |
+|   2      | Amy  | 120000 |     5           | 5/1/2010  |
+|   3      | Mark | 65000  |     12          | 12/25/2008|
+|   4      | Pam  | 25000  |     25          | 1/1/2005  |
+|   5      | Alex | 50000  |     10          | 2/3/2007  |
++----------+------+--------+-----------------+-----------+
+```
+
+The table `salesperson` holds the salesperson information. Every salesperson has a **sales\_id** and a **name**.
+
+Table: `company`
+
+```text
++---------+--------+------------+
+| com_id  |  name  |    city    |
++---------+--------+------------+
+|   1     |  RED   |   Boston   |
+|   2     | ORANGE |   New York |
+|   3     | YELLOW |   Boston   |
+|   4     | GREEN  |   Austin   |
++---------+--------+------------+
+```
+
+The table `company` holds the company information. Every company has a **com\_id** and a **name**.
+
+Table: `orders`
+
+```text
++----------+------------+---------+----------+--------+
+| order_id | order_date | com_id  | sales_id | amount |
++----------+------------+---------+----------+--------+
+| 1        |   1/1/2014 |    3    |    4     | 100000 |
+| 2        |   2/1/2014 |    4    |    5     | 5000   |
+| 3        |   3/1/2014 |    1    |    1     | 50000  |
+| 4        |   4/1/2014 |    1    |    4     | 25000  |
++----------+----------+---------+----------+--------+
+```
+
+The table `orders` holds the sales record information, salesperson and customer company are represented by **sales\_id** and **com\_id**.
+
+**output**
+
+```text
++------+
+| name | 
++------+
+| Amy  | 
+| Mark | 
+| Alex |
++------+
+```
+
+**Explanation**
+
+According to order '3' and '4' in table `orders`, it is easy to tell only salesperson 'John' and 'Pam' have sales to company 'RED',  
+so we need to output all the other **names** in the table `salesperson`.
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists salesperson (sales_id int, name varchar(255), salary int,commission_rate int, hire_date varchar(255))
+Create table If Not Exists company (com_id int, name varchar(255), city varchar(255))
+Create table If Not Exists orders (order_id int, order_date varchar(255), com_id int, sales_id int, amount int)
+Truncate table salesperson
+insert into salesperson (sales_id, name, salary, commission_rate, hire_date) values ('1', 'John', '100000', '6', '4/1/2006')
+insert into salesperson (sales_id, name, salary, commission_rate, hire_date) values ('2', 'Amy', '12000', '5', '5/1/2010')
+insert into salesperson (sales_id, name, salary, commission_rate, hire_date) values ('3', 'Mark', '65000', '12', '12/25/2008')
+insert into salesperson (sales_id, name, salary, commission_rate, hire_date) values ('4', 'Pam', '25000', '25', '1/1/2005')
+insert into salesperson (sales_id, name, salary, commission_rate, hire_date) values ('5', 'Alex', '5000', '10', '2/3/2007')
+Truncate table company
+insert into company (com_id, name, city) values ('1', 'RED', 'Boston')
+insert into company (com_id, name, city) values ('2', 'ORANGE', 'New York')
+insert into company (com_id, name, city) values ('3', 'YELLOW', 'Boston')
+insert into company (com_id, name, city) values ('4', 'GREEN', 'Austin')
+Truncate table orders
+insert into orders (order_id, order_date, com_id, sales_id, amount) values ('1', '1/1/2014', '3', '4', '10000')
+insert into orders (order_id, order_date, com_id, sales_id, amount) values ('2', '2/1/2014', '4', '5', '5000')
+insert into orders (order_id, order_date, com_id, sales_id, amount) values ('3', '3/1/2014', '1', '1', '50000')
+insert into orders (order_id, order_date, com_id, sales_id, amount) values ('4', '4/1/2014', '1', '4', '25000')
 ```
 
 ### Solution
 
 ```sql
-
+Select s.name 
+From salesperson s
+Where s.sales_id not in (
+    Select o.sales_id
+    From orders o
+        Left Join Company c
+        On o.com_id = c.com_id
+    Where c.name = 'RED' # where也可用于join on之后
+)
 ```
 
 ## 182 Duplicate Emails
 
+Write a SQL query to find all duplicate emails in a table named `Person`.
+
+```text
++----+---------+
+| Id | Email   |
++----+---------+
+| 1  | a@b.com |
+| 2  | c@d.com |
+| 3  | a@b.com |
++----+---------+
+```
+
+For example, your query should return the following for the above table:
+
+```text
++---------+
+| Email   |
++---------+
+| a@b.com |
++---------+
+```
+
+**Note**: All emails are in lowercase.
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Person (Id int, Email varchar(255))
+Truncate table Person
+insert into Person (Id, Email) values ('1', 'a@b.com')
+insert into Person (Id, Email) values ('2', 'c@d.com')
+insert into Person (Id, Email) values ('3', 'a@b.com')
 ```
 
 ### Solution
 
 ```sql
+Select Email
+From Person
+Group by Email
+having count(*) > 1
+```
 
+```sql
+Select Email from Person Where Id not in (
+    Select tmp.Id from (
+        Select min(Id) as Id 
+        from Person 
+            Group By email
+    ) tmp
+)
 ```
 
 ## 175 Combine Two Tables 
