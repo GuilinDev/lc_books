@@ -968,26 +968,52 @@ Select Email from Person Where Id not in (
 )
 ```
 
-## 175 Combine Two Tables 
-
-### Schema
-
-```sql
-
-```
-
-### Solution
-
-```sql
-
-```
-
 ## 1667 Fix Names in a Table 
 
+Table: `Users`
+
+```text
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| user_id        | int     |
+| name           | varchar |
++----------------+---------+
+user_id is the primary key for this table.
+This table contains the ID and the name of the user. The name consists of only lowercase and uppercase characters.
+```
+
+Write an SQL query to fix the names so that only the first character is uppercase and the rest are lowercase.
+
+Return the result table ordered by `user_id`.
+
+The query result format is in the following example:
+
+```text
+Users table:
++---------+-------+
+| user_id | name  |
++---------+-------+
+| 1       | aLice |
+| 2       | bOB   |
++---------+-------+
+
+Result table:
++---------+-------+
+| user_id | name  |
++---------+-------+
+| 1       | Alice |
+| 2       | Bob   |
++---------+-------+
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Users (user_id int, name varchar(40))
+Truncate table Users
+insert into Users (user_id, name) values ('1', 'aLice')
+insert into Users (user_id, name) values ('2', 'bOB')
 ```
 
 ### Solution
