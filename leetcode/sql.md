@@ -95,10 +95,8 @@ insert into Address (AddressId, PersonId, City, State) values ('1', '2', 'New Yo
 
 ```sql
 # Write your MySQL query statement below
-Select a.FirstName, a.LastName, b.city, b.State 
-From Person a
-Left join Address b 
-    on a.PersonID = b.PersonId
+select a.FirstName, a.LastName, b.city, b.State from Person a
+left join Address b on a.PersonID = b.PersonId
 ```
 
 ## 177 Nth Highest Salary

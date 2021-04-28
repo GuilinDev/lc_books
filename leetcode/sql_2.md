@@ -1019,62 +1019,176 @@ insert into Users (user_id, name) values ('2', 'bOB')
 ### Solution
 
 ```sql
-
+Select user_id, CONCAT(UPPER(Substring(name, 1, 1)), LOWER(Substring(name, 2))) as name
+From users
 ```
 
 ## 1527 Patients With a Condition 
 
+Table: `Patients`
+
+```text
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| patient_id   | int     |
+| patient_name | varchar |
+| conditions   | varchar |
++--------------+---------+
+patient_id is the primary key for this table.
+'conditions' contains 0 or more code separated by spaces. 
+This table contains information of the patients in the hospital.
+```
+
+Write an SQL query to report the patient\_id, patient\_name all conditions of patients who have Type I Diabetes. Type I Diabetes always starts with `DIAB1` prefix
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+```text
+Patients
++------------+--------------+--------------+
+| patient_id | patient_name | conditions   |
++------------+--------------+--------------+
+| 1          | Daniel       | YFEV COUGH   |
+| 2          | Alice        |              |
+| 3          | Bob          | DIAB100 MYOP |
+| 4          | George       | ACNE DIAB100 |
+| 5          | Alain        | DIAB201      |
++------------+--------------+--------------+
+
+Result table:
++------------+--------------+--------------+
+| patient_id | patient_name | conditions   |
++------------+--------------+--------------+
+| 3          | Bob          | DIAB100 MYOP |
+| 4          | George       | ACNE DIAB100 | 
++------------+--------------+--------------+
+Bob and George both have a condition that starts with DIAB1.
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Patients (patient_id int, patient_name varchar(30), conditions varchar(100))
+Truncate table Patients
+insert into Patients (patient_id, patient_name, conditions) values ('1', 'Daniel', 'YFEV COUGH')
+insert into Patients (patient_id, patient_name, conditions) values ('2', 'Alice', '')
+insert into Patients (patient_id, patient_name, conditions) values ('3', 'Bob', 'DIAB100 MYOP')
+insert into Patients (patient_id, patient_name, conditions) values ('4', 'George', 'ACNE DIAB100')
+insert into Patients (patient_id, patient_name, conditions) values ('5', 'Alain', 'DIAB201')
 ```
 
 ### Solution
 
-```sql
+general
 
+```sql
+Select *
+From patients
+Where conditions like 'DIAB1%' 
+Or conditions like '% DIAB1%'
 ```
 
-## 181 Employees Earning More Than Their Managers 
-
-### Schema
+Regex
 
 ```sql
-
-```
-
-### Solution
-
-```sql
-
+Select patient_id, patient_name, conditions
+From patients
+Where conditions REGEXP '^DIAB1| DIAB1'
 ```
 
 ## 1322 Ads Performance
 
+Table: `Ads`
+
+```text
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| ad_id         | int     |
+| user_id       | int     |
+| action        | enum    |
++---------------+---------+
+(ad_id, user_id) is the primary key for this table.
+Each row of this table contains the ID of an Ad, the ID of a user and the action taken by this user regarding this Ad.
+The action column is an ENUM type of ('Clicked', 'Viewed', 'Ignored').
+```
+
+A company is running Ads and wants to calculate the performance of each Ad.
+
+Performance of the Ad is measured using Click-Through Rate \(CTR\) where:
+
+![](https://assets.leetcode.com/uploads/2020/01/17/sql1.png)
+
+Write an SQL query to find the `ctr` of each Ad.
+
+**Round** `ctr` to 2 decimal points. **Order** the result table by `ctr` in descending order and by `ad_id` in ascending order in case of a tie.
+
+The query result format is in the following example:
+
+```text
+Ads table:
++-------+---------+---------+
+| ad_id | user_id | action  |
++-------+---------+---------+
+| 1     | 1       | Clicked |
+| 2     | 2       | Clicked |
+| 3     | 3       | Viewed  |
+| 5     | 5       | Ignored |
+| 1     | 7       | Ignored |
+| 2     | 7       | Viewed  |
+| 3     | 5       | Clicked |
+| 1     | 4       | Viewed  |
+| 2     | 11      | Viewed  |
+| 1     | 2       | Clicked |
++-------+---------+---------+
+Result table:
++-------+-------+
+| ad_id | ctr   |
++-------+-------+
+| 1     | 66.67 |
+| 3     | 50.00 |
+| 2     | 33.33 |
+| 5     | 0.00  |
++-------+-------+
+for ad_id = 1, ctr = (2/(2+1)) * 100 = 66.67
+for ad_id = 2, ctr = (1/(1+2)) * 100 = 33.33
+for ad_id = 3, ctr = (1/(1+1)) * 100 = 50.00
+for ad_id = 5, ctr = 0.00, Note that ad_id = 5 has no clicks or views.
+Note that we don't care about Ignored Ads.
+Result table is ordered by the ctr. in case of a tie we order them by ad_id
+```
+
 ### Schema
 
 ```sql
-
+Create table If Not Exists Ads (ad_id int, user_id int, action ENUM('Clicked', 'Viewed', 'Ignored'))
+Truncate table Ads
+insert into Ads (ad_id, user_id, action) values ('1', '1', 'Clicked')
+insert into Ads (ad_id, user_id, action) values ('2', '2', 'Clicked')
+insert into Ads (ad_id, user_id, action) values ('3', '3', 'Viewed')
+insert into Ads (ad_id, user_id, action) values ('5', '5', 'Ignored')
+insert into Ads (ad_id, user_id, action) values ('1', '7', 'Ignored')
+insert into Ads (ad_id, user_id, action) values ('2', '7', 'Viewed')
+insert into Ads (ad_id, user_id, action) values ('3', '5', 'Clicked')
+insert into Ads (ad_id, user_id, action) values ('1', '4', 'Viewed')
+insert into Ads (ad_id, user_id, action) values ('2', '11', 'Viewed')
+insert into Ads (ad_id, user_id, action) values ('1', '2', 'Clicked')
 ```
 
 ### Solution
 
 ```sql
-
-```
-
-## 183 Customers Who Never Order
-
-### Schema
-
-```sql
-
-```
-
-### Solution
-
-```sql
-
+Select ad_id, IFNULL(round(avg(
+                                Case When action = 'Clicked' Then 1
+                                     When action = 'Viewed' Then 0
+                                     Else null 
+                                     End
+                                ) * 100, 2), 0) As ctr
+From Ads
+Group by 1
+Order by ctr desc, ad_id;
 ```
 
