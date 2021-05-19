@@ -915,55 +915,104 @@ Quick sort和Merge Sort
 
 ### 代码
 
-快排
+快排 模板
+
+```java
+class Solution {
+    /**
+     * @param A: an integer array
+     * @return: nothing
+     */
+    public int[] sortArray(int[] nums) {
+        // write your code here
+        quickSort(nums, 0, nums.length - 1);
+        return nums;
+    }
+    
+    private void quickSort(int[] nums, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+        int mid = partition(nums, start, end);
+        quickSort(nums, start, mid - 1);
+        quickSort(nums, mid + 1, end);
+    }
+    
+    private int partition(int[] nums, int start, int end) {
+        int pivot = nums[start];
+        int i = start + 1;
+        int j = end;
+        while (i <= j) {
+            while (i <= j && nums[i] <= pivot) {
+                i++;
+            }
+            while (i <= j && nums[j] > pivot) {
+                j--;
+            }
+            if (i > j) {
+                break;
+            } 
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+            j--;
+            i++;
+        }
+        nums[start] = nums[j];
+        nums[j] = pivot;
+        return j;
+    }
+}
+```
+
+归并 模板
 
 ```java
 class Solution {
     public int[] sortArray(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return null;
+        // use a shared temp array, the extra memory is O(n) at least
+        int[] temp = new int[nums.length];
+        mergeSort(nums, 0, nums.length - 1, temp);
+        return nums;
+    }
+    
+    private void mergeSort(int[] nums, int start, int end, int[] temp) {
+        if (start >= end) {
+            return;
         }
-        return quickSort(nums, 0, nums.length - 1);
+        
+        int mid = (start + end) / 2;
+
+        mergeSort(nums, start, mid, temp);
+        mergeSort(nums, mid + 1, end, temp);
+        merge(nums, start, mid, end, temp);
     }
-
-    int[] quickSort(int[] arr, int left, int right) {
-        if (left >= right) return arr;
-        int i = partition(arr, left, right);
-        quickSort(arr, left, i - 1);
-        quickSort(arr, i + 1, right);
-
-        return arr;
-    }
-
-    int partition(int[] arr, int start, int end) {
-        int pivot = arr[start];
-        int sortedIdx = start; // 该轮应该放好位置的元素的index
-        int index = start + 1; // 寻找跟pivot比较的数的index
-
-        while (index <= end) {
-            if (arr[index] < pivot) {
-                sortedIdx++;
-                swap(arr, sortedIdx, index);
+    
+    private void merge(int[] nums, int start, int mid, int end, int[] temp) {
+        int left = start;
+        int right = mid + 1;
+        int index = start;
+        
+        // merge two sorted subarrays in A to temp array
+        while (left <= mid && right <= end) {
+            if (nums[left] < nums[right]) {
+                temp[index++] = nums[left++];
+            } else {
+                temp[index++] = nums[right++];
             }
-            index++;
         }
-        // 把pivot放到正确位置上
-        swap(arr, start, sortedIdx);
-        return sortedIdx;
+        while (left <= mid) {
+            temp[index++] = nums[left++];
+        }
+        while (right <= end) {
+            temp[index++] = nums[right++];
+        }
+        
+        // copy temp back to A
+        for (index = start; index <= end; index++) {
+            nums[index] = temp[index];
+        }
     }
-
-    void swap(int[] arr, int p, int q) {
-        int temp = arr[p];
-        arr[p] = arr[q];
-        arr[q] = temp;
-    }
-
 }
-```
-
-归并
-
-```text
-
 ```
 
