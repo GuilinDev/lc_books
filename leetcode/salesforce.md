@@ -531,3 +531,115 @@ class Solution {
 
 [https://leetcode-cn.com/problems/average-waiting-time/solution/ping-jun-deng-dai-shi-jian-by-yi-shen-du-inj4/](https://leetcode-cn.com/problems/average-waiting-time/solution/ping-jun-deng-dai-shi-jian-by-yi-shen-du-inj4/)
 
+## Find Common Nodes in TWO BST
+
+```java
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class CommonNodesTwoBST {
+    /**
+     * BST Node class
+     */
+    static class Node {
+        private Node(){}
+        int val;
+        Node left;
+        Node right;
+    }
+
+    /**
+     * Create a new Node
+     * @param val - value for a new Node
+     * @return a new Node
+     */
+    public static Node newNode(int val) {
+        Node n = new Node();
+        n.val = val;
+        n.left = null;
+        n.right = null;
+
+        return n;
+    }
+
+    /**
+     * insert a node into a BST
+     */
+    private static Node insert(Node root, int val) {
+        if (root == null) {
+            return newNode(val);
+        }
+        if (val < root.val) {
+            root.left = insert(root.left, val);
+        } else if (val > root.val){
+            root.right = insert(root.right, val);
+        }
+        return root;
+    }
+
+    /**
+     * inorder traversal
+     */
+    private static void inorder(Node root, Stack<Node> stack) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left, stack);
+//        System.out.println(root.val);
+        stack.push(root);
+        inorder(root.right, stack);
+    }
+
+    /**
+     * find common nodes for 2 BST
+     */
+    public static ArrayList<Integer> findCommonNodesTwoBST(Node node1, Node node2) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (node1 == null || node2 == null) {
+            return result;
+        }
+
+        Stack<Node> stack1 = new Stack<>();
+        Stack<Node> stack2 = new Stack<>();
+        Node p1 = node1;
+        Node p2 = node2;
+
+        inorder(p1, stack1);
+        inorder(p2, stack2);
+
+        // bigger elements are on the top of stack
+        while (!stack1.isEmpty() && !stack2.isEmpty()) {
+            if (stack1.peek().val == stack2.peek().val) {
+                result.add(0, stack1.peek().val);
+                stack1.pop();
+                stack2.pop();
+            } else if (stack1.peek().val > stack2.peek().val) {
+                stack1.pop();
+            } else {
+                stack2.pop();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Test
+     */
+    public static void main(String[] args) {
+        Node n1 = newNode(100);
+        Node n2 = newNode(200);
+
+        insert(n1, 50);
+        insert(n1, 200);
+        insert(n2, 100);
+        insert(n2, 300);
+
+        ArrayList<Integer> commonNodes = new ArrayList<>();
+        commonNodes = findCommonNodesTwoBST(n1, n2);
+
+        System.out.println("Result: " + commonNodes.size());
+        commonNodes.stream().forEach(System.out::println); // 100, 200
+    }
+}
+```
+
