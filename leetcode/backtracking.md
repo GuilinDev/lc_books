@@ -335,7 +335,7 @@ A solution set is:
 
 ### 分析
 
-同39，有重复元素，必须排序和跳过重复元素。
+有重复元素，必须排序和跳过重复元素。这道题需要找unique的组合，例如\[2,2,3\], target = 5，这时候只返回一个\[2, 3\]。
 
 ### 代码
 
@@ -357,7 +357,7 @@ class Solution {
             return;
         }
         for (int i = index; i < candidates.length; i++) {
-            if (i > index && (candidates[i] == candidates[i - 1])) { //i > index，不选
+            if (i > index && (candidates[i] == candidates[i - 1])) { //选过了，防止重复combinations
                 continue;
             }
             path.add(candidates[i]);
