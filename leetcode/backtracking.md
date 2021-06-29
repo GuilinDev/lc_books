@@ -357,11 +357,11 @@ class Solution {
             return;
         }
         for (int i = index; i < candidates.length; i++) {
-            if (i > index && (candidates[i] == candidates[i - 1])) { //i > index，刚才取过的数字不用管，后面的重复不用取
+            if (i > index && (candidates[i] == candidates[i - 1])) { //i > index，不选
                 continue;
             }
             path.add(candidates[i]);
-            //跟i比，这里换成i + 1，不能重复使用
+            //跟i比，这里换成i + 1，不使用刚才的重复数字
             dfs(candidates, target, result, path, sum + candidates[i], i + 1);
             path.remove(path.size() - 1);
         }
