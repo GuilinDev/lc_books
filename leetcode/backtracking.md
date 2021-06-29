@@ -452,29 +452,26 @@ Output:
 ```java
 class Solution {
     public List<List<Integer>> permuteUnique(int[] nums) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if (nums == null || nums.length == 0) {
-            return result;
-        }
-        Arrays.sort(nums);//排序的作用是防止利用重复相等的数字
-        backtrack(result, new ArrayList<>(), nums, new boolean[nums.length]);//用一个一维数组来记录元素是否被用过
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+        dfs(nums, result, new ArrayList<>(), new HashSet<>());// 用一个Set或一维boolean数组来记录元素是否被用过
         return result;
     }
-    private void backtrack(List<List<Integer>> result, List<Integer> oneList, int[] nums, boolean[] used) {
-        if (oneList.size() == nums.length) {
-            result.add(new ArrayList<>(oneList));
-        } else {
-            for (int i = 0; i < nums.length; i++) {
-                if (used[i] //被用过
-                        || (i > 0 && nums[i] == nums[i - 1] && !used[i - 1])) {//有重复数字的情况
-                    continue;
-                }
-                used[i] = true;
-                oneList.add(nums[i]);
-                backtrack(result, oneList, nums, used);
-                used[i] = false;
-                oneList.remove(oneList.size() - 1);
+
+    private void dfs(int[] nums, List<List<Integer>> result, List<Integer> list, Set<Integer> visited) {
+        if (visited.size() == nums.length) {
+            result.add(new ArrayList<>(list));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited.contains(i) || (i > 0 && nums[i] == nums[i - 1] && !visited.contains(i - 1))) {
+                continue;
             }
+            visited.add(i);
+            list.add(nums[i]);
+            dfs(nums, result, list, visited);
+            visited.remove(i);
+            list.remove(list.size() - 1);
         }
     }
 }
