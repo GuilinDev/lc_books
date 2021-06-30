@@ -125,11 +125,16 @@ class Solution {
                 resultList.add(entry.getKey());
             }
         }
-        int[] result = new int[resultList.size()];
-        for (int i = 0; i < resultList.size(); i++) {
-            result[i] = resultList.get(i);
-        }
-        return result;
+        // int[] result = new int[resultList.size()];
+        
+        // for (int i = 0; i < resultList.size(); i++) {
+        //     result[i] = resultList.get(i);
+        // }
+        // return result;
+        return resultList.stream()
+                    .filter(Objects::nonNull)
+                    .mapToInt(Integer::intValue)
+                    .toArray();
     }
 
     private int findSum(TreeNode root, HashMap<Integer, Integer> map) {
