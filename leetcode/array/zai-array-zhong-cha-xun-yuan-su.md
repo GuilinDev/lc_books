@@ -46,52 +46,28 @@ class Solution {
         if (nums == null || nums.length == 0) {
             return 0;
         }
-        if (nums.length == 1) {
-            return nums[0];
-        }
-        int left = 0, right = nums.length - 1;//Binary Search
-        while (left < right) {
-            int mid = left + (right - left)/2;
-            if (mid > 0 && nums[mid] < nums[mid - 1]) {//mid>0为了不溢出,注意Array只有两个元素的情况
-                return nums[mid]; //Binary Search的终止条件，找到了
-            }
-            if (nums[mid] >= nums[left] && nums[mid] > nums[right]) {//在最后只剩两个元素的时候，向下取整mid等于left，所以这里数组虽然没有重复值，但是需要>=来确定“nums[mid]比它左右两边都‘大’”
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
-​
-        //如果到这里了还没有找到，那最小值一定就是剩下的那个left到达大于right的值
-        return nums[left];
-    }
-}
-```
-
-另外一种写法，优化下代码，复杂度一样
-
-```java
-class Solution {
-    public int findMin(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        if (nums.length == 1) {
-            return nums[0];
-        }
-        int left = 0, right = nums.length - 1;
+        int left = 0;
+        int right = nums.length - 1;
         if (nums[left] < nums[right]) {
             return nums[left];
         }
-        while(right - left > 1) {//两个指针差<1的时候终止
+        while (left + 1 < right) {
             int mid = left + (right - left) / 2;
+            // if (mid > 0 && nums[mid] < nums[mid - 1]) {
+            //     return nums[mid];
+            // }
+            // if (mid < nums.length - 1 && nums[mid] > nums[mid + 1]) {
+            //     return nums[mid + 1];
+            // }
             if (nums[mid] > nums[left]) {
                 left = mid;
             } else {
                 right = mid;
             }
         }
-        return nums[right];
+        
+        // return nums[right] < nums[left] ? nums[right] : nums[left]; //模板
+        return nums[right]; // left和right停在下降的地方
     }
 }
 ```
@@ -436,7 +412,7 @@ class Solution {
 }
 ```
 
-## 34 - Find First and Last Position of Element in Sorted Array \(Search for a Range\)
+## 34 Find First and Last Position of Element in Sorted Array \(Search for a Range\)
 
 ### 原题概述
 
@@ -523,7 +499,7 @@ public int[] searchRange(int[] nums, int target) {
 
 
 
-## 74 - Search a 2D Matrix
+## 74 Search a 2D Matrix
 
 ### 原题概述
 
@@ -592,7 +568,7 @@ class Solution {
 }
 ```
 
-## 240 - Search a 2D Matrix II
+## 240 Search a 2D Matrix II
 
 ### 原题概述
 
@@ -648,7 +624,7 @@ class Solution {
 }
 ```
 
-## 162 - Find Peak Element
+## 162 Find Peak Element
 
 ### 原题概述
 
