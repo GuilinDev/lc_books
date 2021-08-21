@@ -2073,13 +2073,13 @@ class Solution {
         ListNode dummy = new ListNode(-1);
         
         // insert 每次寻找需要插入的位置
-        ListNode insert = dummy;
         insert.next = head;
                 
         ListNode prev = head; // 已排序部分的最右边节点
         ListNode curr = head.next; // 未排序部分的最左边节点
         
         while (curr != null) {
+            ListNode insert = dummy;
             while (curr.val > insert.next.val && insert != prev) {
                 insert = insert.next;
             }
@@ -2095,7 +2095,6 @@ class Solution {
                 
                 curr = prev.next;
             }
-            insert = dummy;
         }
         return dummy.next;
     }
