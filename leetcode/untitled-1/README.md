@@ -3772,40 +3772,45 @@ Output: [2,1,4,null,null,3]
  *     int val;
  *     TreeNode left;
  *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
  * }
  */
 class Solution {
-
+    TreeNode pre = new TreeNode(Integer.MIN_VALUE);
     public void recoverTree(TreeNode root) {
         if (root == null) {
             return;
         }
-        ArrayList<TreeNode> pre = new ArrayList<TreeNode>();
-        pre.add(null);
-        ArrayList<TreeNode> result = new ArrayList<TreeNode>();
-        helper(root, pre, result);
-        if (result.size() > 0) {
-            int temp = result.get(0).val;
-            result.get(0).val = result.get(1).val;
-            result.get(1).val = temp;
+        ArrayList<TreeNode> toBeSwapped = new ArrayList<>();
+        inorder(root, toBeSwapped);
+        if (toBeSwapped.size() > 0) {
+            // swap two values
+            int temp = toBeSwapped.get(0).val;
+            toBeSwapped.get(0).val = toBeSwapped.get(1).val;
+            toBeSwapped.get(1).val = temp;
         }
     }
-    private void helper(TreeNode root, ArrayList<TreeNode> pre, ArrayList<TreeNode> result) {
-        if (root == null) {
+    private void inorder(TreeNode node, ArrayList<TreeNode> toBeSwapped) {
+        if (node == null) {
             return;
         }
-        helper(root.left, pre, result);
-        if (pre.get(0) != null && pre.get(0).val > root.val) {
-            if (result.size() == 0) {
-                result.add(pre.get(0));
-                result.add(root);
+        inorder(node.left, toBeSwapped);
+        if (pre != null && pre.val > node.val) {
+            if (toBeSwapped.size() == 0) {
+                toBeSwapped.add(pre);
+                toBeSwapped.add(node);
             } else {
-                result.set(1, root);
+                toBeSwapped.set(1, node);
             }
         }
-        pre.set(0, root);
-        helper(root.right, pre, result);
+        pre = node;
+        inorder(node.right, toBeSwapped);
     }
 }
 ```
