@@ -2294,9 +2294,11 @@ Recall that a graph is bipartite if we can split its set of nodes into two indep
 
 在二叉树中找每一行的最大值
 
+DFS
+
 ```java
 /**
- * 深度优先搜索(DFS) -- 
+ * 1. 深度优先搜索(DFS) -- 
  */
 class Solution {
     public List<Integer> largestValues(TreeNode root) {
@@ -2318,8 +2320,13 @@ class Solution {
     }
 }
 
+```
+
+BFS
+
+```java
 /**
-* 广度优先搜索(BFS) -- 按层级遍历
+* 2. 广度优先搜索(BFS) -- 按层级遍历
 */
 class Solution {
     public List<Integer> largestValues(TreeNode root) {
