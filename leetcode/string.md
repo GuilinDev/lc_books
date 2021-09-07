@@ -1161,6 +1161,38 @@ class Solution {
 }
 ```
 
+BFS
+
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        if (n == 0) {
+            return Collections.emptyList();
+        }
+        var queue = new ArrayDeque<Pair<String, int[]>>();
+        queue.offer(new Pair<>("", new int[] {0, 0}));
+        var result = new ArrayList<String>();
+        while (!queue.isEmpty()) {
+            var current = queue.poll();
+            String bracket = current.getKey();
+            int opening = current.getValue()[0];
+            int closing = current.getValue()[1];
+            if (opening == n && closing == n) {
+                result.add(bracket);
+            } else {
+                if (opening < n) {
+                    queue.offer(new Pair<>(bracket + "(", new int[] {opening + 1, closing}));
+                }
+                if (closing < opening) {
+                    queue.offer(new Pair<>(bracket + ")", new int[] {opening, closing + 1}));
+                }
+            }
+        }
+        return result;
+    }
+}
+```
+
 CareerCup书上给的方法，这种方法的思想是找左括号，每找到一个左括号，就在其后面加一个完整的括号，最后再在开头加一个\(\)，就形成了所有的情况，需要注意的是，有时候会出现重复的情况，所以用set数据结构，这样如果遇到重复项，不会加入到结果中，最后我们再把set转为List即可，
 
 n＝1:    \(\)
