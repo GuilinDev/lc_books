@@ -536,11 +536,14 @@ class Solution {
         levelOrderHelper(result, root, 0);
         return result;
     }
-    private void levelOrderHelper(List<List<Integer>> result, TreeNode current, int level) {
+    private void levelOrderHelper(List<List<Integer>> result, TreeNode current, 
+        int level) {
         if (current == null) {
             return;
         }
-        if (result.size() == level) {//先DFS一条路走到底把每一层的arraylist创建好，然后回溯的时候在call stack中取到level的值，把对应的层的值传进去
+        //先DFS一条路走到底把每一层的arraylist创建好，然后回溯的时候在call stack中取到
+        // level的值，把对应的层的值传进去
+        if (result.size() == level) {
             result.add(new ArrayList<Integer>());
         }
         result.get(level).add(current.val);
