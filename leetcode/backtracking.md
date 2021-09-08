@@ -740,7 +740,7 @@ class Solution {
 
 ### 原题概述
 
-The _n_-queens puzzle is the problem of placing _n_queens on an _n_×_n_ chessboard such that no two queens attack each other.
+The _n_-queens puzzle is the problem of placing _n_ queens on an _n_×_n_ chessboard such that no two queens attack each other.
 
 ![](https://assets.leetcode.com/uploads/2018/10/12/8-queens.png)
 
@@ -803,7 +803,7 @@ class Solution {
 
     private boolean isValid(int[] queenPositions, int index) {
         for (int i = 0; i < index; i++) {
-            //判断同一列中是否有重复的皇后
+            //剪枝，判断同一列中是否有重复的皇后
             if (queenPositions[i] == queenPositions[index]) {
                 return false;
             }
