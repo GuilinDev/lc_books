@@ -58,6 +58,7 @@
   * [SQL\_2](leetcode/sql_2.md)
   * [Facebook](leetcode/facebook.md)
   * [Linkedin](leetcode/linkedin.md)
+  * [VM](leetcode/vm.md)
   * [System Design](leetcode/system-design.md)
   * [tag0](leetcode/tag0.md)
   * [tag1](leetcode/tag1.md)
