@@ -2,7 +2,7 @@
 
 ## 146 LRU Cache 
 
-[https://app.gitbook.com/@guilindev/s/interview/~/drafts/-MkF3RlZmVCDwo1nRFTf/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa\#146-lru-cache](https://app.gitbook.com/@guilindev/s/interview/~/drafts/-MkF3RlZmVCDwo1nRFTf/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa#146-lru-cache)
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa\#146-lru-cache](https://app.gitbook.com/@guilindev/s/interview/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa#146-lru-cache)
 
 ## 255 Verify Preorder Sequence in Binary Search Tree 
 
