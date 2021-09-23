@@ -518,301 +518,500 @@ class Solution {
 
 ## 297 Serialize and Deserialize Binary Tree
 
-[https://app.gitbook.com/@guilindev/s/interview/~/drafts/-MkFApqjA3myahwE70yz/leetcode/untitled-1\#297-serialize-and-deserialize-binary-tree](https://app.gitbook.com/@guilindev/s/interview/~/drafts/-MkFApqjA3myahwE70yz/leetcode/untitled-1#297-serialize-and-deserialize-binary-tree)
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#297-serialize-and-deserialize-binary-tree](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#297-serialize-and-deserialize-binary-tree)
 
 ## 200 Number of Islands 
 
-[https://app.gitbook.com/@guilindev/s/interview/~/drafts/-MkFApqjA3myahwE70yz/leetcode/dfs\#200-number-of-islands](https://app.gitbook.com/@guilindev/s/interview/~/drafts/-MkFApqjA3myahwE70yz/leetcode/dfs#200-number-of-islands)
+[https://app.gitbook.com/@guilindev/s/interview/~/drafts/-MkFApqjA3myahwE70yz/leetcode/dfs\#200-number-of-islands](https://app.gitbook.com/@guilindev/s/interview/leetcode/dfs#200-number-of-islands)
 
 ## 8 String to Integer \(atoi\) 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#8-string-to-integer-atoi](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#8-string-to-integer-atoi)
 
 ## 3 Longest Substring Without Repeating Characters 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#3-longest-substring-without-repeating-characters](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#3-longest-substring-without-repeating-characters)
 
 ## 720 Longest Word in Dictionary 
 
+给出一个字符串数组words组成的一本英语词典。从中找出最长的一个单词，该单词是由words词典中其他单词逐步添加一个字母组成。若其中有多个可行的答案，则返回答案中字典序最小的单词。
 
+若无答案，则返回空字符串。
+
+示例 1：
+
+输入： words = \["w","wo","wor","worl", "world"\] 输出："world" 解释： 单词"world"可由"w", "wo", "wor", 和 "worl"添加一个字母组成。 示例 2：
+
+输入： words = \["a", "banana", "app", "appl", "ap", "apply", "apple"\] 输出："apple" 解释： "apply"和"apple"都能由词典中的单词组成。但是"apple"的字典序小于"apply"。
+
+提示：
+
+所有输入的字符串都只包含小写字母。 words数组长度范围为\[1,1000\]。 words\[i\]的长度范围为\[1,30\]。
+
+{% embed url="https://leetcode-cn.com/problems/longest-word-in-dictionary/solution/ci-dian-zhong-zui-chang-de-dan-ci-by-leetcode/" %}
 
 ## 17 Letter Combinations of a Phone Number 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#17-letter-combinations-of-a-phone-number](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#17-letter-combinations-of-a-phone-number)
 
 ## 5 Longest Palindromic Substring
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#5-longest-palindromic-substring](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#5-longest-palindromic-substring)
 
 ## 1669 Merge In Between Linked Lists 
 
+![](../.gitbook/assets/image%20%28196%29.png)
 
+{% embed url="https://leetcode-cn.com/problems/merge-in-between-linked-lists/solution/zhong-deng-nan-du-jian-dan-huan-ying-nin-pg43/" %}
 
 ## 1347 Minimum Number of Steps to Make Two Strings Anagram 
 
+![](../.gitbook/assets/image%20%28197%29.png)
+
+{% embed url="https://leetcode-cn.com/problems/minimum-number-of-steps-to-make-two-strings-anagram/solution/shuang-100-by-wei-yu-13-3/" %}
+
 ## 981 Time Based Key-Value Store 
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedin\#981-time-based-key-value-store-53-8-medium](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedin#981-time-based-key-value-store-53-8-medium)
 
 ## 179 Largest Number 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou\#179-largest-number](https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou#179-largest-number)
+
 ## 206 Reverse Linked List
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#206-reverse-linked-list](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#206-reverse-linked-list)
 
 ## 99 Recover Binary Search Tree 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#99-recover-binary-search-tree](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#99-recover-binary-search-tree)
+
 ## 314 Binary Tree Vertical Order Traversal 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#314-binary-tree-vertical-order-traversal-usd](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#314-binary-tree-vertical-order-traversal-usd)
 
 ## 150 Evaluate Reverse Polish Notation 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#150-evaluate-reverse-polish-notation](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#150-evaluate-reverse-polish-notation)
 
 ## 907 Sum of Subarray Minimums
 
+![](../.gitbook/assets/image%20%28203%29.png)
+
+{% embed url="https://leetcode-cn.com/problems/sum-of-subarray-minimums/solution/leetcodebi-ji-java-py-si-ke-yi-dao-ti-907-zi-shu-3/" %}
+
 ## 41 First Missing Positive 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#41-first-missing-positive](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#41-first-missing-positive)
 
+## 127 Word Ladder 
 
-## 127 Word Ladder 21 Merge Two Sorted Lists 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3\#127-word-ladder](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3#127-word-ladder)
 
+## 21 Merge Two Sorted Lists 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#21-merge-two-sorted-lists](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#21-merge-two-sorted-lists)
 
 ## 155 Min Stack
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#155-min-stack](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#155-min-stack)
 
 ## 1071 Greatest Common Divisor of Strings 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#1071-greatest-common-divisor-of-strings](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#1071-greatest-common-divisor-of-strings)
 
 ## 42 Trapping Rain Water 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#42-trapping-rain-water](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#42-trapping-rain-water)
 
 ## 426 Convert Binary Search Tree to Sorted Doubly Linked List 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#426-convert-binary-search-tree-to-sorted-doubly-linked-list](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#426-convert-binary-search-tree-to-sorted-doubly-linked-list)
 
 ## 905 Sort Array By Parity 
 
+按奇偶排序数组，给定一个非负整数数组 A，返回一个数组，在该数组中， A 的所有偶数元素之后跟着所有奇数元素。
 
+你可以返回满足此条件的任何数组作为答案。
+
+输入：\[3,1,2,4\] 输出：\[2,4,3,1\] 输出 \[4,2,3,1\]，\[2,4,1,3\] 和 \[4,2,1,3\] 也会被接受。
+
+提示：
+
+1 &lt;= A.length &lt;= 5000 0 &lt;= A\[i\] &lt;= 5000
+
+{% embed url="https://leetcode-cn.com/problems/sort-array-by-parity/solution/an-qi-ou-pai-xu-shu-zu-by-leetcode/" %}
 
 ## 733 Flood Fill
 
+图像渲染
 
+![](../.gitbook/assets/image%20%28208%29.png)
 
-## 236 Lowest Common Ancestor of a Binary Tree 38 Count and Say 
+{% embed url="https://leetcode-cn.com/problems/flood-fill/solution/tu-xiang-xuan-ran-by-leetcode-solution/" %}
+
+## 236 Lowest Common Ancestor of a Binary Tree 
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#236-lowest-common-ancestor-of-binary-tree](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#236-lowest-common-ancestor-of-binary-tree)
+
+## 38 Count and Say 
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#38-count-and-say](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#38-count-and-say)
 
 ## 232 Implement Queue using Stacks
 
-##  168 Excel Sheet Column Title
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/stack\#232-implement-queue-using-stacks](https://app.gitbook.com/@guilindev/s/interview/leetcode/stack#232-implement-queue-using-stacks)
 
-##  62 Unique Paths
+## 168 Excel Sheet Column Title
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#168-excel-sheet-column-title](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#168-excel-sheet-column-title)
+
+## 62 Unique Paths
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#62-unique-paths](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#62-unique-paths)
 
 ##  103 Binary Tree Zigzag Level Order Traversal
 
-##  1136 Parallel Courses 226 Invert Binary Tree
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#103-binary-tree-zigzag-level-order-traversal](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#103-binary-tree-zigzag-level-order-traversal)
 
-##  355 Design Twitter 
+## 1136 Parallel Courses $
 
+给定一个整数 n，它表示有 n 个标记为 1 到 n 的课程。您还会得到一个数组关系，其中关系 \[i\] = \[prevCoursei, nextCoursei\]，代表课程 prevCoursei 和课程 nextCoursei 之间的先决条件关系：课程 prevCoursei 必须在课程 nextCoursei 之前进行。
 
+在一个学期内，您可以选修任意数量的课程，只要您已经完成了上一学期所修课程的所有先决条件。
+
+返回学习所有课程所需的最少学期数。如果没有办法走完所有课程，返回-1。
+
+![](../.gitbook/assets/image%20%28206%29.png)
+
+拓扑排序，Time & space: O\(V + E\).
+
+```java
+ public int minimumSemesters(int N, int[][] relations) {
+        Map<Integer, List<Integer>> g = new HashMap<>(); // key: prerequisite, value: course list. 
+        int[] inDegree = new int[N + 1]; // inDegree[i]: number of prerequisites for i.
+        for (int[] r : relations) {
+            g.computeIfAbsent(r[0], l -> new ArrayList<>()).add(r[1]); // construct graph.
+            ++inDegree[r[1]]; // count prerequisites for r[1].
+        }
+        Queue<Integer> q = new LinkedList<>(); // save current 0 in-degree vertices.
+        for (int i = 1; i <= N; ++i)
+            if (inDegree[i] == 0)
+                q.offer(i);
+        int semester = 0;
+        while (!q.isEmpty()) { // BFS traverse all currently 0 in degree vertices.
+            for (int sz = q.size(); sz > 0; --sz) { // sz is the search breadth.
+                int c = q.poll();
+                --N;
+                if (!g.containsKey(c)) continue; // c's in-degree is currently 0, but it has no prerequisite.
+                for (int course : g.remove(c))
+                    if (--inDegree[course] == 0) // decrease the in-degree of course's neighbors.
+                        q.offer(course); // add current 0 in-degree vertex into Queue.
+            }
+            ++semester; // need one more semester.
+        }
+        return N == 0 ? semester : -1;
+    }
+```
+
+## 226 Invert Binary Tree
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#226-invert-binary-tree](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#226-invert-binary-tree)
+
+## 355 Design Twitter 
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/design\#355-design-twitter](https://app.gitbook.com/@guilindev/s/interview/leetcode/design#355-design-twitter)
 
 ## 347 Top K Frequent Elements 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#347-top-k-frequent-elements](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#347-top-k-frequent-elements)
 
 ## 54 Spiral Matrix
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#54-spiral-matrix](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#54-spiral-matrix)
 
 ## 88 Merge Sorted Array
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array/he-bing-you-xu-de-arrays\#88-merge-sorted-array](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/he-bing-you-xu-de-arrays#88-merge-sorted-array)
 
+## 269 Alien Dictionary 
 
-##  269 Alien Dictionary 
-
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/graph\#269-alien-dictionary](https://app.gitbook.com/@guilindev/s/interview/leetcode/graph#269-alien-dictionary)
 
 ## 139 Word Break 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#139-word-break](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#139-word-break)
 
 ## 253 Meeting Rooms II 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou\#253-meeting-rooms-ii](https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou#253-meeting-rooms-ii)
 
 ## 421 Maximum XOR of Two Numbers in an Array 
 
+**数组中两个数的最大异或值**
 
+![](../.gitbook/assets/image%20%28201%29.png)
+
+{% embed url="https://leetcode-cn.com/problems/maximum-xor-of-two-numbers-in-an-array/solution/shu-zu-zhong-liang-ge-shu-de-zui-da-yi-h-n9m9/" %}
 
 ## 856 Score of Parentheses
 
+括号的分数
 
+![](../.gitbook/assets/image%20%28202%29.png)
+
+{% embed url="https://leetcode-cn.com/problems/score-of-parentheses/solution/gua-hao-de-fen-shu-by-leetcode/" %}
 
 ## 39 Combination Sum
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking\#39-combination-sum](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#39-combination-sum)
 
 ## 394 Decode String 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/tag4\#394-decode-string](https://app.gitbook.com/@guilindev/s/interview/leetcode/tag4#394-decode-string)
 
 ## 977 Squares of a Sorted Array
 
+![](../.gitbook/assets/image%20%28204%29.png)
 
+{% embed url="https://leetcode-cn.com/problems/squares-of-a-sorted-array/solution/you-xu-shu-zu-de-ping-fang-by-leetcode-solution/" %}
 
 ## 162 Find Peak Element 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su\#162-find-peak-element](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su#162-find-peak-element)
 
 ## 124 Binary Tree Maximum Path Sum 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#124-binary-tree-maximum-path-sum](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#124-binary-tree-maximum-path-sum)
 
 ## 380 Insert Delete GetRandom O\(1\) 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/design\#380-insert-delete-getrandom-o-1](https://app.gitbook.com/@guilindev/s/interview/leetcode/design#380-insert-delete-getrandom-o-1)
 
 ## 133 Clone Graph
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/graph\#133-clone-graph](https://app.gitbook.com/@guilindev/s/interview/leetcode/graph#133-clone-graph)
 
 ## 242 Valid Anagram 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou\#242-valid-anagram](https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou#242-valid-anagram)
 
+## 50 Pow\(x, n\) 
 
-## 50 Pow\(x, n\) 63 Unique Paths II 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/er-fen-sou-suo\#50-power-x-n](https://app.gitbook.com/@guilindev/s/interview/leetcode/er-fen-sou-suo#50-power-x-n)
 
+## 63 Unique Paths II 
 
+机器人走路，有障碍物，打出所有路径
+
+![](../.gitbook/assets/image%20%28199%29.png)
+
+```java
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if (obstacleGrid == null || obstacleGrid.length == 0) {
+            return 0;
+        }
+        
+        // 定义 dp 数组并初始化第 1 行和第 1 列。
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m && obstacleGrid[i][0] == 0; i++) {
+            dp[i][0] = 1;
+        }
+        for (int j = 0; j < n && obstacleGrid[0][j] == 0; j++) {
+            dp[0][j] = 1;
+        }
+
+        // 根据状态转移方程 dp[i][j] = dp[i - 1][j] + dp[i][j - 1] 进行递推。
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 0) {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+}
+```
 
 ## 108 Convert Sorted Array to Binary Search Tree
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#108-convert-sorted-array-to-binary-search-tree](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#108-convert-sorted-array-to-binary-search-tree)
 
 ## 328 Odd Even Linked List 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#328-odd-even-linked-list](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#328-odd-even-linked-list)
 
 ## 987 Vertical Order Traversal of a Binary Tree 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#987-vertical-order-traversal-of-a-binary-tree](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#987-vertical-order-traversal-of-a-binary-tree)
 
 ## 283 Move Zeroes 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#283-move-zeroes](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#283-move-zeroes)
 
 ## 443 String Compression 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#443-string-compression](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#443-string-compression)
 
 ## 332 Reconstruct Itinerary 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/tag1\#332-reconstruct-itinerary](https://app.gitbook.com/@guilindev/s/interview/leetcode/tag1#332-reconstruct-itinerary)
 
 ## 532 K-diff Pairs in an Array 
 
+**数组中的 k-diff 数对**
 
+![](../.gitbook/assets/image%20%28198%29.png)
+
+```java
+class Solution {
+    public int findPairs(int[] nums, int k) {
+        int ans = 0;
+        //先对数组从大到小排序；
+        Arrays.sort(nums);
+        //定义一个map，用来存放k-diff对
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+        //set用来存放已经访问过的数组元素
+        HashSet<Integer> set = new HashSet<Integer>();
+        for(int i = 0;i < nums.length;i ++){
+            //用pre表示nums[j]，因为已经排过序，所以如果存在，那么nums[j]一定在set中
+            int pre = nums[i] - k;
+            if(set.contains(pre)){
+                map.put(nums[i],pre);
+            }
+            //将访问过的nums[i]放入set;
+            set.add(nums[i]);
+        }
+        //keySet的大小即为答案;
+        return map.keySet().size();
+    }
+}
+```
 
 ## 14 Longest Common Prefix
 
-
+\*\*\*\*[**https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#14-longest-common-prefix**](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#14-longest-common-prefix)\*\*\*\*
 
 ## 11 Container With Most Water 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#11-container-with-most-water](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#11-container-with-most-water)
 
 ## 349 Intersection of Two Arrays
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#349-intersection-of-two-arrays](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#349-intersection-of-two-arrays)
 
 ## 230 Kth Smallest Element in a BST 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#230-kth-smallest-element-in-bst](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#230-kth-smallest-element-in-bst)
 
 ## 811 Subdomain Visit Count 
 
+![](../.gitbook/assets/image%20%28200%29.png)
 
+{% embed url="https://leetcode-cn.com/problems/subdomain-visit-count/solution/zi-yu-ming-fang-wen-ji-shu-by-leetcode/" %}
 
 ## 199 Binary Tree Right Side View 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3\#199-binary-tree-right-side-view](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3#199-binary-tree-right-side-view)
 
 ## 438 Find All Anagrams in a String 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#438-find-all-anagrams-in-a-string](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#438-find-all-anagrams-in-a-string)
 
 ## 32 Longest Valid Parentheses
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#32-longest-valid-parentheses](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#32-longest-valid-parentheses)
 
 ## 102 Binary Tree Level Order Traversal 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#102-binary-tree-level-order-traversal](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#102-binary-tree-level-order-traversal)
 
 ## 1209 Remove All Adjacent Duplicates in String II 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook\#1209-remove-all-adjacent-duplicates-in-string-ii](https://app.gitbook.com/@guilindev/s/interview/leetcode/facebook#1209-remove-all-adjacent-duplicates-in-string-ii)
 
 ## 79 Word Search 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking\#79-word-search](https://app.gitbook.com/@guilindev/s/interview/leetcode/backtracking#79-word-search)
 
 ## 80 Remove Duplicates from Sorted Array II 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array/26-27-80-zai-array-zhong-yi-chu-yuan-su\#80-remove-duplicates-from-sorted-array-ii](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/26-27-80-zai-array-zhong-yi-chu-yuan-su#80-remove-duplicates-from-sorted-array-ii)
 
 ## 105 Construct Binary Tree from Preorder and Inorder Traversal 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1\#105-construct-binary-tree-from-preorder-and-inorder-traversal](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-1#105-construct-binary-tree-from-preorder-and-inorder-traversal)
 
 ## 252 Meeting Rooms
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou\#252-meeting-rooms](https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou#252-meeting-rooms)
 
 ## 287 Find the Duplicate Number 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#287-find-the-duplicate-number](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#287-find-the-duplicate-number)
+
 ## 53 Maximum Subarray 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray\#53-maximum-subarray](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray#53-maximum-subarray)
 
 ## 278 First Bad Version 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/er-fen-sou-suo\#278-first-bad-version](https://app.gitbook.com/@guilindev/s/interview/leetcode/er-fen-sou-suo#278-first-bad-version)
 
 ## 19 Remove Nth Node From End of List 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist\#19-remove-nth-node-from-end-of-list](https://app.gitbook.com/@guilindev/s/interview/leetcode/linkedlist#19-remove-nth-node-from-end-of-list)
 
 ## 210 Course Schedule II 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/graph\#210-course-schedule-ii](https://app.gitbook.com/@guilindev/s/interview/leetcode/graph#210-course-schedule-ii)
+
 ## 71 Simplify Path 
+
+[把Unix风格路径规范和简化 - 顺序栈](https://leetcode-cn.com/problems/simplify-path/solution/2020040371medianzhan-zi-fu-shu-zu-ke-bian-zi-fu-ch/)
 
 ## 36 Valid Sudoku 
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table\#36-valid-sudoku](https://app.gitbook.com/@guilindev/s/interview/leetcode/hash-table#36-valid-sudoku)
+
 ## 416 Partition Equal Subset Sum 
+
+[正整数数组分成两个子集让二者和相等 - DP](https://leetcode-cn.com/problems/partition-equal-subset-sum/solution/fen-ge-deng-he-zi-ji-by-leetcode-solution/)
 
 ## 28 Implement strStr\(\)
 
-##  994 Rotting Oranges
+[KMP了解下](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#28-implement-substr)
 
-##  1143 Longest Common Subsequence
+## 994 Rotting Oranges
 
-##  70 Climbing Stairs
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3\#994-rotting-oranges](https://app.gitbook.com/@guilindev/s/interview/leetcode/untitled-3#994-rotting-oranges)
 
-##  204 Count Primes 
+## 1143 Longest Common Subsequence
 
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#1143-longest-common-subsequence](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#1143-longest-common-subsequence)
 
+## 70 Climbing Stairs
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer\#70-climb-stairs](https://app.gitbook.com/@guilindev/s/interview/leetcode/divide-and-conquer#70-climb-stairs)
+
+## 204 Count Primes 
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/math\#204-count-primes](https://app.gitbook.com/@guilindev/s/interview/leetcode/math#204-count-primes)
 
 ## 509 Fibonacci Number 
 
+![](../.gitbook/assets/image%20%28207%29.png)
 
+![](../.gitbook/assets/image%20%28205%29.png)
 
 ## 73 Set Matrix Zeroes 
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array\#73-set-matrix-zeroes](https://app.gitbook.com/@guilindev/s/interview/leetcode/array#73-set-matrix-zeroes)
 
 ## 35 Search Insert Position
 
-
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su\#35-search-insertion-position](https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zai-array-zhong-cha-xun-yuan-su#35-search-insertion-position)
 
