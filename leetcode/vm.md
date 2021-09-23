@@ -6,37 +6,190 @@
 
 ## 255 Verify Preorder Sequence in Binary Search Tree 
 
+给一个数组，验证里面的数字是否符合BST的前序遍历顺序
+
+正常O\(n\)解法
+
+```java
+class Solution {
+    public boolean verifyPreorder(int[] preorder) {
+        int low = Integer.MIN_VALUE;
+        Stack<Integer> path = new Stack();
+        for (int p : preorder) {
+            if (p < low) {
+                return false;
+            }
+            while (!path.empty() && p > path.peek()) {
+                low = path.pop();
+            }
+            path.push(p);
+        }
+        return true;
+    }
+}
+```
+
+利用给定的参数的array，来存中间结果，O\(1\)解法
+
+```java
+class Solution {
+    public boolean verifyPreorder(int[] preorder) {
+        int low = Integer.MIN_VALUE, i = -1;
+        for (int p : preorder) {
+            if (p < low)
+                return false;
+            while (i >= 0 && p > preorder[i])
+                low = preorder[i--];
+            preorder[++i] = p;
+        }
+        return true;
+    }
+}
+```
+
+## 460 LFU Cache
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa\#460-lfu](https://app.gitbook.com/@guilindev/s/interview/leetcode/gao-ji-de-shu-ju-jie-gou-he-suan-fa#460-lfu)
+
+## 49 Group Anagrams
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/string\#49-group-anagrams](https://app.gitbook.com/@guilindev/s/interview/leetcode/string#49-group-anagrams)
+
+## 56 Merge Intervals
+
+[https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou\#56-merge-intervals](https://app.gitbook.com/@guilindev/s/interview/leetcode/hui-wen-jie-gou#56-merge-intervals)
+
+## 1328 Break a Palindrome
+
+给一个回文串，replace其中一个character，使其不为回文串且 **lexicographically** 最小，贪心算法O\(n\) O\(n\)，从左到右，替换任何非a的字母变成a，如果只有一个字母，变为空串，否则把最后一个字母替换为b\(全a的情况\)。
+
+```java
+class Solution {
+    public String breakPalindrome(String palindrome) {
+        char[] s = palindrome.toCharArray();
+        int n = s.length;
+        
+        for(int i = 0; i < n/2; i++) { //回文串只需遍历一半
+            if(s[i] != 'a') {
+                s[i] = 'a';
+                return String.valueOf(s);
+            }
+        }
+        s[n-1] = 'b'; 
+        return n < 2 ? "" : String.valueOf(s);
+    }
+}
+```
+
+## 697 Degree of an Array
 
 
-## 460 LFU Cache 49 Group Anagrams 56 Merge Intervals 1328 Break a Palindrome 697 Degree of an Array 20 Valid Parentheses 1228 Missing Number In Arithmetic Progression 
 
-## 564 Find the Closest Palindrome 93 Restore IP Addresses 33 Search in Rotated Sorted Array 
+## 20 Valid Parentheses
+
+
+
+## 1228 Missing Number In Arithmetic Progression 
+
+
+
+## 564 Find the Closest Palindrome
+
+
+
+## 93 Restore IP Addresses
+
+
+
+##  33 Search in Rotated Sorted Array 
+
+
 
 ## 138 Copy List with Random Pointer 
 
-## 295 Find Median from Data Stream 1048 Longest String Chain 
+
+
+## 295 Find Median from Data Stream
+
+
+
+## 1048 Longest String Chain 
+
+
 
 ## 1451 Rearrange Words in a Sentence 
 
+
+
 ## 85 Maximal Rectangle 
 
-## 609 Find Duplicate File in System 221 Maximal Square 
 
-## 4 Median of Two Sorted Arrays 1 Two Sum 1192 Critical Connections in a Network 706 Design HashMap 
+
+## 609 Find Duplicate File in System
+
+
+
+## 221 Maximal Square 
+
+
+
+## 4 Median of Two Sorted Arrays
+
+
+
+## 1 Two Sum
+
+
+
+## 1192 Critical Connections in a Network
+
+
+
+## 706 Design HashMap 
+
+
 
 ## 97 Interleaving String 
 
-## 76 Minimum Window Substring 621 Task Scheduler 
+## 76 Minimum Window Substring
+
+
+
+## 621 Task Scheduler 
+
+
 
 ## 277 Find the Celebrity 
 
-## 412 Fizz Buzz 2 Add Two Numbers 
+
+
+## 412 Fizz Buzz
+
+
+
+## 2 Add Two Numbers 
+
+
 
 ## 863 All Nodes Distance K in Binary Tree 
 
+
+
 ## 300 Longest Increasing Subsequence 
 
-## 23 Merge k Sorted Lists 121 Best Time to Buy and Sell Stock 322 Coin Change 98 Validate Binary Search Tree 1010 Pairs of Songs With Total Durations Divisible by 60 
+
+
+## 23 Merge k Sorted Lists
+
+## 121 Best Time to Buy and Sell Stock
+
+## 322 Coin Change
+
+## 98 Validate Binary Search Tree
+
+## 1010 Pairs of Songs With Total Durations Divisible by 60 
+
+
 
 ## 15 3Sum 1046 Last Stone Weight 238 Product of Array Except Self 
 
