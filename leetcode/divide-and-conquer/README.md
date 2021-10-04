@@ -52,6 +52,7 @@ class Solution {
             return maxProfix;
         }
         int len = prices.length;
+        //ith day，没有价格无法计算属于上面corner cases，这里不用len + 1
         int[] dp = new int[len];
         dp[0] = 0; // profit为0，尚未开始买卖
         int minPrice = prices[0];
@@ -70,13 +71,17 @@ class Solution {
 ```java
 class Solution {
     public int maxProfit(int[] prices) {
-        int minPriceStock = Integer.MAX_VALUE, maxProfit = 0;
-        for (int price : prices) {
-            minPriceStock = Math.min(minPriceStock, price);//找到子问题中最小的buy的价格
-            maxProfit = Math.max(maxProfit, price - minPriceStock);//找到最小buy价格下最大的利润
+        if (prices == null || prices.length == 0) {
+            return 0;
         }
-
-        return maxProfit;
+        int minPrice = prices[0];
+        int maxP = Integer.MIN_VALUE;
+        // 跟上面不同，这里第ith day还没有值，从第0个开始
+        for (int i = 0; i < prices.length; i++) { 
+            maxP = Math.max(maxP, prices[i] - minPrice);
+            minPrice = Math.min(minPrice, prices[i]);
+        }
+        return maxP;
     }
 }
 ```
