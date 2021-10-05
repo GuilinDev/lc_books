@@ -26,7 +26,7 @@ If you have figured out the O\(_n_\) solution, try coding another solution using
 
 给一个数组，找到一个子数组，子数组的元素加起来的和最大，并返回这个和。这道题用O\(n\)的办法就是从左扫到右，将临时的tempSum初始化为Integer.MIN\_VALUE，当遇到一个元素时，判断这个元素和之前sum的大小，如果加入当前元素更大，就改变tempSum的值；如果当前元素的值更大，之前的tempSum也不用保留了，一直到末尾。
 
-这道题也可以用DP中的[Kadane’s Algorithm](http://theoryofprogramming.com/2016/10/21/dynamic-programming-kadanes-algorithm/)来进行优化；既然是DP，首先解决子问题的公式\(即状态方程\)，如果想象子问题是这样的公式：maxSubArray\(int nums\[\], int i, int j\)，代表从i位置到j位置是最到的maxSubArray，那么我们的目标就是要分解maxSubArray\(nums, 0, nums.length - 1\)成子问题，然而再往下确是没办法再分了；然后换一种思维，把子问题的公式当作maxSubArray\(int nums\[\], int i\)，表示从位置0到位置i的maxSubArray：
+这道题也可以用DP中的[Kadane’s Algorithm](http://theoryofprogramming.com/2016/10/21/dynamic-programming-kadanes-algorithm/)来进行优化；既然是DP，首先解决子问题的公式\(即状态方程\)，如果想象子问题是这样的公式：maxSubArray\(int nums\[\], int i, int j\)，代表从i位置到j位置是最大的maxSubArray，那么我们的目标就是要分解maxSubArray\(nums, 0, nums.length - 1\)成子问题，但再往下确是没办法再分了；所以需要换一种思维，把子问题的公式当作maxSubArray\(int nums\[\], int i\)，表示从位置0到位置i的maxSubArray：
 
 > maxSubArray\(nums, i\) = maxSubArray\(nums, i - 1\) &gt; 0 ? maxSubArray\(nums, i - 1\) : 0 + nums\[i\];
 
@@ -178,17 +178,62 @@ DP的解法
 ```java
 class Solution {
     public int maxProduct(int[] nums) {
-        int max = nums[0];
-        int prevMin = nums[0], prevMax = nums[0];
-        int curMin, curMax;
-        for (int i = 1; i < nums.length; i++) {
-            curMin = Math.min(Math.min(prevMax * nums[i], prevMin * nums[i]), nums[i]);
-            curMax = Math.max(Math.max(prevMax * nums[i], prevMin * nums[i]), nums[i]);
-            prevMin = curMin;
-            prevMax = curMax;
-            max = Math.max(curMax, max);
+        if (nums == null || nums.length == 0) {
+            return 0;
         }
-        return max;
+        int len = nums.length;
+        long[] dpP = new long[len];
+        long[] dpN = new long[len];
+        dpP[0] = nums[0];
+        dpN[0] = nums[0];
+        long result = dpP[0];
+        for (int i = 1; i < len; i++) {
+            dpP[i] = Math.max(Math.max(dpP[i - 1] * nums[i], dpN[i - 1] * nums[i]), nums[i]);
+            dpN[i] = Math.min(Math.min(dpP[i - 1] * nums[i], dpN[i - 1] * nums[i]), nums[i]);
+            result = Math.max(result, Math.max(dpP[i], dpN[i]));
+        }
+        return (int)result;
+    }
+}
+```
+
+状态压缩
+
+```java
+// class Solution {
+//     public int maxProduct(int[] nums) {
+//         int max = nums[0];
+//         int prevMin = nums[0], prevMax = nums[0];
+//         int curMin, curMax;
+//         for (int i = 1; i < nums.length; i++) {
+//             curMin = Math.min(Math.min(prevMax * nums[i], prevMin * nums[i]), nums[i]);
+//             curMax = Math.max(Math.max(prevMax * nums[i], prevMin * nums[i]), nums[i]);
+//             prevMin = curMin;
+//             prevMax = curMax;
+//             max = Math.max(curMax, max);
+//         }
+//         return max;
+//     }
+// }
+class Solution {
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int len = nums.length;
+        int curMin = Integer.MAX_VALUE;
+        int curMax = Integer.MIN_VALUE;
+        int preMin = 1;
+        int preMax = 1;
+        int result = nums[0];
+        for (int num : nums) {
+            curMin = Math.min(Math.min(preMin * num, preMax * num), num);
+            curMax = Math.max(Math.max(preMin * num, preMax * num), num);
+            preMin = curMin;
+            preMax = curMax;
+            result = Math.max(result, curMax);
+        }
+        return result;
     }
 }
 ```
