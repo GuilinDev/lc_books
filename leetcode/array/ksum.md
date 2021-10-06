@@ -284,6 +284,44 @@ A solution set is:
 ```java
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> results = new ArrayList<>();
+        if (nums == null || nums.length < 3) {
+            return results;
+        }
+        int len = nums.length;
+        HashSet<List<Integer>> noDup = new HashSet<>();
+        Arrays.sort(nums);
+        List<Integer> oneResult = new ArrayList<>();
+        for (int first = 0; first < len - 2; first++) {
+            int second = first + 1, third = len - 1;
+            while (second < third) {
+                int sum = nums[first] + nums[second] + nums[third];
+                if (sum == 0) {
+                    oneResult.add(nums[first]);
+                    oneResult.add(nums[second]);
+                    oneResult.add(nums[third]);
+                    if (noDup.add(oneResult)) {
+                        results.add(oneResult);
+                    }
+                    // 不管是否重复，都要重新设置
+                    oneResult = new ArrayList<>();
+                    second++;
+                    third--;
+                } else if (sum > 0) {
+                    third--;
+                } else {
+                    second++;
+                }
+            }
+        }
+        return results;
+    }
+}
+```
+
+```java
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
         ArrayList<List<Integer>> result = new ArrayList<List<Integer>>(); //保持最终结果
         HashSet<ArrayList<Integer>> noDuplicateTriplets = new HashSet<ArrayList<Integer>>();//保持中间找到的triplet不要是重复的
         
