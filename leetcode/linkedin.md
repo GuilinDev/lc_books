@@ -1056,25 +1056,34 @@ public class AllOne {
 
 {% embed url="https://app.gitbook.com/@guilindev/s/interview/leetcode/array/zi-shu-zu-subarray\#152-maximum-product-subarray" %}
 
-## 261 Graph Valid Tree 42.8% Medium $
+## 261 Graph Valid Tree Medium $
 
-Given `n` nodes labeled from `0` to `n-1` and a list of undirected edges \(each edge is a pair of nodes\), write a function to check whether these edges make up a valid tree.
+You have a graph of `n` nodes labeled from `0` to `n - 1`. You are given an integer n and a list of `edges` where `edges[i] = [ai, bi]` indicates that there is an undirected edge between nodes `ai` and `bi` in the graph.
 
-**Example 1:**
+Return `true` _if the edges of the given graph make up a valid tree, and_ `false` _otherwise_.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2021/03/12/tree1-graph.jpg)
 
 ```text
-Input: n = 5, and edges = [[0,1], [0,2], [0,3], [1,4]]
+Input: n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]
 Output: true
 ```
 
-**Example 2:**
+**Example 2:**![](https://assets.leetcode.com/uploads/2021/03/12/tree2-graph.jpg)
 
 ```text
-Input: n = 5, and edges = [[0,1], [1,2], [2,3], [1,3], [1,4]]
+Input: n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]
 Output: false
 ```
 
-**Note**: you can assume that no duplicate edges will appear in `edges`. Since all edges are undirected, `[0,1]` is the same as `[1,0]` and thus will not appear together in `edges`.
+**Constraints:**
+
+* `1 <= 2000 <= n`
+* `0 <= edges.length <= 5000`
+* `edges[i].length == 2`
+* `0 <= ai, bi < n`
+* `ai != bi`
+* There are no self-loops or repeated edges.
 
 图的DFS
 

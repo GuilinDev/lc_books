@@ -568,7 +568,7 @@ class Solution {
 
 ### 原题概述
 
-Given an array of meeting time intervals consisting of start and end times `[[s1,e1],[s2,e2],...]` \(si &lt; ei\), determine if a person could attend all meetings.
+Given an array of meeting time `intervals` where `intervals[i] = [starti, endi]`, determine if a person could attend all meetings.
 
 **Example 1:**
 
@@ -621,7 +621,7 @@ class Solution {
 
 ### 原题概述
 
-Given an array of meeting time intervals consisting of start and end times `[[s1,e1],[s2,e2],...]` \(si &lt; ei\), find the minimum number of conference rooms required.
+Given an array of meeting time intervals `intervals` where `intervals[i] = [starti, endi]`, return _the minimum number of conference rooms required_.
 
 **Example 1:**
 
