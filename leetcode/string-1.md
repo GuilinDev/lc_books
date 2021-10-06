@@ -162,6 +162,10 @@ public class Codec {
     return Arrays.asList(s.split(d, -1));
   }
 }
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.decode(codec.encode(strs));
 ```
 
 2.
