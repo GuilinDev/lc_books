@@ -282,6 +282,44 @@ Output: -1
 ### 代码
 
 ```java
+class Solution {
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+        int left = 0, right = nums.length - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] > nums[right]) { // 左侧有序，需要跟right比确定哪边有序
+                if (nums[left] == target) {
+                    return left;
+                } else if (nums[left] < target && nums[mid] > target) { // 在有序的左侧
+                    right = mid;
+                } else { // 在乱序的右侧
+                    left = mid;
+                }
+            } else { // 右侧有序
+                if (nums[right] == target) { 
+                    return right;
+                } else if (nums[right] > target && nums[mid] < target) {// 在有序的右侧
+                    left = mid;
+                } else { // 在乱序的左侧
+                    right = mid;
+                }
+            }
+        }
+        
+        if (nums[left] == target) { // 一个元素的情况不会进入while
+            return left;
+        }
+        return nums[right] == target ? right : -1;
+    }
+}
+```
+
+```java
    class Solution {
    // 先判断有序的是左侧还是右侧，再在其中判断target是否在有序的该侧
     public int search(int[] nums, int target) {
