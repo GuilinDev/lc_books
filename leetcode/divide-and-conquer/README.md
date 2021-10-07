@@ -1863,7 +1863,11 @@ class Solution {
         if (len == 1) {
             return 1;
         }
-        int[] regionLongest = new int[len];//regionLongest[k]表示到第k+1个元素的最长升序长度；regionLongest[0]表示初始状态（0个元素的时候，依然为1）, regionLongest[1]表示第0个元素的最长长度，regionLongest[len]表示最后一个元素的最长长度
+        //regionLongest[k]表示到第k+1个元素时的最长升序长度；
+        //regionLongest[0]表示初始状态（0个元素的时候，依然为1）, 
+        //regionLongest[1]表示第0个元素的最长长度，
+        //regionLongest[len]表示最后一个元素的最长长度
+        int[] regionLongest = new int[len];
         Arrays.fill(regionLongest, 1);//每个位置初始值为1，起码包含自己为1
 
         for (int i = 1; i <= len - 1; i++) {//从第二个元素开始，让其之前有元素
