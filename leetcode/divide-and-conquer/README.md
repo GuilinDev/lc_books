@@ -123,28 +123,23 @@ Explanation: There are three ways to climb to the top.
 
 ### 代码
 
-以空间换时间，空间复杂度为O\(n\)
+以空间换时间，空间复杂度为O\(n\),  dp\[i\] = dp\[i - 2\] + dp\[i - 2\]
 
 ```java
 class Solution {
     public int climbStairs(int n) {
-        if (n <= 0) {
-            return 0;
-        }
-        if (n == 1) {
+        if (n == 1) { //防止下面的dp array越界
             return 1;
         }
-        int[] stair = new int[n];
+        int result = 0;
 
-        //two base cases
-        stair[0] = 1;
-        stair[1] = 2;
-
-        //以空间换时间，到每个阶梯i的时候都记忆一下有多少种爬法
-        for (int i = 2; i < n; i++) {
-            stair[i] = stair[i-1] + stair[i-2];
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i <= n; i++) { //包括n
+            dp[i] = dp[i - 1] + dp[i - 2];
         }
-        return stair[n-1];//注意这里是返回stair[n-1]，这是最后一步台阶
+        return dp[n];
     }
 }
 ```
@@ -154,28 +149,20 @@ class Solution {
 ```java
 class Solution {
     public int climbStairs(int n) {
-        if (n <= 0) {
-            return 0;
-        }
-
-        //前两步的基础值
-        if (n == 1) {
+        // dp[i] = dp[i - 2] + dp[i - 2]
+        if (n == 1) { //防止下面的dp array越界
             return 1;
         }
-        if (n == 2) {
-            return 2;
-        }
+        int result = 0;
 
-        //O(1)的空间
-        int a = 1, b = 2, result = 0;
-
-        //只需记住n-1和n-2最后两步的和
-        for (int i = 2; i < n; i++) {
-            result = a + b;//i-1和i-2所有路径和总和
-            a = b;//i-2的总和
-            b = result;//i-1的总和
+        int lastOne = 1;
+        int lastTwo = 2;
+        for (int i = 3; i <= n; i++) { //包括n
+            int temp = lastOne + lastTwo;
+            lastOne = lastTwo;
+            lastTwo = temp;
         }
-        return result;
+        return lastTwo;
     }
 }
 ```
