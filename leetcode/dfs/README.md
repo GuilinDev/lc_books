@@ -360,34 +360,32 @@ class UnionFind2D {
 
 ### 题目
 
-Given `n` nodes labeled from `0` to `n - 1` and a list of undirected edges \(each edge is a pair of nodes\), write a function to find the number of connected components in an undirected graph.
+You have a graph of `n` nodes. You are given an integer `n` and an array `edges` where `edges[i] = [ai, bi]` indicates that there is an edge between `ai` and `bi` in the graph.
 
-**Example 1:**
+Return _the number of connected components in the graph_.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2021/03/14/conn1-graph.jpg)
 
 ```text
-Input: n = 5 and edges = [[0, 1], [1, 2], [3, 4]]
-
-     0          3
-     |          |
-     1 --- 2    4 
-
+Input: n = 5, edges = [[0,1],[1,2],[3,4]]
 Output: 2
 ```
 
-**Example 2:**
+**Example 2:**![](https://assets.leetcode.com/uploads/2021/03/14/conn2-graph.jpg)
 
 ```text
-Input: n = 5 and edges = [[0, 1], [1, 2], [2, 3], [3, 4]]
-
-     0           4
-     |           |
-     1 --- 2 --- 3
-
-Output:  1
+Input: n = 5, edges = [[0,1],[1,2],[2,3],[3,4]]
+Output: 1
 ```
 
-**Note:**  
- You can assume that no duplicate edges will appear in `edges`. Since all edges are undirected, `[0, 1]` is the same as `[1, 0]` and thus will not appear together in `edges`.
+**Constraints:**
+
+* `1 <= n <= 2000`
+* `1 <= edges.length <= 5000`
+* `edges[i].length == 2`
+* `0 <= ai <= bi < n`
+* `ai != bi`
+* There are no repeated edges.
 
 ### 分析
 

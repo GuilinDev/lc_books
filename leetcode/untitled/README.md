@@ -571,3 +571,102 @@ class Solution {
 }
 ```
 
+190
+
+Reverse bits of a given 32 bits unsigned integer.
+
+**Note:**
+
+* Note that in some languages, such as Java, there is no unsigned integer type. In this case, both input and output will be given as a signed integer type. They should not affect your implementation, as the integer's internal binary representation is the same, whether it is signed or unsigned.
+* In Java, the compiler represents the signed integers using [2's complement notation](https://en.wikipedia.org/wiki/Two%27s_complement). Therefore, in **Example 2** above, the input represents the signed integer `-3` and the output represents the signed integer `-1073741825`.
+
+**Example 1:**
+
+```text
+Input: n = 00000010100101000001111010011100
+Output:    964176192 (00111001011110000010100101000000)
+Explanation: The input binary string 00000010100101000001111010011100 represents the unsigned integer 43261596, so return 964176192 which its binary representation is 00111001011110000010100101000000.
+```
+
+**Example 2:**
+
+```text
+Input: n = 11111111111111111111111111111101
+Output:   3221225471 (10111111111111111111111111111111)
+Explanation: The input binary string 11111111111111111111111111111101 represents the unsigned integer 4294967293, so return 3221225471 which its binary representation is 10111111111111111111111111111111.
+```
+
+**Constraints:**
+
+* The input must be a **binary string** of length `32`
+
+**Follow up:** If this function is called many times, how would you optimize it?
+
+### 分析
+
+方法1，逐位颠倒，写个循环，循环32次每次右移取出一位。
+
+方法2：分治，若要翻转一个二进制串，可以将其均分成左右两部分，对每部分递归执行翻转操作，然后将左半部分拼在右半部分的后面，即完成了翻转。由于左右两部分的计算方式是相似的，利用位掩码和位移运算，自底向上地完成这一分治流程。
+
+对于递归的最底层，需要交换所有奇偶位：
+
+取出所有奇数位和偶数位； 将奇数位移到偶数位上，偶数位移到奇数位上。 类似地，对于倒数第二层，每两位分一组，按组号取出所有奇数组和偶数组，然后将奇数组移到偶数组上，偶数组移到奇数组上。以此类推。
+
+需要注意的是，在某些语言（如 Java）中，没有无符号整数类型，因此对 n 的右移操作应使用逻辑右移。
+
+![](../../.gitbook/assets/image%20%28209%29.png)
+
+### 代码
+
+逐个颠倒
+
+```java
+public class Solution {
+    public int reverseBits(int n) {
+        //定义返回结果
+        int res = 0;
+    
+        for(int i = 0; i <= 31; i++){
+            //1 & (n >> i表示n右移i位，并取出其最后一位
+            //将取出的最后一位左移31-i位，存入返回结果中
+            res += ((1 & (n >> i)) << (31 - i));
+        }
+        return res;
+    }
+}
+// ===========================================================
+// 时间复杂度：O(logn)。空间复杂度：O(1)。
+public class Solution {
+    public int reverseBits(int n) {
+        int rev = 0;
+        for (int i = 0; i < 32 && n != 0; ++i) {
+            rev |= (n & 1) << (31 - i);
+            n >>>= 1;
+        }
+        return rev;
+    }
+}
+```
+
+分治
+
+```java
+// 时间复杂度：O(1)。空间复杂度：O(1)。
+public class Solution {
+    private static final int M1 = 0x55555555; // 01010101010101010101010101010101
+    private static final int M2 = 0x33333333; // 00110011001100110011001100110011
+    private static final int M4 = 0x0f0f0f0f; // 00001111000011110000111100001111
+    private static final int M8 = 0x00ff00ff; // 00000000111111110000000011111111
+
+    public int reverseBits(int n) {
+        n = n >>> 1 & M1 | (n & M1) << 1;
+        n = n >>> 2 & M2 | (n & M2) << 2;
+        n = n >>> 4 & M4 | (n & M4) << 4;
+        n = n >>> 8 & M8 | (n & M8) << 8;
+        return n >>> 16 | n << 16;
+    }
+}
+```
+
+
+

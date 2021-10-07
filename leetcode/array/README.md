@@ -861,6 +861,25 @@ class Solution {
 }
 ```
 
+**Hashset**
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return false;
+        }
+        HashSet<Integer> noDup = new HashSet<>();
+        for (int num : nums) {
+            if (!noDup.add(num)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
 ## **48 Rotate Image** 
 
 ### 原题概述
