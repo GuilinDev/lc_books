@@ -369,6 +369,68 @@ class Solution {
 }
 ```
 
+## 377 Combination Sum IV
+
+Given an array of **distinct** integers `nums` and a target integer `target`, return _the number of possible combinations that add up to_ `target`.
+
+The answer is **guaranteed** to fit in a **32-bit** integer.
+
+**Example 1:**
+
+```text
+Input: nums = [1,2,3], target = 4
+Output: 7
+Explanation:
+The possible combination ways are:
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+Note that different sequences are counted as different combinations.
+```
+
+**Example 2:**
+
+```text
+Input: nums = [9], target = 3
+Output: 0
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 200`
+* `1 <= nums[i] <= 1000`
+* All the elements of `nums` are **unique**.
+* `1 <= target <= 1000`
+
+**Follow up:** What if negative numbers are allowed in the given array? How does it change the problem? What limitation we need to add to the question to allow negative numbers?
+
+### 分析
+
+可以DP
+
+### 代码
+
+```java
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+        int[] comb = new int[target + 1];
+        comb[0] = 1;
+        for (int i = 1; i < comb.length; i++) {
+            for (int j = 0; j < nums.length; j++) {
+                if (i - nums[j] >= 0) {
+                    comb[i] += comb[i - nums[j]];
+                }
+            }
+        }
+        return comb[target];
+    }
+}
+```
+
 ## 46 Permutations
 
 ### 原题概述
